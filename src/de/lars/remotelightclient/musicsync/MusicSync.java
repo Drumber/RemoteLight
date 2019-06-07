@@ -91,7 +91,7 @@ public class MusicSync {
 	 * =================
 	 */
 	private static boolean loop;
-	private final static int DELAY = 40;
+	private final static int DELAY = 80;
 	private static boolean bump = false;
 	private static double volume, lastVolume, maxVolume = 2.0,
 						spl, maxSpl, minSpl, lastMaxSpl, lastMinSpl, avgBump, sensitivity = 1;

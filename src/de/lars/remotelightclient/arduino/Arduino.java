@@ -74,7 +74,10 @@ public class Arduino {
 	public static void setFromPixelHash(HashMap<Integer, Color> pixelHash) {
 		Color[] leds = new Color[Main.getLedNum()];
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			leds[i] = dimColor(pixelHash.get(i));
+			if(pixelHash.get(i) == null)
+				leds[i] = Color.BLACK;
+			else
+				leds[i] = dimColor(pixelHash.get(i));
 		}
 		GlediatorProtocol.doOutput(leds);
 		strip = leds;
