@@ -89,7 +89,7 @@ public class Arduino {
 		for(int r = 0; r < amount; r++) {
 			for(int i = 1; i <= strip.length; i++) {
 				if(i == strip.length) {
-					leds[0] = Color.BLACK;
+					leds[0] = strip[0];
 				} else {
 					leds[strip.length - i] = strip[strip.length - i - 1];
 				}
@@ -104,7 +104,7 @@ public class Arduino {
 		for(int r = 0; r < amount; r++) {
 			for(int i = 0; i < strip.length; i++) {
 				if(i == strip.length - 1) {
-					leds[strip.length - 1] = Color.BLACK;
+					leds[strip.length - 1] = strip[strip.length - 1];
 				} else {
 					leds[i] = strip[i + 1];
 				}

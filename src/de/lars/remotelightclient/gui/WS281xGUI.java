@@ -24,6 +24,7 @@ import de.lars.remotelightclient.musicsync.MusicSync;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.scenes.SceneHandler;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
 import javax.swing.event.ChangeEvent;
@@ -740,6 +741,11 @@ public class WS281xGUI extends JFrame {
 		scenes.setLayout(null);
 		
 		JButton btnSunset = new JButton("Sunset");
+		btnSunset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.SUNSET);
+			}
+		});
 		btnSunset.setBounds(10, 11, 89, 23);
 		scenes.add(btnSunset);
 		
@@ -764,6 +770,11 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnSpace);
 		
 		JButton btnStop_1 = new JButton("Stop");
+		btnStop_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.stop();
+			}
+		});
 		btnStop_1.setBounds(208, 86, 89, 23);
 		scenes.add(btnStop_1);
 		

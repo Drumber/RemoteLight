@@ -1,8 +1,11 @@
 package de.lars.remotelightclient.scenes;
 
+import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.network.Identifier;
+
 public class SceneHandler {
 
-	public final static int DELAY = 100;
+	public final static int DELAY = 200;
 	private static boolean active = false;
 	
 	public final static String SUNSET = "sunset";
@@ -15,6 +18,8 @@ public class SceneHandler {
 	public static void stop() {
 		active = false;
 		Sunset.stop();
+		
+		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 	}
 	
 	public static boolean isActive() {

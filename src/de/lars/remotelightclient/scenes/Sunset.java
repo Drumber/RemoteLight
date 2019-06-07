@@ -1,9 +1,22 @@
 package de.lars.remotelightclient.scenes;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.network.Identifier;
+
 public class Sunset {
 	
-	private static boolean active;
+	/*
+	 * effekt: langsames rot/gelb/orange shiften
+	 */
 	
+	private static boolean active;
+	private static Color[] sun;
 	
 	public static void stop() {
 		active = false;
@@ -17,8 +30,27 @@ public class Sunset {
 				
 				@Override
 				public void run() {
+					HashMap<Integer, Color> pixelHash = new HashMap<>();
+					int count = 0;
+					initSun();
+					
+					for(int i = 0; i < Main.getLedNum(); i++) {
+						pixelHash.put(i, sun[count]);
+						count++;
+						if(count >= sun.length)
+							count = 0;
+					}
+					Client.sendWS281xList(pixelHash);
 					
 					while(active) {
+						
+						Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
+						
+						count++;
+						if(count >= sun.length)
+							count = 0;
+						
+						Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"", sun[count].getRed()+"", sun[count].getGreen()+"", sun[count].getBlue()+""});
 						
 						try {
 							Thread.sleep(SceneHandler.DELAY);
@@ -29,6 +61,23 @@ public class Sunset {
 				}
 			}).start();
 		}
-		}
+	}
+	
+	
+	private static void initSun() {
+		List<Color> colors = new ArrayList<Color>();
+		
+		colors.add(new Color(255, 0, 0));
+		for(int i = 0; i < 200; i++)
+			colors.add(new Color(255, i, 0));
+	
+		for(int i = 200; i > 0; i--)
+			colors.add(new Color(255, i, 0));
+		colors.add(new Color(255, 0, 0));
+		
+		sun = colors.toArray(new Color[colors.size()]);
+	}
+	
+	
 
 }
