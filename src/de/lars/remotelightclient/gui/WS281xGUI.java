@@ -320,36 +320,10 @@ public class WS281xGUI extends JFrame {
 		comboBoxMusicSync.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				String selected = comboBoxMusicSync.getSelectedItem().toString().toUpperCase();
-				switch (selected) {
-				case "RUNNINGLIGHT":
-					MusicSync.setAnimation(selected);
-					break;
-				case "LEVELBAR":
-					MusicSync.setAnimation(selected);
-					break;
-				case "BUMP":
-					MusicSync.setAnimation(selected);
-					break;
-				case "EQ":
-					MusicSync.setAnimation(selected);
-					break;
-				
-				case "FADE":
-					MusicSync.setAnimation(selected);
-					break;
-				case "PULSE":
-					MusicSync.setAnimation(selected);
-					break;
-				case "BASS":
-					MusicSync.setAnimation(selected);
-					break;
-
-				default:
-					break;
-				}
+				MusicSync.setAnimation(selected);
 			}
 		});
-		comboBoxMusicSync.setModel(new DefaultComboBoxModel(new String[] {"RunningLight", "LevelBar", "Bump", "EQ", "Fade", "Pulse", "Bass"}));
+		comboBoxMusicSync.setModel(new DefaultComboBoxModel(new String[] {"RunningLight", "LevelBar", "Bump", "EQ", "Fade", "Pulse"}));
 		comboBoxMusicSync.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		comboBoxMusicSync.setBounds(49, 8, 89, 23);
 		panel_2.add(comboBoxMusicSync);
@@ -414,6 +388,7 @@ public class WS281xGUI extends JFrame {
 					Client.send(new String[] {Identifier.WS_COLOR_OFF});
 					btnMusicSyncEnable.setText("Enable");
 				} else {
+					MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString().toUpperCase());
 					MusicSync.startLoop();
 					btnMusicSyncEnable.setText("Disable");
 				}

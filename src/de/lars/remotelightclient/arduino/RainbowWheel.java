@@ -2,6 +2,10 @@ package de.lars.remotelightclient.arduino;
 
 import java.awt.Color;
 
+/*
+ * adapted from https://stackoverflow.com/a/52498075
+ */
+
 public class RainbowWheel {
 	
 	private final static int SIZE = 360;
@@ -9,12 +13,10 @@ public class RainbowWheel {
 	
 	public static void init() {
 		double jump = 1.0 / (SIZE * 1.0);
-		//System.out.println(jump);
 		int[] colors = new int[SIZE];
 		for(int i = 0; i < colors.length; i++) {
 			colors[i] = Color.HSBtoRGB((float) (jump * i), 1.0f, 1.0f);
 			rainbow[i] = Color.getHSBColor((float) (jump * i), 1.0f, 1.0f);
-			//System.out.println(rainbow[i]);
 		}
 	}
 	

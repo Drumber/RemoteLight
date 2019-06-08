@@ -204,9 +204,6 @@ public class MusicSync {
 						case "PULSE":
 							pulse();
 							break;
-						case "BASS":
-							bass();
-							break;
 							
 						case "LEVELBAR":
 							LevelBar.levelBar(bump);
@@ -338,55 +335,6 @@ public class MusicSync {
 		Color c = changeBrightness(pulseColor, pulseBrightness);
 		Main.getRgbGUI().setMusicSyncColorPanel(c, c);
 		Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
-	}
-	
-	
-	// Bass effect
-	private static int bassLastHz, bassResetCount;
-	private static Color bassColor = Color.BLACK, bassLastColor = Color.RED;
-	private static void bass() {
-		int hz = (int) pitch;
-		if(hz <= 200 && hz != 0) { //we want only bass noise
-			int avgHz = hz - bassLastHz;
-			if(avgHz < 20 || avgHz < -20) {
-				if(bassResetCount == 0) { //trigger bass kick
-					bassColor = bassLastColor;
-				}
-				if(bassResetCount == 6) bassColor = Color.BLACK;
-				
-				if(bassResetCount <= 10) bassResetCount++; //to have a little longer blink
-				else {
-					bassResetCount = 0;
-					bassColor = Color.BLACK;
-				}
-				
-			} else {
-				if(bassResetCount == 0) { //trigger bass kick
-					int r = new Random().nextInt(colors.length - 1);
-					bassColor = colors[r];
-					bassLastColor = colors[r];
-				}
-				if(bassResetCount == 6) bassColor = Color.BLACK;
-				
-				if(bassResetCount <= 10) bassResetCount++; //to have a little longer blink
-				else {
-					bassResetCount = 0;
-					bassColor = Color.BLACK;
-				}
-			}
-			
-			bassLastHz = hz;
-		} else { // no bass
-			if(bassResetCount <= 10) bassResetCount++;
-			else {
-				bassResetCount = 0;
-				bassColor = Color.BLACK;
-			}
-		}
-		if(noSoundInfo) bassColor = Color.BLACK;
-		
-		Main.getRgbGUI().setMusicSyncColorPanel(bassColor, bassColor);
-		Client.send(new String[] {Identifier.COLOR_COLOR, bassColor.getRed()+"", bassColor.getGreen()+"", bassColor.getBlue()+""});
 	}
 	
 
