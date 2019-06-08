@@ -21,9 +21,9 @@ public class LevelBar {
 	private static ArrayList<Color[]> pattern = new ArrayList<>();
 	private static int count;
 	private static int lastLeds = 0;
+	private static int pix = Main.getLedNum();
 	
 	public static void levelBar(boolean bump) {
-		int pix = Main.getLedNum();
 		int half = pix / 2;
 		double mul = 0.1 * MusicSync.getSensitivity(); // multiplier for amount of pixels
 		HashMap<Integer, Color> pixelHash = new HashMap<>();

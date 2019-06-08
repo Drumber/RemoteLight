@@ -323,7 +323,7 @@ public class WS281xGUI extends JFrame {
 				MusicSync.setAnimation(selected);
 			}
 		});
-		comboBoxMusicSync.setModel(new DefaultComboBoxModel(new String[] {"RunningLight", "LevelBar", "Bump", "EQ", "Fade", "Pulse"}));
+		comboBoxMusicSync.setModel(new DefaultComboBoxModel(new String[] {"RunningLight", "LevelBar", "Rainbow", "Bump", "EQ", "Fade", "Pulse"}));
 		comboBoxMusicSync.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		comboBoxMusicSync.setBounds(49, 8, 89, 23);
 		panel_2.add(comboBoxMusicSync);

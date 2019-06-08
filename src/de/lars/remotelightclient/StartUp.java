@@ -6,6 +6,7 @@ import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
+import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
 import de.lars.remotelightclient.network.Client;
 
 public class StartUp {
@@ -23,7 +24,6 @@ public class StartUp {
 			} else if(mode.equalsIgnoreCase("ARDUINO")) {
 				Main.getWS281xGUI().setVisible(true);
 				Arduino.init();
-				RainbowWheel.init();
 				//auto open comport
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
 					for(int i = 0; i < ComPort.getComPorts().length; i++) {
@@ -50,6 +50,13 @@ public class StartUp {
 
 		// set settings
 		setSettings();
+		
+		init();
+	}
+	
+	private static void init() {
+		RainbowWheel.init();
+		Rainbow.init();
 	}
 
 	// try 10 times every 5 seconds to connect to client

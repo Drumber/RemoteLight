@@ -2,8 +2,6 @@ package de.lars.remotelightclient.musicsync;
 
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -15,6 +13,7 @@ import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
 import de.lars.remotelightclient.musicsync.ws281x.Bump;
 import de.lars.remotelightclient.musicsync.ws281x.EQ;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
+import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
 import de.lars.remotelightclient.musicsync.ws281x.RunningLight;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
@@ -43,7 +42,6 @@ public class MusicSync {
 			e.printStackTrace();
 		}
 		
-		initRainbow();
 	}
 	
 	public static void openGUI() {
@@ -58,28 +56,6 @@ public class MusicSync {
 			frame.dispose();
 			guiOpen = false;
 		}
-	}
-	
-	
-	/*
-	 * Rainbow Color
-	 */
-	private static Color[] rainbowColor;
-	
-	private static void initRainbow() {
-		List<Color> colors = new ArrayList<Color>();
-	    for (int r=0; r<100; r++) colors.add(new Color(r*255/100,       255,         0));
-	    for (int g=100; g>0; g--) colors.add(new Color(      255, g*255/100,         0));
-	    for (int b=0; b<100; b++) colors.add(new Color(      255,         0, b*255/100));
-	    for (int r=100; r>0; r--) colors.add(new Color(r*255/100,         0,       255));
-	    for (int g=0; g<100; g++) colors.add(new Color(        0, g*255/100,       255));
-	    for (int b=100; b>0; b--) colors.add(new Color(        0,       255, b*255/100));
-	    colors.add(new Color(        0,       255,         0));
-	    rainbowColor = colors.toArray(new Color[colors.size()]);
-	}
-	
-	public static Color[] getRainbowColor() {
-		return rainbowColor;
 	}
 	
 	
@@ -207,6 +183,9 @@ public class MusicSync {
 							
 						case "LEVELBAR":
 							LevelBar.levelBar(bump);
+							break;
+						case "RAINBOW":
+							Rainbow.rainbow(bump);
 							break;
 						case "RUNNINGLIGHT":
 							RunningLight.runningLight(pitch, pitchTime, volume);
