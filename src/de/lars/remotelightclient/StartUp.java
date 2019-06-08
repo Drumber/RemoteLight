@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
+import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
 import de.lars.remotelightclient.network.Client;
 
@@ -22,6 +23,7 @@ public class StartUp {
 			} else if(mode.equalsIgnoreCase("ARDUINO")) {
 				Main.getWS281xGUI().setVisible(true);
 				Arduino.init();
+				RainbowWheel.init();
 				//auto open comport
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
 					for(int i = 0; i < ComPort.getComPorts().length; i++) {
