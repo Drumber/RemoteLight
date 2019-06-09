@@ -1,5 +1,8 @@
 package de.lars.remotelightclient.arduino.animations;
 
+import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.network.Identifier;
+
 public class AnimationHandler_Arduino {
 	
 	private static boolean active = false;
@@ -12,6 +15,8 @@ public class AnimationHandler_Arduino {
 		RunningLight_Arduino.stop();
 		Scan_Arduino.stop();
 		Wipe_Arduino.stop();
+		
+		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 	}
 	
 	public static boolean isActive() {

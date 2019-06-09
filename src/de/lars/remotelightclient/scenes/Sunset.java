@@ -67,13 +67,19 @@ public class Sunset {
 	private static void initSun() {
 		List<Color> colors = new ArrayList<Color>();
 		
+		for(int i = 0; i < 106; i += 5)
+			colors.add(new Color(150 + i, 0, 0));
+		
 		colors.add(new Color(255, 0, 0));
-		for(int i = 0; i < 200; i++)
+		for(int i = 0; i < 160; i++)
 			colors.add(new Color(255, i, 0));
 	
-		for(int i = 200; i > 0; i--)
+		for(int i = 160; i > 0; i--)
 			colors.add(new Color(255, i, 0));
 		colors.add(new Color(255, 0, 0));
+		
+		for(int i = 0; i < 106; i += 5)
+			colors.add(new Color(255 - i, 0, 0));
 		
 		sun = colors.toArray(new Color[colors.size()]);
 	}
