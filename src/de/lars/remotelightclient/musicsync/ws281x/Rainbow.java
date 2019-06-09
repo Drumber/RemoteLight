@@ -51,7 +51,7 @@ public class Rainbow {
 		}
 		
 		if(bump)
-			step += 15;
+			step += 30;
 		else
 			step += 5;
 

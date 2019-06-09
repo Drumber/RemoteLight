@@ -62,7 +62,7 @@ public class SystemTrayIcon {
 				String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 				if(mode.toUpperCase().equals("RGB")) {
 					Main.getRgbGUI().setVisible(true);
-				} else if(mode.toUpperCase().equals("WS281X")) {
+				} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
 					Main.getWS281xGUI().setVisible(true);
 				} else {
 					Main.getSelectionWindow().setVisible(true);
@@ -87,7 +87,7 @@ public class SystemTrayIcon {
 					String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 					if(mode.toUpperCase().equals("RGB")) {
 						Main.getRgbGUI().setVisible(true);
-					} else if(mode.toUpperCase().equals("WS281X")) {
+					} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
 						Main.getWS281xGUI().setVisible(true);
 					} else {
 						Main.getSelectionWindow().setVisible(true);
