@@ -23,6 +23,7 @@ public class DataStorage {
 	public final static String SETTINGS_BOOT_SHOWLAST = "settings_boot_showlast";
 	public final static String SETTINGS_SCREENCOLOR_INTERVAL = "settings_screenncolor_interval";
 	public final static String SETTINGS_SCREENCOLOR_YPOS = "settings_screenncolor_ypos";
+	public final static String SETTINGS_SCREENCOLOR_INVERT = "settings_screenncolor_invert";
 	public final static String SETTINGS_BRIGHTNESS = "settings_brightness";
 	public final static String LEVELBAR_COLOR1 = "levelbar_color1";
 	public final static String LEVELBAR_COLOR2 = "levelbar_color2";

@@ -48,6 +48,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Toolkit;
 import java.awt.BorderLayout;
+import javax.swing.JCheckBox;
 
 public class WS281xGUI extends JFrame {
 
@@ -60,6 +61,7 @@ public class WS281xGUI extends JFrame {
 	private JButton btnConnect;
 	private JLabel lblStatus, lblEffectSettingsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
+	private JCheckBox chckbxInvertScreenColor;
 	private int brightness;
 	
 
@@ -174,6 +176,7 @@ public class WS281xGUI extends JFrame {
 		contentPane.add(lblStatus);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setFocusable(false);
 		tabbedPane.setBounds(10, 268, 314, 185);
 		contentPane.add(tabbedPane);
 		
@@ -239,7 +242,7 @@ public class WS281xGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!WS281xScreenColorHandler.isActive()) {
 					Client.send(Identifier.SC_START);
-					WS281xScreenColorHandler.start((int) spinnerScYpos.getValue(), (int) spinnerScInterval.getValue());
+					WS281xScreenColorHandler.start((int) spinnerScYpos.getValue(), (int) spinnerScInterval.getValue(), chckbxInvertScreenColor.isSelected());
 					btnEnableScreenColor.setText("Disable ScreenColor");
 				} else {
 					WS281xScreenColorHandler.stop();
@@ -267,7 +270,7 @@ public class WS281xGUI extends JFrame {
 				DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_INTERVAL, spinnerScInterval.getValue());
 			}
 		});
-		spinnerScInterval.setModel(new SpinnerNumberModel(new Integer(250), new Integer(25), null, new Integer(1)));
+		spinnerScInterval.setModel(new SpinnerNumberModel(150, 25, 2000, 1));
 		if(DataStorage.isStored(DataStorage.SETTINGS_SCREENCOLOR_INTERVAL))
 			spinnerScInterval.setValue(DataStorage.getData(DataStorage.SETTINGS_SCREENCOLOR_INTERVAL));
 		spinnerScInterval.setBounds(100, 42, 59, 20);
@@ -299,6 +302,20 @@ public class WS281xGUI extends JFrame {
 		lblIsAt.setFont(new Font("Source Sans Pro", Font.ITALIC, 10));
 		lblIsAt.setBounds(10, 100, 113, 14);
 		panel_1.add(lblIsAt);
+		
+		chckbxInvertScreenColor = new JCheckBox("Invert");
+		chckbxInvertScreenColor.setFocusable(false);
+		chckbxInvertScreenColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_INVERT, chckbxInvertScreenColor.isSelected());
+			}
+		});
+		chckbxInvertScreenColor.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		chckbxInvertScreenColor.setToolTipText("Invert left and right");
+		if(DataStorage.isStored(DataStorage.SETTINGS_SCREENCOLOR_INVERT))
+			chckbxInvertScreenColor.setSelected((boolean) DataStorage.getData(DataStorage.SETTINGS_SCREENCOLOR_INVERT));
+		chckbxInvertScreenColor.setBounds(10, 127, 97, 23);
+		panel_1.add(chckbxInvertScreenColor);
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("MusicSync", null, panel_2, null);
@@ -396,6 +413,7 @@ public class WS281xGUI extends JFrame {
 		});
 		
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_1.setFocusable(false);
 		tabbedPane_1.setBounds(10, 89, 314, 148);
 		contentPane.add(tabbedPane_1);
 		
@@ -716,6 +734,8 @@ public class WS281xGUI extends JFrame {
 		scenes.setLayout(null);
 		
 		JButton btnSunset = new JButton("Sunset");
+		btnSunset.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnSunset.setFocusable(false);
 		btnSunset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SceneHandler.start(SceneHandler.SUNSET);
@@ -725,26 +745,39 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnSunset);
 		
 		JButton btnFire = new JButton("Fire");
+		btnFire.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnFire.setFocusable(false);
 		btnFire.setBounds(109, 11, 89, 23);
 		scenes.add(btnFire);
 		
 		JButton btnNorthernlights = new JButton("NorthernLights");
+		btnNorthernlights.setToolTipText("NorthernLights");
+		btnNorthernlights.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnNorthernlights.setFocusable(false);
 		btnNorthernlights.setBounds(208, 11, 89, 23);
 		scenes.add(btnNorthernlights);
 		
 		JButton btnJungle = new JButton("Jungle");
+		btnJungle.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnJungle.setFocusable(false);
 		btnJungle.setBounds(10, 45, 89, 23);
 		scenes.add(btnJungle);
 		
 		JButton btnSea = new JButton("Sea");
+		btnSea.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnSea.setFocusable(false);
 		btnSea.setBounds(109, 45, 89, 23);
 		scenes.add(btnSea);
 		
 		JButton btnSpace = new JButton("Space");
+		btnSpace.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnSpace.setFocusable(false);
 		btnSpace.setBounds(208, 45, 89, 23);
 		scenes.add(btnSpace);
 		
 		JButton btnStop_1 = new JButton("Stop");
+		btnStop_1.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnStop_1.setFocusable(false);
 		btnStop_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SceneHandler.stop();
