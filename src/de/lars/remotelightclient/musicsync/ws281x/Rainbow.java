@@ -3,6 +3,7 @@ package de.lars.remotelightclient.musicsync.ws281x;
 import java.awt.Color;
 import java.util.HashMap;
 
+import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.musicsync.MusicSync;
@@ -16,6 +17,10 @@ public class Rainbow {
 	private static int lastLeds = 0;
 	private static Color[] strip;
 	private static int step = 0;
+	
+	public static boolean smothRise = true;
+	public static boolean smothFall = true;
+	public static int steps = 5;
 	
 	public static void rainbow(boolean bump) {
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
@@ -33,15 +38,33 @@ public class Rainbow {
 		if(leds > half) leds = half;
 		
 		//Smooth
-		if(lastLeds > leds) {
-			leds = lastLeds;
-			lastLeds--;
-		} else {
-			lastLeds += 2;
-			if(lastLeds > leds) lastLeds = leds;
-			leds = lastLeds;
+		if(smothRise && smothFall) {
+			if(lastLeds > leds) {
+				leds = lastLeds;
+				lastLeds--;
+			} else {
+				lastLeds += 2;
+				if(lastLeds > leds) lastLeds = leds;
+				leds = lastLeds;
+			}
 			
-			//lastLeds = leds;
+		} else if(smothRise) {
+			if(lastLeds > leds) {
+				lastLeds = leds;
+			} else {
+				lastLeds += 2;
+				if(lastLeds > leds) lastLeds = leds;
+				leds = lastLeds;
+			}
+			
+		} else if(smothFall) {
+			if(lastLeds > leds) {
+				leds = lastLeds;
+				lastLeds--;
+			} else {
+				lastLeds = leds;
+			}
+			
 		}
 		
 		
@@ -51,9 +74,9 @@ public class Rainbow {
 		}
 		
 		if(bump)
-			step += 30;
+			step += steps + (steps / 2) + 20;
 		else
-			step += 5;
+			step += steps;
 
 		if(step >= RainbowWheel.getRainbow().length)
 			step = 0;
@@ -97,7 +120,12 @@ public class Rainbow {
 			//half2
 			strip[(half + i)] = c;
 		}
-			
+		
+		if(DataStorage.isStored(DataStorage.RAINBOW_SMOOTH_RISE)) {
+			smothRise = (boolean) DataStorage.getData(DataStorage.RAINBOW_SMOOTH_RISE);
+			smothFall = (boolean) DataStorage.getData(DataStorage.RAINBOW_SMOOTH_FALL);
+			steps = (int) DataStorage.getData(DataStorage.RAINBOW_STEPS);
+		}
 	}
 
 }

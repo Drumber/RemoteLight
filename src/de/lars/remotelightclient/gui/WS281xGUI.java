@@ -22,6 +22,7 @@ import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSync;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings;
+import de.lars.remotelightclient.musicsync.ws281x.settings_guis.RainbowSettings;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.scenes.SceneHandler;
@@ -362,15 +363,21 @@ public class WS281xGUI extends JFrame {
 		panel_2.add(lblSensitivity);
 		
 		JSlider sliderMusicSensitivity = new JSlider();
-		sliderMusicSensitivity.setFocusable(false);
-		sliderMusicSensitivity.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
+		sliderMusicSensitivity.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
 				MusicSync.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
+				DataStorage.store(DataStorage.SETTINGS_MUSICSYNC_SENSITIVITY, sliderMusicSensitivity.getValue());
 			}
 		});
-		sliderMusicSensitivity.setValue(100);
+		sliderMusicSensitivity.setFocusable(false);
 		sliderMusicSensitivity.setMinimum(10);
 		sliderMusicSensitivity.setMaximum(300);
+		if(DataStorage.isStored(DataStorage.SETTINGS_MUSICSYNC_SENSITIVITY))
+			sliderMusicSensitivity.setValue((int) DataStorage.getData(DataStorage.SETTINGS_MUSICSYNC_SENSITIVITY));
+		else
+			sliderMusicSensitivity.setValue(100);
+		MusicSync.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
 		sliderMusicSensitivity.setBounds(10, 92, 200, 26);
 		panel_2.add(sliderMusicSensitivity);
 		
@@ -381,6 +388,10 @@ public class WS281xGUI extends JFrame {
 				switch ((String) comboBoxMusicSync.getSelectedItem()) {
 				case "LevelBar":
 					new LevelBarSettings();
+					lblEffectSettingsStatus.setText("");
+					break;
+				case "Rainbow":
+					new RainbowSettings();
 					lblEffectSettingsStatus.setText("");
 					break;
 
