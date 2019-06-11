@@ -18,6 +18,7 @@ public class SceneHandler {
 	public static void stop() {
 		active = false;
 		Sunset.stop();
+		Fire.stop();
 		Ocean.stop();
 		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
@@ -35,7 +36,7 @@ public class SceneHandler {
 			Sunset.start();
 			break;
 		case FIRE:
-			
+			Fire.start();
 			break;
 		case NORTHERNLIGHTS:
 			

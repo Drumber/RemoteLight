@@ -756,6 +756,11 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnSunset);
 		
 		JButton btnFire = new JButton("Fire");
+		btnFire.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.FIRE);
+			}
+		});
 		btnFire.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnFire.setFocusable(false);
 		btnFire.setBounds(109, 11, 89, 23);
@@ -833,6 +838,7 @@ public class WS281xGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				MusicSync.stopLoop();
 				WS281xScreenColorHandler.stop();
+				SceneHandler.stop();
 				Client.send(new String[] {Identifier.WS_ANI_STOP});
 				try {
 					Thread.sleep(100);
