@@ -774,11 +774,16 @@ public class WS281xGUI extends JFrame {
 		btnJungle.setBounds(10, 45, 89, 23);
 		scenes.add(btnJungle);
 		
-		JButton btnSea = new JButton("Sea");
-		btnSea.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		btnSea.setFocusable(false);
-		btnSea.setBounds(109, 45, 89, 23);
-		scenes.add(btnSea);
+		JButton btnOcean = new JButton("Ocean");
+		btnOcean.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.OCEAN);
+			}
+		});
+		btnOcean.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		btnOcean.setFocusable(false);
+		btnOcean.setBounds(109, 45, 89, 23);
+		scenes.add(btnOcean);
 		
 		JButton btnSpace = new JButton("Space");
 		btnSpace.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));

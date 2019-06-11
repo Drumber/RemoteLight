@@ -12,12 +12,13 @@ public class SceneHandler {
 	public final static String FIRE = "fire";
 	public final static String NORTHERNLIGHTS = "northernlights";
 	public final static String JUNGLE = "jungle";
-	public final static String SEA = "sea";
+	public final static String OCEAN = "ocean";
 	public final static String SPACE = "space";
 	
 	public static void stop() {
 		active = false;
 		Sunset.stop();
+		Ocean.stop();
 		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 	}
@@ -42,8 +43,8 @@ public class SceneHandler {
 		case JUNGLE:
 			
 			break;
-		case SEA:
-			
+		case OCEAN:
+			Ocean.start();
 			break;
 		case SPACE:
 			
