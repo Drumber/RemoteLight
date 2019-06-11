@@ -65,7 +65,7 @@ public class SelectionWindow extends JFrame {
 		txtpnControlOneWswswsb.setFocusable(false);
 		txtpnControlOneWswswsb.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		txtpnControlOneWswswsb.setEditable(false);
-		txtpnControlOneWswswsb.setText("Control one WS2811/WS2812/WS2812b LED strip.\r\nOnly GPIO-Pin 18 and GRND are needed. (RPi)\r\nSupports Arduino!");
+		txtpnControlOneWswswsb.setText("Control one WS2811/WS2812/WS2812b LED strip.\r\nOnly GPIO-Pin 18 and GRND are needed. (RPi)\r\nSupports Arduino!\r\n  (-> Settings)");
 		
 		JButton btnSelectRGB = new JButton("Select");
 		btnSelectRGB.addActionListener(new ActionListener() {

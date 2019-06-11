@@ -103,7 +103,6 @@ public class Main {
 	}
 	
 	public static boolean isArduinoMode() {
-		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "Arduino");
 		if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 			if(mode.equalsIgnoreCase("Arduino"))

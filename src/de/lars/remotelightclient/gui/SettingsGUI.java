@@ -246,8 +246,8 @@ public class SettingsGUI extends JFrame {
 				Client.send(new String[] {Identifier.STNG_BOOT_ANI, String.valueOf(DataStorage.getData(DataStorage.SETTINGS_BOOT_ANI))});
 			}
 		});
-		if(DataStorage.isStored(DataStorage.SETTINGS_BOOT_ANI))
-			chckbxBootAnimation.setSelected((boolean) DataStorage.getData(DataStorage.SETTINGS_BOOT_ANI));
+		if(DataStorage.isStored(DataStorage.SETTINGS_BOOT_ANI))											//HIER IST DER FEHLER!!!!
+			chckbxBootAnimation.setSelected((boolean) DataStorage.getData(DataStorage.SETTINGS_BOOT_ANI)); //wenn true, dann ‰ndert sich Modekey zu Arduino... H‰‰‰????
 		chckbxBootAnimation.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
@@ -285,8 +285,20 @@ public class SettingsGUI extends JFrame {
 		JComboBox boxMode = new JComboBox();
 		boxMode.setFocusable(false);
 		boxMode.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		boxMode.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
+		boxMode.setToolTipText("Select the device you want to control");
+		boxMode.setModel(new DefaultComboBoxModel(new String[] {"RGB LED/Strip (RPi)", "WS281x Strip (RPi)", "WS281x Strip (Arduino)"}));
+		if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
+			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
+			if(mode.equalsIgnoreCase("RGB")) {
+				boxMode.setSelectedIndex(0);
+			} else if(mode.equalsIgnoreCase("WS281X")) {
+				boxMode.setSelectedIndex(1);
+			} else if(mode.equalsIgnoreCase("ARDUINO")) {
+				boxMode.setSelectedIndex(2);
+			}
+		}
+		boxMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				if(boxMode.getSelectedIndex() == 0) {
 					DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "RGB");
 				} else if(boxMode.getSelectedIndex() == 1) {
@@ -296,18 +308,6 @@ public class SettingsGUI extends JFrame {
 				}
 			}
 		});
-		boxMode.setToolTipText("Select the device you want to control");
-		boxMode.setModel(new DefaultComboBoxModel(new String[] {"RGB LED/Strip", "WS281x Strip (RPI)", "WS281x Strip (Arduino)"}));
-		if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
-			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
-			if(mode.toUpperCase().equals("RGB")) {
-				boxMode.setSelectedIndex(0);
-			} else if(mode.toUpperCase().equals("WS281X")) {
-				boxMode.setSelectedIndex(1);
-			} else if(mode.toUpperCase().equals("ARDUINO")) {
-				boxMode.setSelectedIndex(2);
-			}
-		}
 		
 		JCheckBox chkAutostart = new JCheckBox("Autostart");
 		chkAutostart.setFocusable(false);
