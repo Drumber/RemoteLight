@@ -2,7 +2,6 @@ package de.lars.remotelightclient.scenes;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.lars.remotelightclient.Main;
@@ -30,17 +29,16 @@ public class Sunset {
 				
 				@Override
 				public void run() {
-					HashMap<Integer, Color> pixelHash = new HashMap<>();
 					int count = 0;
 					initSun();
 					
 					for(int i = 0; i < Main.getLedNum(); i++) {
-						pixelHash.put(i, sun[count]);
+						Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
 						count++;
 						if(count >= sun.length)
 							count = 0;
+						Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"", sun[count].getRed()+"", sun[count].getGreen()+"", sun[count].getBlue()+""});
 					}
-					Client.sendWS281xList(pixelHash);
 					
 					while(active) {
 						

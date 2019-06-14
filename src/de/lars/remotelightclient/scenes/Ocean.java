@@ -2,7 +2,6 @@ package de.lars.remotelightclient.scenes;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.lars.remotelightclient.Main;
@@ -27,18 +26,20 @@ public class Ocean {
 				
 				@Override
 				public void run() {
-					HashMap<Integer, Color> pixelHash = new HashMap<>();
 					int count = 0, loops = 0, pixels = Main.getLedNum();
 					boolean right = true;
 					initOcean();
 					
 					for(int i = 0; i < pixels; i++) {
-						pixelHash.put(i, ocean[count]);
+						Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
 						count++;
 						if(count >= ocean.length)
 							count = 0;
+						Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"",
+								ocean[count].getRed()+"",
+								ocean[count].getGreen()+"",
+								ocean[count].getBlue()+""});
 					}
-					Client.sendWS281xList(pixelHash);
 					
 					while(active) {
 						
