@@ -40,15 +40,16 @@ public class Scan_Arduino {
 							pix = 0;
 							scanning = true;
 						} else {
-							Arduino.setColorPixel(pix, Color.BLACK);
 							if(!reverse) {
 								pix++;
 								if(pix < strip.length) {
 									Arduino.setColorPixel(pix, c);
+									Arduino.setColorPixel(pix-1, Color.BLACK);
 								} else {
 									reverse = true;
 									pix--;
 									Arduino.setColorPixel(pix, c);
+									Arduino.setColorPixel(pix+1, Color.BLACK);
 								}
 							} else {
 								pix--;
@@ -59,6 +60,7 @@ public class Scan_Arduino {
 									scanning = false;
 									Arduino.setColorPixel(pix, c);
 								}
+								Arduino.setColorPixel(pix+1, Color.BLACK);
 							}
 						}
 						

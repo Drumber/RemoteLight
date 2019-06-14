@@ -10,13 +10,18 @@ public class AnimationHandler_Arduino {
 	
 	
 	public static void stop() {
-		active = false;
 		Rainbow_Arduino.stop();
 		RunningLight_Arduino.stop();
 		Scan_Arduino.stop();
 		Wipe_Arduino.stop();
 		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		active = false;
 	}
 	
 	public static boolean isActive() {

@@ -31,18 +31,24 @@ public class Rainbow_Arduino {
 					
 					int step = 0;
 					for(int i = 0; i < Main.getLedNum(); i++) {
-						Arduino.setColorPixel(i, RainbowWheel.getRainbow()[step]);
-						step += 5;
+						Arduino.shiftRight(1);
+						
+						step += 3;
 						if(step >= RainbowWheel.getRainbow().length)
 							step = 0;
+						
+						Arduino.setColorPixel(0, RainbowWheel.getRainbow()[step]);
 					}
 					
 					while(active) {
 						Arduino.shiftRight(1);
-						Arduino.setColorPixel(0, RainbowWheel.getRainbow()[step]);
+						
 						step += 3;
 						if(step >= RainbowWheel.getRainbow().length)
 							step = 0;
+						
+						Arduino.setColorPixel(0, RainbowWheel.getRainbow()[step]);
+						
 						try {
 							Thread.sleep(speed);
 						} catch (InterruptedException e) {
