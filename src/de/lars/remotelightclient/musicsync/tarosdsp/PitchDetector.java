@@ -65,6 +65,7 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 
 	private AudioDispatcher dispatcher;
 	private Mixer currentMixer;
+	private static boolean mixerSet = false;
 	private static SilenceDetector silenceDetector;
 	private static int threshold = -100;
 	
@@ -148,6 +149,7 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 			dispatcher.stop();
 		}
 		currentMixer = mixer;
+		mixerSet = true;
 		
 		textArea.append("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()) + "\n");
 
@@ -257,6 +259,10 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 	
 	public static int[] getAmplitudes() {
 		return new int[] {low1, low2, mid1, mid2, high1, high2};
+	}
+	
+	public static boolean isMixerSet() {
+		return mixerSet;
 	}
 	
 }

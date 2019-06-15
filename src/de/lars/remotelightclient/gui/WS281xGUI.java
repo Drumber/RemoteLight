@@ -21,6 +21,7 @@ import javax.swing.event.ChangeListener;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSync;
+import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.RainbowSettings;
 import de.lars.remotelightclient.network.Client;
@@ -409,8 +410,20 @@ public class WS281xGUI extends JFrame {
 		lblEffectSettingsStatus.setFont(new Font("Source Sans Pro", Font.PLAIN, 10));
 		lblEffectSettingsStatus.setBounds(10, 143, 200, 14);
 		panel_2.add(lblEffectSettingsStatus);
+		
+		JLabel lblInputStatus = new JLabel("");
+		lblInputStatus.setForeground(Color.RED);
+		lblInputStatus.setFont(new Font("Source Sans Pro", Font.PLAIN, 10));
+		lblInputStatus.setBounds(210, 33, 89, 14);
+		panel_2.add(lblInputStatus);
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(!PitchDetector.isMixerSet()) {
+					lblInputStatus.setText("No Input set!");
+					return;
+				}
+				lblInputStatus.setText("");
+				
 				if(MusicSync.isLoopActive()) {
 					MusicSync.stopLoop();
 					Client.send(new String[] {Identifier.WS_COLOR_OFF});

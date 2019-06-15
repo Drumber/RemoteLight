@@ -42,8 +42,8 @@ public class DataStorage {
 	
 	public static void start() {
 		try {
-			new File(System.getProperty("user.home") + File.separator  + ".RgbDeskLampClient").mkdirs();
-			storage = new FileStorage(new File(System.getProperty("user.home") + File.separator  + ".RgbDeskLampClient" + File.separator + "data.dat"));
+			new File(System.getProperty("user.home") + File.separator  + ".RemoteLightClient").mkdirs();
+			storage = new FileStorage(new File(System.getProperty("user.home") + File.separator  + ".RemoteLightClient" + File.separator + "data.dat"));
 		} catch (IllegalArgumentException | IOException e) {
 			e.printStackTrace();
 		}
@@ -109,7 +109,7 @@ public class DataStorage {
 	}
 	
 	public static boolean isCreated() {
-		if(new File(System.getProperty("user.home") + File.separator + ".RgbDeskLampClient" + File.separator + "data.dat").isFile())
+		if(new File(System.getProperty("user.home") + File.separator + ".RemoteLightClient" + File.separator + "data.dat").isFile())
 			return true;
 		else
 			return false;
