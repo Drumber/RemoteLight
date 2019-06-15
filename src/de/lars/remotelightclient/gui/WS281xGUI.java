@@ -780,6 +780,11 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnFire);
 		
 		JButton btnNorthernlights = new JButton("NorthernLights");
+		btnNorthernlights.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.NORTHERNLIGHTS);
+			}
+		});
 		btnNorthernlights.setToolTipText("NorthernLights");
 		btnNorthernlights.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnNorthernlights.setFocusable(false);

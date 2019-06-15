@@ -19,6 +19,7 @@ public class SceneHandler {
 		active = false;
 		Sunset.stop();
 		Fire.stop();
+		NorthernLights.stop();
 		Ocean.stop();
 		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
@@ -39,7 +40,7 @@ public class SceneHandler {
 			Fire.start();
 			break;
 		case NORTHERNLIGHTS:
-			
+			NorthernLights.start();
 			break;
 		case JUNGLE:
 			
