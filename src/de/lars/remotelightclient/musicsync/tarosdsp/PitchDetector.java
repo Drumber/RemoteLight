@@ -100,10 +100,13 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 						try {
 							setNewMixer((Mixer) arg0.getNewValue());
 						} catch (LineUnavailableException e) {
-							// TODO Auto-generated catch block
+							textArea.append("\u25b6" + " ERROR: Input unavailable!" + "\n");
 							e.printStackTrace();
 						} catch (UnsupportedAudioFileException e) {
-							// TODO Auto-generated catch block
+							textArea.append("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
+							e.printStackTrace();
+						} catch (IllegalArgumentException e) {
+							textArea.append("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
 							e.printStackTrace();
 						}
 					}
@@ -127,8 +130,13 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 					try {
 						setNewMixer(newValue);
 					} catch (LineUnavailableException e) {
+						textArea.append("\u25b6" + " ERROR: Input unavailable!" + "\n");
 						e.printStackTrace();
 					} catch (UnsupportedAudioFileException e) {
+						textArea.append("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						textArea.append("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
 						e.printStackTrace();
 					}
 					break;
