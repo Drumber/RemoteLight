@@ -20,6 +20,7 @@ public class SceneHandler {
 		Sunset.stop();
 		Fire.stop();
 		NorthernLights.stop();
+		Jungle.stop();
 		Ocean.stop();
 		Space.stop();
 		
@@ -44,7 +45,7 @@ public class SceneHandler {
 			NorthernLights.start();
 			break;
 		case JUNGLE:
-			
+			Jungle.start();
 			break;
 		case OCEAN:
 			Ocean.start();

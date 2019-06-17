@@ -792,6 +792,11 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnNorthernlights);
 		
 		JButton btnJungle = new JButton("Jungle");
+		btnJungle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.JUNGLE);
+			}
+		});
 		btnJungle.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnJungle.setFocusable(false);
 		btnJungle.setBounds(10, 45, 89, 23);
