@@ -809,6 +809,11 @@ public class WS281xGUI extends JFrame {
 		scenes.add(btnOcean);
 		
 		JButton btnSpace = new JButton("Space");
+		btnSpace.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SceneHandler.start(SceneHandler.SPACE);
+			}
+		});
 		btnSpace.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnSpace.setFocusable(false);
 		btnSpace.setBounds(208, 45, 89, 23);

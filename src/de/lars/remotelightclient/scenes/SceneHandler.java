@@ -21,6 +21,7 @@ public class SceneHandler {
 		Fire.stop();
 		NorthernLights.stop();
 		Ocean.stop();
+		Space.stop();
 		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 	}
@@ -49,7 +50,7 @@ public class SceneHandler {
 			Ocean.start();
 			break;
 		case SPACE:
-			
+			Space.start();
 			break;
 
 		default:
