@@ -222,7 +222,7 @@ public class MusicSync {
 		int r = color.getRed() - diff;
 		int g = color.getGreen() - diff;
 		int b = color.getBlue() - diff;
-		//System.out.println(r + " " + g + " " + b);
+		
 		if(r < 0) r = 0;
 		if(g < 0) g = 0;
 		if(b < 0) b = 0;
@@ -237,7 +237,7 @@ public class MusicSync {
 	private static Color fadeLastColor = colors[0];
 	private static void fade() {
 		if(bump) {
-			System.out.println("bump");
+			
 			if(color < colors.length - 1) {
 				color++;
 			}
@@ -284,8 +284,6 @@ public class MusicSync {
 				pulseBrightness = 200;
 			}
 		}
-		
-		//System.out.println("SPL: " + MusicSync.spl + " Min/Max: " + minSpl + "/" + maxSpl + " bright: " + pulseBrightness);
 		
 		int hz = (int) pitch;
 		if(hz < pulseLastHz) { //deeper sound

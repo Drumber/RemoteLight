@@ -57,7 +57,6 @@ public class WS281xGUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 7017941162622210272L;
 	private JPanel contentPane;
-	private int pixels = 60;
 	private JButton btnConnect;
 	private JLabel lblStatus, lblEffectSettingsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
@@ -73,7 +72,7 @@ public class WS281xGUI extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(WS281xGUI.class.getResource("/resourcen/led-Kiranshastry-64x.png")));
 		setTitle("WS281x Control");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 350, 600);
+		setBounds(100, 100, 350, 570);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -125,18 +124,6 @@ public class WS281xGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JButton btnOpenRgbGui = new JButton("Open RGB GUI with WS281x support");
-		btnOpenRgbGui.setFocusable(false);
-		btnOpenRgbGui.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Main.getRgbGUI().setVisible(true);
-				Client.send(new String[] {Identifier.STNG_MODE_WS28x, pixels+""});
-			}
-		});
-		btnOpenRgbGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		btnOpenRgbGui.setBounds(10, 506, 314, 23);
-		contentPane.add(btnOpenRgbGui);
 		
 		fieldServerIP = new JTextField();
 		fieldServerIP.setText((String) null);

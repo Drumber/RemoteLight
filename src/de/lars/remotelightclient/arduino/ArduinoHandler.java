@@ -9,7 +9,6 @@ import de.lars.remotelightclient.network.Identifier;
 public class ArduinoHandler {
 	
 	public static void handleIdentifier(String[] msg) {
-		//System.out.println("[ArduinoHandler] Identifier: " + msg[0]);
 		
 		if (msg.length > 0) {
 			
@@ -98,7 +97,6 @@ public class ArduinoHandler {
 					
 
 				default:
-					System.out.println("[ServerInputHandler] Identifier '" + msg[0] + "' not found!");
 					break;
 				}
 		}

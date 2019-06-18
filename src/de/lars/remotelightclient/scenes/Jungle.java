@@ -54,7 +54,6 @@ public class Jungle {
 						
 						counter += amount;
 						
-						//System.out.println("Counter: " + counter + " amount: " + amount + " green:" + greenNum + " color: " + greens[greenNum]);
 					}
 					
 					Client.sendWS281xList(backgrnd);
