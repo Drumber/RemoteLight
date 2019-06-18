@@ -3,7 +3,6 @@ package de.lars.remotelightclient.gui;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.GroupLayout;
@@ -49,7 +48,6 @@ import java.awt.event.ItemEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Toolkit;
-import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 
 public class WS281xGUI extends JFrame {
@@ -334,7 +332,7 @@ public class WS281xGUI extends JFrame {
 		lblEffect.setBounds(10, 11, 46, 14);
 		panel_2.add(lblEffect);
 		
-		JComboBox comboBoxMusicSync = new JComboBox();
+		JComboBox<String> comboBoxMusicSync = new JComboBox<String>();
 		comboBoxMusicSync.setFocusable(false);
 		comboBoxMusicSync.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -342,7 +340,7 @@ public class WS281xGUI extends JFrame {
 				MusicSync.setAnimation(selected);
 			}
 		});
-		comboBoxMusicSync.setModel(new DefaultComboBoxModel(new String[] {"RunningLight", "LevelBar", "Rainbow", "Bump", "EQ", "Fade", "Pulse"}));
+		comboBoxMusicSync.setModel(new DefaultComboBoxModel<String>(new String[] {"RunningLight", "LevelBar", "Rainbow", "Bump", "EQ", "Fade", "Pulse"}));
 		comboBoxMusicSync.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		comboBoxMusicSync.setBounds(49, 8, 89, 23);
 		panel_2.add(comboBoxMusicSync);
@@ -832,7 +830,7 @@ public class WS281xGUI extends JFrame {
 				SceneHandler.stop();
 			}
 		});
-		btnStop_1.setBounds(208, 86, 89, 23);
+		btnStop_1.setBounds(10, 86, 89, 23);
 		scenes.add(btnStop_1);
 		
 		JLabel lblDim = new JLabel("Brightness:");

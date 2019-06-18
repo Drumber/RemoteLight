@@ -6,8 +6,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
 import de.lars.remotelightclient.musicsync.ws281x.Bump;
@@ -28,11 +26,6 @@ public class MusicSync {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					} catch (Exception e) {
-						//ignore failure to set default look en feel;
-					}
 					frame = new PitchDetector();
 					frame.pack();
 					frame.dispose();
@@ -78,8 +71,6 @@ public class MusicSync {
 	private static double pitchTime;
 	
 	private static int noInfoCounter, sameMinSplCounter, sameMaxSplCounter;
-	private static boolean noSoundInfo;
-	
 	
 	public static void soundToLight(float pitch, double rms, double time) {
 		volume = rms;
@@ -161,12 +152,10 @@ public class MusicSync {
 						if(spl == 0) {
 							if(noInfoCounter <= 15) noInfoCounter++;
 							else { //time is over
-								noSoundInfo = true;
 								spl = 0;
 								maxSpl = 0;
 							}
 						} else {
-							noSoundInfo = false;
 							noInfoCounter = 0;
 						}
 						

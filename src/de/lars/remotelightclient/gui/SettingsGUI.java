@@ -282,11 +282,11 @@ public class SettingsGUI extends JFrame {
 		lblMode.setFocusable(false);
 		lblMode.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		
-		JComboBox boxMode = new JComboBox();
+		JComboBox<String> boxMode = new JComboBox<String>();
 		boxMode.setFocusable(false);
 		boxMode.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		boxMode.setToolTipText("Select the device you want to control");
-		boxMode.setModel(new DefaultComboBoxModel(new String[] {"RGB LED/Strip (RPi)", "WS281x Strip (RPi)", "WS281x Strip (Arduino)"}));
+		boxMode.setModel(new DefaultComboBoxModel<String>(new String[] {"RGB LED/Strip (RPi)", "WS281x Strip (RPi)", "WS281x Strip (Arduino)"}));
 		if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 			if(mode.equalsIgnoreCase("RGB")) {

@@ -41,7 +41,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import javax.swing.JToolBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -59,7 +58,6 @@ public class RgbGUI extends JFrame {
 	private JTextField fieldServerIP;
 	private JLabel lblStatus, lblColorRight, lblColorLeft;
 	private JButton btnConnect;
-	private boolean connected;
 	JPanel panelScreenColorLeft, panelScreenColorRight;
 	JPanel panelMusicSyncLeft, panelMusicSyncRight;
 	
@@ -746,7 +744,7 @@ public class RgbGUI extends JFrame {
 		sliderMusicSensitivity.setBounds(9, 56, 200, 26);
 		panelMusicSync.add(sliderMusicSensitivity);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				String selected = comboBox.getSelectedItem().toString().toUpperCase();
@@ -766,7 +764,7 @@ public class RgbGUI extends JFrame {
 				}
 			}
 		});
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Fade", "Pulse", "Bass"}));
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Fade", "Pulse", "Bass"}));
 		comboBox.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
 		comboBox.setBounds(70, 115, 79, 23);
 		panelMusicSync.add(comboBox);
@@ -854,13 +852,11 @@ public class RgbGUI extends JFrame {
 	
 	public void setConnectedState() {
 		btnConnect.setText("Disconnect");
-		connected = true;
 		lblStatus.setText("");
 	}
 	
 	public void setDisconnectedState() {
 		btnConnect.setText("Connect");
-		connected = false;
 	}
 	
 	public void setCurentColorPanel(Color left, Color right) {
