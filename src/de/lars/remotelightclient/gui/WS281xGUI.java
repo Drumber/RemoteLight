@@ -201,7 +201,7 @@ public class WS281xGUI extends JFrame {
 				Client.send(new String[] {Identifier.WS_ANI_SPEED, slider.getValue()+""});
 			}
 		});
-		slider.setMaximum(500);
+		slider.setMaximum(300);
 		slider.setMinimum(10);
 		
 		JLabel lblSpeed = new JLabel("Speed:");
