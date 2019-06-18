@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 
@@ -38,6 +41,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JSeparator;
@@ -116,11 +120,20 @@ public class WS281xGUI extends JFrame {
 		});
 		mnRaspberrypi.add(mntmShutdown);
 		
-		JMenu menu_1 = new JMenu("Help");
-		menuBar.add(menu_1);
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
 		
-		JMenuItem menuItem_3 = new JMenuItem("Github");
-		menu_1.add(menuItem_3);
+		JMenuItem mntmWebsite = new JMenuItem("Website");
+		mntmWebsite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Desktop.getDesktop().browse(new URI(Main.WEBSITE));
+				} catch (IOException | URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnHelp.add(mntmWebsite);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -200,7 +213,7 @@ public class WS281xGUI extends JFrame {
 		btnWipe.setBounds(10, 45, 89, 23);
 		panel.add(btnWipe);
 		
-		JButton btnScan = new JButton("Scan");
+		JButton btnScan = new JButton("Scanner");
 		btnScan.setFocusable(false);
 		btnScan.setBounds(208, 11, 89, 23);
 		panel.add(btnScan);

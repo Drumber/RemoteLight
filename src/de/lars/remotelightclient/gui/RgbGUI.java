@@ -16,6 +16,8 @@ import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Cursor;
+import java.awt.Desktop;
+
 import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.DataStorage;
@@ -35,6 +37,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.border.LineBorder;
 import javax.swing.JComboBox;
@@ -105,8 +110,17 @@ public class RgbGUI extends JFrame {
 		JMenu menu_1 = new JMenu("Help");
 		menuBar.add(menu_1);
 		
-		JMenuItem menuItem_3 = new JMenuItem("Github");
-		menu_1.add(menuItem_3);
+		JMenuItem mntmWebsite = new JMenuItem("Website");
+		mntmWebsite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Desktop.getDesktop().browse(new URI(Main.WEBSITE));
+				} catch (IOException | URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		menu_1.add(mntmWebsite);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

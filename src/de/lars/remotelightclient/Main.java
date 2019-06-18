@@ -16,6 +16,7 @@ import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 public class Main {
 	
 	public final static String VERSION = "0.0.7";
+	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	
 	private static SettingsGUI settingsGui;
 	private static RgbGUI rgbGui;
