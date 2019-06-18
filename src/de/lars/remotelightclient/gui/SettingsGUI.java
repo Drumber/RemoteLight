@@ -227,8 +227,6 @@ public class SettingsGUI extends JFrame {
 		}
 		
 		JCheckBox chckbxShowLast = new JCheckBox("Show last");
-		chckbxShowLast.setEnabled(false);
-		chckbxShowLast.setVisible(false);
 		chckbxShowLast.setFocusable(false);
 		chckbxShowLast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -312,8 +310,6 @@ public class SettingsGUI extends JFrame {
 		});
 		
 		JCheckBox chkAutostart = new JCheckBox("Autostart");
-		chkAutostart.setEnabled(false);
-		chkAutostart.setVisible(false);
 		chkAutostart.setFocusable(false);
 		chkAutostart.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		chkAutostart.addChangeListener(new ChangeListener() {
@@ -359,8 +355,6 @@ public class SettingsGUI extends JFrame {
 		fieldServerIP.setText((String) DataStorage.getData(DataStorage.IP_STOREKEY));
 		
 		JCheckBox chkAutoShutdownRaspberrypi = new JCheckBox("Auto Shutdown RaspberryPi");
-		chkAutoShutdownRaspberrypi.setVisible(false);
-		chkAutoShutdownRaspberrypi.setEnabled(false);
 		chkAutoShutdownRaspberrypi.setFocusable(false);
 		chkAutoShutdownRaspberrypi.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		chkAutoShutdownRaspberrypi.addActionListener(new ActionListener() {

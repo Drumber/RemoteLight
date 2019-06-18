@@ -62,7 +62,7 @@ public class InputPanel extends JPanel {
 			group.add(button);
 			button.setActionCommand(info.toString());
 			button.addActionListener(setInput);
-			//set last time used input as selected
+			//set last time input as selected
 			if(data != null) {
 				if(data.equals(info.toString()))
 					button.setSelected(true);

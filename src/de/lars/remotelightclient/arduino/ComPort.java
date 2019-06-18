@@ -15,7 +15,7 @@ public class ComPort {
 	
 	private static SerialPort port = null;
 	private static OutputStream output;
-	
+	//private static Scanner input;
 	private static Timer timer;
 	private static boolean open = false;
 	
@@ -43,6 +43,7 @@ public class ComPort {
 			
 			startLoop();
 			
+			//startReceiving();
 			return true;
 		} else {
 			System.out.println("[COM] Could not open port!");
@@ -119,4 +120,20 @@ public class ComPort {
 			return port.getSystemPortName();
 		return "";
 	}
+	
+	/*
+	public static void startReceiving() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				input = new Scanner(port.getInputStream());
+				while(input.hasNextLine()) {
+					System.out.println("[COM] >> " + input.nextLine());
+				}
+			}
+		}).start();
+	}
+	*/
+
 }

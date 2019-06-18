@@ -10,6 +10,10 @@ import de.lars.remotelightclient.network.Identifier;
 
 public class Sunset {
 	
+	/*
+	 * effekt: langsames rot/gelb/orange shiften
+	 */
+	
 	private static boolean active;
 	private static Color[] sun;
 	

@@ -258,6 +258,8 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 				d += z;
 			}
 			
+			//System.out.println(low1 + " | " + low2 + " | " + mid1 + " | " + mid2 + " | " + high1 + " | " + high2);
+			
 			return true;
 		}
 		

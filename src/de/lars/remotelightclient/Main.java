@@ -25,7 +25,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		DataStorage.start();
-		
+		//DataStorage.remove(DataStorage.SETTINGS_CONTROL_MODEKEY); //TODO remove this! only for debug...
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
