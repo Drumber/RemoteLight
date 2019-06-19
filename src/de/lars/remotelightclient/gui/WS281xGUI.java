@@ -922,10 +922,12 @@ public class WS281xGUI extends JFrame {
 	public void setConnectedState() {
 		btnConnect.setText("Disconnect");
 		lblStatus.setText("");
+		this.setTitle("WS281x | RaspberryPi >> " + fieldServerIP.getText());
 	}
 	
 	public void setDisconnectedState() {
 		btnConnect.setText("Connect");
+		this.setTitle("WS281x Control");
 	}
 	
 	private void sendColor(Color color) {

@@ -29,8 +29,10 @@ public class StartUp {
 					for(int i = 0; i < ComPort.getComPorts().length; i++) {
 						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPort.getComPorts()[i].getSystemPortName())) {
 							ComPort.openPort(ComPort.getComPorts()[i]);
-							if(ComPort.isOpen())
+							if(ComPort.isOpen()) {
 								Main.getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
+								Main.getSettingsGUI().setComButtonText("Close");
+							}
 						}
 					}
 				}

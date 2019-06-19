@@ -42,6 +42,7 @@ public class SettingsGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField fieldServerIP;
 	private JLabel lblComPortStatus;
+	private JButton btnComOpen;
 
 
 	/**
@@ -131,7 +132,7 @@ public class SettingsGUI extends JFrame {
 		}
 		
 		
-		JButton btnComOpen = new JButton("Open");
+		btnComOpen = new JButton("Open");
 		btnComOpen.setFocusable(false);
 		btnComOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -454,5 +455,9 @@ public class SettingsGUI extends JFrame {
 	
 	public void setComPortStatusLabel(String text) {
 		lblComPortStatus.setText(text);
+	}
+	
+	public void setComButtonText(String text) {
+		btnComOpen.setText(text);
 	}
 }
