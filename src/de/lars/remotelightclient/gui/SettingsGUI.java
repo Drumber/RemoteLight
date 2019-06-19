@@ -447,7 +447,7 @@ public class SettingsGUI extends JFrame {
 		if(!data.containsKey(DataStorage.SETTINGS_AUTOSTART))
 			DataStorage.store(DataStorage.SETTINGS_AUTOSTART, true);
 		if(!data.containsKey(DataStorage.SETTINGS_HIDE))
-			DataStorage.store(DataStorage.SETTINGS_HIDE, true);
+			DataStorage.store(DataStorage.SETTINGS_HIDE, false);
 		if(!data.containsKey(DataStorage.SETTINGS_LED_NUM))
 			DataStorage.store(DataStorage.SETTINGS_LED_NUM, 60);
 		

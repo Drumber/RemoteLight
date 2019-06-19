@@ -59,7 +59,7 @@ public class SelectionWindow extends JFrame {
 		txtpnControlThreeSeperate.setFocusable(false);
 		txtpnControlThreeSeperate.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		txtpnControlThreeSeperate.setEditable(false);
-		txtpnControlThreeSeperate.setText("Control three separate LEDs (red, green, blue) or one RGB-LED per side (left / right).\r\nSix GPIO pins + GRND are required.");
+		txtpnControlThreeSeperate.setText("Control three separate LEDs (red, green, blue) or one RGB-LED per side (left / right).\r\nRGB strips should also work.");
 		
 		JTextPane txtpnControlOneWswswsb = new JTextPane();
 		txtpnControlOneWswswsb.setFocusable(false);
@@ -80,6 +80,7 @@ public class SelectionWindow extends JFrame {
 		btnSelectWS281x.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Main.setWS281xMode();
+				Main.getSettingsGUI().setVisible(true);
 			}
 		});
 		btnSelectWS281x.setFocusable(false);
