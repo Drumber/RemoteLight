@@ -28,8 +28,7 @@ public class SystemTrayIcon {
 	public static void showTrayIcon() {
 		if (SystemTray.isSupported()) {
 		    tray = SystemTray.getSystemTray();
-		    Image image = new ImageIcon(StartUp.class.getResource("/resourcen/led-icon-Kiranshastry.png")).getImage();
-		    
+		    Image image = new ImageIcon(StartUp.class.getResource("/resourcen/Icon-16x16.png")).getImage();
 
 		    PopupMenu popup = new PopupMenu();
 		    MenuItem show = new MenuItem("Show Gui");
@@ -40,6 +39,7 @@ public class SystemTrayIcon {
 		    popup.add(exit);
 
 		    trayIcon = new TrayIcon(image, "RemoteLightClient", popup);
+		    trayIcon.setImageAutoSize(true);
 		    trayIcon.addActionListener(listenerShow);
 		    trayIcon.addMouseListener(mouseListener);
 		    try {

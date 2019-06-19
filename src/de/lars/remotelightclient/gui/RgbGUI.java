@@ -71,7 +71,7 @@ public class RgbGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public RgbGUI() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(RgbGUI.class.getResource("/resourcen/led-Kiranshastry-64x.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RgbGUI.class.getResource("/resourcen/Icon-128x128.png")));
 		setResizable(false);
 		setTitle("RGB Desk Lamp Client");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

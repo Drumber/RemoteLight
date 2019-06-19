@@ -50,7 +50,7 @@ public class SettingsGUI extends JFrame {
 	 */
 	public SettingsGUI() {
 		setFocusable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsGUI.class.getResource("/resourcen/led-Kiranshastry-64x.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsGUI.class.getResource("/resourcen/Icon-128x128.png")));
 		setResizable(false);
 		standardSettings();
 		setTitle("RemoteLight " + Main.VERSION + " | Settings");

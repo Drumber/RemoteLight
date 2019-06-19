@@ -32,7 +32,7 @@ public class SelectionWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public SelectionWindow() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(SelectionWindow.class.getResource("/resourcen/led-Kiranshastry-64x.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(SelectionWindow.class.getResource("/resourcen/Icon-128x128.png")));
 		setTitle("RGB DeskLamp | Select Device");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 250);
