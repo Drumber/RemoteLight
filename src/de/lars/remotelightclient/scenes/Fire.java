@@ -30,11 +30,11 @@ public class Fire {
 				@Override
 				public void run() {
 					
-					HashMap<Integer, Color> pixelHash = new HashMap<>();
 					int pixels = Main.getLedNum();
 					
 					while(active) {
 						
+						HashMap<Integer, Color> pixelHash = new HashMap<>();
 						int r = 255, g = 95, b = 12;
 						
 						for(int i = 0; i < pixels; i++) {
