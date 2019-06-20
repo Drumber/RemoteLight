@@ -83,8 +83,10 @@ public class Main {
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 		
 		DataStorage.save();
-		ComPort.closePort();
-		Client.disconnect();
+		if(ComPort.isOpen())
+			ComPort.closePort();
+		if(Client.isConnected())
+			Client.disconnect();
 	}
 	
 	public static void setRGBMode() {
