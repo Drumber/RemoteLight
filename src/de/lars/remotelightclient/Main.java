@@ -33,8 +33,6 @@ public class Main {
 		
 		new Main();
 		//DataStorage.remove(DataStorage.SETTINGS_CONTROL_MODEKEY); //TODO remove this! only for debug...
-		
-		new MusicSync();
 
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
 		      public void run() {

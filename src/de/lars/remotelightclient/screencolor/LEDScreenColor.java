@@ -34,7 +34,8 @@ public class LEDScreenColor {
 								curentColorR = ScreenPixelDetector.getPixelColorRight();
 								Client.send(new String[] {Identifier.SC_COLOR_LEFT, curentColorL.getRed()+"", curentColorL.getGreen()+"", curentColorL.getBlue()+""});
 								Client.send(new String[] {Identifier.SC_COLOR_RIGHT, curentColorR.getRed()+"", curentColorR.getGreen()+"", curentColorR.getBlue()+""});
-								Main.getInstance().getRgbGUI().setCurentColorPanel(curentColorL, curentColorR);
+								if(Main.getInstance().getRgbGUI() != null)
+									Main.getInstance().getRgbGUI().setCurentColorPanel(curentColorL, curentColorR);
 							} else
 								timer.cancel();
 							

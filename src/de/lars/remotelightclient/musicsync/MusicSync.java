@@ -1,11 +1,9 @@
 package de.lars.remotelightclient.musicsync;
 
 import java.awt.Color;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
 import de.lars.remotelightclient.musicsync.ws281x.Bump;
@@ -18,36 +16,27 @@ import de.lars.remotelightclient.network.Identifier;
 
 public class MusicSync {
 	
-	private static boolean guiOpen;
 	private static JFrame frame;
 	
 	public MusicSync() {
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					frame = new PitchDetector();
-					frame.pack();
-					frame.dispose();
-				}
-			});
-		} catch (InvocationTargetException | InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public static void openGUI() {
-		if(!frame.isVisible()) {
-			frame.setVisible(true);
-			guiOpen = true;
-		}
-	}
-	
-	public static void closeGUI() {
-		if(guiOpen) {
+		if(frame == null) {
+			frame = new PitchDetector();
+			frame.pack();
 			frame.dispose();
-			guiOpen = false;
+		}
+	}
+	
+	public void openGUI() {
+		if(frame == null) {
+			frame = new PitchDetector();
+			frame.pack();
+		}
+		frame.setVisible(true);
+	}
+	
+	public void closeGUI() {
+		if(frame != null) {
+			frame.dispose();
 		}
 	}
 	
@@ -59,7 +48,7 @@ public class MusicSync {
 	 *  
 	 * =================
 	 */
-	private static boolean loop;
+	private static boolean active;
 	private final static int DELAY = 80;
 	private static boolean bump = false;
 	private static double volume, lastVolume, maxVolume = 2.0,
@@ -94,19 +83,19 @@ public class MusicSync {
 		return animation;
 	}
 	
-	public static boolean isLoopActive() {
-		return loop;
+	public static boolean isActive() {
+		return active;
 	}
 	
 	//loop
-	public static void startLoop() {
-		if(!loop) {
-			loop = true;
+	public static void start() {
+		if(!active) {
+			active = true;
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
-					while(loop) {
+					while(active) {
 						spl = PitchDetector.getCurrentSPL();
 						//increase minSpl / decrease maxSpl a little bit if the song has only a short quiet/loud part
 						if(lastMinSpl == minSpl) {
@@ -204,7 +193,7 @@ public class MusicSync {
 	}
 	
 	public static void stopLoop() {
-		loop = false;
+		active = false;
 	}
 	
 	private static Color dimColor(Color color, int dimValue) {
@@ -244,7 +233,8 @@ public class MusicSync {
 			else color = 0;
 			fadeLastColor = colors[color];
 		}
-		Main.getInstance().getRgbGUI().setMusicSyncColorPanel(fadeLastColor, fadeLastColor);
+		if(Main.getInstance().getRgbGUI() != null)
+			Main.getInstance().getRgbGUI().setMusicSyncColorPanel(fadeLastColor, fadeLastColor);
 		Client.send(new String[] {Identifier.COLOR_COLOR, fadeLastColor.getRed()+"", fadeLastColor.getGreen()+"", fadeLastColor.getBlue()+""});
 		
 		if((fadeLastColor.getRed() != 0) || (fadeLastColor.getGreen() != 0) || (fadeLastColor.getBlue() != 0)) fadeLastColor = dimColor(fadeLastColor, 2);
@@ -301,7 +291,8 @@ public class MusicSync {
 		}
 		pulseLastHz = hz;
 		Color c = changeBrightness(pulseColor, pulseBrightness);
-		Main.getInstance().getRgbGUI().setMusicSyncColorPanel(c, c);
+		if(Main.getInstance().getRgbGUI() != null)
+			Main.getInstance().getRgbGUI().setMusicSyncColorPanel(c, c);
 		Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
 	}
 	

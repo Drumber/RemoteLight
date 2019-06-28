@@ -59,6 +59,7 @@ public class RgbGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5268393542712389384L;
+	private MusicSync musicSync;
 	private JPanel contentPane;
 	private JTextField fieldServerIP;
 	private JLabel lblStatus, lblColorRight, lblColorLeft;
@@ -721,7 +722,9 @@ public class RgbGUI extends JFrame {
 		JButton btnOpenSettingsGui = new JButton("Settings");
 		btnOpenSettingsGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MusicSync.openGUI();
+				if(musicSync == null)
+					musicSync = new MusicSync();
+				musicSync.openGUI();
 			}
 		});
 		btnOpenSettingsGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
@@ -791,11 +794,14 @@ public class RgbGUI extends JFrame {
 		JButton btnMusicSyncEnable = new JButton("Enable");
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(MusicSync.isLoopActive()) {
+				if(musicSync == null)
+					musicSync = new MusicSync();
+				
+				if(MusicSync.isActive()) {
 					MusicSync.stopLoop();
 					btnMusicSyncEnable.setText("Enable");
 				} else {
-					MusicSync.startLoop();
+					MusicSync.start();
 					btnMusicSyncEnable.setText("Disable");
 				}
 			}

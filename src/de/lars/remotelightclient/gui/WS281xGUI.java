@@ -60,6 +60,7 @@ public class WS281xGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 7017941162622210272L;
+	private MusicSync musicSync;
 	private JPanel contentPane;
 	private int pixels = 60;
 	private JButton btnConnect;
@@ -363,7 +364,9 @@ public class WS281xGUI extends JFrame {
 		btnOpenSettingsGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnOpenSettingsGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MusicSync.openGUI();
+				if(musicSync == null)
+					musicSync = new MusicSync();
+				musicSync.openGUI();
 			}
 		});
 		btnOpenSettingsGui.setBounds(210, 7, 89, 23);
@@ -429,19 +432,22 @@ public class WS281xGUI extends JFrame {
 		panel_2.add(lblInputStatus);
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(musicSync == null) {
+					musicSync = new MusicSync();
+				}
 				if(!PitchDetector.isMixerSet()) {
 					lblInputStatus.setText("No Input set!");
 					return;
 				}
 				lblInputStatus.setText("");
 				
-				if(MusicSync.isLoopActive()) {
+				if(MusicSync.isActive()) {
 					MusicSync.stopLoop();
 					Client.send(new String[] {Identifier.WS_COLOR_OFF});
 					btnMusicSyncEnable.setText("Enable");
 				} else {
 					MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString().toUpperCase());
-					MusicSync.startLoop();
+					MusicSync.start();
 					btnMusicSyncEnable.setText("Disable");
 				}
 			}

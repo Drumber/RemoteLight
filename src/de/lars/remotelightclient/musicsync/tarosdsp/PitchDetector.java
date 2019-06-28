@@ -150,6 +150,11 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 	private int bufferSize = 1024 * 4;
 	private int overlap = 768 * 4;
 	
+	public void stopAudioDispatcher() {
+		if(dispatcher != null)
+			dispatcher.stop();
+	}
+	
 	private void setNewMixer(Mixer mixer) throws LineUnavailableException,
 			UnsupportedAudioFileException {
 		
