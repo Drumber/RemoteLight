@@ -143,7 +143,7 @@ public class SettingsGUI extends JFrame {
 								ComPort.openPort(ComPort.getComPorts()[i]);
 								if(ComPort.isOpen()) {
 									btnComOpen.setText("Close");
-									Main.getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
+									Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
 								}
 							}
 						}
@@ -151,7 +151,7 @@ public class SettingsGUI extends JFrame {
 				} else {
 					ComPort.closePort();
 					btnComOpen.setText("Open");
-					Main.getWS281xGUI().setTitle("WS281x Control");
+					Main.getInstance().getWS281xGUI().setTitle("WS281x Control");
 				}
 			}
 		});

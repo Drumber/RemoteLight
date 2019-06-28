@@ -61,14 +61,14 @@ public class SystemTrayIcon {
 			if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 				String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 				if(mode.toUpperCase().equals("RGB")) {
-					Main.getRgbGUI().setVisible(true);
+					Main.getInstance().openRgbGui();
 				} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-					Main.getWS281xGUI().setVisible(true);
+					Main.getInstance().openWS281xGui();;
 				} else {
-					Main.getSelectionWindow().setVisible(true);
+					Main.getInstance().openSelectionWindow();
 				}
 			} else {
-				Main.getSelectionWindow().setVisible(true);
+				Main.getInstance().openSelectionWindow();
 			}
 		}
     };
@@ -86,14 +86,14 @@ public class SystemTrayIcon {
 				if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 					String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 					if(mode.toUpperCase().equals("RGB")) {
-						Main.getRgbGUI().setVisible(true);
+						Main.getInstance().openRgbGui();
 					} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-						Main.getWS281xGUI().setVisible(true);
+						Main.getInstance().openRgbGui();
 					} else {
-						Main.getSelectionWindow().setVisible(true);
+						Main.getInstance().openSelectionWindow();
 					}
 				} else {
-					Main.getSelectionWindow().setVisible(true);
+					Main.getInstance().openSelectionWindow();
 				}
             }
         }

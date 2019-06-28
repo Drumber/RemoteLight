@@ -244,7 +244,7 @@ public class MusicSync {
 			else color = 0;
 			fadeLastColor = colors[color];
 		}
-		Main.getRgbGUI().setMusicSyncColorPanel(fadeLastColor, fadeLastColor);
+		Main.getInstance().getRgbGUI().setMusicSyncColorPanel(fadeLastColor, fadeLastColor);
 		Client.send(new String[] {Identifier.COLOR_COLOR, fadeLastColor.getRed()+"", fadeLastColor.getGreen()+"", fadeLastColor.getBlue()+""});
 		
 		if((fadeLastColor.getRed() != 0) || (fadeLastColor.getGreen() != 0) || (fadeLastColor.getBlue() != 0)) fadeLastColor = dimColor(fadeLastColor, 2);
@@ -301,7 +301,7 @@ public class MusicSync {
 		}
 		pulseLastHz = hz;
 		Color c = changeBrightness(pulseColor, pulseBrightness);
-		Main.getRgbGUI().setMusicSyncColorPanel(c, c);
+		Main.getInstance().getRgbGUI().setMusicSyncColorPanel(c, c);
 		Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
 	}
 	

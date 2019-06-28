@@ -86,7 +86,7 @@ public class RgbGUI extends JFrame {
 		JMenuItem menuItem = new JMenuItem("Settings");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.openSettingsGui();
+				Main.getInstance().openSettingsGui();
 			}
 		});
 		menu.add(menuItem);
@@ -94,7 +94,7 @@ public class RgbGUI extends JFrame {
 		JMenuItem menuItem_1 = new JMenuItem("WS281x");
 		menuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.openWS281xGui();
+				Main.getInstance().openWS281xGui();
 			}
 		});
 		menu.add(menuItem_1);
@@ -891,7 +891,7 @@ public class RgbGUI extends JFrame {
 		public void windowClosing(WindowEvent windowEvent) {
 			if((boolean) DataStorage.getData(DataStorage.SETTINGS_HIDE)) {
 				SystemTrayIcon.showTrayIcon();
-				Main.getRgbGUI().dispose();
+				RgbGUI.this.dispose();
 			} else {
 				System.exit(0);
 			}

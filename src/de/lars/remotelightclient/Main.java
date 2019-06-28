@@ -15,31 +15,26 @@ import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
 public class Main {
 	
-	public final static String VERSION = "0.1.0";
+	public final static String VERSION = "0.1.0.1";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	
-	private static SettingsGUI settingsGui;
-	private static RgbGUI rgbGui;
-	private static WS281xGUI ws281xGui;
-	private static SelectionWindow selectionWindow;
+	private static Main instance;
+	private SettingsGUI settingsGui;
+	private RgbGUI rgbGui;
+	private WS281xGUI ws281xGui;
+	private SelectionWindow selectionWindow;
 	
 
 	public static void main(String[] args) {
-		DataStorage.start();
-		//DataStorage.remove(DataStorage.SETTINGS_CONTROL_MODEKEY); //TODO remove this! only for debug...
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-		settingsGui = new SettingsGUI();
-		rgbGui = new RgbGUI();
-		ws281xGui = new WS281xGUI();
-		selectionWindow = new SelectionWindow();
-		new MusicSync();
+				| UnsupportedLookAndFeelException e) { e.printStackTrace(); }
 		
-		StartUp.startUp();
+		new Main();
+		//DataStorage.remove(DataStorage.SETTINGS_CONTROL_MODEKEY); //TODO remove this! only for debug...
+		
+		new MusicSync();
 
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
 		      public void run() {
@@ -50,59 +45,75 @@ public class Main {
 	    }); 
 	}
 	
-	public static RgbGUI getRgbGUI() {
+	public Main() {
+		instance = this;
+		DataStorage.start();
+		settingsGui = new SettingsGUI();
+		StartUp.startUp();
+	}
+	
+	public static Main getInstance() {
+		return instance;
+	}
+	
+	public RgbGUI getRgbGUI() {
 		return rgbGui;
 	}
 	
-	public static WS281xGUI getWS281xGUI() {
+	public WS281xGUI getWS281xGUI() {
 		return ws281xGui;
 	}
 	
-	public static SelectionWindow getSelectionWindow() {
+	public SelectionWindow getSelectionWindow() {
 		return selectionWindow;
 	}
 	
-	public static SettingsGUI getSettingsGUI() {
+	public SettingsGUI getSettingsGUI() {
 		return settingsGui;
 	}
 	
-	public static void openSettingsGui() {
+	public void openSelectionWindow() {
+		if(selectionWindow == null)
+			selectionWindow = new SelectionWindow();
+		selectionWindow.setVisible(true);
+	}
+	
+	public void openSettingsGui() {
+		if(settingsGui == null)
+			settingsGui = new SettingsGUI();
 		settingsGui.setVisible(true);
 	}
 	
-	public static void openWS281xGui() {
-		rgbGui.dispose();
+	public void openRgbGui() {
+		if(rgbGui == null)
+			rgbGui = new RgbGUI();
+		rgbGui.setVisible(true);
+	}
+	
+	public void openWS281xGui() {
+		if(ws281xGui == null)
+			ws281xGui = new WS281xGUI();
 		ws281xGui.setVisible(true);
 	}
 	
-	public static void close() {
-		MusicSync.stopLoop();
-		WS281xScreenColorHandler.stop();
-		Client.send(new String[] {Identifier.WS_ANI_STOP});
-		
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
-		
-		DataStorage.save();
-		if(ComPort.isOpen())
-			ComPort.closePort();
-		if(Client.isConnected())
-			Client.disconnect();
-	}
-	
-	public static void setRGBMode() {
-		selectionWindow.dispose();
-		ws281xGui.dispose();
+	public void setRGBMode() {
+		rgbGui = new RgbGUI();
 		rgbGui.setVisible(true);
 		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "RGB");
 		Client.send(new String[] {Identifier.STNG_MODE_WS28x});
 	}
 	
-	public static void setWS281xMode() {
-		selectionWindow.dispose();
-		rgbGui.dispose();
+	public void setWS281xMode() {
+		ws281xGui = new WS281xGUI();
 		ws281xGui.setVisible(true);
 		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "WS281x");
 		Client.send(new String[] {Identifier.STNG_MODE_WS28x, DataStorage.getData(DataStorage.SETTINGS_LED_NUM)+""});
+	}
+	
+	public void setArduinoMode() {
+		ws281xGui = new WS281xGUI();
+		ws281xGui.setVisible(true);
+		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "Arduino");
 	}
 	
 	public static boolean isArduinoMode() {
@@ -118,5 +129,19 @@ public class Main {
 		return (int) DataStorage.getData(DataStorage.SETTINGS_LED_NUM);
 	}
 	
+	
+	public static void close() {
+		MusicSync.stopLoop();
+		WS281xScreenColorHandler.stop();
+		Client.send(new String[] {Identifier.WS_ANI_STOP});
+		
+		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		
+		DataStorage.save();
+		if(ComPort.isOpen())
+			ComPort.closePort();
+		if(Client.isConnected())
+			Client.disconnect();
+	}
 
 }

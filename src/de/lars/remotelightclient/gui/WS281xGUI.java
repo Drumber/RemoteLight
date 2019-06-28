@@ -88,7 +88,7 @@ public class WS281xGUI extends JFrame {
 		JMenuItem menuItem = new JMenuItem("Settings");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.openSettingsGui();
+				Main.getInstance().openSettingsGui();
 			}
 		});
 		menu.add(menuItem);
@@ -96,7 +96,7 @@ public class WS281xGUI extends JFrame {
 		JMenuItem mntmRgb = new JMenuItem("RGB");
 		mntmRgb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.setRGBMode();
+				Main.getInstance().openRgbGui();
 			}
 		});
 		menu.add(mntmRgb);
@@ -143,7 +143,7 @@ public class WS281xGUI extends JFrame {
 		btnOpenRgbGui.setFocusable(false);
 		btnOpenRgbGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.getRgbGUI().setVisible(true);
+				Main.getInstance().openRgbGui();
 				Client.send(new String[] {Identifier.STNG_MODE_WS28x, pixels+""});
 			}
 		});
@@ -943,7 +943,7 @@ public class WS281xGUI extends JFrame {
 		public void windowClosing(WindowEvent windowEvent) {
 			if((boolean) DataStorage.getData(DataStorage.SETTINGS_HIDE)) {
 				SystemTrayIcon.showTrayIcon();
-				Main.getWS281xGUI().dispose();
+				WS281xGUI.this.dispose();
 			} else {
 				System.exit(0);
 			}

@@ -29,13 +29,13 @@ public class Client {
 				System.out.println("[Client] Connecting to " + address.toString());
 				socket.connect(address, 5000);
 				out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-				Main.getRgbGUI().setConnectedState();
-				Main.getWS281xGUI().setConnectedState();
+				Main.getInstance().getRgbGUI().setConnectedState();
+				Main.getInstance().getWS281xGUI().setConnectedState();
 				
 			} catch (IOException e) {
 				e.printStackTrace();
-				Main.getRgbGUI().setConnectionStatus("ERROR: Could not connect to Server!");
-				Main.getWS281xGUI().setConnectionStatus("ERROR: Could not connect to Server!");
+				Main.getInstance().getRgbGUI().setConnectionStatus("ERROR: Could not connect to Server!");
+				Main.getInstance().getWS281xGUI().setConnectionStatus("ERROR: Could not connect to Server!");
 				connected = false;
 				close();
 			}
@@ -104,8 +104,8 @@ public class Client {
 		// disconnect
 		send("DISCONNECT");
 		connected = false;
-		Main.getRgbGUI().setDisconnectedState();
-		Main.getWS281xGUI().setDisconnectedState();
+		Main.getInstance().getRgbGUI().setDisconnectedState();
+		Main.getInstance().getWS281xGUI().setDisconnectedState();
 		try {
 			if(out != null || socket != null) {
 				out.close();
@@ -118,8 +118,8 @@ public class Client {
 	
 	public static void close() {
 		connected = false;
-		Main.getRgbGUI().setDisconnectedState();
-		Main.getWS281xGUI().setDisconnectedState();
+		Main.getInstance().getRgbGUI().setDisconnectedState();
+		Main.getInstance().getWS281xGUI().setDisconnectedState();
 		try {
 			out.close();
 			socket.close();

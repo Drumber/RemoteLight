@@ -70,7 +70,8 @@ public class SelectionWindow extends JFrame {
 		JButton btnSelectRGB = new JButton("Select");
 		btnSelectRGB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.setRGBMode();
+				dispose();
+				Main.getInstance().setRGBMode();
 			}
 		});
 		btnSelectRGB.setFocusable(false);
@@ -79,8 +80,9 @@ public class SelectionWindow extends JFrame {
 		JButton btnSelectWS281x = new JButton("Select");
 		btnSelectWS281x.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.setWS281xMode();
-				Main.getSettingsGUI().setVisible(true);
+				dispose();
+				Main.getInstance().setWS281xMode();
+				Main.getInstance().openSettingsGui();
 			}
 		});
 		btnSelectWS281x.setFocusable(false);

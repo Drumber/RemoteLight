@@ -36,7 +36,7 @@ public class ComPort {
 			open = true;
 			ComPort.port = port;
 			System.out.println("[COM] Successfully opened port!");
-			Main.getSettingsGUI().setComPortStatusLabel("");
+			Main.getInstance().getSettingsGUI().setComPortStatusLabel("");
 			
 			port.setBaudRate(BAUD);
 			output = port.getOutputStream();
@@ -47,7 +47,7 @@ public class ComPort {
 			return true;
 		} else {
 			System.out.println("[COM] Could not open port!");
-			Main.getSettingsGUI().setComPortStatusLabel("Could not open port!");
+			Main.getInstance().getSettingsGUI().setComPortStatusLabel("Could not open port!");
 		}
 		return false;
 	}

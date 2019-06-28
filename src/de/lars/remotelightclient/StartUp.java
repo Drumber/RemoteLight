@@ -16,13 +16,13 @@ public class StartUp {
 		if (DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 			if (mode.toUpperCase().equals("RGB")) {
-				Main.getRgbGUI().setVisible(true);
+				Main.getInstance().setRGBMode();
 				
 			} else if (mode.toUpperCase().equals("WS281X")) {
-				Main.getWS281xGUI().setVisible(true);
+				Main.getInstance().setWS281xMode();
 				
 			} else if(mode.equalsIgnoreCase("ARDUINO")) {
-				Main.getWS281xGUI().setVisible(true);
+				Main.getInstance().setArduinoMode();
 				Arduino.init();
 				//auto open comport
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
@@ -30,18 +30,18 @@ public class StartUp {
 						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPort.getComPorts()[i].getSystemPortName())) {
 							ComPort.openPort(ComPort.getComPorts()[i]);
 							if(ComPort.isOpen()) {
-								Main.getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
-								Main.getSettingsGUI().setComButtonText("Close");
+								Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
+								Main.getInstance().getSettingsGUI().setComButtonText("Close");
 							}
 						}
 					}
 				}
 				
 			} else {
-				Main.getSelectionWindow().setVisible(true);
+				Main.getInstance().openSelectionWindow();
 			}
 		} else {
-			Main.getSelectionWindow().setVisible(true);
+			Main.getInstance().openSelectionWindow();
 		}
 
 		// auto connect
@@ -83,7 +83,8 @@ public class StartUp {
 					}
 				}
 				if(Client.isConnected()) {
-					Main.getWS281xGUI().performConnectActions();
+					if(Main.getInstance().getWS281xGUI() != null)
+						Main.getInstance().getWS281xGUI().performConnectActions();
 				}
 			}
 		}).start();
