@@ -8,7 +8,6 @@ import de.lars.remotelightclient.gui.RgbGUI;
 import de.lars.remotelightclient.gui.SelectionWindow;
 import de.lars.remotelightclient.gui.SettingsGUI;
 import de.lars.remotelightclient.gui.WS281xGUI;
-import de.lars.remotelightclient.musicsync.MusicSync;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
@@ -129,7 +128,6 @@ public class Main {
 	
 	
 	public static void close() {
-		MusicSync.stopLoop();
 		WS281xScreenColorHandler.stop();
 		Client.send(new String[] {Identifier.WS_ANI_STOP});
 		

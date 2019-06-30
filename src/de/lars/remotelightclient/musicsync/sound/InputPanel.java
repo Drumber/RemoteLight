@@ -22,7 +22,7 @@
 */
 
 
-package de.lars.remotelightclient.musicsync.tarosdsp;
+package de.lars.remotelightclient.musicsync.sound;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -39,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
 import de.lars.remotelightclient.DataStorage;
+import de.lars.remotelightclient.musicsync.tarosdsp.Shared;
 
 public class InputPanel extends JPanel {
 

@@ -798,10 +798,10 @@ public class RgbGUI extends JFrame {
 					musicSync = new MusicSync();
 				
 				if(MusicSync.isActive()) {
-					MusicSync.stopLoop();
+					musicSync.stop();
 					btnMusicSyncEnable.setText("Enable");
 				} else {
-					MusicSync.start();
+					musicSync.start();
 					btnMusicSyncEnable.setText("Disable");
 				}
 			}

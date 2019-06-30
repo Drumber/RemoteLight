@@ -7,7 +7,7 @@ import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.musicsync.MusicSync;
-import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
 
 public class Rainbow {
@@ -22,11 +22,11 @@ public class Rainbow {
 	public static boolean smothFall = true;
 	public static int steps = 5;
 	
-	public static void rainbow(boolean bump) {
+	public static void rainbow(boolean bump, SoundProcessing soundProcessor) {
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		
 		double mul = 0.1 * MusicSync.getSensitivity(); // multiplier for amount of pixels
-		int[] amp = PitchDetector.getAmplitudes(); //6 bands
+		int[] amp = soundProcessor.getAmplitudes(); //6 bands
 		
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {

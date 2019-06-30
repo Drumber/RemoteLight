@@ -5,18 +5,18 @@ import java.util.HashMap;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSync;
-import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
 
 public class EQ {
 	
-	public static void eq() {
+	public static void eq(SoundProcessing soundProcessor) {
 		int pix = Main.getLedNum();
 		int half = pix / 2;
 		int pixBand = half / 6; // pixels per frequency at each side(left/right) (6 bands)
 		double mul = 0.318 * MusicSync.getSensitivity(); // multiplier for brightness
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
-		int[] amp = PitchDetector.getAmplitudes();
+		int[] amp = soundProcessor.getAmplitudes();
 
 		// half 1 (left)
 

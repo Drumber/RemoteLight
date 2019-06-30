@@ -53,6 +53,8 @@ import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.musicsync.MusicSync;
+import de.lars.remotelightclient.musicsync.sound.InputPanel;
+import de.lars.remotelightclient.musicsync.sound.PitchDetectionPanel;
 
 public class PitchDetector extends JFrame implements PitchDetectionHandler {
 
@@ -150,10 +152,6 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 	private int bufferSize = 1024 * 4;
 	private int overlap = 768 * 4;
 	
-	public void stopAudioDispatcher() {
-		if(dispatcher != null)
-			dispatcher.stop();
-	}
 	
 	private void setNewMixer(Mixer mixer) throws LineUnavailableException,
 			UnsupportedAudioFileException {
@@ -201,7 +199,7 @@ public class PitchDetector extends JFrame implements PitchDetectionHandler {
 			textArea.append(message);
 			textArea.setCaretPosition(textArea.getDocument().getLength());
 			
-			MusicSync.soundToLight(pitch, rms, timeStamp);
+			//MusicSync.soundToLight(pitch, rms, timeStamp);
 		}
 	}
 	

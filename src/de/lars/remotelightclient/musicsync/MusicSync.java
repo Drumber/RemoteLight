@@ -3,9 +3,9 @@ package de.lars.remotelightclient.musicsync;
 import java.awt.Color;
 import java.util.Random;
 
-import javax.swing.JFrame;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
+import de.lars.remotelightclient.musicsync.sound.InputFrame;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.musicsync.ws281x.Bump;
 import de.lars.remotelightclient.musicsync.ws281x.EQ;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
@@ -16,27 +16,35 @@ import de.lars.remotelightclient.network.Identifier;
 
 public class MusicSync {
 	
-	private static JFrame frame;
+	private InputFrame inputFrame;
+	private SoundProcessing soundProcessor;
 	
 	public MusicSync() {
-		if(frame == null) {
-			frame = new PitchDetector();
-			frame.pack();
-			frame.dispose();
+		System.out.println("new MusicSync");
+		if(inputFrame != null) {
+			inputFrame.dispose();
 		}
+		inputFrame = new InputFrame();
+		inputFrame.pack();
+		
+		if(soundProcessor != null) {
+			soundProcessor.stop();
+		}
+		soundProcessor = new SoundProcessing(inputFrame, this);
 	}
 	
 	public void openGUI() {
-		if(frame == null) {
-			frame = new PitchDetector();
-			frame.pack();
+		if(inputFrame == null) {
+			inputFrame = new InputFrame();
+			inputFrame.pack();
 		}
-		frame.setVisible(true);
+		inputFrame.setVisible(true);
 	}
 	
 	public void closeGUI() {
-		if(frame != null) {
-			frame.dispose();
+		if(inputFrame != null) {
+			inputFrame.dispose();
+			System.out.println("Dispose InputFrame");
 		}
 	}
 	
@@ -49,21 +57,22 @@ public class MusicSync {
 	 * =================
 	 */
 	private static boolean active;
-	private final static int DELAY = 80;
-	private static boolean bump = false;
-	private static double volume, lastVolume, maxVolume = 2.0,
-						spl, maxSpl, minSpl, lastMaxSpl, lastMinSpl, avgBump, sensitivity = 1;
-	private static float pitch;
-	private static Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.MAGENTA, Color.WHITE, Color.PINK};
-	private static int color = 0;
+	private int DELAY = 80;
+	private boolean bump = false;
+	private double volume, lastVolume, maxVolume = 2.0,
+						spl, maxSpl, minSpl, lastMaxSpl, lastMinSpl, avgBump;
+	private static double sensitivity = 1;
+	private float pitch;
+	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.MAGENTA, Color.WHITE, Color.PINK};
+	private int color = 0;
 	private static String animation = "FADE";
-	private static double pitchTime;
+	private double pitchTime;
 	
-	private static int noInfoCounter, sameMinSplCounter, sameMaxSplCounter;
+	private int noInfoCounter, sameMinSplCounter, sameMaxSplCounter;
 	
-	public static void soundToLight(float pitch, double rms, double time) {
+	public void soundToLight(float pitch, double rms, double time) {
 		volume = rms;
-		MusicSync.pitch = pitch;
+		this.pitch = pitch;
 		pitchTime = time;
 	}
 	
@@ -88,7 +97,7 @@ public class MusicSync {
 	}
 	
 	//loop
-	public static void start() {
+	public void start() {
 		if(!active) {
 			active = true;
 			new Thread(new Runnable() {
@@ -96,7 +105,7 @@ public class MusicSync {
 				@Override
 				public void run() {
 					while(active) {
-						spl = PitchDetector.getCurrentSPL();
+						spl = soundProcessor.getCurrentSPL();
 						//increase minSpl / decrease maxSpl a little bit if the song has only a short quiet/loud part
 						if(lastMinSpl == minSpl) {
 							if(sameMinSplCounter <= 800) sameMinSplCounter++;
@@ -160,10 +169,10 @@ public class MusicSync {
 							break;
 							
 						case "LEVELBAR":
-							LevelBar.levelBar(bump);
+							LevelBar.levelBar(bump, soundProcessor);
 							break;
 						case "RAINBOW":
-							Rainbow.rainbow(bump);
+							Rainbow.rainbow(bump, soundProcessor);
 							break;
 						case "RUNNINGLIGHT":
 							RunningLight.runningLight(pitch, pitchTime, volume);
@@ -172,7 +181,7 @@ public class MusicSync {
 							Bump.bump(bump);
 							break;
 						case "EQ":
-							EQ.eq();
+							EQ.eq(soundProcessor);
 							break;
 
 						default:
@@ -192,8 +201,10 @@ public class MusicSync {
 		}
 	}
 	
-	public static void stopLoop() {
+	public void stop() {
 		active = false;
+		soundProcessor.stop();
+		inputFrame.dispose();
 	}
 	
 	private static Color dimColor(Color color, int dimValue) {
@@ -223,8 +234,8 @@ public class MusicSync {
 	}
 	
 	// Fade Effect
-	private static Color fadeLastColor = colors[0];
-	private static void fade() {
+	private Color fadeLastColor = colors[0];
+	private void fade() {
 		if(bump) {
 			System.out.println("bump");
 			if(color < colors.length - 1) {
@@ -248,20 +259,20 @@ public class MusicSync {
 	}
 	
 	// Pulse effect
-	private static int pulseLastHz;
-	private static Color[] deepColors = {Color.RED, Color.BLUE, new Color(255, 0, 120), new Color(180, 50, 50), new Color(0, 20, 200)};
-	private static Color[] highColors = {Color.GREEN, Color.CYAN, Color.YELLOW, Color.PINK, Color.MAGENTA};
-	private static Color pulseColor = Color.GREEN;
+	private int pulseLastHz;
+	private Color[] deepColors = {Color.RED, Color.BLUE, new Color(255, 0, 120), new Color(180, 50, 50), new Color(0, 20, 200)};
+	private Color[] highColors = {Color.GREEN, Color.CYAN, Color.YELLOW, Color.PINK, Color.MAGENTA};
+	private Color pulseColor = Color.GREEN;
 	
-	private static void pulse() {
+	private void pulse() {
 		int max = (int) (maxSpl * 10.);
 		int min = (int) (minSpl * 10.);
-		int spl = (int) (MusicSync.spl * 10.);
+		int spl = (int) (this.spl * 10.);
 		int pulseBrightness = 0;
 		
 		if(maxSpl == 0)
 			pulseBrightness = 10;
-		else if(MusicSync.spl == maxSpl) {
+		else if(this.spl == maxSpl) {
 			pulseBrightness = 255;
 		} else {
 			try {

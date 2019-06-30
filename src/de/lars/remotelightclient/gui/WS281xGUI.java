@@ -23,7 +23,7 @@ import javax.swing.event.ChangeListener;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSync;
-import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.RainbowSettings;
 import de.lars.remotelightclient.network.Client;
@@ -435,19 +435,20 @@ public class WS281xGUI extends JFrame {
 				if(musicSync == null) {
 					musicSync = new MusicSync();
 				}
-				if(!PitchDetector.isMixerSet()) {
+				if(!SoundProcessing.isMixerSet()) {
 					lblInputStatus.setText("No Input set!");
 					return;
 				}
 				lblInputStatus.setText("");
 				
 				if(MusicSync.isActive()) {
-					MusicSync.stopLoop();
+					musicSync.stop();
+					musicSync = null;
 					Client.send(new String[] {Identifier.WS_COLOR_OFF});
 					btnMusicSyncEnable.setText("Enable");
 				} else {
 					MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString().toUpperCase());
-					MusicSync.start();
+					musicSync.start();
 					btnMusicSyncEnable.setText("Disable");
 				}
 			}
@@ -881,7 +882,8 @@ public class WS281xGUI extends JFrame {
 		btnOff.setFocusable(false);
 		btnOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MusicSync.stopLoop();
+				if(musicSync != null)
+					musicSync.stop();
 				WS281xScreenColorHandler.stop();
 				SceneHandler.stop();
 				Client.send(new String[] {Identifier.WS_ANI_STOP});

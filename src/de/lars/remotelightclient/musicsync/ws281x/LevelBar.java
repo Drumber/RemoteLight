@@ -7,7 +7,7 @@ import java.util.HashMap;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSync;
-import de.lars.remotelightclient.musicsync.tarosdsp.PitchDetector;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
 
 public class LevelBar {
@@ -23,11 +23,11 @@ public class LevelBar {
 	private static int lastLeds = 0;
 	private static int pix = Main.getLedNum();
 	
-	public static void levelBar(boolean bump) {
+	public static void levelBar(boolean bump, SoundProcessing soundProcessor) {
 		int half = pix / 2;
 		double mul = 0.1 * MusicSync.getSensitivity(); // multiplier for amount of pixels
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
-		int[] amp = PitchDetector.getAmplitudes(); //6 bands
+		int[] amp = soundProcessor.getAmplitudes(); //6 bands
 		int ampAv; //average of all amp bands
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {
