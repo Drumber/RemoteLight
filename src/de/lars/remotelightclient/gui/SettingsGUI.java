@@ -85,16 +85,20 @@ public class SettingsGUI extends JFrame {
 		JPanel panel_2 = new JPanel();
 		panel_2.setFocusable(false);
 		panel_2.setBorder(new TitledBorder(null, "Arduino Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		JLabel lblRemotelightByLars = new JLabel("RemoteLight by Lars O.");
+		lblRemotelightByLars.setFont(new Font("Source Sans Pro Light", Font.PLAIN, 10));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addContainerGap(364, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblRemotelightByLars)
+							.addPreferredGap(ComponentPlacement.RELATED, 318, Short.MAX_VALUE)
 							.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -106,8 +110,10 @@ public class SettingsGUI extends JFrame {
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-					.addComponent(btnOk))
+					.addPreferredGap(ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnOk)
+						.addComponent(lblRemotelightByLars)))
 		);
 		
 		JLabel lblComPort = new JLabel("COM Port:");
@@ -228,6 +234,7 @@ public class SettingsGUI extends JFrame {
 		}
 		
 		JCheckBox chckbxShowLast = new JCheckBox("Show last");
+		chckbxShowLast.setVisible(false);
 		chckbxShowLast.setFocusable(false);
 		chckbxShowLast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -240,6 +247,7 @@ public class SettingsGUI extends JFrame {
 		chckbxShowLast.setToolTipText("Shows the last color/animation");
 		
 		JCheckBox chckbxBootAnimation = new JCheckBox("Boot Animation");
+		chckbxBootAnimation.setVisible(false);
 		chckbxBootAnimation.setFocusable(false);
 		chckbxBootAnimation.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -311,6 +319,7 @@ public class SettingsGUI extends JFrame {
 		});
 		
 		JCheckBox chkAutostart = new JCheckBox("Autostart");
+		chkAutostart.setVisible(false);
 		chkAutostart.setFocusable(false);
 		chkAutostart.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		chkAutostart.addChangeListener(new ChangeListener() {
@@ -356,6 +365,7 @@ public class SettingsGUI extends JFrame {
 		fieldServerIP.setText((String) DataStorage.getData(DataStorage.IP_STOREKEY));
 		
 		JCheckBox chkAutoShutdownRaspberrypi = new JCheckBox("Auto Shutdown RaspberryPi");
+		chkAutoShutdownRaspberrypi.setVisible(false);
 		chkAutoShutdownRaspberrypi.setFocusable(false);
 		chkAutoShutdownRaspberrypi.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		chkAutoShutdownRaspberrypi.addActionListener(new ActionListener() {

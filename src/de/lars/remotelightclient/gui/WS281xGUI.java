@@ -74,6 +74,7 @@ public class WS281xGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public WS281xGUI() {
+		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(WS281xGUI.class.getResource("/resourcen/Icon-128x128.png")));
 		setTitle("WS281x Control");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
