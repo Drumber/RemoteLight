@@ -62,7 +62,6 @@ public class WS281xGUI extends JFrame {
 	private static final long serialVersionUID = 7017941162622210272L;
 	private MusicSync musicSync;
 	private JPanel contentPane;
-	private int pixels = 60;
 	private JButton btnConnect;
 	private JLabel lblStatus, lblEffectSettingsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
@@ -78,7 +77,7 @@ public class WS281xGUI extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(WS281xGUI.class.getResource("/resourcen/Icon-128x128.png")));
 		setTitle("WS281x Control");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 350, 600);
+		setBounds(100, 100, 350, 580);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -139,18 +138,6 @@ public class WS281xGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JButton btnOpenRgbGui = new JButton("Open RGB GUI with WS281x support");
-		btnOpenRgbGui.setFocusable(false);
-		btnOpenRgbGui.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Main.getInstance().openRgbGui();
-				Client.send(new String[] {Identifier.STNG_MODE_WS28x, pixels+""});
-			}
-		});
-		btnOpenRgbGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		btnOpenRgbGui.setBounds(10, 506, 314, 23);
-		contentPane.add(btnOpenRgbGui);
 		
 		fieldServerIP = new JTextField();
 		fieldServerIP.setText((String) null);
@@ -357,6 +344,7 @@ public class WS281xGUI extends JFrame {
 		comboBoxMusicSync.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		if(DataStorage.isStored(DataStorage.MUSICSYNC_MODE)) {
 			comboBoxMusicSync.setSelectedItem(DataStorage.getData(DataStorage.MUSICSYNC_MODE));
+			//System.out.println(DataStorage.getData(DataStorage.MUSICSYNC_MODE));
 		}
 		comboBoxMusicSync.setBounds(49, 8, 89, 23);
 		panel_2.add(comboBoxMusicSync);

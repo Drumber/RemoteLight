@@ -27,6 +27,8 @@ public class MusicSync {
 		inputFrame = new InputFrame(this);
 		inputFrame.pack();
 		
+		if(!SoundProcessing.isMixerSet())
+			return;
 		if(soundProcessor != null) {
 			soundProcessor.stop();
 		}

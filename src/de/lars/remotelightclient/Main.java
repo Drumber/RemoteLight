@@ -14,7 +14,7 @@ import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
 public class Main {
 	
-	public final static String VERSION = "0.1.0.1";
+	public final static String VERSION = "0.1.1";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	
 	private static Main instance;
@@ -31,7 +31,6 @@ public class Main {
 				| UnsupportedLookAndFeelException e) { e.printStackTrace(); }
 		
 		new Main();
-		//DataStorage.remove(DataStorage.SETTINGS_CONTROL_MODEKEY); //TODO remove this! only for debug...
 
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
 		      public void run() {
