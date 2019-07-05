@@ -18,7 +18,6 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
 import de.lars.remotelightclient.musicsync.MusicSync;
-import de.lars.remotelightclient.musicsync.tarosdsp.Shared;
 
 public class SoundProcessing implements PitchDetectionHandler {
 	

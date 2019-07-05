@@ -22,7 +22,7 @@
 */
 
 
-package de.lars.remotelightclient.musicsync.tarosdsp;
+package de.lars.remotelightclient.musicsync.sound;
 
 import java.util.Vector;
 

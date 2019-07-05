@@ -12,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.musicsync.tarosdsp.Shared;
 
 public class InputFrame extends JFrame {
 	
