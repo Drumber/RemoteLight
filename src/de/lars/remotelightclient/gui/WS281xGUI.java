@@ -362,9 +362,9 @@ public class WS281xGUI extends JFrame {
 		btnOpenSettingsGui.setBounds(210, 7, 89, 23);
 		panel_2.add(btnOpenSettingsGui);
 		
-		JLabel lblSensitivity = new JLabel("Sensitivity:");
+		JLabel lblSensitivity = new JLabel("Adjustment:");
 		lblSensitivity.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		lblSensitivity.setBounds(10, 78, 59, 14);
+		lblSensitivity.setBounds(10, 78, 89, 14);
 		panel_2.add(lblSensitivity);
 		
 		JSlider sliderMusicSensitivity = new JSlider();

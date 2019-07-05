@@ -48,6 +48,7 @@ public class RainbowSettings extends JFrame {
 		contentPane.setLayout(null);
 		
 		chckbxSmoothRise = new JCheckBox("Smooth Rise");
+		chckbxSmoothRise.setSelected(true);
 		chckbxSmoothRise.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Rainbow.smothRise = chckbxSmoothRise.isSelected();
@@ -74,6 +75,7 @@ public class RainbowSettings extends JFrame {
 		contentPane.add(btnOk);
 		
 		chckbxSmoothFall = new JCheckBox("Smooth Fall");
+		chckbxSmoothFall.setSelected(true);
 		chckbxSmoothFall.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				Rainbow.smothFall = chckbxSmoothFall.isSelected();
