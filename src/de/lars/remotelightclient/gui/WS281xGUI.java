@@ -350,12 +350,14 @@ public class WS281xGUI extends JFrame {
 		comboBoxMusicSync.setFocusable(false);
 		comboBoxMusicSync.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				String selected = comboBoxMusicSync.getSelectedItem().toString().toUpperCase();
-				MusicSync.setAnimation(selected);
+				MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString());
 			}
 		});
 		comboBoxMusicSync.setModel(new DefaultComboBoxModel<String>(new String[] {"RunningLight", "LevelBar", "Rainbow", "Bump", "EQ", "Fade", "Pulse"}));
 		comboBoxMusicSync.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		if(DataStorage.isStored(DataStorage.MUSICSYNC_MODE)) {
+			comboBoxMusicSync.setSelectedItem(DataStorage.getData(DataStorage.MUSICSYNC_MODE));
+		}
 		comboBoxMusicSync.setBounds(49, 8, 89, 23);
 		panel_2.add(comboBoxMusicSync);
 		

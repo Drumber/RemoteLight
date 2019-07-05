@@ -3,6 +3,7 @@ package de.lars.remotelightclient.musicsync;
 import java.awt.Color;
 import java.util.Random;
 
+import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.sound.InputFrame;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
@@ -92,6 +93,7 @@ public class MusicSync {
 	
 	public static void setAnimation(String animation) {
 		MusicSync.animation = animation;
+		DataStorage.store(DataStorage.MUSICSYNC_MODE, animation);
 	}
 	
 	public static String getAnimation() {
