@@ -46,7 +46,7 @@ public class Main {
 		instance = this;
 		DataStorage.start();
 		settingsGui = new SettingsGUI();
-		StartUp.startUp();
+		new StartUp();
 	}
 	
 	public static Main getInstance() {

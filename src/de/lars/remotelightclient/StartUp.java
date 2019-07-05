@@ -11,7 +11,7 @@ import de.lars.remotelightclient.network.Client;
 
 public class StartUp {
 
-	public static void startUp() {
+	public StartUp() {
 		// which gui should be shown on start
 		if (DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
@@ -56,13 +56,13 @@ public class StartUp {
 		init();
 	}
 	
-	private static void init() {
+	private void init() {
 		RainbowWheel.init();
 		Rainbow.init();
 	}
 
 	// try 10 times every 5 seconds to connect to client
-	private static void autoConnect() {
+	private void autoConnect() {
 		new Thread(new Runnable() {
 
 			@Override
@@ -90,7 +90,7 @@ public class StartUp {
 		}).start();
 	}
 
-	private static void setSettings() {
+	private void setSettings() {
 		if (!DataStorage.isStored(DataStorage.LEVELBAR_COLOR1)) {
 			DataStorage.store(DataStorage.LEVELBAR_COLOR1, Color.RED);
 			DataStorage.store(DataStorage.LEVELBAR_COLOR2, Color.RED);
