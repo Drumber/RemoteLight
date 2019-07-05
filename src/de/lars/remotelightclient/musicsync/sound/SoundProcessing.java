@@ -35,7 +35,6 @@ public class SoundProcessing implements PitchDetectionHandler {
 	
 	
 	public SoundProcessing(InputFrame inputFrame, MusicSync musicSync) {
-		System.out.println("New SoundProcessor");
 		this.musicSync = musicSync;
 		gui = inputFrame;
 		
@@ -70,13 +69,13 @@ public class SoundProcessing implements PitchDetectionHandler {
 			new Thread(dispatcher,"Audio dispatching").start();
 			
 		} catch (LineUnavailableException e) {
-			gui.addText("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input.");
-			e.printStackTrace();
+			gui.addText("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
+		} catch(IllegalArgumentException e) {
+			gui.addText("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
 		}
 	}
 	
 	public void stop() {
-		System.out.println("Stop SoundProcessor");
 		if(dispatcher != null)
 			dispatcher.stop();
 	}

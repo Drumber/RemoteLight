@@ -20,11 +20,10 @@ public class MusicSync {
 	private SoundProcessing soundProcessor;
 	
 	public MusicSync() {
-		System.out.println("new MusicSync");
 		if(inputFrame != null) {
 			inputFrame.dispose();
 		}
-		inputFrame = new InputFrame();
+		inputFrame = new InputFrame(this);
 		inputFrame.pack();
 		
 		if(soundProcessor != null) {
@@ -35,7 +34,7 @@ public class MusicSync {
 	
 	public void openGUI() {
 		if(inputFrame == null) {
-			inputFrame = new InputFrame();
+			inputFrame = new InputFrame(this);
 			inputFrame.pack();
 		}
 		inputFrame.setVisible(true);
@@ -46,6 +45,13 @@ public class MusicSync {
 			inputFrame.dispose();
 			System.out.println("Dispose InputFrame");
 		}
+	}
+	
+	public void newSoundProcessor() {
+		if(soundProcessor != null) {
+			soundProcessor.stop();
+		}
+		soundProcessor = new SoundProcessing(inputFrame, this);
 	}
 	
 	

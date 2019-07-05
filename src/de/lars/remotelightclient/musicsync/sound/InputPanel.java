@@ -1,26 +1,7 @@
 /*
-*      _______                       _____   _____ _____  
-*     |__   __|                     |  __ \ / ____|  __ \ 
-*        | | __ _ _ __ ___  ___  ___| |  | | (___ | |__) |
-*        | |/ _` | '__/ __|/ _ \/ __| |  | |\___ \|  ___/ 
-*        | | (_| | |  \__ \ (_) \__ \ |__| |____) | |     
-*        |_|\__,_|_|  |___/\___/|___/_____/|_____/|_|     
-*                                                         
-* -------------------------------------------------------------
-*
-* TarsosDSP is developed by Joren Six at IPEM, University Ghent
-*  
-* -------------------------------------------------------------
-*
-*  Info: http://0110.be/tag/TarsosDSP
-*  Github: https://github.com/JorenSix/TarsosDSP
-*  Releases: http://0110.be/releases/TarsosDSP/
-*  
-*  TarsosDSP includes modified source code by various authors,
-*  for credits and info, see README.
-* 
-*/
-
+ * Adapted from TarosDSP PitchDetector example
+ * Github: https://github.com/JorenSix/TarsosDSP
+ */
 
 package de.lars.remotelightclient.musicsync.sound;
 
@@ -31,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -51,21 +35,25 @@ public class InputPanel extends JPanel {
 	
 	public InputPanel(){
 		super(new BorderLayout());
-		this.setBorder(new TitledBorder("1. Choose a microphone input"));
+		this.setBorder(new TitledBorder("Choose a microphone input"));
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
 		ButtonGroup group = new ButtonGroup();
 		String data = (String) DataStorage.getData(DataStorage.SOUND_INPUT_STOREKEY);
-		for(Mixer.Info info : Shared.getMixerInfo(false, true)){
-			JRadioButton button = new JRadioButton();
-			button.setText(Shared.toLocalString(info));
-			buttonPanel.add(button);
-			group.add(button);
-			button.setActionCommand(info.toString());
-			button.addActionListener(setInput);
-			//set last time input as selected
-			if(data != null) {
-				if(data.equals(info.toString()))
-					button.setSelected(true);
+		for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
+			Mixer mixer = AudioSystem.getMixer(info);
+
+			if(this.isLineSupported(mixer)) {
+				JRadioButton button = new JRadioButton();
+				button.setText(Shared.toLocalString(info));
+				buttonPanel.add(button);
+				group.add(button);
+				button.setActionCommand(info.toString());
+				button.addActionListener(setInput);
+				//set last time input as selected
+				if(data != null) {
+					if(data.equals(info.toString()))
+						button.setSelected(true);
+				}
 			}
 		}
 		this.add(new JScrollPane(buttonPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),BorderLayout.CENTER);
@@ -78,6 +66,7 @@ public class InputPanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			for(Mixer.Info info : Shared.getMixerInfo(false, true)){
 				if(arg0.getActionCommand().equals(info.toString())){
+					System.out.println("action");
 					Mixer newValue = AudioSystem.getMixer(info);
 					InputPanel.this.firePropertyChange("mixer", mixer, newValue);
 					InputPanel.this.mixer = newValue;
@@ -88,5 +77,25 @@ public class InputPanel extends JPanel {
 			}
 		}
 	};
+	
+	private boolean isLineSupported(Mixer mixer) {
+		try {
+			mixer.open();
+	        Line.Info linfo = new Line.Info(TargetDataLine.class);
+	        TargetDataLine line = null;
+	        try {
+	            line = (TargetDataLine)mixer.getLine(linfo);
+	            line.open();
+	        } catch (IllegalArgumentException ex) {
+	        	return false;
+	        } catch (LineUnavailableException ex) {
+	        	return false;
+	        }
+			mixer.close();
+		} catch(LineUnavailableException e) {
+			return false;
+		}
+		return true;
+	}
 
 }
