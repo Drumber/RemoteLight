@@ -41,6 +41,8 @@ public class DataStorage {
 	public final static String RAINBOW_SMOOTH_FALL = "rainbow_smooth_fall";
 	public final static String RAINBOW_STEPS = "rainbow_steps";
 	
+	public final static String CUSTOM_COLORS_ARRAY = "custom_colors_array";
+	
 	public static void start() {
 		try {
 			new File(System.getProperty("user.home") + File.separator  + ".RemoteLightClient").mkdirs();

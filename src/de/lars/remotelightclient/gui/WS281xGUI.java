@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -53,6 +54,11 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Toolkit;
 import javax.swing.JCheckBox;
+import javax.swing.JScrollPane;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
 
 public class WS281xGUI extends JFrame {
 
@@ -450,9 +456,6 @@ public class WS281xGUI extends JFrame {
 		tabbedPane_1.setBounds(10, 89, 314, 148);
 		contentPane.add(tabbedPane_1);
 		
-		JPanel panelColors = new JPanel();
-		tabbedPane_1.addTab("Colors", null, panelColors, null);
-		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 76, 314, 9);
 		contentPane.add(separator);
@@ -482,285 +485,73 @@ public class WS281xGUI extends JFrame {
 		});
 		this.addWindowListener(closeListener);
 		
-		JPanel c1 = new JPanel();
-		c1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c1.setFocusTraversalPolicyProvider(true);
-		c1.setFocusCycleRoot(true);
-		c1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c1.getBackground());
-			}
-		});
-		c1.setBackground(Color.RED);
+		JPanel panel_3 = new JPanel();
+		tabbedPane_1.addTab("Colors", null, panel_3, null);
+		panel_3.setLayout(new BorderLayout(0, 0));
 		
-		JPanel c7 = new JPanel();
-		c7.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c7.setFocusTraversalPolicyProvider(true);
-		c7.setFocusCycleRoot(true);
-		c7.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c7.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c7.getBackground());
-			}
-		});
-		c7.setBackground(Color.CYAN);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_3.add(scrollPane_1, BorderLayout.CENTER);
 		
-		JPanel c13 = new JPanel();
-		c13.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c13.setFocusTraversalPolicyProvider(true);
-		c13.setFocusCycleRoot(true);
-		c13.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c13.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c13.getBackground());
+		JPanel colorsPanel = new JPanel();
+		scrollPane_1.setViewportView(colorsPanel);
+		colorsPanel.setLayout(new GridLayout(0,6));
+		if(((Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY)).length > 0) {
+			Color[] colors= (Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY);
+			
+			for(int i = 0; i < colors.length; i++) {
+				colorsPanel.add(new CustomColorPanel(colors[i]));
 			}
-		});
-		c13.setBackground(Color.WHITE);
+		}
 		
-		JPanel c2 = new JPanel();
-		c2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c2.setFocusTraversalPolicyProvider(true);
-		c2.setFocusCycleRoot(true);
-		c2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c2.getBackground());
-			}
-		});
-		c2.setBackground(Color.GREEN);
+		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(Color.GRAY);
+		panel_3.add(panel_4, BorderLayout.SOUTH);
+		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.X_AXIS));
 		
-		JPanel c8 = new JPanel();
-		c8.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c8.setFocusTraversalPolicyProvider(true);
-		c8.setFocusCycleRoot(true);
-		c8.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c8.addMouseListener(new MouseAdapter() {
+		JLabel colorsAdd = new JLabel("");
+		colorsAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c8.getBackground());
+			public void mouseEntered(MouseEvent e) {
+				addBorder(colorsAdd);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				removeBorder(colorsAdd);
 			}
 		});
-		c8.setBackground(new Color(0, 139, 139));
+		colorsAdd.setToolTipText("Add color");
+		colorsAdd.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/add-24x.png")));
+		panel_4.add(colorsAdd);
 		
-		JPanel c14 = new JPanel();
-		c14.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c14.setFocusTraversalPolicyProvider(true);
-		c14.setFocusCycleRoot(true);
-		c14.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c14.addMouseListener(new MouseAdapter() {
+		JLabel colorsEdit = new JLabel("");
+		colorsEdit.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c14.getBackground());
+			public void mouseEntered(MouseEvent e) {
+				addBorder(colorsEdit);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				removeBorder(colorsEdit);
 			}
 		});
-		c14.setBackground(new Color(50, 205, 50));
+		colorsEdit.setToolTipText("Edit color");
+		colorsEdit.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/settings-24x.png")));
+		panel_4.add(colorsEdit);
 		
-		JPanel c3 = new JPanel();
-		c3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c3.setFocusTraversalPolicyProvider(true);
-		c3.setFocusCycleRoot(true);
-		c3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c3.addMouseListener(new MouseAdapter() {
+		JLabel colorsRemove = new JLabel("");
+		colorsRemove.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c3.getBackground());
+			public void mouseEntered(MouseEvent e) {
+				addBorder(colorsRemove);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				removeBorder(colorsRemove);
 			}
 		});
-		c3.setBackground(Color.BLUE);
-		
-		JPanel c4 = new JPanel();
-		c4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c4.setFocusTraversalPolicyProvider(true);
-		c4.setFocusCycleRoot(true);
-		c4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c4.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c4.getBackground());
-			}
-		});
-		c4.setBackground(Color.YELLOW);
-		
-		JPanel c10 = new JPanel();
-		c10.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c10.setFocusTraversalPolicyProvider(true);
-		c10.setFocusCycleRoot(true);
-		c10.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c10.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c10.getBackground());
-			}
-		});
-		c10.setBackground(new Color(255, 69, 0));
-		
-		JPanel c9 = new JPanel();
-		c9.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c9.setFocusTraversalPolicyProvider(true);
-		c9.setFocusCycleRoot(true);
-		c9.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c9.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c9.getBackground());
-			}
-		});
-		c9.setBackground(new Color(25, 25, 112));
-		
-		JPanel c16 = new JPanel();
-		c16.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c16.setFocusTraversalPolicyProvider(true);
-		c16.setFocusCycleRoot(true);
-		c16.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c16.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c16.getBackground());
-			}
-		});
-		c16.setBackground(new Color(0, 100, 0));
-		
-		JPanel c5 = new JPanel();
-		c5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c5.setFocusTraversalPolicyProvider(true);
-		c5.setFocusCycleRoot(true);
-		c5.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c5.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c5.getBackground());
-			}
-		});
-		c5.setBackground(Color.ORANGE);
-		
-		JPanel c6 = new JPanel();
-		c6.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c6.setFocusTraversalPolicyProvider(true);
-		c6.setFocusCycleRoot(true);
-		c6.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c6.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c6.getBackground());
-			}
-		});
-		c6.setBackground(Color.MAGENTA);
-		
-		JPanel c12 = new JPanel();
-		c12.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c12.setFocusTraversalPolicyProvider(true);
-		c12.setFocusCycleRoot(true);
-		c12.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c12.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c12.getBackground());
-			}
-		});
-		c12.setBackground(new Color(128, 0, 128));
-		
-		JPanel c17 = new JPanel();
-		c17.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c17.setFocusTraversalPolicyProvider(true);
-		c17.setFocusCycleRoot(true);
-		c17.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c17.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c17.getBackground());
-			}
-		});
-		c17.setBackground(new Color(46, 139, 87));
-		
-		JPanel c18 = new JPanel();
-		c18.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		c18.setFocusTraversalPolicyProvider(true);
-		c18.setFocusCycleRoot(true);
-		c18.setBorder(new LineBorder(new Color(0, 0, 0)));
-		c18.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				sendColor(c18.getBackground());
-			}
-		});
-		c18.setBackground(new Color(0, 255, 127));
-		GroupLayout gl_panelColors = new GroupLayout(panelColors);
-		gl_panelColors.setHorizontalGroup(
-			gl_panelColors.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelColors.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-						.addComponent(c1, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(c7, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-						.addComponent(c2, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(c8, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelColors.createSequentialGroup()
-							.addComponent(c3, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(c4, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c5, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(c6, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c12, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c13, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelColors.createSequentialGroup()
-							.addComponent(c9, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(c10, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c14, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c16, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c17, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(c18, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		gl_panelColors.setVerticalGroup(
-			gl_panelColors.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panelColors.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelColors.createSequentialGroup()
-							.addComponent(c2, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(c8, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelColors.createSequentialGroup()
-							.addComponent(c1, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(c7, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelColors.createSequentialGroup()
-							.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-								.addComponent(c3, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c4, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c5, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c6, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c12, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c13, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panelColors.createParallelGroup(Alignment.LEADING)
-								.addComponent(c18, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c17, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c14, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c16, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c9, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(c10, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))))
-					.addGap(41))
-		);
-		panelColors.setLayout(gl_panelColors);
+		colorsRemove.setToolTipText("Remove color");
+		colorsRemove.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/remove-24x.png")));
+		panel_4.add(colorsRemove);
 		
 		JPanel scenes = new JPanel();
 		tabbedPane_1.addTab("Scenes", null, scenes, null);
@@ -929,12 +720,13 @@ public class WS281xGUI extends JFrame {
 		this.setTitle("WS281x Control");
 	}
 	
-	private void sendColor(Color color) {
-		int r = color.getRed(), g = color.getGreen(), b = color.getBlue();
-		if(r < 0) r = 0;
-		if(g < 0) g = 0;
-		if(b < 0) b = 0;
-		Client.send(new String[] {Identifier.COLOR_COLOR, r+"", g+"", b+""});
+	
+	private void addBorder(JLabel label) {
+		label.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+	}
+	
+	private void removeBorder(JLabel label) {
+		label.setBorder(null);
 	}
 	
 	

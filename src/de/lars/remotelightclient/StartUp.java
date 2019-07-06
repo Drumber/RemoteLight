@@ -12,6 +12,8 @@ import de.lars.remotelightclient.network.Client;
 public class StartUp {
 
 	public StartUp() {
+		// set settings
+		setSettings();
 		// which gui should be shown on start
 		if (DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
@@ -49,9 +51,6 @@ public class StartUp {
 			if (DataStorage.isStored(DataStorage.IP_STOREKEY))
 				autoConnect();
 		}
-
-		// set settings
-		setSettings();
 		
 		init();
 	}
@@ -104,6 +103,11 @@ public class StartUp {
 
 		if (!DataStorage.isStored(DataStorage.SETTINGS_BRIGHTNESS)) {
 			DataStorage.store(DataStorage.SETTINGS_BRIGHTNESS, 1);
+		}
+		
+		if(!DataStorage.isStored(DataStorage.CUSTOM_COLORS_ARRAY)) {
+			Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.WHITE};
+			DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, colors);
 		}
 	}
 
