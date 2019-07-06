@@ -5,6 +5,7 @@ import java.awt.Color;
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.arduino.RainbowWheel;
+import de.lars.remotelightclient.gui.CustomColorPanel;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
 import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
 import de.lars.remotelightclient.network.Client;
@@ -106,8 +107,7 @@ public class StartUp {
 		}
 		
 		if(!DataStorage.isStored(DataStorage.CUSTOM_COLORS_ARRAY)) {
-			Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.WHITE};
-			DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, colors);
+			DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.DEFAULT_COLORS);
 		}
 	}
 

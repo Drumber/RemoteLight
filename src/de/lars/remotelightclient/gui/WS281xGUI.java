@@ -54,6 +54,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Toolkit;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
@@ -69,7 +70,7 @@ public class WS281xGUI extends JFrame {
 	private MusicSync musicSync;
 	private JPanel contentPane;
 	private JButton btnConnect;
-	private JLabel lblStatus, lblEffectSettingsStatus;
+	private JLabel lblStatus, lblEffectSettingsStatus, labelColorsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
 	private JCheckBox chckbxInvertScreenColor;
 	private int brightness;
@@ -485,15 +486,13 @@ public class WS281xGUI extends JFrame {
 		});
 		this.addWindowListener(closeListener);
 		
-		JPanel panel_3 = new JPanel();
-		tabbedPane_1.addTab("Colors", null, panel_3, null);
-		panel_3.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_3.add(scrollPane_1, BorderLayout.CENTER);
+		JPanel colorsMainPanel = new JPanel();
+		tabbedPane_1.addTab("Colors", null, colorsMainPanel, null);
+		colorsMainPanel.setLayout(new BorderLayout(0, 0));
+		//TODO fix scrollbar not showing
 		
 		JPanel colorsPanel = new JPanel();
-		scrollPane_1.setViewportView(colorsPanel);
+		colorsMainPanel.add(new JScrollPane(colorsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 		colorsPanel.setLayout(new GridLayout(0,6));
 		if(((Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY)).length > 0) {
 			Color[] colors= (Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY);
@@ -503,10 +502,10 @@ public class WS281xGUI extends JFrame {
 			}
 		}
 		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(Color.GRAY);
-		panel_3.add(panel_4, BorderLayout.SOUTH);
-		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.X_AXIS));
+		JPanel colorsMenuBar = new JPanel();
+		colorsMenuBar.setBackground(Color.GRAY);
+		colorsMainPanel.add(colorsMenuBar, BorderLayout.SOUTH);
+		colorsMenuBar.setLayout(new BoxLayout(colorsMenuBar, BoxLayout.X_AXIS));
 		
 		JLabel colorsAdd = new JLabel("");
 		colorsAdd.addMouseListener(new MouseAdapter() {
@@ -518,10 +517,18 @@ public class WS281xGUI extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				removeBorder(colorsAdd);
 			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				labelColorsStatus.setText("");
+				Color c = openColorChooser(Color.RED);
+				CustomColorPanel panel = new CustomColorPanel(c);
+				DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.getAllBackgroundColors());
+				colorsPanel.add(panel);
+			}
 		});
 		colorsAdd.setToolTipText("Add color");
 		colorsAdd.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/add-24x.png")));
-		panel_4.add(colorsAdd);
+		colorsMenuBar.add(colorsAdd);
 		
 		JLabel colorsEdit = new JLabel("");
 		colorsEdit.addMouseListener(new MouseAdapter() {
@@ -533,10 +540,22 @@ public class WS281xGUI extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				removeBorder(colorsEdit);
 			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(CustomColorPanel.getSelectedPanel() != null) {
+					labelColorsStatus.setText("");
+					Color c = openColorChooser(CustomColorPanel.getSelectedPanel().getBackground());
+					CustomColorPanel.getSelectedPanel().setBackground(c);
+					
+					DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.getAllBackgroundColors());
+				} else {
+					labelColorsStatus.setText("Please select a color!");
+				}
+			}
 		});
 		colorsEdit.setToolTipText("Edit color");
 		colorsEdit.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/settings-24x.png")));
-		panel_4.add(colorsEdit);
+		colorsMenuBar.add(colorsEdit);
 		
 		JLabel colorsRemove = new JLabel("");
 		colorsRemove.addMouseListener(new MouseAdapter() {
@@ -548,10 +567,56 @@ public class WS281xGUI extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				removeBorder(colorsRemove);
 			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(CustomColorPanel.getSelectedPanel() != null) {
+					labelColorsStatus.setText("");
+					colorsPanel.remove(CustomColorPanel.getSelectedPanel());
+					CustomColorPanel.removePanel(CustomColorPanel.getSelectedPanel());
+					colorsPanel.revalidate();
+					colorsPanel.repaint();
+					DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.getAllBackgroundColors());
+				} else {
+					labelColorsStatus.setText("Please select a color!");
+				}
+			}
 		});
 		colorsRemove.setToolTipText("Remove color");
 		colorsRemove.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/remove-24x.png")));
-		panel_4.add(colorsRemove);
+		colorsMenuBar.add(colorsRemove);
+		
+		JLabel colorsReset = new JLabel("");
+		colorsReset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				addBorder(colorsReset);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				removeBorder(colorsReset);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				labelColorsStatus.setText("");
+				colorsPanel.removeAll();
+				colorsPanel.revalidate();
+				colorsPanel.repaint();
+				DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.DEFAULT_COLORS);
+				Color[] colors = CustomColorPanel.DEFAULT_COLORS;
+				
+				for(int i = 0; i < colors.length; i++) {
+					colorsPanel.add(new CustomColorPanel(colors[i]));
+				}
+			}
+		});
+		colorsReset.setToolTipText("Reset colors");
+		colorsReset.setIcon(new ImageIcon(WS281xGUI.class.getResource("/resourcen/reset-24x.png")));
+		colorsMenuBar.add(colorsReset);
+		
+		labelColorsStatus = new JLabel("");
+		labelColorsStatus.setForeground(Color.RED);
+		labelColorsStatus.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		colorsMenuBar.add(labelColorsStatus);
 		
 		JPanel scenes = new JPanel();
 		tabbedPane_1.addTab("Scenes", null, scenes, null);
@@ -727,6 +792,11 @@ public class WS281xGUI extends JFrame {
 	
 	private void removeBorder(JLabel label) {
 		label.setBorder(null);
+	}
+	
+	private Color openColorChooser(Color c) {
+		JColorChooser cc = new JColorChooser();
+		return JColorChooser.showDialog(cc, "Choose a color", c);
 	}
 	
 	
