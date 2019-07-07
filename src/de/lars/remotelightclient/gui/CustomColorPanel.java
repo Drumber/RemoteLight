@@ -29,7 +29,8 @@ public class CustomColorPanel extends JPanel {
 	public CustomColorPanel(Color color) {
 		addMouseListener(this.mouseListener);
 		setBackground(color);
-		setMaximumSize(new Dimension(50, 50));
+		setPreferredSize(new Dimension(40, 40));
+		setMaximumSize(new Dimension(40, 40));
 		
 		setLayout(new BorderLayout());
 		allPanels.add(this);

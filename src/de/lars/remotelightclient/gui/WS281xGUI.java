@@ -5,13 +5,11 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -37,12 +35,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JSeparator;
@@ -68,7 +64,7 @@ public class WS281xGUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 7017941162622210272L;
 	private MusicSync musicSync;
-	private JPanel contentPane;
+	private JPanel contentPane, colorsPanel;
 	private JButton btnConnect;
 	private JLabel lblStatus, lblEffectSettingsStatus, labelColorsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
@@ -488,12 +484,21 @@ public class WS281xGUI extends JFrame {
 		
 		JPanel colorsMainPanel = new JPanel();
 		tabbedPane_1.addTab("Colors", null, colorsMainPanel, null);
-		colorsMainPanel.setLayout(new BorderLayout(0, 0));
-		//TODO fix scrollbar not showing
 		
-		JPanel colorsPanel = new JPanel();
-		colorsMainPanel.add(new JScrollPane(colorsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
-		colorsPanel.setLayout(new GridLayout(0,6));
+		colorsMainPanel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panelColorsMain = new JPanel();
+		colorsMainPanel.add(panelColorsMain, BorderLayout.CENTER);
+		panelColorsMain.setLayout(new BorderLayout(0, 0));
+		panelColorsMain.setPreferredSize(new Dimension(300, 100));
+		panelColorsMain.setMaximumSize(new Dimension(300, 100));
+		
+		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		panelColorsMain.add(scrollPane);
+		
+		colorsPanel = new JPanel();
+		scrollPane.setViewportView(colorsPanel);
+		colorsPanel.setLayout(new GridLayout(0, 6, 0, 0));
 		if(((Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY)).length > 0) {
 			Color[] colors= (Color[]) DataStorage.getData(DataStorage.CUSTOM_COLORS_ARRAY);
 			
