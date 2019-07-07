@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.network.Identifier;
+
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,6 +47,9 @@ public class CustomColorPanel extends JPanel {
 			}
 			setBorder(new LineBorder(new Color(0, 0, 0), 2, false));
 			selectedPanel = CustomColorPanel.this;
+			
+			Color c = getBackground();
+			Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
 		}
 	};
 	

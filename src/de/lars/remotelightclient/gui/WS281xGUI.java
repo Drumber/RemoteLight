@@ -81,7 +81,7 @@ public class WS281xGUI extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(WS281xGUI.class.getResource("/resourcen/Icon-128x128.png")));
 		setTitle("WS281x Control");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 350, 580);
+		setBounds(100, 100, 350, 600);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -182,7 +182,7 @@ public class WS281xGUI extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFocusable(false);
-		tabbedPane.setBounds(10, 268, 314, 185);
+		tabbedPane.setBounds(10, 306, 314, 185);
 		contentPane.add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -450,7 +450,7 @@ public class WS281xGUI extends JFrame {
 		
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_1.setFocusable(false);
-		tabbedPane_1.setBounds(10, 89, 314, 148);
+		tabbedPane_1.setBounds(10, 89, 314, 186);
 		contentPane.add(tabbedPane_1);
 		
 		JSeparator separator = new JSeparator();
@@ -458,7 +458,7 @@ public class WS281xGUI extends JFrame {
 		contentPane.add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(10, 248, 314, 9);
+		separator_1.setBounds(10, 286, 314, 9);
 		contentPane.add(separator_1);
 		btnScan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -707,7 +707,7 @@ public class WS281xGUI extends JFrame {
 		
 		JLabel lblDim = new JLabel("Brightness:");
 		lblDim.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		lblDim.setBounds(10, 464, 74, 14);
+		lblDim.setBounds(10, 502, 74, 14);
 		contentPane.add(lblDim);
 		
 		JSlider sliderBrightness = new JSlider();
@@ -727,7 +727,7 @@ public class WS281xGUI extends JFrame {
 			sliderBrightness.setValue(7 - (int) DataStorage.getData(DataStorage.SETTINGS_BRIGHTNESS));
 		else
 			sliderBrightness.setValue(6);
-		sliderBrightness.setBounds(10, 475, 200, 26);
+		sliderBrightness.setBounds(10, 513, 200, 26);
 		contentPane.add(sliderBrightness);
 		
 		JButton btnOff = new JButton("Turn off");
@@ -747,7 +747,7 @@ public class WS281xGUI extends JFrame {
 				Client.send(new String[] {Identifier.WS_COLOR_OFF});
 			}
 		});
-		btnOff.setBounds(253, 472, 71, 23);
+		btnOff.setBounds(253, 510, 71, 23);
 		contentPane.add(btnOff);
 		
 	}
