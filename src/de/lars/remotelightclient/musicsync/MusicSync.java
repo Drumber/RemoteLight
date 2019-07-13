@@ -217,7 +217,7 @@ public class MusicSync {
 		inputFrame.dispose();
 	}
 	
-	private static Color dimColor(Color color, int dimValue) {
+	private Color dimColor(Color color, int dimValue) {
 		int r = color.getRed() - dimValue;
 		int g = color.getGreen() - dimValue;
 		int b = color.getBlue() - dimValue;
@@ -227,7 +227,7 @@ public class MusicSync {
 		return new Color(r, g, b);
 	}
 	
-	private static Color changeBrightness(Color color, int brightness) {
+	private Color changeBrightness(Color color, int brightness) {
 		int diff = (255 - brightness);
 		int r = color.getRed() - diff;
 		int g = color.getGreen() - diff;
@@ -270,8 +270,8 @@ public class MusicSync {
 	
 	// Pulse effect
 	private int pulseLastHz;
-	private Color[] deepColors = {Color.RED, Color.BLUE, new Color(255, 0, 120), new Color(180, 50, 50), new Color(0, 20, 200)};
-	private Color[] highColors = {Color.GREEN, Color.CYAN, Color.YELLOW, Color.PINK, Color.MAGENTA};
+	private Color[] deepColors = {Color.RED, Color.BLUE, new Color(220, 90, 0), new Color(130, 0, 255), new Color(0, 20, 200), new Color(0, 170, 30)};
+	private Color[] highColors = {Color.GREEN, Color.CYAN, Color.YELLOW, Color.PINK, Color.WHITE, new Color(255, 220, 90), new Color(0, 255, 200)};
 	private Color pulseColor = Color.GREEN;
 	
 	private void pulse() {
