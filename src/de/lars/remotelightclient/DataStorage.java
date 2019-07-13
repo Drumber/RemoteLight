@@ -27,6 +27,7 @@ public class DataStorage {
 	public final static String SETTINGS_SCREENCOLOR_INTERVAL = "settings_screenncolor_interval";
 	public final static String SETTINGS_SCREENCOLOR_YPOS = "settings_screenncolor_ypos";
 	public final static String SETTINGS_SCREENCOLOR_INVERT = "settings_screenncolor_invert";
+	public final static String SETTINGS_SCREENCOLOR_MONITOR = "settings_screencolor_monitor";
 	
 	public final static String SETTINGS_MUSICSYNC_SENSITIVITY = "settings_musicsync_sensitivity";
 	public final static String MUSICSYNC_MODE = "musicsync_mode";

@@ -1,6 +1,7 @@
 package de.lars.remotelightclient;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
@@ -108,6 +109,10 @@ public class StartUp {
 		
 		if(!DataStorage.isStored(DataStorage.CUSTOM_COLORS_ARRAY)) {
 			DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.DEFAULT_COLORS);
+		}
+		
+		if(!DataStorage.isStored(DataStorage.SETTINGS_SCREENCOLOR_MONITOR)) {
+			DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_MONITOR, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getIDstring());
 		}
 	}
 

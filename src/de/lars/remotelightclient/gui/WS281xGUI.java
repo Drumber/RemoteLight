@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -69,7 +70,9 @@ public class WS281xGUI extends JFrame {
 	private JLabel lblStatus, lblEffectSettingsStatus, labelColorsStatus;
 	private JSpinner spinnerScInterval, spinnerScYpos;
 	private JCheckBox chckbxInvertScreenColor;
+	private JComboBox<String> comboBoxMonitors;
 	private int brightness;
+	private GraphicsDevice[] monitors;
 	
 
 
@@ -247,8 +250,9 @@ public class WS281xGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!WS281xScreenColorHandler.isActive()) {
 					Client.send(Identifier.SC_START);
-					WS281xScreenColorHandler.start((int) spinnerScYpos.getValue(), (int) spinnerScInterval.getValue(), chckbxInvertScreenColor.isSelected());
+					WS281xScreenColorHandler.start((int) spinnerScYpos.getValue(), (int) spinnerScInterval.getValue(), chckbxInvertScreenColor.isSelected(), monitors[comboBoxMonitors.getSelectedIndex()]);
 					btnEnableScreenColor.setText("Disable ScreenColor");
+					DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_MONITOR, monitors[comboBoxMonitors.getSelectedIndex()].getIDstring());
 				} else {
 					WS281xScreenColorHandler.stop();
 					btnEnableScreenColor.setText("Enable ScreenColor");
@@ -321,6 +325,27 @@ public class WS281xGUI extends JFrame {
 			chckbxInvertScreenColor.setSelected((boolean) DataStorage.getData(DataStorage.SETTINGS_SCREENCOLOR_INVERT));
 		chckbxInvertScreenColor.setBounds(10, 127, 97, 23);
 		panel_1.add(chckbxInvertScreenColor);
+		
+		JLabel lblSelectMonitor = new JLabel("Select monitor:");
+		lblSelectMonitor.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
+		lblSelectMonitor.setBounds(169, 45, 91, 14);
+		panel_1.add(lblSelectMonitor);
+		
+		comboBoxMonitors = new JComboBox<String>();
+		comboBoxMonitors.setFocusable(false);
+		comboBoxMonitors.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
+		comboBoxMonitors.setBounds(169, 67, 130, 20);
+		if(WS281xScreenColorHandler.getMonitors() != null) {
+			monitors = WS281xScreenColorHandler.getMonitors();
+			for(int i = 0; i < monitors.length; i++) {
+				comboBoxMonitors.addItem(monitors[i].getIDstring().substring(1)
+						+ " (" + monitors[i].getDisplayMode().getWidth() + "x" + monitors[i].getDisplayMode().getHeight() + "@" + monitors[i].getDisplayMode().getRefreshRate() + ")");
+				if(monitors[i].getIDstring().equals(DataStorage.getData(DataStorage.SETTINGS_SCREENCOLOR_MONITOR))) {
+					comboBoxMonitors.setSelectedIndex(i);
+				}
+			}
+		}
+		panel_1.add(comboBoxMonitors);
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("MusicSync", null, panel_2, null);

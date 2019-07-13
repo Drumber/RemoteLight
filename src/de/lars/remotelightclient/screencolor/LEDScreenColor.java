@@ -23,15 +23,16 @@ public class LEDScreenColor {
 				@Override
 				public void run() {
 					active = true;
-					ScreenPixelDetector.setPickPixel(widthL, heightL, widthR, heightR);
+					RgbScreenColorDetector detector = new RgbScreenColorDetector(widthL, heightL, widthR, heightR);
+					
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new TimerTask() {
 						
 						@Override
 						public void run() {
 							if(active) {
-								curentColorL = ScreenPixelDetector.getPixelColorLeft();
-								curentColorR = ScreenPixelDetector.getPixelColorRight();
+								curentColorL = detector.getPixelColorLeft();
+								curentColorR = detector.getPixelColorRight();
 								Client.send(new String[] {Identifier.SC_COLOR_LEFT, curentColorL.getRed()+"", curentColorL.getGreen()+"", curentColorL.getBlue()+""});
 								Client.send(new String[] {Identifier.SC_COLOR_RIGHT, curentColorR.getRed()+"", curentColorR.getGreen()+"", curentColorR.getBlue()+""});
 								if(Main.getInstance().getRgbGUI() != null)
