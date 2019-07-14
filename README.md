@@ -15,7 +15,7 @@ RemoteLight supports both Arduino and Raspberry Pi!
 
 # Installation
 You can find a [documentation on my blog](https://remotelight-software.blogspot.com/p/documentation_20.html "documentation on my blog").
-### Arduino
+## Arduino
 [YouTube Tutorial](https://youtu.be/NUhIEzkLeKA "YouTube Tutorial")  
 Download the [GlediatorProtocol sketch](http://www.solderlab.de/index.php/downloads/file/33-ws2812-glediator-interface-v1 "GlediatorProtocol sketch"), edit the number of pixels and upload it to your Arduino.
 Connect your WS2812(B) or WS2811 led strip.
@@ -24,7 +24,8 @@ Connect your WS2812(B) or WS2811 led strip.
 
 Open RemoteLightClient and select *WS281x Strip (Arduino)* mode in settings. Don't forget to open the ComPort.
 
-### Raspberry Pi
+## Raspberry Pi
+[YouTube Tutorial](https://youtu.be/Kkgx3geth9Q "YouTube Tutorial")  
 I recommend this [tutorial](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/ "tutorial").
 After this, upload the [RemoteLight Server](https://remotelight-software.blogspot.com/p/downloads.html "RemoteLight Server") to your RaspberryPi.  
 Start Server:  `sudo java -jar RemoteLight-RPi-0.1.x.jar`  
