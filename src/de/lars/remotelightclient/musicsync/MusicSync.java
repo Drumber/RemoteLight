@@ -289,14 +289,14 @@ public class MusicSync {
 				int span = max - min;
 				int m = span / (max - spl);
 				pulseBrightness = 255 - (255 / m);
-				if(pulseBrightness < 10)
-					pulseBrightness = 10;
+				if(pulseBrightness < 0)
+					pulseBrightness = 0;
 			} catch(ArithmeticException e) {
 				pulseBrightness = 200;
 			}
 		}
 		
-		//System.out.println("SPL: " + MusicSync.spl + " Min/Max: " + minSpl + "/" + maxSpl + " bright: " + pulseBrightness);
+		//System.out.println("SPL: " + this.spl + " Min/Max: " + minSpl + "/" + maxSpl + " bright: " + pulseBrightness);
 		
 		int hz = (int) pitch;
 		if(hz < pulseLastHz) { //deeper sound

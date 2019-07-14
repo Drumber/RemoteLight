@@ -141,6 +141,18 @@ public class WS281xGUI extends JFrame {
 			}
 		});
 		mnHelp.add(mntmWebsite);
+		
+		JMenuItem mntmGithub = new JMenuItem("GitHub");
+		mntmGithub.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Desktop.getDesktop().browse(new URI(Main.GITHUB));
+				} catch (IOException | URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnHelp.add(mntmGithub);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
