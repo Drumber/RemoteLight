@@ -1,10 +1,12 @@
 package de.lars.remotelightclient;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.arduino.RainbowWheel;
+import de.lars.remotelightclient.gui.CustomColorPanel;
 import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
 import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
 import de.lars.remotelightclient.network.Client;
@@ -12,6 +14,8 @@ import de.lars.remotelightclient.network.Client;
 public class StartUp {
 
 	public StartUp() {
+		// set settings
+		setSettings();
 		// which gui should be shown on start
 		if (DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
@@ -49,9 +53,6 @@ public class StartUp {
 			if (DataStorage.isStored(DataStorage.IP_STOREKEY))
 				autoConnect();
 		}
-
-		// set settings
-		setSettings();
 		
 		init();
 	}
@@ -104,6 +105,14 @@ public class StartUp {
 
 		if (!DataStorage.isStored(DataStorage.SETTINGS_BRIGHTNESS)) {
 			DataStorage.store(DataStorage.SETTINGS_BRIGHTNESS, 1);
+		}
+		
+		if(!DataStorage.isStored(DataStorage.CUSTOM_COLORS_ARRAY)) {
+			DataStorage.store(DataStorage.CUSTOM_COLORS_ARRAY, CustomColorPanel.DEFAULT_COLORS);
+		}
+		
+		if(!DataStorage.isStored(DataStorage.SETTINGS_SCREENCOLOR_MONITOR)) {
+			DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_MONITOR, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getIDstring());
 		}
 	}
 

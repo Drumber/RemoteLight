@@ -1,6 +1,8 @@
 package de.lars.remotelightclient.screencolor;
 
 import java.awt.Color;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,7 +15,7 @@ public class WS281xScreenColorHandler {
 	private static boolean active;
 	private static Timer timer;
 	
-	public static void start(int yPos, int interval, boolean invert) {
+	public static void start(int yPos, int interval, boolean invert, GraphicsDevice monitor) {
 		if(!active) {
 			new Thread(new Runnable() {
 				
@@ -21,14 +23,15 @@ public class WS281xScreenColorHandler {
 				public void run() {
 					active = true;
 					int pixels = Main.getLedNum();
-					ScreenPixelDetector.setWS281xYpos(yPos);
+					WS281xScreenColorDetector detector = new WS281xScreenColorDetector(pixels, monitor, yPos);
+					
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new TimerTask() {
 						
 						@Override
 						public void run() {
 							if(active) {
-								Color[] c = ScreenPixelDetector.getColors(pixels);
+								Color[] c = detector.getColors();
 								if(c.length <= pixels) {
 									HashMap<Integer, Color> pixelHash = new HashMap<>();
 									
@@ -66,6 +69,10 @@ public class WS281xScreenColorHandler {
 	
 	public static boolean isActive() {
 		return active;
+	}
+	
+	public static GraphicsDevice[] getMonitors() {
+		return GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 	}
 
 }

@@ -27,6 +27,7 @@ public class DataStorage {
 	public final static String SETTINGS_SCREENCOLOR_INTERVAL = "settings_screenncolor_interval";
 	public final static String SETTINGS_SCREENCOLOR_YPOS = "settings_screenncolor_ypos";
 	public final static String SETTINGS_SCREENCOLOR_INVERT = "settings_screenncolor_invert";
+	public final static String SETTINGS_SCREENCOLOR_MONITOR = "settings_screencolor_monitor";
 	
 	public final static String SETTINGS_MUSICSYNC_SENSITIVITY = "settings_musicsync_sensitivity";
 	public final static String MUSICSYNC_MODE = "musicsync_mode";
@@ -40,6 +41,8 @@ public class DataStorage {
 	public final static String RAINBOW_SMOOTH_RISE = "rainbow_smooth_rise";
 	public final static String RAINBOW_SMOOTH_FALL = "rainbow_smooth_fall";
 	public final static String RAINBOW_STEPS = "rainbow_steps";
+	
+	public final static String CUSTOM_COLORS_ARRAY = "custom_colors_array";
 	
 	public static void start() {
 		try {
