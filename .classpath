@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="D:/Development/APIs_Libs/TarsosDSP-2.4.jar"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="lib" path="D:/Development/APIs_Libs/jSerialComm-2.5.1.jar"/>
+	<classpathentry kind="lib" path="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-api-2.0.0.jar" sourcepath="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-api-2.0.0-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-impl-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
