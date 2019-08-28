@@ -4,25 +4,24 @@ public class Animation {
 	
 	private String name;
 	private String displayname;
-	private boolean enabled;
 	private int delay;
 	private boolean adjustable;
 	
 	/**
 	 * Animation with adjustable speed
 	 */
-	public Animation(String name, String displayname) {
+	public Animation(String name) {
 		this.name = name;
-		this.displayname = displayname;
+		this.displayname = name; //TODO Language system
 		adjustable = true;
 	}
 	
 	/**
 	 * Animation with pre-defined speed (not adjustable)
 	 */
-	public Animation(String name, String displayname, int delay) {
+	public Animation(String name, int delay) {
 		this.name = name;
-		this.displayname = displayname;
+		this.displayname = name; //TODO Language system
 		this.delay = delay;
 		adjustable = false;
 	}
@@ -41,23 +40,6 @@ public class Animation {
 
 	public void setDisplayname(String displayname) {
 		this.displayname = displayname;
-	}
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
-	public void setEnabled(boolean b) {
-		enabled = b;
-		if(enabled) {
-			this.onEnable();
-		} else {
-			this.onDisable();
-		}
-	}
-	
-	public void toggle() {
-		this.setEnabled(!enabled);
 	}
 	
 	public boolean isAdjustable() {

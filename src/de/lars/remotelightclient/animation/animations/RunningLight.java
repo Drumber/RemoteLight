@@ -10,8 +10,8 @@ public class RunningLight extends Animation {
 	private Color[] color;
 	private int pass, counter;
 
-	public RunningLight(String name, String displayname) {
-		super(name, displayname);
+	public RunningLight() {
+		super("RunningLight");
 	}
 	
 	@Override

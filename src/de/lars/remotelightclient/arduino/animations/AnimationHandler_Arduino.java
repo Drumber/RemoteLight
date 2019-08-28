@@ -38,35 +38,30 @@ public class AnimationHandler_Arduino {
 		Scan_Arduino.setSpeed(speed);
 		Wipe_Arduino.setSpeed(speed);*/
 		
-		Main.getInstance().getAnimationManager().setDelay(speed);
 	}
 
 	public static void startRainbow() {
 		stop();
 		//Rainbow_Arduino.start(speed);
 		active = true;
-		Main.getInstance().getAnimationManager().start("Rainbow");
 	}
 	
 	public static void startRunningLight() {
 		stop();
 		//RunningLight_Arduino.start(speed);
 		active = true;
-		Main.getInstance().getAnimationManager().start("RunningLight");
 	}
 	
 	public static void startScan() {
 		stop();
 		//Scan_Arduino.start(speed);
 		active = true;
-		Main.getInstance().getAnimationManager().start("Scanner");
 	}
 	
 	public static void startWipe() {
 		stop();
 		//Wipe_Arduino.start(speed);
 		active = true;
-		Main.getInstance().getAnimationManager().start("Wipe");
 	}
 	
 }

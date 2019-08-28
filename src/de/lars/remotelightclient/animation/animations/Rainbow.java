@@ -9,8 +9,8 @@ public class Rainbow extends Animation {
 	
 	int step;
 
-	public Rainbow(String name, String displayname) {
-		super(name, displayname);
+	public Rainbow() {
+		super("Rainbow");
 	}
 	
 	@Override

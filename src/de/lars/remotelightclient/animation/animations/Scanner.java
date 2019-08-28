@@ -14,8 +14,8 @@ public class Scanner extends Animation {
 	private int pix;
 	private boolean scanning, reverse;
 
-	public Scanner(String name, String displayname) {
-		super(name, displayname);
+	public Scanner() {
+		super("Scanner");
 	}
 	
 	@Override

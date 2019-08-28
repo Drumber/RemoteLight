@@ -13,8 +13,8 @@ public class Wipe extends Animation {
 	int pix, count;
 	boolean wiping;
 
-	public Wipe(String name, String displayname) {
-		super(name, displayname);
+	public Wipe() {
+		super("Wipe");
 	}
 	
 	@Override
