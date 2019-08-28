@@ -6,6 +6,11 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.animation.animations.Rainbow;
+import de.lars.remotelightclient.animation.animations.RunningLight;
+import de.lars.remotelightclient.animation.animations.Scanner;
+import de.lars.remotelightclient.animation.animations.Wipe;
+import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.network.Identifier;
 
 public class AnimationManager {
 	
@@ -19,6 +24,9 @@ public class AnimationManager {
 	 */
 	private void registerAnimations() {
 		this.addAnimation(new Rainbow("Rainbow", "Rainbow"));
+		this.addAnimation(new RunningLight("RunningLight", "RunningLight"));
+		this.addAnimation(new Scanner("Scanner", "Scanner"));
+		this.addAnimation(new Wipe("Wipe", "Wipe"));
 	}
 	
 	public AnimationManager() {
@@ -40,6 +48,7 @@ public class AnimationManager {
 				return ani;
 			}
 		}
+		Logger.debug(name + " not found!");
 		return null;
 	}
 	
@@ -49,6 +58,7 @@ public class AnimationManager {
 				return ani;
 			}
 		}
+		Logger.debug(cls + " not found!");
 		return null;
 	}
 	
@@ -79,6 +89,7 @@ public class AnimationManager {
 			activeAnimation.setEnabled(false);
 			activeAnimation = null;
 		}
+		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 	}
 	
 	public void setDelay(int delay) {
@@ -94,6 +105,7 @@ public class AnimationManager {
 				
 				@Override
 				public void run() {
+					Logger.debug("START Loop");
 					while(activeAnimation != null) {
 						activeAnimation.onLoop();
 						

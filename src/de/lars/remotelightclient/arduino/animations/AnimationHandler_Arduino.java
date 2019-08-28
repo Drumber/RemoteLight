@@ -1,5 +1,6 @@
 package de.lars.remotelightclient.arduino.animations;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 
@@ -10,7 +11,9 @@ public class AnimationHandler_Arduino {
 	
 	
 	public static void stop() {
-		Rainbow_Arduino.stop();
+		Main.getInstance().getAnimationManager().stop();
+		
+		/*Rainbow_Arduino.stop();
 		RunningLight_Arduino.stop();
 		Scan_Arduino.stop();
 		Wipe_Arduino.stop();
@@ -20,7 +23,7 @@ public class AnimationHandler_Arduino {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		active = false;
 	}
 	
@@ -29,35 +32,41 @@ public class AnimationHandler_Arduino {
 	}
 	
 	public static void setSpeed(int speed) {
-		AnimationHandler_Arduino.speed = speed;
+		/*AnimationHandler_Arduino.speed = speed;
 		Rainbow_Arduino.setSpeed(speed);
 		RunningLight_Arduino.setSpeed(speed);
 		Scan_Arduino.setSpeed(speed);
-		Wipe_Arduino.setSpeed(speed);
+		Wipe_Arduino.setSpeed(speed);*/
+		
+		Main.getInstance().getAnimationManager().setDelay(speed);
 	}
 
 	public static void startRainbow() {
 		stop();
-		Rainbow_Arduino.start(speed);
+		//Rainbow_Arduino.start(speed);
 		active = true;
+		Main.getInstance().getAnimationManager().start("Rainbow");
 	}
 	
 	public static void startRunningLight() {
 		stop();
-		RunningLight_Arduino.start(speed);
+		//RunningLight_Arduino.start(speed);
 		active = true;
+		Main.getInstance().getAnimationManager().start("RunningLight");
 	}
 	
 	public static void startScan() {
 		stop();
-		Scan_Arduino.start(speed);
+		//Scan_Arduino.start(speed);
 		active = true;
+		Main.getInstance().getAnimationManager().start("Scanner");
 	}
 	
 	public static void startWipe() {
 		stop();
-		Wipe_Arduino.start(speed);
+		//Wipe_Arduino.start(speed);
 		active = true;
+		Main.getInstance().getAnimationManager().start("Wipe");
 	}
 	
 }

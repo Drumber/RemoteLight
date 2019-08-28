@@ -3,6 +3,7 @@ package de.lars.remotelightclient;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.gui.RgbGUI;
 import de.lars.remotelightclient.gui.SelectionWindow;
@@ -23,6 +24,7 @@ public class Main {
 	private RgbGUI rgbGui;
 	private WS281xGUI ws281xGui;
 	private SelectionWindow selectionWindow;
+	private AnimationManager aniManager;
 	
 
 	public static void main(String[] args) {
@@ -45,6 +47,7 @@ public class Main {
 	public Main() {
 		instance = this;
 		DataStorage.start();
+		aniManager = new AnimationManager();
 		settingsGui = new SettingsGUI();
 		new StartUp();
 	}
@@ -67,6 +70,10 @@ public class Main {
 	
 	public SettingsGUI getSettingsGUI() {
 		return settingsGui;
+	}
+	
+	public AnimationManager getAnimationManager() {
+		return aniManager;
 	}
 	
 	public void openSelectionWindow() {

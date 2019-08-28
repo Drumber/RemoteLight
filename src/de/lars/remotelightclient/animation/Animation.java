@@ -49,16 +49,15 @@ public class Animation {
 	
 	public void setEnabled(boolean b) {
 		enabled = b;
+		if(enabled) {
+			this.onEnable();
+		} else {
+			this.onDisable();
+		}
 	}
 	
 	public void toggle() {
-		if(enabled) {
-			enabled = false;
-			this.onDisable();
-		} else {
-			enabled = true;
-			this.onEnable();
-		}
+		this.setEnabled(!enabled);
 	}
 	
 	public boolean isAdjustable() {
