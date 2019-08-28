@@ -27,6 +27,7 @@ public class AnimationManager {
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();
 		}
+		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 		if(animation != null) {
 			animation.onEnable();
 		}
