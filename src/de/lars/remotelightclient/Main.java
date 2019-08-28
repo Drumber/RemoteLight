@@ -11,6 +11,7 @@ import de.lars.remotelightclient.gui.SettingsGUI;
 import de.lars.remotelightclient.gui.WS281xGUI;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
 public class Main {
@@ -25,6 +26,7 @@ public class Main {
 	private WS281xGUI ws281xGui;
 	private SelectionWindow selectionWindow;
 	private AnimationManager aniManager;
+	private SceneManager sceneManager;
 	
 
 	public static void main(String[] args) {
@@ -48,6 +50,7 @@ public class Main {
 		instance = this;
 		DataStorage.start();
 		aniManager = new AnimationManager();
+		sceneManager = new SceneManager();
 		settingsGui = new SettingsGUI();
 		new StartUp();
 	}
@@ -74,6 +77,10 @@ public class Main {
 	
 	public AnimationManager getAnimationManager() {
 		return aniManager;
+	}
+	
+	public SceneManager getSceneManager() {
+		return sceneManager;
 	}
 	
 	public void openSelectionWindow() {

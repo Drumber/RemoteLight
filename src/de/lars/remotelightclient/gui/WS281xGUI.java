@@ -28,6 +28,8 @@ import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.RainbowSettings;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.scene.SceneManager;
+import de.lars.remotelightclient.scene.scenes.Fire;
 import de.lars.remotelightclient.scenes.SceneHandler;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
@@ -65,6 +67,7 @@ public class WS281xGUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 7017941162622210272L;
 	private MusicSync musicSync;
+	private SceneManager sceneManager = Main.getInstance().getSceneManager();
 	private JPanel contentPane, colorsPanel;
 	private JButton btnConnect;
 	private JLabel lblStatus, lblEffectSettingsStatus, labelColorsStatus;
@@ -678,7 +681,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnFire = new JButton("Fire");
 		btnFire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.FIRE);
+				sceneManager.start(new Fire("Fire", "Fire"));
 			}
 		});
 		btnFire.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
@@ -737,6 +740,7 @@ public class WS281xGUI extends JFrame {
 		btnStop_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SceneHandler.stop();
+				sceneManager.stop();
 			}
 		});
 		btnStop_1.setBounds(10, 86, 89, 23);

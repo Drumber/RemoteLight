@@ -105,7 +105,6 @@ public class AnimationManager {
 				
 				@Override
 				public void run() {
-					Logger.debug("START Loop");
 					while(activeAnimation != null) {
 						activeAnimation.onLoop();
 						
