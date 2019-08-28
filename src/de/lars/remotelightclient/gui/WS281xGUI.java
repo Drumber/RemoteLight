@@ -30,7 +30,11 @@ import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.scene.scenes.Fire;
-import de.lars.remotelightclient.scenes.SceneHandler;
+import de.lars.remotelightclient.scene.scenes.Jungle;
+import de.lars.remotelightclient.scene.scenes.NorthernLights;
+import de.lars.remotelightclient.scene.scenes.Ocean;
+import de.lars.remotelightclient.scene.scenes.Space;
+import de.lars.remotelightclient.scene.scenes.Sunset;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
 import javax.swing.event.ChangeEvent;
@@ -672,7 +676,7 @@ public class WS281xGUI extends JFrame {
 		btnSunset.setFocusable(false);
 		btnSunset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.SUNSET);
+				sceneManager.start(new Sunset());
 			}
 		});
 		btnSunset.setBounds(10, 11, 89, 23);
@@ -681,7 +685,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnFire = new JButton("Fire");
 		btnFire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sceneManager.start(new Fire("Fire", "Fire"));
+				sceneManager.start(new Fire());
 			}
 		});
 		btnFire.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
@@ -692,7 +696,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnNorthernlights = new JButton("NorthernLights");
 		btnNorthernlights.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.NORTHERNLIGHTS);
+				sceneManager.start(new NorthernLights());
 			}
 		});
 		btnNorthernlights.setToolTipText("NorthernLights");
@@ -704,7 +708,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnJungle = new JButton("Jungle");
 		btnJungle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.JUNGLE);
+				sceneManager.start(new Jungle());
 			}
 		});
 		btnJungle.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
@@ -715,7 +719,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnOcean = new JButton("Ocean");
 		btnOcean.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.OCEAN);
+				sceneManager.start(new Ocean());
 			}
 		});
 		btnOcean.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
@@ -726,7 +730,7 @@ public class WS281xGUI extends JFrame {
 		JButton btnSpace = new JButton("Space");
 		btnSpace.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.start(SceneHandler.SPACE);
+				sceneManager.start(new Space());
 			}
 		});
 		btnSpace.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
@@ -739,7 +743,6 @@ public class WS281xGUI extends JFrame {
 		btnStop_1.setFocusable(false);
 		btnStop_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SceneHandler.stop();
 				sceneManager.stop();
 			}
 		});
@@ -778,7 +781,7 @@ public class WS281xGUI extends JFrame {
 				if(musicSync != null)
 					musicSync.stop();
 				WS281xScreenColorHandler.stop();
-				SceneHandler.stop();
+				sceneManager.stop();
 				Client.send(new String[] {Identifier.WS_ANI_STOP});
 				try {
 					Thread.sleep(100);

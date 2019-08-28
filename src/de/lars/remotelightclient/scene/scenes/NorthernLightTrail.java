@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.scenes;
+package de.lars.remotelightclient.scene.scenes;
 
 import java.awt.Color;
 import java.io.Serializable;

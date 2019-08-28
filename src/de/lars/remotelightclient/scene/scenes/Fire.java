@@ -12,8 +12,8 @@ public class Fire extends Scene {
 	
 	private int pixels;
 
-	public Fire(String name, String displayname) {
-		super(name, displayname, 100);
+	public Fire() {
+		super("Fire", 100);
 	}
 	
 	@Override

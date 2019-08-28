@@ -6,9 +6,9 @@ public class Scene {
 	private String displayname;
 	private int delay;
 	
-	public Scene(String name, String displayname, int delay) {
+	public Scene(String name, int delay) {
 		this.name = name;
-		this.displayname = displayname;
+		this.displayname = name; //TODO Language system
 		this.delay = delay;
 	}
 

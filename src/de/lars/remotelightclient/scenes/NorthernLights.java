@@ -8,6 +8,7 @@ import java.util.Random;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.scene.scenes.NorthernLightTrail;
 
 public class NorthernLights {
 	
