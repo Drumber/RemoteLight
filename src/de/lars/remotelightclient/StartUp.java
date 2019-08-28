@@ -7,8 +7,6 @@ import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.gui.CustomColorPanel;
-import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
-import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
 import de.lars.remotelightclient.network.Client;
 
 public class StartUp {
@@ -59,7 +57,7 @@ public class StartUp {
 	
 	private void init() {
 		RainbowWheel.init();
-		Rainbow.init();
+		//Rainbow.init();
 	}
 
 	// try 10 times every 5 seconds to connect to client
@@ -101,7 +99,7 @@ public class StartUp {
 			DataStorage.store(DataStorage.LEVELBAR_AUTOCHANGE, true);
 			DataStorage.store(DataStorage.LEVELBAR_SMOOTH, true);
 		}
-		LevelBar.initPattern();
+		//LevelBar.initPattern();
 
 		if (!DataStorage.isStored(DataStorage.SETTINGS_BRIGHTNESS)) {
 			DataStorage.store(DataStorage.SETTINGS_BRIGHTNESS, 1);

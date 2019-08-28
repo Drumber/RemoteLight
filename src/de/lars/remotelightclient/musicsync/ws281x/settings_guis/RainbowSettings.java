@@ -6,8 +6,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.musicsync.ws281x.Rainbow;
-
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -51,7 +49,7 @@ public class RainbowSettings extends JFrame {
 		chckbxSmoothRise.setSelected(true);
 		chckbxSmoothRise.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				Rainbow.smothRise = chckbxSmoothRise.isSelected();
+				//Rainbow.smothRise = chckbxSmoothRise.isSelected();
 			}
 		});
 		if(DataStorage.isStored(DataStorage.RAINBOW_SMOOTH_RISE))
@@ -78,7 +76,7 @@ public class RainbowSettings extends JFrame {
 		chckbxSmoothFall.setSelected(true);
 		chckbxSmoothFall.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				Rainbow.smothFall = chckbxSmoothFall.isSelected();
+				//Rainbow.smothFall = chckbxSmoothFall.isSelected();
 			}
 		});
 		if(DataStorage.isStored(DataStorage.RAINBOW_SMOOTH_FALL))
@@ -101,7 +99,7 @@ public class RainbowSettings extends JFrame {
 		spinnerSteps = new JSpinner();
 		spinnerSteps.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				Rainbow.steps = (int) spinnerSteps.getValue();
+				//Rainbow.steps = (int) spinnerSteps.getValue();
 			}
 		});
 		spinnerSteps.setModel(new SpinnerNumberModel(5, 1, 90, 1));

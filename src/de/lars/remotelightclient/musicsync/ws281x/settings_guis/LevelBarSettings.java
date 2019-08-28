@@ -8,8 +8,6 @@ import java.awt.Font;
 import javax.swing.border.LineBorder;
 
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.musicsync.ws281x.LevelBar;
-
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
@@ -69,7 +67,7 @@ public class LevelBarSettings extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				panelColor1.setBackground(openColorChooser(panelColor1.getBackground()));
-				LevelBar.color1 = panelColor1.getBackground();
+				//LevelBar.color1 = panelColor1.getBackground();
 				System.out.println("1: " + panelColor1.getBackground());
 			}
 		});
@@ -83,7 +81,7 @@ public class LevelBarSettings extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				panelColor2.setBackground(openColorChooser(panelColor2.getBackground()));
-				LevelBar.color2 = panelColor2.getBackground();
+				//LevelBar.color2 = panelColor2.getBackground();
 				System.out.println("2: " + panelColor2.getBackground());
 			}
 		});
@@ -98,7 +96,7 @@ public class LevelBarSettings extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				panelColor3.setBackground(openColorChooser(panelColor3.getBackground()));
-				LevelBar.color3 = panelColor3.getBackground();
+				//LevelBar.color3 = panelColor3.getBackground();
 				System.out.println("3: " + panelColor3.getBackground());
 			}
 		});
@@ -112,7 +110,7 @@ public class LevelBarSettings extends JFrame {
 		chckbxSmooth.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				DataStorage.store(DataStorage.LEVELBAR_SMOOTH, chckbxSmooth.isSelected());
-				LevelBar.smooth = chckbxSmooth.isSelected();
+				//LevelBar.smooth = chckbxSmooth.isSelected();
 			}
 		});
 		if(DataStorage.isStored(DataStorage.LEVELBAR_SMOOTH))
@@ -139,7 +137,7 @@ public class LevelBarSettings extends JFrame {
 		chckbxAutoChangeColor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				DataStorage.store(DataStorage.LEVELBAR_AUTOCHANGE, chckbxAutoChangeColor.isSelected());
-				LevelBar.autoChange = chckbxAutoChangeColor.isSelected();
+				//LevelBar.autoChange = chckbxAutoChangeColor.isSelected();
 			}
 		});
 		if(DataStorage.isStored(DataStorage.LEVELBAR_AUTOCHANGE))

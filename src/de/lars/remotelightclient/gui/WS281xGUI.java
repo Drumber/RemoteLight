@@ -22,7 +22,14 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.MusicSync;
+import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.musicsync.modes.Bump;
+import de.lars.remotelightclient.musicsync.modes.EQ;
+import de.lars.remotelightclient.musicsync.modes.Fade;
+import de.lars.remotelightclient.musicsync.modes.LevelBar;
+import de.lars.remotelightclient.musicsync.modes.Pulse;
+import de.lars.remotelightclient.musicsync.modes.Rainbow;
+import de.lars.remotelightclient.musicsync.modes.RunningLight;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.LevelBarSettings;
 import de.lars.remotelightclient.musicsync.ws281x.settings_guis.RainbowSettings;
@@ -70,7 +77,7 @@ public class WS281xGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 7017941162622210272L;
-	private MusicSync musicSync;
+	private MusicSyncManager musicManager = Main.getInstance().getMusicSyncManager();
 	private SceneManager sceneManager = Main.getInstance().getSceneManager();
 	private JPanel contentPane, colorsPanel;
 	private JButton btnConnect;
@@ -385,7 +392,9 @@ public class WS281xGUI extends JFrame {
 		comboBoxMusicSync.setFocusable(false);
 		comboBoxMusicSync.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString());
+				if(musicManager.isActive()) {
+					startMusicSync(comboBoxMusicSync.getSelectedItem().toString());
+				}
 			}
 		});
 		comboBoxMusicSync.setModel(new DefaultComboBoxModel<String>(new String[] {"RunningLight", "LevelBar", "Rainbow", "Bump", "EQ", "Fade", "Pulse"}));
@@ -402,9 +411,7 @@ public class WS281xGUI extends JFrame {
 		btnOpenSettingsGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
 		btnOpenSettingsGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(musicSync == null)
-					musicSync = new MusicSync();
-				musicSync.openGUI();
+				musicManager.openGUI();
 			}
 		});
 		btnOpenSettingsGui.setBounds(210, 7, 89, 23);
@@ -419,7 +426,7 @@ public class WS281xGUI extends JFrame {
 		sliderMusicSensitivity.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				MusicSync.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
+				musicManager.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
 				DataStorage.store(DataStorage.SETTINGS_MUSICSYNC_SENSITIVITY, sliderMusicSensitivity.getValue());
 			}
 		});
@@ -430,7 +437,7 @@ public class WS281xGUI extends JFrame {
 			sliderMusicSensitivity.setValue((int) DataStorage.getData(DataStorage.SETTINGS_MUSICSYNC_SENSITIVITY));
 		else
 			sliderMusicSensitivity.setValue(100);
-		MusicSync.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
+		musicManager.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
 		sliderMusicSensitivity.setBounds(10, 92, 200, 26);
 		panel_2.add(sliderMusicSensitivity);
 		
@@ -470,23 +477,18 @@ public class WS281xGUI extends JFrame {
 		panel_2.add(lblInputStatus);
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(musicSync == null) {
-					musicSync = new MusicSync();
-				}
 				if(!SoundProcessing.isMixerSet()) {
 					lblInputStatus.setText("No Input set!");
 					return;
 				}
 				lblInputStatus.setText("");
 				
-				if(MusicSync.isActive()) {
-					musicSync.stop();
-					musicSync = null;
+				if(musicManager.isActive()) {
+					musicManager.stop();
 					Client.send(new String[] {Identifier.WS_COLOR_OFF});
 					btnMusicSyncEnable.setText("Enable");
 				} else {
-					MusicSync.setAnimation(comboBoxMusicSync.getSelectedItem().toString().toUpperCase());
-					musicSync.start();
+					startMusicSync(comboBoxMusicSync.getSelectedItem().toString());
 					btnMusicSyncEnable.setText("Disable");
 				}
 			}
@@ -778,8 +780,7 @@ public class WS281xGUI extends JFrame {
 		btnOff.setFocusable(false);
 		btnOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(musicSync != null)
-					musicSync.stop();
+				musicManager.stop();
 				WS281xScreenColorHandler.stop();
 				sceneManager.stop();
 				Client.send(new String[] {Identifier.WS_ANI_STOP});
@@ -846,6 +847,32 @@ public class WS281xGUI extends JFrame {
 	private Color openColorChooser(Color c) {
 		JColorChooser cc = new JColorChooser();
 		return JColorChooser.showDialog(cc, "Choose a color", c);
+	}
+	
+	private void startMusicSync(String name) {
+		switch(name.toLowerCase()) {
+		case "runninglight":
+			musicManager.start(new RunningLight());
+			break;
+		case "levelbar":
+			musicManager.start(new LevelBar());
+			break;
+		case "rainbow":
+			musicManager.start(new Rainbow());
+			break;
+		case "bump":
+			musicManager.start(new Bump());
+			break;
+		case "eq":
+			musicManager.start(new EQ());
+			break;
+		case "fade":
+			musicManager.start(new Fade());
+			break;
+		case "pulse":
+			musicManager.start(new Pulse());
+			break;
+		}
 	}
 	
 	

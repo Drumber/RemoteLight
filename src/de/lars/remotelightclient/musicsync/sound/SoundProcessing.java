@@ -17,11 +17,11 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
-import de.lars.remotelightclient.musicsync.MusicSync;
+import de.lars.remotelightclient.musicsync.MusicSyncManager;
 
 public class SoundProcessing implements PitchDetectionHandler {
 	
-	private MusicSync musicSync;
+	private MusicSyncManager manager;
 	private InputFrame gui;
 	private PitchEstimationAlgorithm algo = PitchEstimationAlgorithm.DYNAMIC_WAVELET;
 	private AudioDispatcher dispatcher;
@@ -34,8 +34,8 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private int overlap = 768 * 4;
 	
 	
-	public SoundProcessing(InputFrame inputFrame, MusicSync musicSync) {
-		this.musicSync = musicSync;
+	public SoundProcessing(InputFrame inputFrame, MusicSyncManager manager) {
+		this.manager = manager;
 		gui = inputFrame;
 		
 		if(dispatcher!= null){
@@ -99,7 +99,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 			String message = String.format("Pitch detected at %.2fs: %.2fHz ( %.2f probability, RMS: %.5f )\n", timeStamp,pitch,probability,rms);
 			gui.addText(message);
 			
-			musicSync.soundToLight(pitch, rms, timeStamp);
+			manager.soundToLight(pitch, rms, timeStamp);
 		}
 	}
 	

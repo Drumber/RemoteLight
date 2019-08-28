@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.MusicSync;
+import de.lars.remotelightclient.musicsync.MusicSyncOld;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.screencolor.LEDScreenColor;
@@ -59,7 +59,7 @@ public class RgbGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5268393542712389384L;
-	private MusicSync musicSync;
+	private MusicSyncOld musicSyncOld;
 	private JPanel contentPane;
 	private JTextField fieldServerIP;
 	private JLabel lblStatus, lblColorRight, lblColorLeft;
@@ -734,9 +734,9 @@ public class RgbGUI extends JFrame {
 		JButton btnOpenSettingsGui = new JButton("Settings");
 		btnOpenSettingsGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(musicSync == null)
-					musicSync = new MusicSync();
-				musicSync.openGUI();
+				if(musicSyncOld == null)
+					musicSyncOld = new MusicSyncOld();
+				//musicSyncOld.openGUI();
 			}
 		});
 		btnOpenSettingsGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
@@ -764,7 +764,7 @@ public class RgbGUI extends JFrame {
 		sliderMusicSensitivity.setFocusable(false);
 		sliderMusicSensitivity.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				MusicSync.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
+				//MusicSyncOld.setSensitivity(sliderMusicSensitivity.getValue() / 100.0);
 			}
 		});
 		sliderMusicSensitivity.setValue(100);
@@ -779,13 +779,13 @@ public class RgbGUI extends JFrame {
 				String selected = comboBox.getSelectedItem().toString().toUpperCase();
 				switch (selected) {
 				case "FADE":
-					MusicSync.setAnimation(selected);
+					//MusicSyncOld.setAnimation(selected);
 					break;
 				case "PULSE":
-					MusicSync.setAnimation(selected);
+					//MusicSyncOld.setAnimation(selected);
 					break;
 				case "BASS":
-					MusicSync.setAnimation(selected);
+					//MusicSyncOld.setAnimation(selected);
 					break;
 
 				default:
@@ -806,16 +806,16 @@ public class RgbGUI extends JFrame {
 		JButton btnMusicSyncEnable = new JButton("Enable");
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(musicSync == null)
-					musicSync = new MusicSync();
+				if(musicSyncOld == null)
+					musicSyncOld = new MusicSyncOld();
 				
-				if(MusicSync.isActive()) {
-					musicSync.stop();
-					btnMusicSyncEnable.setText("Enable");
-				} else {
-					musicSync.start();
-					btnMusicSyncEnable.setText("Disable");
-				}
+//				if(MusicSyncOld.isActive()) {
+//					musicSyncOld.stop();
+//					btnMusicSyncEnable.setText("Enable");
+//				} else {
+//					musicSyncOld.start();
+//					btnMusicSyncEnable.setText("Disable");
+//				}
 			}
 		});
 		btnMusicSyncEnable.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
