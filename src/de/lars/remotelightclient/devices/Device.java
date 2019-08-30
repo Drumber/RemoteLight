@@ -24,5 +24,10 @@ public abstract class Device extends Output implements Serializable {
 	public abstract ConnectionState getConnectionState();
 	
 	public abstract void send(Color[] pixels);
+	
+	@Override
+	public void onOutput(Color[] pixels) {
+		send(pixels);
+	}
 
 }

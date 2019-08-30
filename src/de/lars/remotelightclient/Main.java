@@ -13,6 +13,7 @@ import de.lars.remotelightclient.gui.WS281xGUI;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
 
@@ -31,6 +32,7 @@ public class Main {
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
 	private DeviceManager deviceManager;
+	private OutputManager outputManager;
 
 	public static void main(String[] args) {
 		try {
@@ -53,6 +55,7 @@ public class Main {
 		instance = this;
 		DataStorage.start();
 		deviceManager = new DeviceManager();
+		outputManager = new OutputManager();
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		settingsGui = new SettingsGUI();
@@ -96,6 +99,9 @@ public class Main {
 		return deviceManager;
 	}
 	
+	public OutputManager getOutputManager() {
+		return outputManager;
+	}
 	public void openSelectionWindow() {
 		if(selectionWindow == null)
 			selectionWindow = new SelectionWindow();
