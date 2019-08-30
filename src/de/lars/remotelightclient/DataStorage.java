@@ -11,6 +11,7 @@ public class DataStorage {
 	private static final String PSW = "jAW1O4fkWsWC9834rujhGTZUk2FDthPX"; //I know it's pointless
 	public final static String IP_STOREKEY = "serverip";
 	public final static String SOUND_INPUT_STOREKEY = "soundinput";
+	public final static String DEVICES_LIST = "devices_list";
 	
 	public final static String SETTINGS_CONTROL_MODEKEY = "settings_control_mode";
 	public final static String SETTINGS_COMPORT = "settings_comport";
