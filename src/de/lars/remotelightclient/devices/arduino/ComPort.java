@@ -31,7 +31,7 @@ public class ComPort {
 		this.port = port;
 	}
 	
-	public SerialPort[] getComPorts() {
+	public static SerialPort[] getComPorts() {
 		SerialPort ports[] = SerialPort.getCommPorts();
 		return ports;
 	}

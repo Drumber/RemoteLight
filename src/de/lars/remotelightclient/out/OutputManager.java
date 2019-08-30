@@ -6,9 +6,9 @@ import org.tinylog.Logger;
 
 public class OutputManager {
 	
-	private Output activeOutput;
-	private static Color[] outputPixels;
-	private int delay = 20;
+	private volatile Output activeOutput;
+	private volatile static Color[] outputPixels;
+	private int delay = 100;
 	private boolean active;
 	
 	public OutputManager() {
@@ -54,8 +54,7 @@ public class OutputManager {
 					Logger.info("Started output loop.");
 					
 					while(active) {
-						if(outputPixels != null && activeOutput != null) {
-							
+						if((outputPixels != null) && (activeOutput != null)) {
 							activeOutput.onOutput(outputPixels);
 							
 							try {

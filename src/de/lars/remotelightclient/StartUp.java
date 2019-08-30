@@ -5,9 +5,12 @@ import java.awt.GraphicsEnvironment;
 
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.RainbowWheel;
+import de.lars.remotelightclient.devices.arduino.ComPort;
 import de.lars.remotelightclient.devices.arduino.ComPortOld;
 import de.lars.remotelightclient.gui.CustomColorPanel;
 import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class StartUp {
 
@@ -30,11 +33,17 @@ public class StartUp {
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
 					for(int i = 0; i < ComPortOld.getComPorts().length; i++) {
 						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPortOld.getComPorts()[i].getSystemPortName())) {
-							ComPortOld.openPort(ComPortOld.getComPorts()[i]);
-							if(ComPortOld.isOpen()) {
-								Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPortOld.getPortName());
-								Main.getInstance().getSettingsGUI().setComButtonText("Close");
-							}
+							
+							de.lars.remotelightclient.devices.arduino.Arduino arduino = new de.lars.remotelightclient.devices.arduino.Arduino("Test", ComPort.getComPorts()[i]);
+							arduino.connect();
+							OutputManager outm = Main.getInstance().getOutputManager();
+							outm.setActiveOutput(arduino);
+							
+//							ComPortOld.openPort(ComPortOld.getComPorts()[i]);
+//							if(ComPortOld.isOpen()) {
+//								Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPortOld.getPortName());
+//								Main.getInstance().getSettingsGUI().setComButtonText("Close");
+//							}
 						}
 					}
 				}

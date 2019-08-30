@@ -8,6 +8,8 @@ import javax.swing.border.LineBorder;
 
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
@@ -49,6 +51,7 @@ public class CustomColorPanel extends JPanel {
 			selectedPanel = CustomColorPanel.this;
 			
 			Color c = getBackground();
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, 60));
 			Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
 		}
 	};

@@ -23,6 +23,8 @@ public abstract class Output implements Serializable {
 		this.id = id;
 	}
 	
-	public abstract void onOutput(Color[] pixels);
+	public void onOutput(Color[] pixels) {
+		System.out.println(1);
+	}
 
 }
