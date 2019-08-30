@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.HashMap;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.devices.arduino.GlediatorProtocol;
 
 public class Arduino {
 	

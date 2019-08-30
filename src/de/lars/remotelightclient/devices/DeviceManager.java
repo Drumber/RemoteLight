@@ -7,10 +7,13 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.DataStorage;
+import de.lars.remotelightclient.devices.arduino.Arduino;
+import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 
 public class DeviceManager {
 	
 	private List<Device> devices;
+	private Device activeDevice;
 	
 	public DeviceManager() {
 		Device[] storedDevices = (Device[]) DataStorage.getData(DataStorage.DEVICES_LIST);
@@ -45,11 +48,11 @@ public class DeviceManager {
 		return tmp;
 	}
 	
-	public List<RaspberryPi> getRaspberryPis() {
-		List<RaspberryPi> tmp = new ArrayList<RaspberryPi>();
+	public List<RemoteLightServer> getRemoteLightServer() {
+		List<RemoteLightServer> tmp = new ArrayList<RemoteLightServer>();
 		for(Device d : devices) {
-			if(d instanceof RaspberryPi) {
-				tmp.add((RaspberryPi) d);
+			if(d instanceof RemoteLightServer) {
+				tmp.add((RemoteLightServer) d);
 			}
 		}
 		return tmp;
@@ -76,7 +79,7 @@ public class DeviceManager {
 		return false;
 	}
 	
-	public void renoveAllDevices() {
+	public void removeAllDevices() {
 		devices.clear();
 	}
 	
@@ -85,6 +88,14 @@ public class DeviceManager {
 		storedDevices = devices.toArray(storedDevices);
 		DataStorage.store(DataStorage.DEVICES_LIST, storedDevices);
 		Logger.info("Saved " + storedDevices.length + " devices.");
+	}
+	
+	public void setActiveDevice(Device device) {
+		activeDevice = device;
+	}
+	
+	public Device getActiveDevice() {
+		return activeDevice;
 	}
 
 }

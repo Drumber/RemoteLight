@@ -1,10 +1,10 @@
-package de.lars.remotelightclient.arduino;
+package de.lars.remotelightclient.devices.arduino;
 
 import java.awt.Color;
 
 public class GlediatorProtocol {
 	
-	public static void doOutput(Color[] leds) {
+	public static byte[] doOutput(Color[] leds) {
 		
 		int index = 0;
 		
@@ -35,8 +35,7 @@ public class GlediatorProtocol {
 			index += 3;
 		}
 		
-		ComPort.send(outputBuffer, outputBuffer.length);
-		
+		return outputBuffer;
 	}
 
 }

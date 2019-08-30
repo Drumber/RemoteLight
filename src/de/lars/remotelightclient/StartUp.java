@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 
 import de.lars.remotelightclient.arduino.Arduino;
-import de.lars.remotelightclient.arduino.ComPort;
 import de.lars.remotelightclient.arduino.RainbowWheel;
+import de.lars.remotelightclient.devices.arduino.ComPortOld;
 import de.lars.remotelightclient.gui.CustomColorPanel;
 import de.lars.remotelightclient.network.Client;
 
@@ -28,11 +28,11 @@ public class StartUp {
 				Arduino.init();
 				//auto open comport
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
-					for(int i = 0; i < ComPort.getComPorts().length; i++) {
-						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPort.getComPorts()[i].getSystemPortName())) {
-							ComPort.openPort(ComPort.getComPorts()[i]);
-							if(ComPort.isOpen()) {
-								Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
+					for(int i = 0; i < ComPortOld.getComPorts().length; i++) {
+						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPortOld.getComPorts()[i].getSystemPortName())) {
+							ComPortOld.openPort(ComPortOld.getComPorts()[i]);
+							if(ComPortOld.isOpen()) {
+								Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPortOld.getPortName());
 								Main.getInstance().getSettingsGUI().setComButtonText("Close");
 							}
 						}

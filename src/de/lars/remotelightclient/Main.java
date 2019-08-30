@@ -4,7 +4,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import de.lars.remotelightclient.animation.AnimationManager;
-import de.lars.remotelightclient.arduino.ComPort;
+import de.lars.remotelightclient.devices.DeviceManager;
+import de.lars.remotelightclient.devices.arduino.ComPortOld;
 import de.lars.remotelightclient.gui.RgbGUI;
 import de.lars.remotelightclient.gui.SelectionWindow;
 import de.lars.remotelightclient.gui.SettingsGUI;
@@ -29,6 +30,7 @@ public class Main {
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
+	private DeviceManager deviceManager;
 
 	public static void main(String[] args) {
 		try {
@@ -50,6 +52,7 @@ public class Main {
 	public Main() {
 		instance = this;
 		DataStorage.start();
+		deviceManager = new DeviceManager();
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		settingsGui = new SettingsGUI();
@@ -87,6 +90,10 @@ public class Main {
 	
 	public MusicSyncManager getMusicSyncManager() {
 		return musicManager;
+	}
+	
+	public DeviceManager getDeviceManager() {
+		return deviceManager;
 	}
 	
 	public void openSelectionWindow() {
@@ -154,8 +161,8 @@ public class Main {
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 		
 		DataStorage.save();
-		if(ComPort.isOpen())
-			ComPort.closePort();
+		if(ComPortOld.isOpen())
+			ComPortOld.closePort();
 		if(Client.isConnected())
 			Client.disconnect();
 	}

@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.arduino;
+package de.lars.remotelightclient.devices.arduino;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -9,13 +9,13 @@ import java.util.TimerTask;
 import com.fazecast.jSerialComm.SerialPort;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.arduino.Arduino;
 
-public class ComPort {
+public class ComPortOld {
 	private final static int BAUD = 1000000;
 	
 	private static SerialPort port = null;
 	private static OutputStream output;
-	//private static Scanner input;
 	private static Timer timer;
 	private static boolean open = false;
 	
@@ -28,13 +28,13 @@ public class ComPort {
 	}
 	
 	public static boolean openPort(SerialPort port) {
-		if(ComPort.port != null && ComPort.port.isOpen()) {
+		if(ComPortOld.port != null && ComPortOld.port.isOpen()) {
 			closePort();
 		}
 		
 		if(port.openPort()) {
 			open = true;
-			ComPort.port = port;
+			ComPortOld.port = port;
 			System.out.println("[COM] Successfully opened port!");
 			Main.getInstance().getSettingsGUI().setComPortStatusLabel("");
 			
@@ -55,8 +55,8 @@ public class ComPort {
 	
 	public static void send(byte[] outputBuffer, int size) {
 		if(isOpen()) {
-			ComPort.outputBuffer = outputBuffer;
-			ComPort.size = size;
+			ComPortOld.outputBuffer = outputBuffer;
+			ComPortOld.size = size;
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class ComPort {
 	
 	public static void closePort() {
 		if(isOpen()) {
-			if(ComPort.port != null && ComPort.port.isOpen()) {
+			if(ComPortOld.port != null && ComPortOld.port.isOpen()) {
 				try {
 					
 					System.out.println("[COM] Closing last opened port...");
@@ -101,7 +101,7 @@ public class ComPort {
 					
 					stopLoop();
 					output.close();
-					ComPort.port.closePort();
+					ComPortOld.port.closePort();
 					open = false;
 					
 				} catch (IOException e) {

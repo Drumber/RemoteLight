@@ -9,7 +9,7 @@ import javax.swing.border.TitledBorder;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.arduino.ComPort;
+import de.lars.remotelightclient.devices.arduino.ComPortOld;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 
@@ -131,9 +131,9 @@ public class SettingsGUI extends JFrame {
 		String lastPort = "";
 		if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT))
 			lastPort = (String) DataStorage.getData(DataStorage.SETTINGS_COMPORT);
-		for(int i = 0; i < ComPort.getComPorts().length; i++) {
-			boxComPort.addItem(ComPort.getComPorts()[i].getSystemPortName());
-			if(lastPort.equals(ComPort.getComPorts()[i].getSystemPortName()))
+		for(int i = 0; i < ComPortOld.getComPorts().length; i++) {
+			boxComPort.addItem(ComPortOld.getComPorts()[i].getSystemPortName());
+			if(lastPort.equals(ComPortOld.getComPorts()[i].getSystemPortName()))
 				boxComPort.setSelectedIndex(i);
 		}
 		
@@ -142,27 +142,27 @@ public class SettingsGUI extends JFrame {
 		btnComOpen.setFocusable(false);
 		btnComOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(!ComPort.isOpen()) {
+				if(!ComPortOld.isOpen()) {
 					if(boxComPort.getItemCount() != 0) {
-						for(int i = 0; i < ComPort.getComPorts().length; i++) {
-							if(boxComPort.getSelectedItem().equals(ComPort.getComPorts()[i].getSystemPortName())) {
-								ComPort.openPort(ComPort.getComPorts()[i]);
-								if(ComPort.isOpen()) {
+						for(int i = 0; i < ComPortOld.getComPorts().length; i++) {
+							if(boxComPort.getSelectedItem().equals(ComPortOld.getComPorts()[i].getSystemPortName())) {
+								ComPortOld.openPort(ComPortOld.getComPorts()[i]);
+								if(ComPortOld.isOpen()) {
 									btnComOpen.setText("Close");
-									Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPort.getPortName());
+									Main.getInstance().getWS281xGUI().setTitle("WS281x | Arduiono >> " + ComPortOld.getPortName());
 								}
 							}
 						}
 					}
 				} else {
-					ComPort.closePort();
+					ComPortOld.closePort();
 					btnComOpen.setText("Open");
 					Main.getInstance().getWS281xGUI().setTitle("WS281x Control");
 				}
 			}
 		});
 		btnComOpen.setFont(new Font("Source Sans Pro", Font.PLAIN, 12));
-		if(ComPort.isOpen())
+		if(ComPortOld.isOpen())
 			btnComOpen.setText("Close");
 		
 		lblComPortStatus = new JLabel("");
