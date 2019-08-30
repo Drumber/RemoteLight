@@ -22,7 +22,6 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.MusicSyncOld;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.screencolor.LEDScreenColor;
@@ -59,7 +58,6 @@ public class RgbGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5268393542712389384L;
-	private MusicSyncOld musicSyncOld;
 	private JPanel contentPane;
 	private JTextField fieldServerIP;
 	private JLabel lblStatus, lblColorRight, lblColorLeft;
@@ -734,9 +732,6 @@ public class RgbGUI extends JFrame {
 		JButton btnOpenSettingsGui = new JButton("Settings");
 		btnOpenSettingsGui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(musicSyncOld == null)
-					musicSyncOld = new MusicSyncOld();
-				//musicSyncOld.openGUI();
 			}
 		});
 		btnOpenSettingsGui.setFont(new Font("Source Sans Pro", Font.PLAIN, 11));
@@ -806,8 +801,6 @@ public class RgbGUI extends JFrame {
 		JButton btnMusicSyncEnable = new JButton("Enable");
 		btnMusicSyncEnable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(musicSyncOld == null)
-					musicSyncOld = new MusicSyncOld();
 				
 //				if(MusicSyncOld.isActive()) {
 //					musicSyncOld.stop();
