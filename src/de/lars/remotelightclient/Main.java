@@ -2,7 +2,6 @@ package de.lars.remotelightclient;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.ComPortOld;
@@ -35,6 +34,14 @@ public class Main {
 	private OutputManager outputManager;
 
 	public static void main(String[] args) {
+//		BasicLookAndFeel darcula = new DarculaLaf();
+//		try {
+//			UIManager.setLookAndFeel(darcula);
+//		} catch (UnsupportedLookAndFeelException e) {
+//			e.printStackTrace();
+//		}
+		
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
