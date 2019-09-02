@@ -9,10 +9,14 @@ public class SettingInt extends Setting {
 	 */
 	private static final long serialVersionUID = -6084760644268375263L;
 	private int value;
+	private int min, max, stepsize;
 
-	public SettingInt(String id, String name, String description, int value) {
+	public SettingInt(String id, String name, String description, int value, int min, int max, int stepsize) {
 		super(id, name, description);
 		this.value = value;
+		this.min = min;
+		this.max = max;
+		this.stepsize = stepsize;
 	}
 
 	public int getValue() {
@@ -21,6 +25,30 @@ public class SettingInt extends Setting {
 
 	public void setValue(int value) {
 		this.value = value;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
+	}
+
+	public int getStepsize() {
+		return stepsize;
+	}
+
+	public void setStepsize(int stepsize) {
+		this.stepsize = stepsize;
 	}
 
 }

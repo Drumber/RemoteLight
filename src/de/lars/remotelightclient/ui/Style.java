@@ -60,5 +60,12 @@ public class Style {
 		}
 		return new ImageIcon(Style.class.getResource("/resourcen/menu/black/" + filename));
 	}
+	
+	public static ImageIcon getSettingsIcon(String filename) {
+		if(style.equalsIgnoreCase("Dark")) {
+			return new ImageIcon(Style.class.getResource("/resourcen/settings/white/" + filename));
+		}
+		return new ImageIcon(Style.class.getResource("/resourcen/settings/black/" + filename));
+	}
 
 }
