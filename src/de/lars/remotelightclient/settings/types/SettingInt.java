@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.settings.types;
 
 import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 
 public class SettingInt extends Setting {
 	
@@ -11,8 +12,8 @@ public class SettingInt extends Setting {
 	private int value;
 	private int min, max, stepsize;
 
-	public SettingInt(String id, String name, String description, int value, int min, int max, int stepsize) {
-		super(id, name, description);
+	public SettingInt(String id, String name, SettingCategory category, String description, int value, int min, int max, int stepsize) {
+		super(id, name, description, category);
 		this.value = value;
 		this.min = min;
 		this.max = max;

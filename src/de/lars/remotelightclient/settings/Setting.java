@@ -2,6 +2,8 @@ package de.lars.remotelightclient.settings;
 
 import java.io.Serializable;
 
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+
 public class Setting implements Serializable {
 	
 	/**
@@ -11,11 +13,13 @@ public class Setting implements Serializable {
 	private String name;
 	private String id;
 	private String description;
+	private SettingCategory category;
 	
-	public Setting(String id, String name, String description) {
+	public Setting(String id, String name, String description, SettingCategory category) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.category = category;
 	}
 
 	public String getName() {
@@ -40,6 +44,14 @@ public class Setting implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public SettingCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(SettingCategory category) {
+		this.category = category;
 	}
 	
 

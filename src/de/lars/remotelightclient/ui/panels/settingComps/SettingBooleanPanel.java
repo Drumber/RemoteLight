@@ -4,6 +4,7 @@ import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import java.awt.FlowLayout;
 
 public class SettingBooleanPanel extends SettingPanel {
 

@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.settings.types;
 
 import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 
 public class SettingDouble extends Setting {
 	
@@ -11,8 +12,8 @@ public class SettingDouble extends Setting {
 	private double value;
 	private double min, max, stepsize;
 
-	public SettingDouble(String id, String name, String description, double value, double min, double max, double stepsize) {
-		super(id, name, description);
+	public SettingDouble(String id, String name, SettingCategory category, String description, double value, double min, double max, double stepsize) {
+		super(id, name, description, category);
 		this.value = value;
 		this.min = min;
 		this.max = max;

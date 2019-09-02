@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.settings.types;
 
 import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 
 public class SettingSelection extends Setting {
 	
@@ -15,8 +16,8 @@ public class SettingSelection extends Setting {
 		RadioButton, ComboBox
 	}
 
-	public SettingSelection(String id, String name, String description, String[] values, String selected, Model model) {
-		super(id, name, description);
+	public SettingSelection(String id, String name, SettingCategory category, String description, String[] values, String selected, Model model) {
+		super(id, name, description, category);
 		this.values = values;
 		this.model = model;
 	}

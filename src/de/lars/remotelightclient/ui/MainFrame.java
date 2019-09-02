@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.gui.SystemTrayIcon;
+import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.panels.SideMenuSmall;
 import java.awt.Dimension;
 
@@ -22,11 +23,14 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JPanel bgrSideMenu;
 	private JPanel bgrContentPanel;
+	
 
+	public static SettingsManager sm;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		sm = new SettingsManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

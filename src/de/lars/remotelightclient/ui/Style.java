@@ -25,9 +25,10 @@ public class Style {
 	public static Color panelBackground = new Color(40, 40, 40);
 	public static Color panelAccentBackground = new Color(60, 60, 60);
 	public static Color hoverBackground = new Color(100, 100, 100);
+	public static Color buttonBackground = new Color(50, 50, 50);
 	public static Color textColor = new Color(255, 255, 255);
 	public static Color textColorDarker = new Color(220, 220, 220);
-	public static Color accent = new Color(50, 125, 255);
+	public static Color accent = new Color(21, 38, 66);
 	
 	
 	/*
@@ -37,9 +38,10 @@ public class Style {
 		panelBackground = new Color(245, 245, 245);
 		panelAccentBackground = new Color(225, 225, 225);
 		hoverBackground = new Color(200, 200, 200);
+		buttonBackground = new Color(235, 235, 235);
 		textColor = new Color(0, 0, 0);
 		textColorDarker = new Color(20, 20, 20);
-		accent = new Color(50, 125, 255);
+		accent = new Color(21, 38, 66);
 	}
 	
 	/*
@@ -49,9 +51,10 @@ public class Style {
 		panelBackground = new Color(40, 40, 40);
 		panelAccentBackground = new Color(60, 60, 60);
 		hoverBackground = new Color(100, 100, 100);
+		buttonBackground = new Color(50, 50, 50);
 		textColor = new Color(255, 255, 255);
 		textColorDarker = new Color(220, 220, 220);
-		accent = new Color(50, 125, 255);
+		accent = new Color(21, 38, 66);
 	}
 	
 	public static ImageIcon getMenuIcon(String filename) {

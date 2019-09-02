@@ -121,7 +121,10 @@ public class SideMenuSmall extends JPanel {
 				sideMenu.add(new SideMenuExtended(mainFrame), BorderLayout.CENTER);
 				sideMenu.updateUI();
 				break;
-
+			case "settings":
+				mainFrame.setContentPanel(new Settings(MainFrame.sm));
+				break;
+				
 			default:
 				break;
 			}
