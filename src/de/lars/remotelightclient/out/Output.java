@@ -24,7 +24,6 @@ public abstract class Output implements Serializable {
 	}
 	
 	public void onOutput(Color[] pixels) {
-		System.out.println(1);
 	}
 
 }

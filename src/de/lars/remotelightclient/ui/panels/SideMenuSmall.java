@@ -1,7 +1,6 @@
 package de.lars.remotelightclient.ui.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
@@ -131,18 +130,12 @@ public class SideMenuSmall extends JPanel {
 				mainFrame.setSelectedMenu(btn.getName());
 			}
 			
-			switch (btn.getName()) {
-			case "extend":
+			if(btn.getName().equals("extend")) {
 				sideMenu.removeAll();
 				sideMenu.add(new SideMenuExtended(mainFrame), BorderLayout.CENTER);
 				sideMenu.updateUI();
-				break;
-			case "settings":
-				mainFrame.setContentPanel(new Settings(MainFrame.sm));
-				break;
-				
-			default:
-				break;
+			} else {
+				mainFrame.menuSelected(btn.getName());
 			}
 		}
 	};

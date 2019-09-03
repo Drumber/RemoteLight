@@ -36,6 +36,15 @@ public class ComPort {
 		return ports;
 	}
 	
+	public static SerialPort getComPortByName(String name) {
+		for(SerialPort s : getComPorts()) {
+			if(s.getSystemPortName().equals(name)) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
 	public ConnectionState openPort(SerialPort comPort) {
 		if(port != null && port.isOpen()) {
 			closePort();

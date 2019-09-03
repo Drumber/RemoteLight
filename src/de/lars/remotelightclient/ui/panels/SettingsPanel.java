@@ -11,6 +11,8 @@ import de.lars.remotelightclient.settings.types.SettingDouble;
 import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingString;
+import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settingComps.SettingBooleanPanel;
 import de.lars.remotelightclient.ui.panels.settingComps.SettingColorPanel;
@@ -22,6 +24,8 @@ import de.lars.remotelightclient.ui.panels.settingComps.SettingStringPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -37,20 +41,23 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.Font;
 
-public class Settings extends JPanel {
+public class SettingsPanel extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3954953325346082615L;
 	private SettingsManager sm;
+	private MainFrame mainFrame;
 	private List<SettingPanel> settingPanels;
 
 	/**
 	 * Create the panel.
 	 */
-	public Settings(SettingsManager sm) {
+	public SettingsPanel(MainFrame mainFrame , SettingsManager sm) {
+		this.mainFrame = mainFrame;
 		this.sm = sm;
+		mainFrame.showControlBar(false);
 		settingPanels = new ArrayList<SettingPanel>();
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
@@ -70,6 +77,7 @@ public class Settings extends JPanel {
         btnSave.setBackground(Style.buttonBackground);
         btnSave.setForeground(Style.textColor);
         btnSave.addMouseListener(buttonHoverListener);
+        btnSave.addActionListener(btnSaveListener);
 		add(btnSave, BorderLayout.SOUTH);
 		
 		JScrollPane scrollPane = new JScrollPane(main);
@@ -138,6 +146,21 @@ public class Settings extends JPanel {
 		public void mouseExited(MouseEvent e) {
 			JButton btn = (JButton) e.getSource();
 			btn.setBackground(Style.buttonBackground);
+		}
+	};
+	
+	private ActionListener btnSaveListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//save values
+			for(SettingPanel sp : settingPanels) {
+				sp.setValue();
+			}
+			//repaint ui
+			mainFrame.updateFrame();
+			//display settings
+			mainFrame.displayPanel(new SettingsPanel(mainFrame, MainFrame.sm));
+			mainFrame.printNotification("Saved settings", NotificationType.Info);
 		}
 	};
 

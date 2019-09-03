@@ -133,18 +133,12 @@ public class SideMenuExtended extends JPanel {
 				mainFrame.setSelectedMenu(btn.getName());
 			}
 			
-			switch (btn.getName()) {
-			case "extend": //$NON-NLS-1$
+			if(btn.getName().equals("extend")) {
 				sideMenu.removeAll();
 				sideMenu.add(new SideMenuSmall(mainFrame), BorderLayout.CENTER);
 				sideMenu.updateUI();
-				break;
-			case "settings":
-				mainFrame.setContentPanel(new Settings(MainFrame.sm));
-				break;
-				
-			default:
-				break;
+			} else {
+				mainFrame.menuSelected(btn.getName());
 			}
 		}
 	};

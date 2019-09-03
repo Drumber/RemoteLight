@@ -3,6 +3,8 @@ package de.lars.remotelightclient;
 import java.io.File;
 import java.io.IOException;
 
+import org.tinylog.Logger;
+
 import com.blogspot.debukkitsblog.util.FileStorage;
 
 public class DataStorage {
@@ -92,8 +94,8 @@ public class DataStorage {
 			if(isCreated())
 				return storage.get(key, PSW);
 		} catch (Exception e) {
+			Logger.error("Could not read data file!");
 			e.printStackTrace();
-			System.out.println("ERROR: Could not read data file!");
 		}
 		return null;
 	}

@@ -9,8 +9,11 @@ import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 
 public class SettingsManager {
 	
+	/**
+	 * Intern: Not displayed in settings UI
+	 */
 	public enum SettingCategory {
-		General, Others
+		General, Others, Intern
 	}
 	
 	private List<Setting> settings;

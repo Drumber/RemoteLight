@@ -20,6 +20,7 @@ public class SettingSelection extends Setting {
 		super(id, name, description, category);
 		this.values = values;
 		this.model = model;
+		this.selected = selected;
 	}
 
 	public String[] getValues() {
