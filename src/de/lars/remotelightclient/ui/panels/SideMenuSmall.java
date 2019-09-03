@@ -1,12 +1,14 @@
 package de.lars.remotelightclient.ui.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.UiUtils;
 
 import javax.swing.JButton;
 
@@ -95,18 +97,25 @@ public class SideMenuSmall extends JPanel {
         btn.setBackground(null);
         btn.addMouseListener(buttonHoverListener);
         btn.addActionListener(buttonActionListener);
+        if(mainFrame.getSelectedMenu().equals(btn.getName())) {
+        	btn.setBackground(Style.accent);
+        }
 	}
 	
 	private MouseAdapter buttonHoverListener = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			JButton btn = (JButton) e.getSource();
-			btn.setBackground(Style.hoverBackground);
+			if(!mainFrame.getSelectedMenu().equals(btn.getName())) {
+				btn.setBackground(Style.hoverBackground);
+			}
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
 			JButton btn = (JButton) e.getSource();
-			btn.setBackground(null);
+			if(!mainFrame.getSelectedMenu().equals(btn.getName())) {
+				btn.setBackground(null);
+			}
 		}
 	};
 	
@@ -115,6 +124,13 @@ public class SideMenuSmall extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
+			
+			if(!btn.getName().equals("extend")) {
+				UiUtils.getComponentByName(SideMenuSmall.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
+				btn.setBackground(Style.accent);
+				mainFrame.setSelectedMenu(btn.getName());
+			}
+			
 			switch (btn.getName()) {
 			case "extend":
 				sideMenu.removeAll();
@@ -130,5 +146,6 @@ public class SideMenuSmall extends JPanel {
 			}
 		}
 	};
+	
 
 }

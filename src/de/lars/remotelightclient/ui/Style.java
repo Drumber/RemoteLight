@@ -28,7 +28,7 @@ public class Style {
 	public static Color buttonBackground = new Color(50, 50, 50);
 	public static Color textColor = new Color(255, 255, 255);
 	public static Color textColorDarker = new Color(220, 220, 220);
-	public static Color accent = new Color(21, 38, 66);
+	public static Color accent = new Color(255, 160, 60);
 	
 	
 	/*
@@ -41,7 +41,7 @@ public class Style {
 		buttonBackground = new Color(235, 235, 235);
 		textColor = new Color(0, 0, 0);
 		textColorDarker = new Color(20, 20, 20);
-		accent = new Color(21, 38, 66);
+		accent = new Color(0, 70, 255);
 	}
 	
 	/*

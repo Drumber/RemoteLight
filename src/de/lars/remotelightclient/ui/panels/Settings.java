@@ -21,6 +21,7 @@ import de.lars.remotelightclient.ui.panels.settingComps.SettingSelectionPanel;
 import de.lars.remotelightclient.ui.panels.settingComps.SettingStringPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,10 +29,13 @@ import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import java.awt.Font;
 
 public class Settings extends JPanel {
 
@@ -46,7 +50,6 @@ public class Settings extends JPanel {
 	 * Create the panel.
 	 */
 	public Settings(SettingsManager sm) {
-		setBorder(null);
 		this.sm = sm;
 		settingPanels = new ArrayList<SettingPanel>();
 		setBackground(Style.panelBackground);
@@ -54,8 +57,10 @@ public class Settings extends JPanel {
 		
 		JPanel main = new JPanel();
 		main.setBackground(Style.panelBackground);
-		main.setLayout(new BorderLayout(0, 0));
-		main.add(getSettingsBgr());
+		main.setAlignmentX(Component.LEFT_ALIGNMENT);
+		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+		main.add(getSettingsBgr(SettingCategory.General, "General"));
+		main.add(getSettingsBgr(SettingCategory.Others, "Others"));
 		
 		JButton btnSave = new JButton("Save");
         btnSave.setContentAreaFilled(false);
@@ -65,45 +70,35 @@ public class Settings extends JPanel {
         btnSave.setBackground(Style.buttonBackground);
         btnSave.setForeground(Style.textColor);
         btnSave.addMouseListener(buttonHoverListener);
-		main.add(btnSave, BorderLayout.SOUTH);
+		add(btnSave, BorderLayout.SOUTH);
 		
 		JScrollPane scrollPane = new JScrollPane(main);
 		scrollPane.setViewportBorder(null);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane, BorderLayout.CENTER);
 		
 		this.updateUI();
 	}
 	
-	private JPanel getSettingsBgr() {
+	private JPanel getSettingsBgr(SettingCategory category, String title) {
 		JPanel bgr = new JPanel();
 		bgr.setBorder(new EmptyBorder(10, 10, 10, 0));
 		bgr.setBackground(Style.panelBackground);
+		bgr.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgr.setLayout(new BoxLayout(bgr, BoxLayout.Y_AXIS));
-		bgr.setAlignmentX(LEFT_ALIGNMENT);
 		
-		JPanel panelGeneral = new JPanel();
-		panelGeneral.setBackground(Style.panelBackground);
-		panelGeneral.setLayout(new BoxLayout(panelGeneral, BoxLayout.Y_AXIS));
-		bgr.add(panelGeneral);
+		JLabel lblTitle = new JLabel(title, SwingConstants.LEFT);
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTitle.setForeground(Style.accent);
+		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+		bgr.add(lblTitle);
 		
-		JLabel lblGeneral = new JLabel("General");
-		lblGeneral.setForeground(Style.textColor);
-		panelGeneral.add(lblGeneral);
-		
-		for(Setting s : sm.getSettingsFromCategory(SettingCategory.General)) {
+		for(Setting s : sm.getSettingsFromCategory(category)) {
 			SettingPanel spanel = this.getSettingPanel(s);
-			panelGeneral.add(spanel);
-			settingPanels.add(spanel);
-		}
-		
-		JLabel lblOthers = new JLabel("Others");
-		lblOthers.setForeground(Style.textColor);
-		bgr.add(lblOthers);
-		
-		for(Setting s : sm.getSettingsFromCategory(SettingCategory.Others)) {
-			SettingPanel spanel = this.getSettingPanel(s);
+			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			bgr.add(spanel);
 			settingPanels.add(spanel);
 		}

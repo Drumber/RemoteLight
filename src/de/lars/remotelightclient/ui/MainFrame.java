@@ -8,6 +8,9 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.gui.SystemTrayIcon;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -24,6 +27,7 @@ public class MainFrame extends JFrame {
 	private JPanel bgrSideMenu;
 	private JPanel bgrContentPanel;
 	
+	private String selectedMenu = "connection";
 
 	public static SettingsManager sm;
 	/**
@@ -31,6 +35,10 @@ public class MainFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		sm = new SettingsManager();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) { e.printStackTrace(); }
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -84,6 +92,14 @@ public class MainFrame extends JFrame {
 	
 	public JPanel getSideMenu() {
 		return bgrSideMenu;
+	}
+	
+	public String getSelectedMenu() {
+		return selectedMenu;
+	}
+	
+	public void setSelectedMenu(String menu) {
+		selectedMenu = menu.toLowerCase();
 	}
 	
 	public void setContentPanel(JPanel panel) {
