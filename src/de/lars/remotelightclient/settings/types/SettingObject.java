@@ -14,8 +14,8 @@ public class SettingObject extends Setting {
 	/**
 	 * (!) This Setting will not be visible in settings menu
 	 */
-	public SettingObject(String id, String name, String description, Object value) {
-		super(id, name, description, SettingCategory.Intern);
+	public SettingObject(String id, String name, Object value) {
+		super(id, name, null, SettingCategory.Intern);
 		this.value = value;
 	}
 

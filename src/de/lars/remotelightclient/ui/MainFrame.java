@@ -2,22 +2,14 @@ package de.lars.remotelightclient.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.devices.DeviceManager;
-import de.lars.remotelightclient.devices.arduino.Arduino;
-import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
-import de.lars.remotelightclient.gui.SystemTrayIcon;
-import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.ConnectionPanel;
@@ -39,44 +31,19 @@ public class MainFrame extends JFrame {
 	
 	private String selectedMenu = "connection";
 	private JPanel displayedPanel;
+	private SettingsManager sm;
 
-	//TEMP
-	public static SettingsManager sm;
-	public static DeviceManager dm;
-	public static OutputManager om;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		sm = new SettingsManager();
-		dm = new DeviceManager();
-		om = new OutputManager();
-		dm.addDevice(new Arduino("Arduino1", null));
-		dm.addDevice(new RemoteLightServer("RaspberryPi", null));
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) { e.printStackTrace(); }
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		sm = Main.getInstance().getSettingsManager();
 		setTitle("RemoteLight");
 		setMinimumSize(new Dimension(400, 350));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 836, 391);
+		addWindowListener(closeListener);
 		
 		this.setFrameContetPane();
 	}

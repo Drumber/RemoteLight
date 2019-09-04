@@ -17,7 +17,7 @@ public class Arduino extends Device {
 	private ComPort out;
 
 	public Arduino(String id, SerialPort port) {
-		super(id);
+		super(id, 0);
 		this.serialPort = port;
 		out = new ComPort(port);
 	}

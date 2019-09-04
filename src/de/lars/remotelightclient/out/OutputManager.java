@@ -4,6 +4,9 @@ import java.awt.Color;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.settings.types.SettingObject;
+
 public class OutputManager {
 	
 	private volatile Output activeOutput;
@@ -38,6 +41,12 @@ public class OutputManager {
 	
 	public boolean isEnabled() {
 		return active;
+	}
+	
+	public void close() {
+		setEnabled(false);
+		//save last output before closing
+		Main.getInstance().getSettingsManager().addSetting(new SettingObject("out.lastoutput", "Last active Output", activeOutput));
 	}
 	
 	public static void addToOutput(Color[] pixels) {

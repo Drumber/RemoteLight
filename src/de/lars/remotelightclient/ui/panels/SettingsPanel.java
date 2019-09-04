@@ -2,6 +2,7 @@ package de.lars.remotelightclient.ui.panels;
 
 import javax.swing.JPanel;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -159,7 +160,7 @@ public class SettingsPanel extends JPanel {
 			//repaint ui
 			mainFrame.updateFrame();
 			//display settings
-			mainFrame.displayPanel(new SettingsPanel(mainFrame, MainFrame.sm));
+			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
 			mainFrame.printNotification("Saved settings", NotificationType.Info);
 		}
 	};

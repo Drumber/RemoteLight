@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.gui;
+package de.lars.remotelightclient.ui;
 
 import java.awt.AWTException;
 import java.awt.Image;
@@ -16,11 +16,10 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.StartUp;
 
 public class SystemTrayIcon {
-	
+
 	private static SystemTray tray;
 	private static TrayIcon trayIcon;
 	
@@ -61,14 +60,14 @@ public class SystemTrayIcon {
 			if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 				String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 				if(mode.toUpperCase().equals("RGB")) {
-					Main.getInstance().openRgbGui();
+					//TODO
 				} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-					Main.getInstance().openWS281xGui();;
+					
 				} else {
-					Main.getInstance().openSelectionWindow();
+					
 				}
 			} else {
-				Main.getInstance().openSelectionWindow();
+				
 			}
 		}
     };
@@ -86,17 +85,17 @@ public class SystemTrayIcon {
 				if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 					String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 					if(mode.toUpperCase().equals("RGB")) {
-						Main.getInstance().openRgbGui();
+						//TODO
 					} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-						Main.getInstance().openRgbGui();
+						
 					} else {
-						Main.getInstance().openSelectionWindow();
+						
 					}
 				} else {
-					Main.getInstance().openSelectionWindow();
+					
 				}
             }
         }
 	};
-
+	
 }

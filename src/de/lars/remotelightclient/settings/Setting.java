@@ -20,6 +20,8 @@ public class Setting implements Serializable {
 		this.name = name;
 		this.description = description;
 		this.category = category;
+		if(name == null) this.name = "";
+		if(description == null) this.description = "";
 	}
 
 	public String getName() {

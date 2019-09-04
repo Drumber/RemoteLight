@@ -15,8 +15,8 @@ public abstract class Device extends Output implements Serializable {
 	/**
 	 * @param id User defined name for the device
 	 */
-	public Device(String id) {
-		super(id);
+	public Device(String id, int pixels) {
+		super(id, pixels);
 	}
 	
 	public abstract ConnectionState connect();

@@ -6,33 +6,55 @@ import java.awt.GraphicsEnvironment;
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.devices.arduino.ComPort;
-import de.lars.remotelightclient.devices.arduino.ComPortOld;
-import de.lars.remotelightclient.gui.CustomColorPanel;
 import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.Output;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.settings.types.SettingSelection;
+import de.lars.remotelightclient.settings.types.SettingSelection.Model;
+import de.lars.remotelightclient.ui.panels.CustomColorPanel;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class StartUp {
+	
+	private SettingsManager s = Main.getInstance().getSettingsManager();
 
 	public StartUp() {
+		//register default setting
+		registerSettings();
+		
+		//auto connect feauture
+		if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {
+			Output output = (Output) s.getSettingFromType(new SettingObject("out.lastoutput", null, null)).getValue();
+			if(output != null) {
+				Main.getInstance().getOutputManager().setActiveOutput(output);
+			}
+		}
+		
+		
+		if(true)
+			return;
 		// set settings
 		setSettings();
 		// which gui should be shown on start
 		if (DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
 			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
 			if (mode.toUpperCase().equals("RGB")) {
-				Main.getInstance().setRGBMode();
+				//Main.getInstance().setRGBMode();
 				
 			} else if (mode.toUpperCase().equals("WS281X")) {
-				Main.getInstance().setWS281xMode();
+				//Main.getInstance().setWS281xMode();
 				
 			} else if(mode.equalsIgnoreCase("ARDUINO")) {
-				Main.getInstance().setArduinoMode();
+				//Main.getInstance().setArduinoMode();
 				Arduino.init();
 				//auto open comport
 				if(DataStorage.isStored(DataStorage.SETTINGS_COMPORT_AUTOOPEN) && (boolean) DataStorage.getData(DataStorage.SETTINGS_COMPORT_AUTOOPEN)) {
-					for(int i = 0; i < ComPortOld.getComPorts().length; i++) {
-						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPortOld.getComPorts()[i].getSystemPortName())) {
+					for(int i = 0; i < ComPort.getComPorts().length; i++) {
+						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPort.getComPorts()[i].getSystemPortName())) {
 							
 							de.lars.remotelightclient.devices.arduino.Arduino arduino = new de.lars.remotelightclient.devices.arduino.Arduino("Test", ComPort.getComPorts()[i]);
 							arduino.connect();
@@ -49,10 +71,10 @@ public class StartUp {
 				}
 				
 			} else {
-				Main.getInstance().openSelectionWindow();
+				//Main.getInstance().openSelectionWindow();
 			}
 		} else {
-			Main.getInstance().openSelectionWindow();
+			//Main.getInstance().openSelectionWindow();
 		}
 
 		// auto connect
@@ -91,8 +113,7 @@ public class StartUp {
 					}
 				}
 				if(Client.isConnected()) {
-					if(Main.getInstance().getWS281xGUI() != null)
-						Main.getInstance().getWS281xGUI().performConnectActions();
+					
 				}
 			}
 		}).start();
@@ -121,6 +142,13 @@ public class StartUp {
 		if(!DataStorage.isStored(DataStorage.SETTINGS_SCREENCOLOR_MONITOR)) {
 			DataStorage.store(DataStorage.SETTINGS_SCREENCOLOR_MONITOR, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getIDstring());
 		}
+	}
+	
+	public void registerSettings() {
+		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
+		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
+		
+		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
 	}
 
 }

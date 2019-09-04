@@ -18,6 +18,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 
@@ -27,6 +29,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 	private static final long serialVersionUID = -3968905553069494626L;
 	private Arduino arduino;
 	private JTextField fieldId;
+	private JSpinner spinnerPixels;
 	private JComboBox<String> comboPorts;
 	private Dimension size;
 
@@ -74,6 +77,23 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		comboPorts = new JComboBox<String>();
 		panelPort.add(comboPorts);
 		
+		JPanel panelPixels = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) panelPixels.getLayout();
+		flowLayout_2.setAlignment(FlowLayout.LEFT);
+		panelPixels.setPreferredSize(size);
+		panelPixels.setMaximumSize(size);
+		panelPixels.setBackground(Style.panelBackground);
+		panelPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelPixels);
+		
+		JLabel lblPixels = new JLabel("Pixels:");
+		lblPixels.setForeground(Style.textColor);
+		panelPixels.add(lblPixels);
+		
+		spinnerPixels = new JSpinner();
+		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		panelPixels.add(spinnerPixels);
+		
 		setValues();
 	}
 	
@@ -93,6 +113,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 				comboPorts.setSelectedItem(pname);
 			}
 		}
+		spinnerPixels.setValue(arduino.getPixels());
 	}
 
 	@Override
@@ -102,6 +123,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		}
 		arduino.setId(fieldId.getText());
 		arduino.setSerialPort(ComPort.getComPortByName((String) comboPorts.getSelectedItem()));
+		arduino.setPixels((int) spinnerPixels.getValue());
 		return true;
 	}
 

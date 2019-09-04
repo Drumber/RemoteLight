@@ -15,7 +15,7 @@ public class RemoteLightServer extends Device {
 	private RLClient client;
 
 	public RemoteLightServer(String id, String ip) {
-		super(id);
+		super(id, 0);
 		this.ip = ip;
 		client = new RLClient(ip);
 	}

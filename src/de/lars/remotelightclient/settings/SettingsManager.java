@@ -3,9 +3,9 @@ package de.lars.remotelightclient.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tinylog.Logger;
+
 import de.lars.remotelightclient.DataStorage;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 
 public class SettingsManager {
 	
@@ -20,7 +20,6 @@ public class SettingsManager {
 	
 	public SettingsManager() {
 		settings = new ArrayList<Setting>();
-		this.registerSettings();
 	}
 	
 	public List<Setting> getSettings() {
@@ -46,7 +45,32 @@ public class SettingsManager {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param type Setting type WITH defined ID
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Setting> T getSettingFromType(T type) {
+		if(type.getId() != null) {
+			Setting s = getSettingFromId(type.getId());
+			return (T) getSettingFromId(type.getId());
+		}
+		return null;
+	}
+	
+	public boolean isRegistered(String id) {
+		return getSettingFromId(id) != null;
+	}
+	
+	/**
+	 * Register setting if not already registered
+	 */
 	public void addSetting(Setting setting) {
+		if(getSettingFromId(setting.getId()) != null) {
+			return;
+		}
+		Logger.info("Registered Setting '" + setting.getId() + "'.");
 		settings.add(setting);
 	}
 	
@@ -60,12 +84,9 @@ public class SettingsManager {
 	
 	@SuppressWarnings("unchecked")
 	public void load(String key) {
-		settings = (List<Setting>) DataStorage.getData(key);
-	}
-	
-	private void registerSettings() {
-		this.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI",
-				new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
+		if(DataStorage.getData(key) != null && DataStorage.getData(key) instanceof List<?>) {
+			settings = (List<Setting>) DataStorage.getData(key);
+		}
 	}
 
 }

@@ -1,20 +1,18 @@
 package de.lars.remotelightclient;
 
+import java.awt.EventQueue;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
-import de.lars.remotelightclient.devices.arduino.ComPortOld;
-import de.lars.remotelightclient.gui.RgbGUI;
-import de.lars.remotelightclient.gui.SelectionWindow;
-import de.lars.remotelightclient.gui.SettingsGUI;
-import de.lars.remotelightclient.gui.WS281xGUI;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
-import de.lars.remotelightclient.screencolor.WS281xScreenColorHandler;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.ui.MainFrame;
 
 public class Main {
 	
@@ -23,25 +21,15 @@ public class Main {
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLightClient";
 	
 	private static Main instance;
-	private SettingsGUI settingsGui;
-	private RgbGUI rgbGui;
-	private WS281xGUI ws281xGui;
-	private SelectionWindow selectionWindow;
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
 	private DeviceManager deviceManager;
 	private OutputManager outputManager;
+	private SettingsManager settingsManager;
+	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
-//		BasicLookAndFeel darcula = new DarculaLaf();
-//		try {
-//			UIManager.setLookAndFeel(darcula);
-//		} catch (UnsupportedLookAndFeelException e) {
-//			e.printStackTrace();
-//		}
-		
-		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -53,7 +41,7 @@ public class Main {
 		      public void run() {
 		  		if((boolean) DataStorage.getData(DataStorage.SETTINGS_AUTOSHUTDOWN))
 					Client.send(new String[] {Identifier.SYS_SHUTDOWN_NOW});
-		        close();
+		        instance.close();
 		      } 
 	    }); 
 	}
@@ -61,33 +49,30 @@ public class Main {
 	public Main() {
 		instance = this;
 		DataStorage.start();
+		settingsManager = new SettingsManager();
+		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
+		
+		new StartUp();
+		
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
-		settingsGui = new SettingsGUI();
 		musicManager = new MusicSyncManager();
-		new StartUp();
+		EventQueue.invokeLater(new Runnable() {
+		public void run() {
+			try {
+				mainFrame = new MainFrame();
+				mainFrame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	});
 	}
 	
 	public static Main getInstance() {
 		return instance;
-	}
-	
-	public RgbGUI getRgbGUI() {
-		return rgbGui;
-	}
-	
-	public WS281xGUI getWS281xGUI() {
-		return ws281xGui;
-	}
-	
-	public SelectionWindow getSelectionWindow() {
-		return selectionWindow;
-	}
-	
-	public SettingsGUI getSettingsGUI() {
-		return settingsGui;
 	}
 	
 	public AnimationManager getAnimationManager() {
@@ -109,75 +94,32 @@ public class Main {
 	public OutputManager getOutputManager() {
 		return outputManager;
 	}
-	public void openSelectionWindow() {
-		if(selectionWindow == null)
-			selectionWindow = new SelectionWindow();
-		selectionWindow.setVisible(true);
+	
+	public SettingsManager getSettingsManager() {
+		return settingsManager;
 	}
 	
-	public void openSettingsGui() {
-		if(settingsGui == null)
-			settingsGui = new SettingsGUI();
-		settingsGui.setVisible(true);
-	}
-	
-	public void openRgbGui() {
-		if(rgbGui == null)
-			rgbGui = new RgbGUI();
-		rgbGui.setVisible(true);
-	}
-	
-	public void openWS281xGui() {
-		if(ws281xGui == null)
-			ws281xGui = new WS281xGUI();
-		ws281xGui.setVisible(true);
-	}
-	
-	public void setRGBMode() {
-		rgbGui = new RgbGUI();
-		rgbGui.setVisible(true);
-		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "RGB");
-		Client.send(new String[] {Identifier.STNG_MODE_WS28x});
-	}
-	
-	public void setWS281xMode() {
-		ws281xGui = new WS281xGUI();
-		ws281xGui.setVisible(true);
-		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "WS281x");
-		Client.send(new String[] {Identifier.STNG_MODE_WS28x, DataStorage.getData(DataStorage.SETTINGS_LED_NUM)+""});
-	}
-	
-	public void setArduinoMode() {
-		ws281xGui = new WS281xGUI();
-		ws281xGui.setVisible(true);
-		DataStorage.store(DataStorage.SETTINGS_CONTROL_MODEKEY, "Arduino");
-	}
-	
-	public static boolean isArduinoMode() {
-		if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
-			String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
-			if(mode.equalsIgnoreCase("Arduino"))
-				return true;
-		}
-		return false;
+	public MainFrame getMainFrame() {
+		return mainFrame;
 	}
 	
 	public static int getLedNum() {
-		return (int) DataStorage.getData(DataStorage.SETTINGS_LED_NUM);
+		if(instance.getOutputManager().getActiveOutput() != null) {
+			return instance.getOutputManager().getActiveOutput().getPixels();
+		}
+		return 0;
 	}
 	
 	
-	public static void close() {
-		WS281xScreenColorHandler.stop();
+	public void close() {
+		//TODO
 		Client.send(new String[] {Identifier.WS_ANI_STOP});
-		
 		Client.send(new String[] {Identifier.WS_COLOR_OFF});
 		
+		this.getDeviceManager().saveDevices();
+		this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
+		
 		DataStorage.save();
-		if(ComPortOld.isOpen())
-			ComPortOld.closePort();
-		if(Client.isConnected())
-			Client.disconnect();
 	}
 
 }

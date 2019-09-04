@@ -3,9 +3,12 @@ package de.lars.remotelightclient.ui.panels;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.devices.Device;
+import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
@@ -45,6 +48,8 @@ public class ConnectionPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 8004937110428129961L;
 	private MainFrame mainFrame;
+	private OutputManager om = Main.getInstance().getOutputManager();
+	private DeviceManager dm = Main.getInstance().getDeviceManager();
 	private JPanel bgrMenu;
 	private DeviceSettingsPanel currentSettingsPanel;
 	private JPopupMenu popupMenu;
@@ -179,7 +184,7 @@ public class ConnectionPanel extends JPanel {
 	}
 	
 	public void addDeviceButtons(JPanel panel) {
-		for(Device d : MainFrame.dm.getDevices()) {
+		for(Device d : dm.getDevices()) {
 			String icon = "error.png";
 			if(d instanceof Arduino) {
 				icon = "arduino.png";
@@ -189,7 +194,7 @@ public class ConnectionPanel extends JPanel {
 			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
 			btn.setName(d.getId());
 			btn.addMouseListener(deviceClicked);
-			if(MainFrame.om.getActiveOutput() != null && MainFrame.om.getActiveOutput() == d) {
+			if(om.getActiveOutput() != null && om.getActiveOutput() == d) {
 				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
 			}
 			panel.add(btn);
@@ -200,7 +205,7 @@ public class ConnectionPanel extends JPanel {
 		@Override
 		public void mouseClicked(java.awt.event.MouseEvent e) {
 			BigImageButton btn = (BigImageButton) e.getSource();
-			for(Device d : MainFrame.dm.getDevices()) {
+			for(Device d : dm.getDevices()) {
 				if(d.getId().equals(btn.getName())) {
 					showSettingsPanel(d, false);
 					break;
@@ -294,13 +299,13 @@ public class ConnectionPanel extends JPanel {
 			if(name.equals("save") && currentSettingsPanel != null) {
 				if(!currentSettingsPanel.getId().isEmpty()) {
 					
-					if(!MainFrame.dm.isIdUsed(currentSettingsPanel.getId())) {
+					if(!dm.isIdUsed(currentSettingsPanel.getId())) {
 						
 						currentSettingsPanel.save();
 						Device device = currentSettingsPanel.getDevice();
 						
 						if(currentSettingsPanel.isSetup()) {
-							if(MainFrame.dm.addDevice(device)) {
+							if(dm.addDevice(device)) {
 								mainFrame.displayPanel(new ConnectionPanel(mainFrame));
 								mainFrame.printNotification("Added new device.", NotificationType.Success);
 							} else {
@@ -319,8 +324,8 @@ public class ConnectionPanel extends JPanel {
 			//REMOVE clicked
 			} else if(name.equals("remove") && currentSettingsPanel != null) {
 				Device device = currentSettingsPanel.getDevice();
-				if(!currentSettingsPanel.isSetup() && MainFrame.dm.isIdUsed(device.getId())) {
-					MainFrame.dm.removeDevice(device);
+				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
+					dm.removeDevice(device);
 					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
 					mainFrame.printNotification("Removed device.", NotificationType.Info);
 				} else {
@@ -329,8 +334,8 @@ public class ConnectionPanel extends JPanel {
 			//SELECT clicked
 			} else if(name.equals("select") && currentSettingsPanel != null) {
 				Device device = currentSettingsPanel.getDevice();
-				if(!currentSettingsPanel.isSetup() && MainFrame.dm.isIdUsed(device.getId())) {
-					MainFrame.om.setActiveOutput(device);
+				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
+					om.setActiveOutput(device);
 					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
 				}
 			//CANCEL clicked
