@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.ui.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 public class SideMenuExtended extends JPanel {
@@ -85,6 +87,15 @@ public class SideMenuExtended extends JPanel {
 		this.configureButton(btnSettings);
 		add(btnSettings);
 
+		Component glue = Box.createGlue();
+		add(glue);
+		
+		JButton btnAbout = new JButton(i18n.getString("Basic.About")); //$NON-NLS-1$
+		btnAbout.setIcon(Style.getMenuIcon("info.png")); //$NON-NLS-1$
+		btnAbout.setName("about"); //$NON-NLS-1$
+		this.configureButton(btnAbout);
+		add(btnAbout);
+		
 	}
 	
 	
@@ -127,13 +138,13 @@ public class SideMenuExtended extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
 
-			if(!btn.getName().equals("extend")) {
+			if(!btn.getName().equals("extend")) { //$NON-NLS-1$
 				UiUtils.getComponentByName(SideMenuExtended.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
 				btn.setBackground(Style.accent);
 				mainFrame.setSelectedMenu(btn.getName());
 			}
 			
-			if(btn.getName().equals("extend")) {
+			if(btn.getName().equals("extend")) { //$NON-NLS-1$
 				sideMenu.removeAll();
 				sideMenu.add(new SideMenuSmall(mainFrame), BorderLayout.CENTER);
 				sideMenu.updateUI();

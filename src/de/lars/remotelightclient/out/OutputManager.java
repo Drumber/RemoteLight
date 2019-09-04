@@ -13,7 +13,6 @@ public class OutputManager {
 	
 	public OutputManager() {
 		active = false;
-		this.loop();
 	}
 
 	public Output getActiveOutput() {
@@ -22,6 +21,7 @@ public class OutputManager {
 
 	public void setActiveOutput(Output activeOutput) {
 		this.activeOutput = activeOutput;
+		this.loop();
 	}
 	
 	public void setDelay(int delay) {

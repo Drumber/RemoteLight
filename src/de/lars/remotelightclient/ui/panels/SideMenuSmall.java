@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BoxLayout;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class SideMenuSmall extends JPanel {
 
@@ -83,6 +85,15 @@ public class SideMenuSmall extends JPanel {
 		btnSettings.setName("settings");
 		this.configureButton(btnSettings);
 		add(btnSettings);
+		
+		Component glue = Box.createGlue();
+		add(glue);
+		
+		JButton btnAbout = new JButton("");
+		btnAbout.setIcon(Style.getMenuIcon("info.png"));
+		btnAbout.setName("about");
+		this.configureButton(btnAbout);
+		add(btnAbout);
 
 	}
 	

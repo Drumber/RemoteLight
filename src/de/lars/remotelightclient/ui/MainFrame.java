@@ -17,6 +17,7 @@ import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.gui.SystemTrayIcon;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.ConnectionPanel;
@@ -42,12 +43,14 @@ public class MainFrame extends JFrame {
 	//TEMP
 	public static SettingsManager sm;
 	public static DeviceManager dm;
+	public static OutputManager om;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		sm = new SettingsManager();
 		dm = new DeviceManager();
+		om = new OutputManager();
 		dm.addDevice(new Arduino("Arduino1", null));
 		dm.addDevice(new RemoteLightServer("RaspberryPi", null));
 		try {
@@ -182,7 +185,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	public enum NotificationType {
-		Error, Info, Unimportant
+		Error, Info, Unimportant, Success
 	}
 	public void printNotification(String text, NotificationType type) {
 		if(text == null || text.equals("")) {
@@ -200,6 +203,9 @@ public class MainFrame extends JFrame {
 			break;
 		case Unimportant:
 			lblNotification.setForeground(Style.textColor);
+			break;
+		case Success:
+			lblNotification.setForeground(Color.GREEN);
 			break;
 		}
 	}

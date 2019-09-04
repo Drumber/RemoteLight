@@ -58,8 +58,20 @@ public class DeviceManager {
 		return tmp;
 	}
 	
+	/**
+	 * 
+	 * @return returns true when ID is already used
+	 */
+	public boolean isIdUsed(String id) {
+		return this.getDevice(id) != null;
+	}
+	
+	/**
+	 * 
+	 * @return returns false when ID is already used
+	 */
 	public boolean addDevice(Device device) {
-		if(this.getDevice(device.getId()) != null) { //ID is already used
+		if(this.isIdUsed(device.getId())) { //ID is already used
 			return false;
 		}
 		devices.add(device);

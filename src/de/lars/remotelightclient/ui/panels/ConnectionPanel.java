@@ -8,6 +8,7 @@ import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
 import de.lars.remotelightclient.ui.panels.connectionComps.ArduinoSettingsPanel;
 import de.lars.remotelightclient.ui.panels.connectionComps.DeviceSettingsPanel;
@@ -20,23 +21,22 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 
 import java.awt.Font;
-import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenu;
 
 public class ConnectionPanel extends JPanel {
 
@@ -47,7 +47,7 @@ public class ConnectionPanel extends JPanel {
 	private MainFrame mainFrame;
 	private JPanel bgrMenu;
 	private DeviceSettingsPanel currentSettingsPanel;
-	private JPopupMenu popup;
+	private JPopupMenu popupMenu;
 
 	/**
 	 * Create the panel.
@@ -82,6 +82,36 @@ public class ConnectionPanel extends JPanel {
 		addDeviceButtons(panelDevices);
 		scrollPane.setViewportView(panelDevices);
 		
+		popupMenu = new JPopupMenu();
+		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent));
+		panelDevices.add(popupMenu);
+		
+		BigImageButton add =  new BigImageButton(Style.getUiIcon("add.png"), "Add");
+		this.addPopupListener(add, popupMenu);
+		panelDevices.add(add);
+		
+		JMenuItem itemArduino = new JMenuItem("Arduino");
+		itemArduino.setIcon(Style.getUiIcon("arduino.png"));
+		this.configureAddPopup(itemArduino, "arduino");
+		popupMenu.add(itemArduino);
+		
+		JMenuItem itemRLServer = new JMenuItem("RLServer (Raspberry)");
+		itemRLServer.setIcon(Style.getUiIcon("raspberry.png"));
+		this.configureAddPopup(itemRLServer, "rlserver");
+		popupMenu.add(itemRLServer);
+		
+		JMenu mnLink = new JMenu("Link");
+		this.configureAddPopup(mnLink, "menulink");
+		popupMenu.add(mnLink);
+		
+		JMenuItem itemMultiOutput = new JMenuItem("MultiOutput");
+		this.configureAddPopup(itemMultiOutput, "multioutput");
+		mnLink.add(itemMultiOutput);
+		
+		JMenuItem itemChain = new JMenuItem("Chain");
+		this.configureAddPopup(itemChain, "chain");
+		mnLink.add(itemChain);
+		
 		JLabel lblDevices = new JLabel("Devices");
 		lblDevices.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDevices.setForeground(Style.accent);
@@ -89,13 +119,11 @@ public class ConnectionPanel extends JPanel {
 		
 		bgrMenu = new JPanel();
 		bgrMenu.setBackground(Style.panelBackground);
-		Dimension size = new Dimension(Integer.MAX_VALUE, 200);
-		bgrMenu.setPreferredSize(size);
-		bgrMenu.setMaximumSize(size);
+		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 150));
+		bgrMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
 		add(bgrMenu);
 		bgrMenu.setLayout(new BorderLayout(0, 0));
 
-		createPopup();
 	}
 	
 	private JPanel getDeviceSettingsBgr(boolean setup) {
@@ -116,21 +144,29 @@ public class ConnectionPanel extends JPanel {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnCancel);
+		btnCancel.setName("cancel");
+		btnCancel.addActionListener(optionsButtonListener);
 		panelOptions.add(btnCancel);
 		
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnRemove);
+		btnRemove.setName("remove");
+		btnRemove.addActionListener(optionsButtonListener);
 		panelOptions.add(btnRemove);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnSave);
+		btnSave.setName("save");
+		btnSave.addActionListener(optionsButtonListener);
 		panelOptions.add(btnSave);
 		
 		JButton btnSelect = new JButton("Select");
 		btnSelect.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnSelect);
+		btnSelect.setName("select");
+		btnSelect.addActionListener(optionsButtonListener);
 		panelOptions.add(btnSelect);
 		
 		
@@ -153,11 +189,11 @@ public class ConnectionPanel extends JPanel {
 			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
 			btn.setName(d.getId());
 			btn.addMouseListener(deviceClicked);
+			if(MainFrame.om.getActiveOutput() != null && MainFrame.om.getActiveOutput() == d) {
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+			}
 			panel.add(btn);
 		}
-		BigImageButton add =  new BigImageButton(Style.getUiIcon("add.png"), "Add");
-		add.addMouseListener(addBtnClicked);
-		panel.add(add);
 	}
 	
 	private MouseAdapter deviceClicked = new MouseAdapter() {
@@ -178,12 +214,13 @@ public class ConnectionPanel extends JPanel {
 		DeviceSettingsPanel panel = null;
 		
 		if(d instanceof Arduino) {
-			panel = new ArduinoSettingsPanel((Arduino) d);
+			panel = new ArduinoSettingsPanel((Arduino) d, setup);
 		} else if(d instanceof RemoteLightServer) {
-			panel = new RLServerSettingsPanel((RemoteLightServer) d);
+			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
 		}
 		
 		if(panel != null) {
+			currentSettingsPanel = panel;
 			bgr.add(panel, BorderLayout.CENTER);
 			bgrMenu.removeAll();
 			bgrMenu.add(bgr, BorderLayout.CENTER);
@@ -191,64 +228,118 @@ public class ConnectionPanel extends JPanel {
 		}
 	}
 	
-	
-	private MouseAdapter addBtnClicked = new MouseAdapter() {
-		@Override
-		public void mouseClicked(java.awt.event.MouseEvent e) {
-			showAddPopupMenu();
-		}
-	};
-	
-	private void createPopup() {
-		popup = new JPopupMenu();
-		JMenuItem arduino = new JMenuItem("Arduino", Style.getUiIcon("arduino.png"));
-		arduino.setName("arduino");
-		arduino.addActionListener(popupMenuListener);
-		JMenuItem raspberry = new JMenuItem("RLServer", Style.getUiIcon("raspberry.png"));
-		raspberry.setName("raspberry");
-		raspberry.addActionListener(popupMenuListener);
-		raspberry.setBackground(Style.buttonBackground);
-		popup.add(arduino);
-		popup.add(raspberry);
-		popup.setBackground(Style.buttonBackground);
-		popup.setForeground(Style.textColor);
-		popup.setVisible(false);
-		popup.addPopupMenuListener(popupListener);
+	public void hideSettingsPanel() {
+		currentSettingsPanel = null;
+		bgrMenu.removeAll();
+		bgrMenu.updateUI();
 	}
 	
-	private PopupMenuListener popupListener = new PopupMenuListener() {
-		
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-			System.out.println(1);
-		}
-		
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			System.out.println(2);
-		}
-		
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) {
-			System.out.println(3);
-		}
-	};
-	
-	private void showAddPopupMenu() {
-		popup.setLocation(MouseInfo.getPointerInfo().getLocation());
-		popup.setVisible(true);
-		this.updateUI();
+	private void configureAddPopup(JMenuItem item, String name) {
+		item.setBackground(Style.panelAccentBackground);
+		item.setContentAreaFilled(false);
+		item.setOpaque(true);
+		item.setForeground(Style.textColor);
+		item.setName(name);
+		item.addActionListener(menuItemListener);
+	}
+
+	private void addPopupListener(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				hideSettingsPanel();
+				showMenu(e);
+			}
+			public void mouseReleased(MouseEvent e) {
+				showMenu(e);
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 	
-	private void hideAddPopupMenu() {
-		popup.setVisible(false);
-	}
-	
-	private ActionListener popupMenuListener = new ActionListener() {
+	private ActionListener menuItemListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(1);
+			JMenuItem item = (JMenuItem) e.getSource();
+			Device device = null;
+			
+			switch (item.getName()) {
+			case "arduino":
+				device = new Arduino(null, null);
+				break;
+			case "rlserver":
+				device = new RemoteLightServer(null, null);
+				break;
+			case "multioutput": //TODO
+				
+				break;
+			case "chain":
+				
+				break;
+			}
+			if(device != null) {
+				showSettingsPanel(device, true);
+			}
 		}
 	};
-
+	
+	private ActionListener optionsButtonListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton btn = (JButton) e.getSource();
+			String name = btn.getName();
+			
+			//SAVE clicked
+			if(name.equals("save") && currentSettingsPanel != null) {
+				if(!currentSettingsPanel.getId().isEmpty()) {
+					
+					if(!MainFrame.dm.isIdUsed(currentSettingsPanel.getId())) {
+						
+						currentSettingsPanel.save();
+						Device device = currentSettingsPanel.getDevice();
+						
+						if(currentSettingsPanel.isSetup()) {
+							if(MainFrame.dm.addDevice(device)) {
+								mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+								mainFrame.printNotification("Added new device.", NotificationType.Success);
+							} else {
+								mainFrame.printNotification("Name / ID already used!", NotificationType.Error);
+							}
+						} else {
+							mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+							mainFrame.printNotification("Saved changes.", NotificationType.Unimportant);
+						}
+					} else {
+						mainFrame.printNotification("Name / ID already used!", NotificationType.Error);
+					}
+				} else {
+					mainFrame.printNotification("Name / ID field cannot be empty!", NotificationType.Error);
+				}
+			//REMOVE clicked
+			} else if(name.equals("remove") && currentSettingsPanel != null) {
+				Device device = currentSettingsPanel.getDevice();
+				if(!currentSettingsPanel.isSetup() && MainFrame.dm.isIdUsed(device.getId())) {
+					MainFrame.dm.removeDevice(device);
+					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+					mainFrame.printNotification("Removed device.", NotificationType.Info);
+				} else {
+					mainFrame.printNotification("Could not remove device!", NotificationType.Error);
+				}
+			//SELECT clicked
+			} else if(name.equals("select") && currentSettingsPanel != null) {
+				Device device = currentSettingsPanel.getDevice();
+				if(!currentSettingsPanel.isSetup() && MainFrame.dm.isIdUsed(device.getId())) {
+					MainFrame.om.setActiveOutput(device);
+					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+				}
+			//CANCEL clicked
+			} else if(name.equals("cancel")) {
+				hideSettingsPanel();
+				mainFrame.printNotification(null, null);
+			}
+		}
+	};
+	
+	
 }

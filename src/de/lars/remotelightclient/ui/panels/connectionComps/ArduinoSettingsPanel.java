@@ -33,7 +33,8 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ArduinoSettingsPanel(Arduino arduino) {
+	public ArduinoSettingsPanel(Arduino arduino, boolean setup) {
+		super(arduino, setup);
 		this.arduino = arduino;
 		size = new Dimension(800, 40);
 		setBackground(Style.panelBackground);
@@ -95,9 +96,18 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 	}
 
 	@Override
-	public void save() {
+	public boolean save() {
+		if(fieldId.getText().isEmpty()) {
+			return false;
+		}
 		arduino.setId(fieldId.getText());
 		arduino.setSerialPort(ComPort.getComPortByName((String) comboPorts.getSelectedItem()));
+		return true;
+	}
+
+	@Override
+	public String getId() {
+		return fieldId.getText();
 	}
 
 }

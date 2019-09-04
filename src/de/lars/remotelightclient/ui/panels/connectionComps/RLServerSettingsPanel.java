@@ -31,7 +31,8 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	/**
 	 * Create the panel.
 	 */
-	public RLServerSettingsPanel(RemoteLightServer rlServer) {
+	public RLServerSettingsPanel(RemoteLightServer rlServer, boolean setup) {
+		super(rlServer, setup);
 		this.rlServer = rlServer;
 		size = new Dimension(800, 40);
 		setBackground(Style.panelBackground);
@@ -90,9 +91,18 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	}
 
 	@Override
-	public void save() {
+	public boolean save() {
+		if(fieldId.getText().isEmpty()) {
+			return false;
+		}
 		rlServer.setId(fieldId.getText());
 		rlServer.setIp(fieldHostname.getText());
+		return true;
+	}
+
+	@Override
+	public String getId() {
+		return fieldId.getName();
 	}
 
 }
