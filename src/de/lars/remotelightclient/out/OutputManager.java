@@ -5,6 +5,7 @@ import java.awt.Color;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingObject;
 
 public class OutputManager {
@@ -46,7 +47,7 @@ public class OutputManager {
 	public void close() {
 		setEnabled(false);
 		//save last output before closing
-		Main.getInstance().getSettingsManager().addSetting(new SettingObject("out.lastoutput", "Last active Output", activeOutput));
+		Main.getInstance().getSettingsManager().getSettingFromType(new SettingObject("out.lastoutput", null, null)).setValue(activeOutput);
 	}
 	
 	public static void addToOutput(Color[] pixels) {

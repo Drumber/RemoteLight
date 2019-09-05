@@ -13,9 +13,9 @@ import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
-import de.lars.remotelightclient.ui.panels.connectionComps.ArduinoSettingsPanel;
-import de.lars.remotelightclient.ui.panels.connectionComps.DeviceSettingsPanel;
-import de.lars.remotelightclient.ui.panels.connectionComps.RLServerSettingsPanel;
+import de.lars.remotelightclient.ui.panels.outputComps.ArduinoSettingsPanel;
+import de.lars.remotelightclient.ui.panels.outputComps.DeviceSettingsPanel;
+import de.lars.remotelightclient.ui.panels.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
 
@@ -41,7 +41,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenu;
 
-public class ConnectionPanel extends JPanel {
+public class OutputPanel extends JPanel {
 
 	/**
 	 * 
@@ -57,7 +57,7 @@ public class ConnectionPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ConnectionPanel(MainFrame mainFrame) {
+	public OutputPanel(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		mainFrame.showControlBar(true);
 		setBackground(Style.panelBackground);
@@ -117,7 +117,7 @@ public class ConnectionPanel extends JPanel {
 		this.configureAddPopup(itemChain, "chain");
 		mnLink.add(itemChain);
 		
-		JLabel lblDevices = new JLabel("Devices");
+		JLabel lblDevices = new JLabel("Outputs");
 		lblDevices.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDevices.setForeground(Style.accent);
 		bgrDevices.add(lblDevices, BorderLayout.NORTH);
@@ -203,10 +203,18 @@ public class ConnectionPanel extends JPanel {
 	
 	private MouseAdapter deviceClicked = new MouseAdapter() {
 		@Override
-		public void mouseClicked(java.awt.event.MouseEvent e) {
+		public void mouseClicked(MouseEvent e) {
 			BigImageButton btn = (BigImageButton) e.getSource();
 			for(Device d : dm.getDevices()) {
 				if(d.getId().equals(btn.getName())) {
+					//double click -> select
+					if(e.getClickCount() == 2) {
+						if((!currentSettingsPanel.isSetup() || currentSettingsPanel == null) && dm.isIdUsed(d.getId())) {
+							om.setActiveOutput(d);
+							mainFrame.displayPanel(new OutputPanel(mainFrame));
+							break;
+						}
+					}
 					showSettingsPanel(d, false);
 					break;
 				}
@@ -306,13 +314,13 @@ public class ConnectionPanel extends JPanel {
 						
 						if(currentSettingsPanel.isSetup()) {
 							if(dm.addDevice(device)) {
-								mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+								mainFrame.displayPanel(new OutputPanel(mainFrame));
 								mainFrame.printNotification("Added new device.", NotificationType.Success);
 							} else {
 								mainFrame.printNotification("Name / ID already used!", NotificationType.Error);
 							}
 						} else {
-							mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+							mainFrame.displayPanel(new OutputPanel(mainFrame));
 							mainFrame.printNotification("Saved changes.", NotificationType.Unimportant);
 						}
 					} else {
@@ -326,7 +334,7 @@ public class ConnectionPanel extends JPanel {
 				Device device = currentSettingsPanel.getDevice();
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
 					dm.removeDevice(device);
-					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+					mainFrame.displayPanel(new OutputPanel(mainFrame));
 					mainFrame.printNotification("Removed device.", NotificationType.Info);
 				} else {
 					mainFrame.printNotification("Could not remove device!", NotificationType.Error);
@@ -336,7 +344,7 @@ public class ConnectionPanel extends JPanel {
 				Device device = currentSettingsPanel.getDevice();
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
 					om.setActiveOutput(device);
-					mainFrame.displayPanel(new ConnectionPanel(mainFrame));
+					mainFrame.displayPanel(new OutputPanel(mainFrame));
 				}
 			//CANCEL clicked
 			} else if(name.equals("cancel")) {

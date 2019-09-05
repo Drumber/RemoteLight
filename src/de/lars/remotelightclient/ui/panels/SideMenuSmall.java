@@ -44,11 +44,11 @@ public class SideMenuSmall extends JPanel {
 		this.configureButton(btnExtend);
 		add(btnExtend);
 		
-		JButton btnConnection = new JButton("");
-		btnConnection.setName("connection");
-		btnConnection.setIcon(Style.getMenuIcon("connection.png"));
-		this.configureButton(btnConnection);
-		add(btnConnection);
+		JButton btnOutput = new JButton("");
+		btnOutput.setName("output");
+		btnOutput.setIcon(Style.getMenuIcon("connection.png"));
+		this.configureButton(btnOutput);
+		add(btnOutput);
 		
 		JButton btnColors = new JButton("");
 		btnColors.setName("colors");

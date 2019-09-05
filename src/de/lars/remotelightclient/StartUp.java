@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.devices.arduino.ComPort;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.out.Output;
 import de.lars.remotelightclient.out.OutputManager;
@@ -147,10 +148,11 @@ public class StartUp {
 	}
 	
 	public void registerSettings() {
+		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", i18n.langCodeToName(i18n.LANGUAGES), "english", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
 		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
-		
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
+		
 	}
 
 }

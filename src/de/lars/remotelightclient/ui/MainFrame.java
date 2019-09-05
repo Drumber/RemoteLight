@@ -5,14 +5,17 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Locale;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.ui.panels.ConnectionPanel;
+import de.lars.remotelightclient.settings.types.SettingString;
+import de.lars.remotelightclient.ui.panels.OutputPanel;
 import de.lars.remotelightclient.ui.panels.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.SideMenuSmall;
 import java.awt.Dimension;
@@ -29,7 +32,7 @@ public class MainFrame extends JFrame {
 	private JPanel bgrSideMenu;
 	private JPanel bgrContentPanel;
 	
-	private String selectedMenu = "connection";
+	private String selectedMenu = "output";
 	private JPanel displayedPanel;
 	private SettingsManager sm;
 
@@ -46,11 +49,13 @@ public class MainFrame extends JFrame {
 		addWindowListener(closeListener);
 		
 		this.setFrameContetPane();
+		this.displayPanel(new OutputPanel(this));
 	}
 	
 	private void setFrameContetPane() {
 		SettingSelection style = (SettingSelection) sm.getSettingFromId("ui.style");
 		Style.setStyle(style.getSelected());
+		Locale.setDefault(new Locale(i18n.langNameToCode(((SettingSelection) sm.getSettingFromId("ui.language")).getSelected())));
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(Style.panelBackground);
@@ -145,8 +150,8 @@ public class MainFrame extends JFrame {
 		case "settings":
 			this.displayPanel(new SettingsPanel(this, sm));
 			break;
-		case "connection":
-			this.displayPanel(new ConnectionPanel(this));
+		case "output":
+			this.displayPanel(new OutputPanel(this));
 			break;
 		}
 	}

@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.panels.connectionComps;
+package de.lars.remotelightclient.ui.panels.outputComps;
 
 import de.lars.remotelightclient.devices.arduino.ComPort;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;

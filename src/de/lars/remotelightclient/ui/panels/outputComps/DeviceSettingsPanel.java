@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.panels.connectionComps;
+package de.lars.remotelightclient.ui.panels.outputComps;
 
 import javax.swing.JPanel;
 

@@ -45,11 +45,11 @@ public class SideMenuExtended extends JPanel {
 		this.configureButton(btnExtend);
 		add(btnExtend);
 		
-		JButton btnConnection = new JButton(i18n.getString("Basic.Connection")); //$NON-NLS-1$
-		btnConnection.setName("connection"); //$NON-NLS-1$
-		btnConnection.setIcon(Style.getMenuIcon("connection.png")); //$NON-NLS-1$
-		this.configureButton(btnConnection);
-		add(btnConnection);
+		JButton btnOutput = new JButton(i18n.getString("Basic.Output")); //$NON-NLS-1$
+		btnOutput.setName("output"); //$NON-NLS-1$
+		btnOutput.setIcon(Style.getMenuIcon("connection.png")); //$NON-NLS-1$
+		this.configureButton(btnOutput);
+		add(btnOutput);
 		
 		JButton btnColors = new JButton(i18n.getString("Basic.Colors")); //$NON-NLS-1$
 		btnColors.setName("colors"); //$NON-NLS-1$

@@ -124,9 +124,7 @@ public class Main {
 	
 	
 	public void close() {
-		//TODO
-		Client.send(new String[] {Identifier.WS_ANI_STOP});
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		this.getOutputManager().close();
 		
 		this.getDeviceManager().saveDevices();
 		this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
