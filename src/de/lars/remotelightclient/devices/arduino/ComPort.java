@@ -2,13 +2,20 @@ package de.lars.remotelightclient.devices.arduino;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
+
 import org.tinylog.Logger;
 
 import com.fazecast.jSerialComm.SerialPort;
 
 import de.lars.remotelightclient.devices.ConnectionState;
 
-public class ComPort {
+public class ComPort implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -269054641983915463L;
+
 	private final int BAUD = 1000000;
 	
 	private SerialPort port;

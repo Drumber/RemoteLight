@@ -39,8 +39,6 @@ public class Main {
 
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
 		      public void run() {
-		  		if((boolean) DataStorage.getData(DataStorage.SETTINGS_AUTOSHUTDOWN))
-					Client.send(new String[] {Identifier.SYS_SHUTDOWN_NOW});
 		        instance.close();
 		      } 
 	    }); 

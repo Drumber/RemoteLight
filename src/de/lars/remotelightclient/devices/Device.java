@@ -29,5 +29,10 @@ public abstract class Device extends Output implements Serializable {
 	public void onOutput(Color[] pixels) {
 		send(pixels);
 	}
+	
+	/**
+	 * Called when Device is loaded from data file
+	 */
+	public abstract void onLoad();
 
 }

@@ -20,6 +20,7 @@ public class DeviceManager {
 		if(storedDevices != null) {
 			devices = new ArrayList<Device>(Arrays.asList(storedDevices));
 			Logger.info("Loaded " + devices.size() + " devices.");
+			for(Device d : devices) d.onLoad();
 		} else {
 			devices = new ArrayList<Device>();
 		}

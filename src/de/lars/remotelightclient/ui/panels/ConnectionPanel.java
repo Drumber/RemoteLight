@@ -299,7 +299,7 @@ public class ConnectionPanel extends JPanel {
 			if(name.equals("save") && currentSettingsPanel != null) {
 				if(!currentSettingsPanel.getId().isEmpty()) {
 					
-					if(!dm.isIdUsed(currentSettingsPanel.getId())) {
+					if(!dm.isIdUsed(currentSettingsPanel.getId()) || currentSettingsPanel.getId().equals(currentSettingsPanel.getDevice().getId())) {
 						
 						currentSettingsPanel.save();
 						Device device = currentSettingsPanel.getDevice();

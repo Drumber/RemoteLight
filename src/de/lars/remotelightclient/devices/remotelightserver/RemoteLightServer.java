@@ -35,8 +35,7 @@ public class RemoteLightServer extends Device {
 
 	@Override
 	public void send(Color[] pixels) {
-		// TODO Auto-generated method stub
-		
+		client.send(pixels);
 	}
 
 	@Override
@@ -52,6 +51,11 @@ public class RemoteLightServer extends Device {
 	@Override
 	public ConnectionState getConnectionState() {
 		return client.getState();
+	}
+
+	@Override
+	public void onLoad() {
+		
 	}
 
 }

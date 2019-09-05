@@ -56,7 +56,7 @@ public class StartUp {
 					for(int i = 0; i < ComPort.getComPorts().length; i++) {
 						if(DataStorage.getData(DataStorage.SETTINGS_COMPORT).equals(ComPort.getComPorts()[i].getSystemPortName())) {
 							
-							de.lars.remotelightclient.devices.arduino.Arduino arduino = new de.lars.remotelightclient.devices.arduino.Arduino("Test", ComPort.getComPorts()[i]);
+							de.lars.remotelightclient.devices.arduino.Arduino arduino = new de.lars.remotelightclient.devices.arduino.Arduino("Test", ComPort.getComPorts()[i].getSystemPortName());
 							arduino.connect();
 							OutputManager outm = Main.getInstance().getOutputManager();
 							outm.setActiveOutput(arduino);

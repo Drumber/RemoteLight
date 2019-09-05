@@ -10,7 +10,6 @@ import com.blogspot.debukkitsblog.util.FileStorage;
 public class DataStorage {
 	
 	private static FileStorage storage;
-	private static final String PSW = "jAW1O4fkWsWC9834rujhGTZUk2FDthPX"; //I know it's pointless
 	public static final String SETTINGSMANAGER_KEY = "settingsmanager_key";
 	public final static String IP_STOREKEY = "serverip";
 	public final static String SOUND_INPUT_STOREKEY = "soundinput";
@@ -64,7 +63,7 @@ public class DataStorage {
 				if(storage.hasKey(key)) {
 					storage.remove(key);
 				}
-				storage.store(key, data, PSW);
+				storage.store(key, data);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -93,7 +92,7 @@ public class DataStorage {
 	public static Object getData(String key) {
 		try {
 			if(isCreated())
-				return storage.get(key, PSW);
+				return storage.get(key);
 		} catch (Exception e) {
 			Logger.error("Could not read data file!");
 			e.printStackTrace();

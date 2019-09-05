@@ -91,7 +91,7 @@ public class MainFrame extends JFrame {
 	
 	WindowListener closeListener = new WindowAdapter() {
 		public void windowClosing(WindowEvent windowEvent) {
-			if((boolean) DataStorage.getData(DataStorage.SETTINGS_HIDE)) {
+			if(DataStorage.isStored(DataStorage.SETTINGS_HIDE) && (boolean) DataStorage.getData(DataStorage.SETTINGS_HIDE)) {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {

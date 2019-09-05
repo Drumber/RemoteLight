@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -11,8 +12,12 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.devices.ConnectionState;
 
-public class RLClient {
+public class RLClient implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1077693134503577060L;
 	public final static int PORT = 20002;
 	private String hostname;
 	private boolean connected;

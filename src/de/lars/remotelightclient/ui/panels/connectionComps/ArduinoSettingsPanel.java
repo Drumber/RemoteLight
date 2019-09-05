@@ -91,6 +91,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
+		spinnerPixels.setPreferredSize(new Dimension(50, 20));
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		
@@ -108,7 +109,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			fieldId.setText(arduino.getId());
 		}
 		if(arduino.getSerialPort() != null) {
-			String pname = arduino.getSerialPort().getSystemPortName();
+			String pname = arduino.getSerialPort();
 			if(ports.contains(pname)) {
 				comboPorts.setSelectedItem(pname);
 			}
@@ -122,7 +123,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			return false;
 		}
 		arduino.setId(fieldId.getText());
-		arduino.setSerialPort(ComPort.getComPortByName((String) comboPorts.getSelectedItem()));
+		arduino.setSerialPort((String) comboPorts.getSelectedItem());
 		arduino.setPixels((int) spinnerPixels.getValue());
 		return true;
 	}
