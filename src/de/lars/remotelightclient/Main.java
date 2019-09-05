@@ -1,9 +1,16 @@
 package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.tinylog.configuration.Configuration;
+import org.tinylog.provider.ProviderRegistry;
+
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
@@ -13,6 +20,7 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class Main {
 	
@@ -37,14 +45,20 @@ public class Main {
 		
 		new Main();
 
-	    Runtime.getRuntime().addShutdownHook(new Thread() {
-		      public void run() {
-		        instance.close();
-		      } 
-	    }); 
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				instance.close();
+				try {
+					ProviderRegistry.getLoggingProvider().shutdown();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	public Main() {
+		this.configureLogger();
 		instance = this;
 		DataStorage.start();
 		settingsManager = new SettingsManager();
@@ -118,6 +132,16 @@ public class Main {
 		this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
 		
 		DataStorage.save();
+		
+		//copy log file and rename
+		DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date().getTime()) + ".txt");
+		
+	}
+	
+	private void configureLogger() {
+		new File(DirectoryUtil.getDataStoragePath()).mkdir();
+		new File(DirectoryUtil.getLogsPath()).mkdir();
+		Configuration.set("writerF.file", DirectoryUtil.getLogsPath() + "log.txt");
 	}
 
 }

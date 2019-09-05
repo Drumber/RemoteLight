@@ -1,0 +1,4 @@
+[2019-09-05 15:51:42] [main] INFO: Loaded 3 settings from data file. (de.lars.remotelightclient.settings.SettingsManager.load)
+[2019-09-05 15:51:42] [main] INFO: Loaded 1 devices. (de.lars.remotelightclient.devices.DeviceManager.<init>)
+[2019-09-05 15:51:45] [Thread-3] INFO: Saved 1 devices. (de.lars.remotelightclient.devices.DeviceManager.saveDevices)
+[2019-09-05 15:51:45] [Thread-3] INFO: Stored 3 setting to data file. (de.lars.remotelightclient.settings.SettingsManager.save)

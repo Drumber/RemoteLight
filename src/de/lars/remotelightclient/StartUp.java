@@ -16,13 +16,15 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.panels.CustomColorPanel;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class StartUp {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
 
 	public StartUp() {
+		//delte old logs
+		DirectoryUtil.deleteOldLogs(7);
 		//register default setting
 		registerSettings();
 		

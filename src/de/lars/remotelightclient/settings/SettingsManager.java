@@ -47,7 +47,7 @@ public class SettingsManager {
 	
 	/**
 	 * 
-	 * @param type Setting type WITH defined ID
+	 * @param type Setting subclass WITH defined ID
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -80,12 +80,14 @@ public class SettingsManager {
 	
 	public void save(String key) {
 		DataStorage.store(key, settings);
+		Logger.info("Stored " + settings.size() + " setting to data file.");
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void load(String key) {
 		if(DataStorage.getData(key) != null && DataStorage.getData(key) instanceof List<?>) {
 			settings = (List<Setting>) DataStorage.getData(key);
+			Logger.info("Loaded " + settings.size() + " settings from data file.");
 		}
 	}
 

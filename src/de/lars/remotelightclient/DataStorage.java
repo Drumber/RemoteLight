@@ -7,6 +7,8 @@ import org.tinylog.Logger;
 
 import com.blogspot.debukkitsblog.util.FileStorage;
 
+import de.lars.remotelightclient.utils.DirectoryUtil;
+
 public class DataStorage {
 	
 	private static FileStorage storage;
@@ -49,12 +51,12 @@ public class DataStorage {
 	
 	public static void start() {
 		try {
-			new File(System.getProperty("user.home") + File.separator  + ".RemoteLightClient").mkdirs();
-			storage = new FileStorage(new File(System.getProperty("user.home") + File.separator  + ".RemoteLightClient" + File.separator + "data.dat"));
+			new File(DirectoryUtil.getDataStoragePath()).mkdirs();
+			storage = new FileStorage(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME));
 		} catch (IllegalArgumentException | IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
-		if(!isCreated()) System.out.println("ERROR: Could not create data file!");;
+		if(!isCreated()) Logger.error("Could not create data file!");;
 	}
 	
 	public static void store(String key, Object data) {
@@ -66,8 +68,7 @@ public class DataStorage {
 				storage.store(key, data);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("ERROR: Could not save data!");
+			Logger.error(e, "Could not save data!");
 		}
 	}
 	
@@ -75,7 +76,7 @@ public class DataStorage {
 		try {
 			storage.remove(key);
 		} catch (IOException e) {
-			//do nothing
+			Logger.warn(e, "Could not remove '" + key + "'.");
 		}
 	}
 	
@@ -84,7 +85,7 @@ public class DataStorage {
 			try {
 				storage.save();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e, "Could not save data file!");
 			}
 		}
 	}
@@ -94,8 +95,7 @@ public class DataStorage {
 			if(isCreated())
 				return storage.get(key);
 		} catch (Exception e) {
-			Logger.error("Could not read data file!");
-			e.printStackTrace();
+			Logger.error(e, "Could not read data file!");
 		}
 		return null;
 	}
@@ -116,7 +116,7 @@ public class DataStorage {
 	}
 	
 	public static boolean isCreated() {
-		if(new File(System.getProperty("user.home") + File.separator + ".RemoteLightClient" + File.separator + "data.dat").isFile())
+		if(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME).isFile())
 			return true;
 		else
 			return false;
