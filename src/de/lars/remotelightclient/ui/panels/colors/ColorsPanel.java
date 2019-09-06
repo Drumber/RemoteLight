@@ -1,10 +1,15 @@
 package de.lars.remotelightclient.ui.panels.colors;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -19,7 +24,12 @@ import de.lars.remotelightclient.utils.WrapLayout;
 
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 
 public class ColorsPanel extends MenuPanel {
@@ -28,20 +38,30 @@ public class ColorsPanel extends MenuPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 2572544853394733969L;
-	private Color[] colors = {Color.ORANGE, Color.RED, Color.MAGENTA, Color.GREEN, Color.BLUE, Color.CYAN, Color.WHITE, Color.BLACK};
+	private Color[] defaultColors = {Color.ORANGE, Color.RED, Color.MAGENTA, Color.GREEN, Color.BLUE, Color.CYAN, Color.WHITE, Color.BLACK};
+	private List<Color> colors;
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
 	private final int STEP_SIZE = 10;
 	private JPanel bgrColors;
+	private JPanel bgrContentArea;
 	private JLabel lblCurrentSize;
 	private JButton btnMinus, btnPlus;
+	private JButton btnAdd;
+	private JButton btnRemove;
+	private JButton btnReset;
 
 	/**
 	 * Create the panel.
 	 */
 	public ColorsPanel() {
-		sm.addSetting(new SettingObject("colorspanel.colors", null, colors)); //register setting if not already registered
-		colors = (Color[]) sm.getSettingObject("colorspanel.colors").getValue();
+		colors = new ArrayList<>();
+		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered
+		sm.addSetting(new SettingObject("colorspanel.panelsize", null, CustomColorPanel.getPanelSize()));
+		sm.addSetting(new SettingObject("colorspanel.panelsizelbl", null, 50+""));
+		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").getValue()));
 		CustomColorPanel.reset();
+		CustomColorPanel.resetPanelSize();
+		CustomColorPanel.setPanelSize((Dimension) sm.getSettingObject("colorspanel.panelsize").getValue());
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
@@ -51,11 +71,16 @@ public class ColorsPanel extends MenuPanel {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane, BorderLayout.CENTER);
 		
+		bgrContentArea = new JPanel();
+		scrollPane.setViewportView(bgrContentArea);
+		bgrContentArea.setLayout(new BorderLayout(0, 0));
+		bgrContentArea.setBackground(Style.panelBackground);
+		
 		bgrColors = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrColors.setLayout(wlayout);
 		bgrColors.setBackground(Style.panelBackground);
-		scrollPane.setViewportView(bgrColors);
+		bgrContentArea.add(bgrColors);
 		
 		JPanel bgrMenu = new JPanel();
 		bgrMenu.setBackground(Style.panelDarkBackground);
@@ -65,6 +90,27 @@ public class ColorsPanel extends MenuPanel {
 		JPanel panelButtons = new JPanel();
 		panelButtons.setBackground(Style.panelDarkBackground);
 		bgrMenu.add(panelButtons, BorderLayout.WEST);
+		
+		btnReset = new JButton("");
+		UiUtils.configureButton(btnReset);
+		btnReset.setName("reset");
+		btnReset.setIcon(Style.getUiIcon("reset.png"));
+		btnReset.addActionListener(btnListener);
+		panelButtons.add(btnReset);
+		
+		btnRemove = new JButton("");
+		UiUtils.configureButton(btnRemove);
+		btnRemove.setName("remove");
+		btnRemove.setIcon(Style.getUiIcon("remove.png"));
+		btnRemove.addActionListener(btnListener);
+		panelButtons.add(btnRemove);
+		
+		btnAdd = new JButton("");
+		UiUtils.configureButton(btnAdd);
+		btnAdd.setName("add");
+		btnAdd.setIcon(Style.getUiIcon("add.png"));
+		btnAdd.addActionListener(btnListener);
+		panelButtons.add(btnAdd);
 		
 		JPanel panelSize = new JPanel();
 		panelSize.setBackground(Style.panelDarkBackground);
@@ -76,8 +122,9 @@ public class ColorsPanel extends MenuPanel {
 		UiUtils.configureButton(btnMinus);
 		panelSize.add(btnMinus);
 		
-		lblCurrentSize = new JLabel("50%");
-		lblCurrentSize.setName("50");
+		int curSize = Integer.parseInt((String) sm.getSettingObject("colorspanel.panelsizelbl").getValue());
+		lblCurrentSize = new JLabel(curSize + "%");
+		lblCurrentSize.setName(curSize +"");
 		lblCurrentSize.setForeground(Style.textColor);
 		panelSize.add(lblCurrentSize);
 		
@@ -100,7 +147,10 @@ public class ColorsPanel extends MenuPanel {
 	
 	@Override
 	public void onEnd(MenuPanel newPanel) {
-		sm.getSettingObject("colorspanel.colors").setValue(CustomColorPanel.getAllBackgroundColors());
+		sm.getSettingObject("colorspanel.colors").setValue(colors.toArray(new Color[colors.size()]));
+		sm.getSettingObject("colorspanel.panelsize").setValue(CustomColorPanel.getPanelSize());
+		sm.getSettingObject("colorspanel.panelsizelbl").setValue(lblCurrentSize.getName());
+		System.out.println(colors.size());
 		super.onEnd(newPanel);
 	}
 	
@@ -115,6 +165,20 @@ public class ColorsPanel extends MenuPanel {
 				break;
 			case "plus":
 				changePanelSize(STEP_SIZE);
+				break;
+			case "add":
+				showColorChooser();
+				break;
+			case "remove":
+				CustomColorPanel.removePanel(CustomColorPanel.getSelectedPanel());
+				colors = CustomColorPanel.getAllBackgroundColors();
+				CustomColorPanel.reset();
+				addColorPanels();
+				break;
+			case "reset":
+				CustomColorPanel.reset();
+				colors = new LinkedList<>(Arrays.asList(defaultColors));
+				addColorPanels();
 				break;
 			}
 		}
@@ -136,5 +200,76 @@ public class ColorsPanel extends MenuPanel {
 			}
 		}
 	}
+	
+	
+	private void showColorChooser() {
+		bgrContentArea.removeAll();
+		
+		JPanel preview = new JPanel();
+		FlowLayout flayout = new FlowLayout(FlowLayout.LEFT);
+		preview.setLayout(flayout);
+		preview.setBackground(Style.panelBackground);
+		preview.setBorder(BorderFactory.createLineBorder(Style.panelBackground, 4));
+		preview.setPreferredSize(new Dimension(0, 40));
+		
+		UIManager.put("ColorChooser.background", Style.panelBackground);
+		UIManager.put("ColorChooser.swatchesRecentSwatchSize", new Dimension(15, 15));
+		UIManager.put("ColorChooser.swatchesSwatchSize", new Dimension(20, 20));
+		UIManager.put("TabbedPane.opaque", true);
+		UIManager.put("TabbedPane.contentOpaque", true);
+		
+		JColorChooser cc = new JColorChooser();
+		cc.setBorder(BorderFactory.createEmptyBorder());
+		cc.removeChooserPanel(cc.getChooserPanels()[4]);
+		cc.removeChooserPanel(cc.getChooserPanels()[3]);
+		cc.removeChooserPanel(cc.getChooserPanels()[2]);
+		for(Component co : cc.getComponents()) {
+			co.setBackground(Style.panelBackground);
+			if(co instanceof JTabbedPane) {
+				JTabbedPane tp = (JTabbedPane) co;
+				UiUtils.configureTabbedPane(tp);
+			}
+		}
+		cc.setPreviewPanel(new JPanel());
+		cc.getSelectionModel().addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				preview.setBackground(cc.getColor());
+			}
+		});
+		
+		Dimension btnSize = new Dimension(80, 20);
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setPreferredSize(btnSize);
+		UiUtils.configureButton(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bgrContentArea.removeAll();
+				bgrContentArea.add(bgrColors);
+				updateUI();
+			}
+		});
+		preview.add(btnCancel);
+		
+		JButton btnOk = new JButton("Ok");
+		btnOk.setPreferredSize(btnSize);
+		UiUtils.configureButton(btnOk);
+		btnOk.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				colors.add(cc.getColor());
+				bgrContentArea.removeAll();
+				bgrContentArea.add(bgrColors);
+				addColorPanels();
+			}
+		});
+		preview.add(btnOk);
+		
+		bgrContentArea.add(cc, BorderLayout.CENTER);
+		bgrContentArea.add(preview, BorderLayout.SOUTH);
+		updateUI();
+	}
+	
 
 }

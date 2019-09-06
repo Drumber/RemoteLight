@@ -2,6 +2,7 @@ package de.lars.remotelightclient;
 
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
+import java.util.Locale;
 
 import de.lars.remotelightclient.arduino.Arduino;
 import de.lars.remotelightclient.arduino.RainbowWheel;
@@ -29,6 +30,9 @@ public class StartUp {
 		DirectoryUtil.deleteOldLogs(2);
 		//register default setting
 		registerSettings();
+		
+		//set language
+		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) s.getSettingFromId("ui.language")).getSelected())));
 		
 		//auto connect feauture
 		if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {

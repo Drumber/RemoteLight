@@ -5,13 +5,10 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Locale;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
@@ -32,6 +29,10 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JPanel bgrSideMenu;
 	private JPanel bgrContentPanel;
+	private JPanel bgrControlBar;
+	private JPanel panelNotification;
+	private JLabel lblNotification;
+	private JPanel contentArea;
 	
 	private String selectedMenu = "output";
 	private MenuPanel displayedPanel;
@@ -100,14 +101,13 @@ public class MainFrame extends JFrame {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {
+				if(displayedPanel != null) {
+					displayedPanel.onEnd(null);
+				}
 				Main.getInstance().close(true);
 			}
 		}
 	};
-	private JPanel bgrControlBar;
-	private JPanel panelNotification;
-	private JLabel lblNotification;
-	private JPanel contentArea;
 	
 	public JPanel getSideMenu() {
 		return bgrSideMenu;

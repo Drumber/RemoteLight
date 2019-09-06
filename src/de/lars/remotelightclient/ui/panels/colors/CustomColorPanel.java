@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomColorPanel extends JPanel {
 
@@ -69,19 +70,21 @@ public class CustomColorPanel extends JPanel {
 		panel = null;
 	}
 	
-	public static Color[] getAllBackgroundColors() {
-		Color[] colors = new Color[allPanels.size()];
-		int count = 0;
+	public static List<Color> getAllBackgroundColors() {
+		List<Color> tmp = new ArrayList<>();
 		for(CustomColorPanel panel : allPanels) {
-			colors[count] = panel.getBackground();
-			count++;
+			tmp.add(panel.getBackground());
 		}
-		return colors;
+		return tmp;
 	}
 	
 	public static void reset() {
 		allPanels.clear();
 		selectedPanel = null;
+	}
+	
+	public static void resetPanelSize() {
+		size = new Dimension(80, 80);
 	}
 	
 	public static void setPanelSize(Dimension size) {

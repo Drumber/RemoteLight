@@ -4,8 +4,6 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -15,15 +13,10 @@ import org.tinylog.provider.ProviderRegistry;
 
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
-import de.lars.remotelightclient.lang.LangUtil;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.utils.DirectoryUtil;
 
@@ -68,9 +61,6 @@ public class Main {
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
-		
-		//set language
-		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) getSettingsManager().getSettingFromId("ui.language")).getSelected())));
 		
 		new StartUp();
 		

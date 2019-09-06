@@ -5,9 +5,14 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import de.lars.remotelightclient.ui.Style;
 
@@ -58,5 +63,47 @@ public class UiUtils {
 			btn.setBackground(Style.buttonBackground);
 		}
 	};
+	
+	public static void configureTabbedPane(JTabbedPane tp) {
+		tp.setBackground(Style.panelBackground);
+		tp.setBorder(BorderFactory.createEmptyBorder());
+		tp.setOpaque(true);
+		tp.setFocusable(false);
+		for(int i = 0; i < tp.getTabCount(); i++) {
+			tp.getComponentAt(i).setBackground(Style.panelBackground);
+			tp.setBackgroundAt(i, Style.panelBackground);
+			if(tp.getComponentAt(i) instanceof JPanel) {
+				JPanel p = (JPanel) tp.getComponentAt(i);
+				p.setOpaque(true);
+				p.setBorder(BorderFactory.createEmptyBorder());
+				for(Component co : p.getComponents()) {
+					co.setBackground(Style.panelBackground);
+					if(co instanceof AbstractColorChooserPanel) {
+						AbstractColorChooserPanel ac = (AbstractColorChooserPanel) co;
+						ac.setBorder(BorderFactory.createEmptyBorder());
+						for(Component com : ac.getComponents()) {
+							if(com instanceof JComponent) {
+								JComponent jc = (JComponent) com;
+								jc.setBackground(Style.panelBackground);
+								jc.setOpaque(true);
+								jc.setBorder(BorderFactory.createEmptyBorder());
+								jc.setFocusable(false);
+								jc.setForeground(Style.textColor);
+								for(Component comp : jc.getComponents()) {
+									if(comp instanceof JComponent) {
+										JComponent jco = (JComponent) comp;
+										jco.setBackground(Style.panelBackground);
+										jco.setForeground(Style.textColor);
+										jco.setOpaque(true);
+										jco.setFocusable(false);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 }
