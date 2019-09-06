@@ -6,6 +6,7 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.DataStorage;
+import de.lars.remotelightclient.settings.types.SettingObject;
 
 public class SettingsManager {
 	
@@ -43,6 +44,10 @@ public class SettingsManager {
 			}
 		}
 		return null;
+	}
+	
+	public SettingObject getSettingObject(String id) {
+		return getSettingFromType(new SettingObject(id, null, null));
 	}
 	
 	/**

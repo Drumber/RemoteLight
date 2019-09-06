@@ -52,7 +52,7 @@ public class DataStorage {
 	public static void start() {
 		try {
 			new File(DirectoryUtil.getDataStoragePath()).mkdirs();
-			storage = new FileStorage(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME));
+			storage = new FileStorage(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME), true);
 		} catch (IllegalArgumentException | IOException e) {
 			Logger.error(e);
 		}
@@ -110,7 +110,7 @@ public class DataStorage {
 			if(data != null)
 				return true;
 		} catch (Exception e) {
-			//do nothing
+			Logger.info(e, key + " is not stored.");
 		}
 		return false;
 	}

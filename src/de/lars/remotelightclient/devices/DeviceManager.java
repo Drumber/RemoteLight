@@ -13,7 +13,6 @@ import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 public class DeviceManager {
 	
 	private List<Device> devices;
-	private Device activeDevice;
 	
 	public DeviceManager() {
 		Device[] storedDevices = (Device[]) DataStorage.getData(DataStorage.DEVICES_LIST);
@@ -101,14 +100,6 @@ public class DeviceManager {
 		storedDevices = devices.toArray(storedDevices);
 		DataStorage.store(DataStorage.DEVICES_LIST, storedDevices);
 		Logger.info("Saved " + storedDevices.length + " devices.");
-	}
-	
-	public void setActiveDevice(Device device) {
-		activeDevice = device;
-	}
-	
-	public Device getActiveDevice() {
-		return activeDevice;
 	}
 
 }

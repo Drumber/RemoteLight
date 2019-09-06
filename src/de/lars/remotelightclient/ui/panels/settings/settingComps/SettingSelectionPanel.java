@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.panels.settingComps;
+package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;

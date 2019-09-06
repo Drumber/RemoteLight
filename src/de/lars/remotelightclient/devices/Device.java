@@ -22,6 +22,10 @@ public abstract class Device extends Output implements Serializable {
 	public abstract ConnectionState connect();
 	public abstract ConnectionState disconnect();
 	public abstract ConnectionState getConnectionState();
+	/**
+	 * Called when Device is loaded from data file
+	 */
+	public abstract void onLoad();
 	
 	public abstract void send(Color[] pixels);
 	
@@ -30,9 +34,21 @@ public abstract class Device extends Output implements Serializable {
 		send(pixels);
 	}
 	
-	/**
-	 * Called when Device is loaded from data file
-	 */
-	public abstract void onLoad();
+	@Override
+	public ConnectionState getState() {
+		return getConnectionState();
+	}
+	
+	@Override
+	public void onActivate() {
+		connect();
+		super.onActivate();
+	}
+	
+	@Override
+	public void onDeactivate() {
+		disconnect();
+		super.onDeactivate();
+	}
 
 }

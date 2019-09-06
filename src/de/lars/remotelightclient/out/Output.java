@@ -3,6 +3,8 @@ package de.lars.remotelightclient.out;
 import java.awt.Color;
 import java.io.Serializable;
 
+import de.lars.remotelightclient.devices.ConnectionState;
+
 public abstract class Output implements Serializable {
 	
 	/**
@@ -31,6 +33,14 @@ public abstract class Output implements Serializable {
 	public void setPixels(int pixels) {
 		this.pixels = pixels;
 	}
+	
+	public void onActivate() {
+	}
+	
+	public void onDeactivate() {
+	}
+	
+	public abstract ConnectionState getState();
 
 	public void onOutput(Color[] pixels) {
 	}

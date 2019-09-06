@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.panels;
+package de.lars.remotelightclient.ui.panels.sidemenu;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

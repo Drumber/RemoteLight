@@ -14,10 +14,11 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingString;
-import de.lars.remotelightclient.ui.panels.OutputPanel;
-import de.lars.remotelightclient.ui.panels.SettingsPanel;
-import de.lars.remotelightclient.ui.panels.SideMenuSmall;
+import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
+import de.lars.remotelightclient.ui.panels.output.OutputPanel;
+import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
+import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
+
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
@@ -33,7 +34,7 @@ public class MainFrame extends JFrame {
 	private JPanel bgrContentPanel;
 	
 	private String selectedMenu = "output";
-	private JPanel displayedPanel;
+	private MenuPanel displayedPanel;
 	private SettingsManager sm;
 
 
@@ -55,7 +56,6 @@ public class MainFrame extends JFrame {
 	private void setFrameContetPane() {
 		SettingSelection style = (SettingSelection) sm.getSettingFromId("ui.style");
 		Style.setStyle(style.getSelected());
-		Locale.setDefault(new Locale(i18n.langNameToCode(((SettingSelection) sm.getSettingFromId("ui.language")).getSelected())));
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(Style.panelBackground);
@@ -89,8 +89,8 @@ public class MainFrame extends JFrame {
 		contentArea.setLayout(new BorderLayout(0, 0));
 		
 		bgrControlBar = new JPanel();
+		bgrContentPanel.add(bgrControlBar, BorderLayout.SOUTH);
 		bgrControlBar.setBackground(Style.panelDarkBackground);
-		contentPane.add(bgrControlBar, BorderLayout.SOUTH);
 	}
 	
 	
@@ -100,7 +100,7 @@ public class MainFrame extends JFrame {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {
-				System.exit(0);
+				Main.getInstance().close(true);
 			}
 		}
 	};
@@ -121,7 +121,10 @@ public class MainFrame extends JFrame {
 		selectedMenu = menu.toLowerCase();
 	}
 	
-	public void displayPanel(JPanel panel) {
+	public void displayPanel(MenuPanel panel) {
+		if(this.displayedPanel != null) {
+			this.displayedPanel.onEnd(panel);
+		}
 		contentArea.removeAll();
 		contentArea.add(panel, BorderLayout.CENTER);
 		this.displayedPanel = panel;
@@ -153,6 +156,8 @@ public class MainFrame extends JFrame {
 		case "output":
 			this.displayPanel(new OutputPanel(this));
 			break;
+		case "colors":
+			this.displayPanel(new ColorsPanel());
 		}
 	}
 	

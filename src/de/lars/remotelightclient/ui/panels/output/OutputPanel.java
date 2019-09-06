@@ -1,21 +1,23 @@
-package de.lars.remotelightclient.ui.panels;
+package de.lars.remotelightclient.ui.panels.output;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.devices.ConnectionState;
 import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
-import de.lars.remotelightclient.ui.panels.outputComps.ArduinoSettingsPanel;
-import de.lars.remotelightclient.ui.panels.outputComps.DeviceSettingsPanel;
-import de.lars.remotelightclient.ui.panels.outputComps.RLServerSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
 
@@ -41,7 +43,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenu;
 
-public class OutputPanel extends JPanel {
+public class OutputPanel extends MenuPanel {
 
 	/**
 	 * 
@@ -53,6 +55,7 @@ public class OutputPanel extends JPanel {
 	private JPanel bgrMenu;
 	private DeviceSettingsPanel currentSettingsPanel;
 	private JPopupMenu popupMenu;
+	private JButton btnActivate;
 
 	/**
 	 * Create the panel.
@@ -167,17 +170,17 @@ public class OutputPanel extends JPanel {
 		btnSave.addActionListener(optionsButtonListener);
 		panelOptions.add(btnSave);
 		
-		JButton btnSelect = new JButton("Select");
-		btnSelect.setPreferredSize(btnSize);
-		UiUtils.configureButton(btnSelect);
-		btnSelect.setName("select");
-		btnSelect.addActionListener(optionsButtonListener);
-		panelOptions.add(btnSelect);
+		btnActivate = new JButton("Activate");
+		btnActivate.setPreferredSize(btnSize);
+		UiUtils.configureButton(btnActivate);
+		btnActivate.setName("activate");
+		btnActivate.addActionListener(optionsButtonListener);
+		panelOptions.add(btnActivate);
 		
 		
 		if(setup) {
 			btnRemove.setVisible(false);
-			btnSelect.setVisible(false);
+			btnActivate.setVisible(false);
 		}
 		
 		return bgrDeviceSettings;
@@ -194,7 +197,7 @@ public class OutputPanel extends JPanel {
 			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
 			btn.setName(d.getId());
 			btn.addMouseListener(deviceClicked);
-			if(om.getActiveOutput() != null && om.getActiveOutput() == d) {
+			if(om.getActiveOutput() != null && om.getActiveOutput() == d && d.getConnectionState() == ConnectionState.CONNECTED) {
 				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
 			}
 			panel.add(btn);
@@ -207,7 +210,7 @@ public class OutputPanel extends JPanel {
 			BigImageButton btn = (BigImageButton) e.getSource();
 			for(Device d : dm.getDevices()) {
 				if(d.getId().equals(btn.getName())) {
-					//double click -> select
+					//double click -> activate
 					if(e.getClickCount() == 2) {
 						if((!currentSettingsPanel.isSetup() || currentSettingsPanel == null) && dm.isIdUsed(d.getId())) {
 							om.setActiveOutput(d);
@@ -230,6 +233,10 @@ public class OutputPanel extends JPanel {
 			panel = new ArduinoSettingsPanel((Arduino) d, setup);
 		} else if(d instanceof RemoteLightServer) {
 			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
+		}
+		
+		if(d.getConnectionState() == ConnectionState.CONNECTED) {
+			btnActivate.setText("Deactivate");
 		}
 		
 		if(panel != null) {
@@ -339,11 +346,16 @@ public class OutputPanel extends JPanel {
 				} else {
 					mainFrame.printNotification("Could not remove device!", NotificationType.Error);
 				}
-			//SELECT clicked
-			} else if(name.equals("select") && currentSettingsPanel != null) {
+			//ACTIVATE clicked
+			} else if(name.equals("activate") && currentSettingsPanel != null) {
 				Device device = currentSettingsPanel.getDevice();
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
-					om.setActiveOutput(device);
+					
+					if(device.getConnectionState() == ConnectionState.CONNECTED) {
+						om.deactivate(device);
+					} else {
+						om.setActiveOutput(device);
+					}
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
 				}
 			//CANCEL clicked

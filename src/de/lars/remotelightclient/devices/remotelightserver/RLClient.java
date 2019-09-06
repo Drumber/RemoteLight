@@ -43,7 +43,7 @@ public class RLClient implements Serializable {
 				out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				return ConnectionState.CONNECTED;
 				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				Logger.error("Error while connecting to " + hostname);
 				e.printStackTrace();
 				connected = false;
@@ -62,7 +62,7 @@ public class RLClient implements Serializable {
 				out.close();
 			if(socket != null)
 				socket.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return state;
@@ -89,9 +89,8 @@ public class RLClient implements Serializable {
 			try {
 				out.writeObject(pixels);
 				out.flush();
-			} catch (IOException e) {
-				Logger.error("Could not send color array to server!");
-				e.printStackTrace();
+			} catch (Exception e) {
+				Logger.error(e, "Could not send color array to server!");
 				this.disconnect();
 			}
 		}

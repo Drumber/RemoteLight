@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.panels;
+package de.lars.remotelightclient.ui.panels.settings;
 
 import javax.swing.JPanel;
 
@@ -13,15 +13,16 @@ import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingString;
 import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingBooleanPanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingColorPanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingDoublePanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingIntPanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingPanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingSelectionPanel;
-import de.lars.remotelightclient.ui.panels.settingComps.SettingStringPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -42,7 +43,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.Font;
 
-public class SettingsPanel extends JPanel {
+public class SettingsPanel extends MenuPanel {
 
 	/**
 	 * 
@@ -164,5 +165,14 @@ public class SettingsPanel extends JPanel {
 			mainFrame.printNotification("Saved settings", NotificationType.Info);
 		}
 	};
+	
+	@Override
+	public void onEnd(MenuPanel newPanel) {
+		//save values
+		for(SettingPanel sp : settingPanels) {
+			sp.setValue();
+		}
+		super.onEnd(newPanel);
+	}
 
 }

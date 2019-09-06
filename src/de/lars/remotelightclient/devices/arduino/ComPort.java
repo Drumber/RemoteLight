@@ -88,7 +88,7 @@ public class ComPort implements Serializable {
 					state = ConnectionState.DISCONNECTED;
 					
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.error(e, "Could not close ComPort: " + port.getSystemPortName());
 				}
 			}
 		}
@@ -100,8 +100,7 @@ public class ComPort implements Serializable {
 			try {
 				output.write(outputBuffer, 0, size);
 			} catch (IOException e) {
-				Logger.error("Error while sending data kto ComPort " + port.getSystemPortName());
-				e.printStackTrace();
+				Logger.error(e, "Error while sending data to ComPort " + port.getSystemPortName());
 			}
 		}
 	}

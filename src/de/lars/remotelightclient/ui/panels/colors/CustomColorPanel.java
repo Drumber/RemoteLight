@@ -1,13 +1,12 @@
-package de.lars.remotelightclient.ui.panels;
+package de.lars.remotelightclient.ui.panels.colors;
 
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
@@ -21,9 +20,10 @@ public class CustomColorPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 4871730974494095833L;
-	public final static Color[] DEFAULT_COLORS = {Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.WHITE};
 	private static ArrayList<CustomColorPanel> allPanels = new ArrayList<>();
 	private static CustomColorPanel selectedPanel = null;
+	private static Dimension size = new Dimension(80, 80);
+	private static int selSizeFactor = 10;
 	
 
 	/**
@@ -32,8 +32,8 @@ public class CustomColorPanel extends JPanel {
 	public CustomColorPanel(Color color) {
 		addMouseListener(this.mouseListener);
 		setBackground(color);
-		setPreferredSize(new Dimension(40, 40));
-		setMaximumSize(new Dimension(40, 40));
+		setPreferredSize(size);
+		setMaximumSize(size);
 		
 		setLayout(new BorderLayout());
 		allPanels.add(this);
@@ -43,13 +43,17 @@ public class CustomColorPanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			for(CustomColorPanel panel : allPanels) {
-				panel.setBorder(null);
+				panel.setPreferredSize(size);
+				panel.setMaximumSize(size);
 			}
-			setBorder(new LineBorder(new Color(0, 0, 0), 2, false));
+			Dimension selSize = new Dimension(size.width + selSizeFactor, size.height + selSizeFactor);
+			setPreferredSize(selSize);
+			setMaximumSize(selSize);
 			selectedPanel = CustomColorPanel.this;
+			updateUI();
 			
 			Color c = getBackground();
-			Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, Main.getLedNum()));
 		}
 	};
 	
@@ -73,6 +77,19 @@ public class CustomColorPanel extends JPanel {
 			count++;
 		}
 		return colors;
+	}
+	
+	public static void reset() {
+		allPanels.clear();
+		selectedPanel = null;
+	}
+	
+	public static void setPanelSize(Dimension size) {
+		CustomColorPanel.size = size;
+	}
+	
+	public static Dimension getPanelSize() {
+		return size;
 	}
 
 }

@@ -4,25 +4,31 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
+import de.lars.remotelightclient.lang.LangUtil;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.network.Client;
 import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class Main {
+	private boolean shuttingDown = false;
 	
 	public final static String VERSION = "0.1.2";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
@@ -47,11 +53,8 @@ public class Main {
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				instance.close();
-				try {
-					ProviderRegistry.getLoggingProvider().shutdown();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				if(!getInstance().shuttingDown) { //prevent calling close method twice
+					instance.close(false);
 				}
 			}
 		});
@@ -65,6 +68,9 @@ public class Main {
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
+		
+		//set language
+		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) getSettingsManager().getSettingFromId("ui.language")).getSelected())));
 		
 		new StartUp();
 		
@@ -123,17 +129,31 @@ public class Main {
 	}
 	
 	
-	public void close() {
-		this.getOutputManager().close();
-		
-		this.getDeviceManager().saveDevices();
-		this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
-		
-		DataStorage.save();
-		
-		//copy log file and rename
-		DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date().getTime()) + ".txt");
-		
+	public void close(boolean autoexit) {
+		shuttingDown = true;
+		try {
+			this.getOutputManager().close();
+			
+			this.getDeviceManager().saveDevices();
+			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
+			
+			DataStorage.save();
+			
+			//copy log file and rename
+			DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date().getTime()) + ".txt");
+			
+			try {
+				ProviderRegistry.getLoggingProvider().shutdown();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if(autoexit) {
+				Thread.sleep(150);
+				System.exit(0);
+			}
+		} catch(Exception e) {
+			Logger.error(e, "Error while closing.");
+		}
 	}
 	
 	private void configureLogger() {

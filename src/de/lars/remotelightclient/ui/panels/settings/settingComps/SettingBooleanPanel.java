@@ -1,23 +1,24 @@
-package de.lars.remotelightclient.ui.panels.settingComps;
+package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import de.lars.remotelightclient.settings.types.SettingString;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.ui.Style;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import java.awt.FlowLayout;
 
-public class SettingStringPanel extends SettingPanel {
+public class SettingBooleanPanel extends SettingPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7949888285481977614L;
-	private SettingString setting;
-	private JTextField fieldValue;
+	private SettingBoolean setting;
+	private JCheckBox checkBox;
 
 	/**
 	 * Create the panel.
 	 */
-	public SettingStringPanel(SettingString setting) {
+	public SettingBooleanPanel(SettingBoolean setting) {
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -26,10 +27,10 @@ public class SettingStringPanel extends SettingPanel {
 		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
-		fieldValue = new JTextField();
-		fieldValue.setText(setting.getValue());
-		add(fieldValue);
-		fieldValue.setColumns(20);
+		checkBox = new JCheckBox("");
+		checkBox.setOpaque(false);
+		checkBox.setSelected(setting.getValue());
+		add(checkBox);
 		
 		if(setting.getDescription() != null) {
 			JLabel lblHelp = new JLabel("");
@@ -38,11 +39,10 @@ public class SettingStringPanel extends SettingPanel {
 			add(lblHelp);
 		}
 	}
-	
 
 	@Override
 	public void setValue() {
-		setting.setValue(fieldValue.getText());
+		setting.setValue(checkBox.isSelected());
 	}
 
 }

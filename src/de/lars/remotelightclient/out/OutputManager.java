@@ -5,8 +5,9 @@ import java.awt.Color;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.devices.ConnectionState;
 import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class OutputManager {
 	
@@ -24,8 +25,36 @@ public class OutputManager {
 	}
 
 	public void setActiveOutput(Output activeOutput) {
+		this.setEnabled(false);
+		if(this.activeOutput != null && !(this.activeOutput.getId().equals(activeOutput.getId()))) {
+			
+			deactivate(this.activeOutput);
+		}
+
+		activate(activeOutput);
 		this.activeOutput = activeOutput;
 		this.loop();
+		
+	}
+	
+	/**
+	 * Connects the device if not connected
+	 */
+	public void activate(Output output) {
+		Logger.info("Activate output: " + output.getId());
+		if(output.getState() != ConnectionState.CONNECTED) {
+			output.onActivate();
+		}
+	}
+	
+	/**
+	 * Disconnects the device if connected
+	 */
+	public void deactivate(Output output) {
+		Logger.info("Deactivate output: " + output.getId());
+		if(output.getState() == ConnectionState.CONNECTED) {
+			output.onDeactivate();
+		}
 	}
 	
 	public void setDelay(int delay) {
@@ -46,6 +75,10 @@ public class OutputManager {
 	
 	public void close() {
 		setEnabled(false);
+		if(activeOutput != null) {
+			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			deactivate(activeOutput);
+		}
 		//save last output before closing
 		Main.getInstance().getSettingsManager().getSettingFromType(new SettingObject("out.lastoutput", null, null)).setValue(activeOutput);
 	}

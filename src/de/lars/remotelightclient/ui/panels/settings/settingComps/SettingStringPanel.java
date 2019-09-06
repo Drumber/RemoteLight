@@ -1,25 +1,23 @@
-package de.lars.remotelightclient.ui.panels.settingComps;
+package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
-import de.lars.remotelightclient.settings.types.SettingInt;
+import de.lars.remotelightclient.settings.types.SettingString;
 import de.lars.remotelightclient.ui.Style;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
-public class SettingIntPanel extends SettingPanel {
+public class SettingStringPanel extends SettingPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7949888285481977614L;
-	private SettingInt setting;
-	private JSpinner spinner;
+	private SettingString setting;
+	private JTextField fieldValue;
 
 	/**
 	 * Create the panel.
 	 */
-	public SettingIntPanel(SettingInt setting) {
+	public SettingStringPanel(SettingString setting) {
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -28,9 +26,10 @@ public class SettingIntPanel extends SettingPanel {
 		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
-		spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(setting.getValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
-		add(spinner);
+		fieldValue = new JTextField();
+		fieldValue.setText(setting.getValue());
+		add(fieldValue);
+		fieldValue.setColumns(20);
 		
 		if(setting.getDescription() != null) {
 			JLabel lblHelp = new JLabel("");
@@ -39,10 +38,11 @@ public class SettingIntPanel extends SettingPanel {
 			add(lblHelp);
 		}
 	}
+	
 
 	@Override
 	public void setValue() {
-		setting.setValue((int) spinner.getValue());
+		setting.setValue(fieldValue.getText());
 	}
 
 }
