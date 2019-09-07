@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,10 +18,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
 
@@ -40,6 +45,8 @@ public class ColorsPanel extends MenuPanel {
 	private static final long serialVersionUID = 2572544853394733969L;
 	private Color[] defaultColors = {Color.ORANGE, Color.RED, Color.MAGENTA, Color.GREEN, Color.BLUE, Color.CYAN, Color.WHITE, Color.BLACK};
 	private List<Color> colors;
+	private List<CustomColorPanel> ccp;
+	private int selSizeFactor = 10;
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
 	private final int STEP_SIZE = 10;
 	private JPanel bgrColors;
@@ -55,11 +62,11 @@ public class ColorsPanel extends MenuPanel {
 	 */
 	public ColorsPanel() {
 		colors = new ArrayList<>();
+		ccp = new ArrayList<>();
 		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered
 		sm.addSetting(new SettingObject("colorspanel.panelsize", null, CustomColorPanel.getPanelSize()));
 		sm.addSetting(new SettingObject("colorspanel.panelsizelbl", null, 50+""));
 		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").getValue()));
-		CustomColorPanel.reset();
 		CustomColorPanel.resetPanelSize();
 		CustomColorPanel.setPanelSize((Dimension) sm.getSettingObject("colorspanel.panelsize").getValue());
 		setBackground(Style.panelBackground);
@@ -140,17 +147,40 @@ public class ColorsPanel extends MenuPanel {
 	public void addColorPanels() {
 		bgrColors.removeAll();
 		for(Color c : colors) {
-			bgrColors.add(new CustomColorPanel(c));
+			CustomColorPanel cpanel = new CustomColorPanel(c);
+			cpanel.addMouseListener(ccpMouseListener);
+			bgrColors.add(cpanel);
+			ccp.add(cpanel);
 		}
 		this.updateUI();
 	}
+	
+	private MouseListener ccpMouseListener = new MouseAdapter() {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			CustomColorPanel cpanel = (CustomColorPanel) e.getSource();
+			
+			Dimension size = CustomColorPanel.getPanelSize();
+			for(CustomColorPanel panel : ccp) {
+				panel.setPreferredSize(size);
+				panel.setMaximumSize(size);
+			}
+			Dimension selSize = new Dimension(size.width + selSizeFactor, size.height + selSizeFactor);
+			cpanel.setPreferredSize(selSize);
+			cpanel.setMaximumSize(selSize);
+			cpanel.updateUI();
+			CustomColorPanel.setSelectedPanel(cpanel);
+			
+			Color c = cpanel.getBackground();
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, Main.getLedNum()));
+		}
+	};
 	
 	@Override
 	public void onEnd(MenuPanel newPanel) {
 		sm.getSettingObject("colorspanel.colors").setValue(colors.toArray(new Color[colors.size()]));
 		sm.getSettingObject("colorspanel.panelsize").setValue(CustomColorPanel.getPanelSize());
 		sm.getSettingObject("colorspanel.panelsizelbl").setValue(lblCurrentSize.getName());
-		System.out.println(colors.size());
 		super.onEnd(newPanel);
 	}
 	
@@ -170,13 +200,16 @@ public class ColorsPanel extends MenuPanel {
 				showColorChooser();
 				break;
 			case "remove":
-				CustomColorPanel.removePanel(CustomColorPanel.getSelectedPanel());
-				colors = CustomColorPanel.getAllBackgroundColors();
-				CustomColorPanel.reset();
+				colors.clear();
+				ccp.remove(CustomColorPanel.getSelectedPanel());
+				for(CustomColorPanel panel : ccp) {
+					colors.add(panel.getBackground());
+				}
+				ccp.clear();
 				addColorPanels();
 				break;
 			case "reset":
-				CustomColorPanel.reset();
+				ccp.clear();
 				colors = new LinkedList<>(Arrays.asList(defaultColors));
 				addColorPanels();
 				break;
@@ -261,6 +294,7 @@ public class ColorsPanel extends MenuPanel {
 				colors.add(cc.getColor());
 				bgrContentArea.removeAll();
 				bgrContentArea.add(bgrColors);
+				ccp.clear();
 				addColorPanels();
 			}
 		});
