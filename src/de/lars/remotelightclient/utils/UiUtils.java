@@ -2,21 +2,56 @@ package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.plaf.FontUIResource;
+
+import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
 
 public class UiUtils {
+	
+	public static Font loadFont(String name, int style) {
+		String fName = "/resourcen/fonts/" + name;
+		InputStream is = UiUtils.class.getResourceAsStream(fName);
+		Font out = null;
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+			out = font.deriveFont(style, 11);
+		} catch (FontFormatException | IOException e) {
+			Logger.error(e, "Could not load font: " + fName);
+		}
+		return out;
+	}
+	
+	//https://stackoverflow.com/a/7434935
+	public static void setUIFont(FontUIResource f) {
+		Enumeration<?> keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if (value instanceof FontUIResource) {
+				UIManager.put(key, f);
+			}
+		}
+	}
 	
 	public static Component getComponentByName(JPanel panel, Object type, String name) {
 		Component[] comp = panel.getComponents();
@@ -105,5 +140,22 @@ public class UiUtils {
 			}
 		}
 	}
+	
+	public static void addSliderMouseWheelListener(JSlider slider) {
+		slider.addMouseWheelListener(sliderWheelListener);
+	}
+	
+	private static MouseWheelListener sliderWheelListener = new MouseWheelListener() {
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			JSlider slider = (JSlider) e.getSource();
+			int notches = e.getWheelRotation();
+			if (notches < 0) {
+				slider.setValue(slider.getValue() + 1);
+			} else if(notches > 0) {
+				slider.setValue(slider.getValue() - 1);
+			}
+		}
+	};
 
 }

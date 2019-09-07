@@ -1,9 +1,14 @@
 package de.lars.remotelightclient.ui;
 
 import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
+import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
+
+import de.lars.remotelightclient.utils.UiUtils;
 
 public class Style {
 	
@@ -85,6 +90,43 @@ public class Style {
 			Logger.error("Image '" + filename + "' not found!");
 			return getIcon("ui", "error.png");
 		}
+	}
+	
+	/*
+	 * FONT
+	 */
+	private static Font regular;
+	private static Font bold;
+	private static Font light;
+	
+	public static void loadFonts() {
+		regular = UiUtils.loadFont("muli/Muli-Regular.ttf", Font.PLAIN);
+		bold = UiUtils.loadFont("muli/Muli-ExtraBold.ttf", Font.BOLD);
+		light = UiUtils.loadFont("muli/Muli-Light.ttf", Font.ITALIC);
+		if(regular != null) {
+			UiUtils.setUIFont(new FontUIResource(regular));
+		}
+	}
+	
+	public static Font getFontRegualar(int size) {
+		if(regular != null) {
+			return regular.deriveFont(Font.PLAIN, size);
+		}
+		return new Font("Tahoma", Font.PLAIN, size);
+	}
+	
+	public static Font getFontBold(int size) {
+		if(bold != null) {
+			return bold.deriveFont(Font.PLAIN, size);
+		}
+		return new Font("Tahoma", Font.BOLD, size);
+	}
+	
+	public static Font getFontLight(int size) {
+		if(bold != null) {
+			return light.deriveFont(Font.ITALIC, size);
+		}
+		return new Font("Tahoma", Font.ITALIC, size);
 	}
 
 }

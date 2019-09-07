@@ -1,11 +1,13 @@
 package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
@@ -18,7 +20,9 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
+import de.lars.remotelightclient.utils.UiUtils;
 
 public class Main {
 	private boolean shuttingDown = false;
@@ -34,6 +38,7 @@ public class Main {
 	private DeviceManager deviceManager;
 	private OutputManager outputManager;
 	private SettingsManager settingsManager;
+	private EffectManager effectManager;
 	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
@@ -56,6 +61,7 @@ public class Main {
 	public Main() {
 		this.configureLogger();
 		instance = this;
+		Style.loadFonts();
 		DataStorage.start();
 		settingsManager = new SettingsManager();
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
@@ -67,6 +73,7 @@ public class Main {
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
+		effectManager = new EffectManager();
 		EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
@@ -93,6 +100,10 @@ public class Main {
 	
 	public MusicSyncManager getMusicSyncManager() {
 		return musicManager;
+	}
+	
+	public EffectManager getEffectManager() {
+		return effectManager;
 	}
 	
 	public DeviceManager getDeviceManager() {

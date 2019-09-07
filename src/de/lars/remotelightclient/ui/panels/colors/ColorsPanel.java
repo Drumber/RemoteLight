@@ -23,6 +23,7 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
@@ -61,6 +62,8 @@ public class ColorsPanel extends MenuPanel {
 	 * Create the panel.
 	 */
 	public ColorsPanel() {
+		Main.getInstance().getMainFrame().showControlBar(true);
+		Main.getInstance().getMainFrame().setControlBarPanel(new DefaultControlBar());
 		colors = new ArrayList<>();
 		ccp = new ArrayList<>();
 		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered
@@ -146,6 +149,7 @@ public class ColorsPanel extends MenuPanel {
 	
 	public void addColorPanels() {
 		bgrColors.removeAll();
+		ccp.clear();
 		for(Color c : colors) {
 			CustomColorPanel cpanel = new CustomColorPanel(c);
 			cpanel.addMouseListener(ccpMouseListener);

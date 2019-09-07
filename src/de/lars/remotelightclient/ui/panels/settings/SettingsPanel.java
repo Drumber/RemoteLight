@@ -101,7 +101,7 @@ public class SettingsPanel extends MenuPanel {
 		bgr.setLayout(new BoxLayout(bgr, BoxLayout.Y_AXIS));
 		
 		JLabel lblTitle = new JLabel(title, SwingConstants.LEFT);
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTitle.setFont(Style.getFontBold(12));
 		lblTitle.setForeground(Style.accent);
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgr.add(lblTitle);

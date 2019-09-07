@@ -6,7 +6,6 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.devices.ConnectionState;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class OutputManager {
@@ -14,6 +13,7 @@ public class OutputManager {
 	private volatile Output activeOutput;
 	private volatile static Color[] outputPixels;
 	private int delay = 100;
+	private int brightness = 100;
 	private boolean active;
 	
 	public OutputManager() {
@@ -65,6 +65,18 @@ public class OutputManager {
 		return delay;
 	}
 	
+	/**
+	 * 
+	 * @param brightness Value between 0 and 100
+	 */
+	public void setBrightness(int brightness) {
+		this.brightness = brightness;
+	}
+	
+	public int getBrightness() {
+		return brightness;
+	}
+	
 	public void setEnabled(boolean enabled) {
 		active = enabled;
 	}
@@ -80,10 +92,13 @@ public class OutputManager {
 			deactivate(activeOutput);
 		}
 		//save last output before closing
-		Main.getInstance().getSettingsManager().getSettingFromType(new SettingObject("out.lastoutput", null, null)).setValue(activeOutput);
+		Main.getInstance().getSettingsManager().getSettingObject("out.lastoutput").setValue(activeOutput);
+		//save brightness
+		Main.getInstance().getSettingsManager().getSettingObject("out.brightness").setValue(getBrightness());
 	}
 	
 	public static void addToOutput(Color[] pixels) {
+		PixelColorUtils.changeBrightness(pixels, Main.getInstance().getOutputManager().getBrightness());
 		outputPixels = pixels;
 	}
 	

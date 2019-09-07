@@ -12,6 +12,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.OutputPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
@@ -19,6 +20,7 @@ import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame {
 
@@ -90,8 +92,11 @@ public class MainFrame extends JFrame {
 		contentArea.setLayout(new BorderLayout(0, 0));
 		
 		bgrControlBar = new JPanel();
+		bgrControlBar.setBorder(new EmptyBorder(2, 0, 0, 0));
 		bgrContentPanel.add(bgrControlBar, BorderLayout.SOUTH);
-		bgrControlBar.setBackground(Style.panelDarkBackground);
+		bgrControlBar.setBackground(Style.accent);
+		bgrControlBar.setLayout(new BorderLayout(0, 0));
+		this.setControlBarPanel(new DefaultControlBar());
 	}
 	
 	
@@ -137,6 +142,12 @@ public class MainFrame extends JFrame {
 	
 	public void showControlBar(boolean enabled) {
 		bgrControlBar.setVisible(enabled);
+	}
+	
+	public void setControlBarPanel(JPanel panel) {
+		bgrControlBar.removeAll();
+		bgrControlBar.add(panel);
+		bgrControlBar.updateUI();
 	}
 	
 	public void updateFrame() {

@@ -11,5 +11,25 @@ public class PixelColorUtils {
 		}
 		return pixels;
 	}
+	
+	/**
+	 * 
+	 * @param colors Color array
+	 * @param value Dim value between 0 and 100
+	 */
+	public static void changeBrightness(Color[] colors, int value) {
+		if(value < 0) {
+			value = 0;
+		} else if(value > 100) {
+			value = 100;
+		}
+		for(int i = 0; i < colors.length; i++) {
+			int r = colors[i].getRed() * value / 100;
+			int g = colors[i].getGreen() * value / 100;
+			int b = colors[i].getBlue() * value / 100;
+			
+			colors[i] = new Color(r, g, b);
+		}
+	}
 
 }

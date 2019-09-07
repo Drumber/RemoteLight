@@ -153,7 +153,12 @@ public class StartUp {
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
 		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
+		s.addSetting(new SettingObject("out.brightness", null, 100));
 		
+	}
+	
+	public void setSettingValues() {
+		Main.getInstance().getOutputManager().setBrightness((int) s.getSettingObject("out.brightness").getValue());
 	}
 
 }
