@@ -2,7 +2,6 @@ package de.lars.remotelightclient.devices.remotelightserver;
 
 import java.awt.Color;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
@@ -41,16 +40,17 @@ public class RLClient implements Serializable {
 				
 				socket.connect(address, 5000);
 				out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-				return ConnectionState.CONNECTED;
+				state = ConnectionState.CONNECTED;
+				return state;
 				
 			} catch (Exception e) {
-				Logger.error("Error while connecting to " + hostname);
-				e.printStackTrace();
+				Logger.error(e, "Error while connecting to " + hostname);
 				connected = false;
 				this.disconnect();;
 			}
 		}
-		return ConnectionState.FAILED;
+		state = ConnectionState.FAILED;
+		return state;
 	}
 	
 	public ConnectionState disconnect() {

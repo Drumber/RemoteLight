@@ -12,7 +12,7 @@ public class RemoteLightServer extends Device {
 	 */
 	private static final long serialVersionUID = 768993097355819403L;
 	private String ip;
-	private RLClient client;
+	private transient RLClient client;
 
 	public RemoteLightServer(String id, String ip) {
 		super(id, 0);
@@ -55,7 +55,9 @@ public class RemoteLightServer extends Device {
 
 	@Override
 	public void onLoad() {
-		
+		if(client == null) {
+			client = new RLClient(ip);
+		}
 	}
 
 }

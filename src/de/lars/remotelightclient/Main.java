@@ -1,14 +1,11 @@
 package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.FontUIResource;
-
 import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
@@ -22,7 +19,6 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
-import de.lars.remotelightclient.utils.UiUtils;
 
 public class Main {
 	private boolean shuttingDown = false;
@@ -154,6 +150,9 @@ public class Main {
 			}
 		} catch(Exception e) {
 			Logger.error(e, "Error while closing.");
+			if(autoexit) {
+				System.exit(0);
+			}
 		}
 	}
 	

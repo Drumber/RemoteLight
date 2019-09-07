@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.BrightnessSlider;
+import de.lars.remotelightclient.ui.panels.controlbars.comps.OutputInfo;
 
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
@@ -39,6 +40,7 @@ public class DefaultControlBar extends JPanel {
 		bgrOutput.setBackground(Style.panelDarkBackground);
 		add(bgrOutput);
 		bgrOutput.setLayout(new BorderLayout(0, 0));
+		bgrOutput.add(new OutputInfo(Style.panelDarkBackground));
 		
 		JPanel bgrAction = new JPanel();
 		bgrAction.setBackground(Style.panelDarkBackground);

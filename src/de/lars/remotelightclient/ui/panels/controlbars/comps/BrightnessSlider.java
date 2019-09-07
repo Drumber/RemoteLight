@@ -7,11 +7,15 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.BoxLayout;
+import javax.swing.border.EmptyBorder;
 
 public class BrightnessSlider extends JPanel {
 
@@ -20,19 +24,33 @@ public class BrightnessSlider extends JPanel {
 	 */
 	private static final long serialVersionUID = -4537780229514767590L;
 	private String textBrightness = "Brightness";
+	private Dimension size;
 
 	/**
 	 * Create the panel.
 	 */
 	public BrightnessSlider(Color c) {
+		setBorder(new EmptyBorder(5, 0, 0, 0));
 		setBackground(c);
-		setLayout(new GridLayout(2, 0, 0, 0));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		size = new Dimension(180, 30);
 		
 		JLabel lblBrightness = new JLabel(textBrightness);
 		lblBrightness.setForeground(Style.textColor);
+		lblBrightness.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(lblBrightness);
 		
+		JPanel bgrSlider = new JPanel();
+		bgrSlider.setAlignmentX(Component.LEFT_ALIGNMENT);
+		bgrSlider.setBackground(c);
+		bgrSlider.setPreferredSize(size);
+		bgrSlider.setMaximumSize(size);
+		add(bgrSlider);
+		bgrSlider.setLayout(new BoxLayout(bgrSlider, BoxLayout.X_AXIS));
+		
 		JSlider slider = new JSlider();
+		bgrSlider.add(slider);
+		slider.setAlignmentX(Component.LEFT_ALIGNMENT);
 		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue());
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -49,7 +67,6 @@ public class BrightnessSlider extends JPanel {
 		slider.setPaintTrack(true);
 		lblBrightness.setText(textBrightness + " " + slider.getValue() + "%");
 		UiUtils.addSliderMouseWheelListener(slider);
-		add(slider);
 	}
 
 }
