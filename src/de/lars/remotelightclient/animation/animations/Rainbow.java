@@ -2,8 +2,8 @@ package de.lars.remotelightclient.animation.animations;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
-import de.lars.remotelightclient.arduino.Arduino;
-import de.lars.remotelightclient.arduino.RainbowWheel;
+import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Rainbow extends Animation {
 	
@@ -17,26 +17,26 @@ public class Rainbow extends Animation {
 	public void onEnable() {
 		step = 0;
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			Arduino.shiftRight(1);
+			PixelColorUtils.shiftRight(1);
 			
 			step += 3;
 			if(step >= RainbowWheel.getRainbow().length)
 				step = 0;
 			
-			Arduino.setColorPixel(0, RainbowWheel.getRainbow()[step]);
+			PixelColorUtils.setPixel(0, RainbowWheel.getRainbow()[step]);
 		}
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		Arduino.shiftRight(1);
+		PixelColorUtils.shiftRight(1);
 		
 		step += 3;
 		if(step >= RainbowWheel.getRainbow().length)
 			step = 0;
 		
-		Arduino.setColorPixel(0, RainbowWheel.getRainbow()[step]);
+		PixelColorUtils.setPixel(0, RainbowWheel.getRainbow()[step]);
 		
 		super.onLoop();
 	}

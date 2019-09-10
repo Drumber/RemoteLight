@@ -11,8 +11,9 @@ import de.lars.remotelightclient.utils.PixelColorUtils;
 public class OutputManager {
 	
 	private volatile Output activeOutput;
-	private volatile static Color[] outputPixels;
-	private int delay = 100;
+	private Color[] outputPixels;
+	private Color[] lastPixels;
+	private int delay = 50;
 	private int brightness = 100;
 	private boolean active;
 	
@@ -29,6 +30,10 @@ public class OutputManager {
 		if(this.activeOutput != null && !(this.activeOutput.getId().equals(activeOutput.getId()))) {
 			
 			deactivate(this.activeOutput);
+		}
+		if(outputPixels == null) {
+			outputPixels = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+			lastPixels = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
 		}
 
 		activate(activeOutput);
@@ -77,6 +82,10 @@ public class OutputManager {
 		return brightness;
 	}
 	
+	public Color[] getLastColors() {
+		return lastPixels;
+	}
+	
 	public void setEnabled(boolean enabled) {
 		active = enabled;
 	}
@@ -99,8 +108,17 @@ public class OutputManager {
 	}
 	
 	public static void addToOutput(Color[] pixels) {
-		PixelColorUtils.changeBrightness(pixels, Main.getInstance().getOutputManager().getBrightness());
-		outputPixels = pixels;
+		Main.getInstance().getOutputManager().setOutputPixels(pixels);
+	}
+	
+	private void setOutputPixels(Color[] pixels) {
+		lastPixels = pixels;
+		outputPixels = this.changeBrightness(pixels, getBrightness());
+	}
+	
+	private Color[] getOutputPixels() {
+		Color[] out = outputPixels;
+		return out;
 	}
 	
 	private void loop() {
@@ -114,7 +132,9 @@ public class OutputManager {
 					
 					while(active) {
 						if((outputPixels != null) && (activeOutput != null)) {
-							activeOutput.onOutput(outputPixels);
+							
+							Color[] out = getOutputPixels();
+							activeOutput.onOutput(out);
 							
 							try {
 								Thread.sleep(delay);
@@ -127,6 +147,32 @@ public class OutputManager {
 				}
 			}).start();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param colors Color array
+	 * @param value Dim value between 0 and 100
+	 */
+	private Color[] changeBrightness(Color[] color, int value) {
+		Color[] colors = new Color[color.length];
+		if(value < 0) {
+			value = 0;
+		} else if(value > 100) {
+			value = 100;
+		}
+		for(int i = 0; i < colors.length; i++) {
+			int r = color[i].getRed();
+			int g = color[i].getGreen();
+			int b = color[i].getBlue();
+			
+			r = r * value / 100;
+			g = g * value / 100;
+			b = b * value / 100;
+			
+			colors[i] = new Color(r, g, b);
+		}
+		return colors;
 	}
 
 }

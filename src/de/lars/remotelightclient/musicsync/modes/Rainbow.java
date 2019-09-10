@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	

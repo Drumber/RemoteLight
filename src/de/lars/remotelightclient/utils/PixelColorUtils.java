@@ -2,6 +2,9 @@ package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.out.OutputManager;
+
 public class PixelColorUtils {
 	
 	public static Color[] colorAllPixels(Color color, int size) {
@@ -12,24 +15,46 @@ public class PixelColorUtils {
 		return pixels;
 	}
 	
-	/**
-	 * 
-	 * @param colors Color array
-	 * @param value Dim value between 0 and 100
-	 */
-	public static void changeBrightness(Color[] colors, int value) {
-		if(value < 0) {
-			value = 0;
-		} else if(value > 100) {
-			value = 100;
+	public static void shiftRight(int amount) {
+		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] leds = strip;
+		for(int r = 0; r < amount; r++) {
+			for(int i = 1; i <= strip.length; i++) {
+				if(i == strip.length) {
+					leds[0] = strip[0];
+				} else {
+					leds[strip.length - i] = strip[strip.length - i - 1];
+				}
+			}
 		}
-		for(int i = 0; i < colors.length; i++) {
-			int r = colors[i].getRed() * value / 100;
-			int g = colors[i].getGreen() * value / 100;
-			int b = colors[i].getBlue() * value / 100;
-			
-			colors[i] = new Color(r, g, b);
+		OutputManager.addToOutput(leds);
+	}
+	
+	public static void shiftLeft(int amount) {
+		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] leds = strip;
+		for(int r = 0; r < amount; r++) {
+			for(int i = 0; i < strip.length; i++) {
+				if(i == strip.length - 1) {
+					leds[strip.length - 1] = strip[strip.length - 1];
+				} else {
+					leds[i] = strip[i + 1];
+				}
+			}
 		}
+		OutputManager.addToOutput(leds);
+	}
+	
+	public static void setPixel(int pixel, Color color) {
+		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] leds = strip;
+		for(int i = 0; i < Main.getLedNum(); i++) {
+			if(i == pixel)
+				leds[i] = color;
+			else
+				leds[i] = strip[i];
+		}
+		OutputManager.addToOutput(leds);
 	}
 
 }

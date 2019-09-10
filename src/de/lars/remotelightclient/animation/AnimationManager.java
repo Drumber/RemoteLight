@@ -1,18 +1,29 @@
 package de.lars.remotelightclient.animation;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.animation.animations.Rainbow;
+import de.lars.remotelightclient.animation.animations.RunningLight;
+import de.lars.remotelightclient.animation.animations.Scanner;
+import de.lars.remotelightclient.animation.animations.Wipe;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class AnimationManager {
 	
 	private Animation activeAnimation;
+	private List<Animation> animations;
 	private boolean active;
 	private int delay = 50;
 	
 	public AnimationManager() {
-		
+		animations = new ArrayList<Animation>();
+		this.registerAnimations();
 	}
 	
 	public boolean isActive() {
@@ -23,11 +34,23 @@ public class AnimationManager {
 		return activeAnimation;
 	}
 	
+	public void addAnimation(Animation animation) {
+		animations.add(animation);
+	}
+	
+	public void removeAnimation(Animation animation) {
+		animations.remove(animation);
+	}
+	
+	public List<Animation> getAnimations() {
+		return animations;
+	}
+	
 	public void start(Animation animation) {
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();
 		}
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 		if(animation != null) {
 			animation.onEnable();
 		}
@@ -40,7 +63,7 @@ public class AnimationManager {
 			activeAnimation.onDisable();
 			activeAnimation = null;
 		}
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
 	public void setDelay(int delay) {
@@ -80,6 +103,13 @@ public class AnimationManager {
 				}
 			}).start();
 		}
+	}
+	
+	private void registerAnimations() {
+		animations.add(new Rainbow());
+		animations.add(new RunningLight());
+		animations.add(new Scanner());
+		animations.add(new Wipe());
 	}
 
 }

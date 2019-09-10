@@ -5,7 +5,6 @@ import java.awt.GraphicsEnvironment;
 import java.util.Locale;
 
 import de.lars.remotelightclient.arduino.Arduino;
-import de.lars.remotelightclient.arduino.RainbowWheel;
 import de.lars.remotelightclient.devices.arduino.ComPort;
 import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.lang.i18n;
@@ -20,6 +19,7 @@ import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.panels.colors.CustomColorPanel;
 import de.lars.remotelightclient.utils.DirectoryUtil;
+import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class StartUp {
 	
@@ -42,6 +42,7 @@ public class StartUp {
 			}
 		}
 		
+		init();
 		
 		if(true)
 			return;
@@ -91,7 +92,6 @@ public class StartUp {
 				autoConnect();
 		}
 		
-		init();
 	}
 	
 	private void init() {

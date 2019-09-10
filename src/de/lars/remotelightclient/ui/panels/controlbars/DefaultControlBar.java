@@ -12,13 +12,14 @@ import java.awt.Dimension;
 
 import javax.swing.border.EmptyBorder;
 
-public class DefaultControlBar extends JPanel {
+public class DefaultControlBar extends ControlBar {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6631254065528102825L;
 	private Dimension size = new Dimension(100, 45);
+	private JPanel bgrAction;
 
 	/**
 	 * Create the panel.
@@ -42,10 +43,16 @@ public class DefaultControlBar extends JPanel {
 		bgrOutput.setLayout(new BorderLayout(0, 0));
 		bgrOutput.add(new OutputInfo(Style.panelDarkBackground));
 		
-		JPanel bgrAction = new JPanel();
+		bgrAction = new JPanel();
 		bgrAction.setBackground(Style.panelDarkBackground);
 		add(bgrAction);
 		bgrAction.setLayout(new BorderLayout(0, 0));
+	}
+	
+	public void setActionPanel(JPanel panel) {
+		bgrAction.removeAll();
+		bgrAction.add(panel);
+		updateUI();
 	}
 
 }

@@ -11,6 +11,7 @@ import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
+import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.OutputPanel;
@@ -38,6 +39,7 @@ public class MainFrame extends JFrame {
 	
 	private String selectedMenu = "output";
 	private MenuPanel displayedPanel;
+	private JPanel displayedControlBar;
 	private SettingsManager sm;
 
 
@@ -147,7 +149,12 @@ public class MainFrame extends JFrame {
 	public void setControlBarPanel(JPanel panel) {
 		bgrControlBar.removeAll();
 		bgrControlBar.add(panel);
+		this.displayedControlBar = panel;
 		bgrControlBar.updateUI();
+	}
+	
+	public JPanel getDisplayedControlBar() {
+		return this.displayedControlBar;
 	}
 	
 	public void updateFrame() {
@@ -169,6 +176,10 @@ public class MainFrame extends JFrame {
 			break;
 		case "colors":
 			this.displayPanel(new ColorsPanel());
+			break;
+		case "animations":
+			this.displayPanel(new AnimationsPanel());
+			break;
 		}
 	}
 	

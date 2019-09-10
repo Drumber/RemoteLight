@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
@@ -129,6 +128,7 @@ public class Main {
 	public void close(boolean autoexit) {
 		shuttingDown = true;
 		try {
+			this.getEffectManager().stopAll();
 			this.getOutputManager().close();
 			
 			this.getDeviceManager().saveDevices();
@@ -145,11 +145,11 @@ public class Main {
 				e.printStackTrace();
 			}
 			if(autoexit) {
-				Thread.sleep(150);
+				Thread.sleep(450);
 				System.exit(0);
 			}
 		} catch(Exception e) {
-			Logger.error(e, "Error while closing.");
+			e.printStackTrace();
 			if(autoexit) {
 				System.exit(0);
 			}

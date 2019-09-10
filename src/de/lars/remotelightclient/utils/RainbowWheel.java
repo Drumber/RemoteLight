@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.arduino;
+package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
 

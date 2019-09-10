@@ -3,7 +3,7 @@ package de.lars.remotelightclient.animation.animations;
 import java.awt.Color;
 
 import de.lars.remotelightclient.animation.Animation;
-import de.lars.remotelightclient.arduino.Arduino;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class RunningLight extends Animation {
 	
@@ -29,22 +29,22 @@ public class RunningLight extends Animation {
 			switch (pass) {
 			case 0:
 				if(counter >= color.length) counter = 0;
-				Arduino.setColorPixel(0, color[counter].darker().darker());
+				PixelColorUtils.setPixel(0, color[counter].darker().darker());
 				break;
 			case 1:
 				if(counter > color.length) counter = 0;
-				Arduino.setColorPixel(0, color[counter].darker());
+				PixelColorUtils.setPixel(0, color[counter].darker());
 				break;
 			case 2:
 				if(counter > color.length) counter = 0;
-				Arduino.setColorPixel(0, color[counter]);
+				PixelColorUtils.setPixel(0, color[counter]);
 				break;
 			case 3:
 				if(counter > color.length) counter = 0;
-				Arduino.setColorPixel(0, color[counter].darker());
+				PixelColorUtils.setPixel(0, color[counter].darker());
 				break;
 			case 4:
-				Arduino.setColorPixel(0, color[counter].darker().darker());
+				PixelColorUtils.setPixel(0, color[counter].darker().darker());
 				counter++;
 				if(counter >= color.length) counter = 0;
 				break;
@@ -56,14 +56,14 @@ public class RunningLight extends Animation {
 			pass++;
 		} else if(pass < 10) {
 			pass++;
-			Arduino.setColorPixel(0, Color.BLACK);
+			PixelColorUtils.setPixel(0, Color.BLACK);
 		} else {
 			pass = 0;
-			Arduino.setColorPixel(0, Color.BLACK);
+			PixelColorUtils.setPixel(0, Color.BLACK);
 		}
 		
 		//shift pixels to right
-		Arduino.shiftRight(1);
+		PixelColorUtils.shiftRight(1);
 		
 		super.onLoop();
 	}

@@ -52,6 +52,7 @@ public class BrightnessSlider extends JPanel {
 		bgrSlider.add(slider);
 		slider.setAlignmentX(Component.LEFT_ALIGNMENT);
 		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue());
+		Main.getInstance().getOutputManager().setBrightness(slider.getValue());
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Main.getInstance().getOutputManager().setBrightness(slider.getValue());
