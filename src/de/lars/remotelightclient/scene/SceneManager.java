@@ -1,17 +1,31 @@
 package de.lars.remotelightclient.scene;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.scene.scenes.Fire;
+import de.lars.remotelightclient.scene.scenes.Jungle;
+import de.lars.remotelightclient.scene.scenes.NorthernLights;
+import de.lars.remotelightclient.scene.scenes.Ocean;
+import de.lars.remotelightclient.scene.scenes.Space;
+import de.lars.remotelightclient.scene.scenes.Sunset;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class SceneManager {
 	
 	private Scene activeScene;
+	private List<Scene> scenes;
 	private boolean active = false;
 	
 	public SceneManager() {
-		
+		scenes = new ArrayList<Scene>();
+		this.registerScenes();
 	}
 	
 	public boolean isActive() {
@@ -22,7 +36,12 @@ public class SceneManager {
 		return activeScene;
 	}
 	
+	public List<Scene> getScenes() {
+		return this.scenes;
+	}
+	
 	public void start(Scene scene) {
+		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Scene);
 		if(activeScene != null) {
 			activeScene.onDisable();
 		}
@@ -38,7 +57,7 @@ public class SceneManager {
 			activeScene.onDisable();
 		}
 		activeScene = null;
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
 	private void loop() {
@@ -67,6 +86,16 @@ public class SceneManager {
 				}
 			}).start();
 		}
+	}
+	
+	private void registerScenes() {
+		scenes.add(new Sunset());
+		scenes.add(new Fire());
+		scenes.add(new Ocean());
+		scenes.add(new Jungle());
+		scenes.add(new NorthernLights());
+		scenes.add(new Space());
+		
 	}
 
 }

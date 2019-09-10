@@ -1,12 +1,13 @@
 package de.lars.remotelightclient.scene.scenes;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Space extends Scene {
 	
@@ -23,7 +24,7 @@ public class Space extends Scene {
 		pix = Main.getLedNum();
 		stars = new HashMap<>();
 		r = new Random();
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, pix));
 		super.onEnable();
 	}
 	
@@ -40,11 +41,11 @@ public class Space extends Scene {
 			if(stars.containsKey(i)) {
 				
 				int b = stars.get(i);
-				Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", b+"", b+"", (b / 2)+""});
+				PixelColorUtils.setPixel(i, new Color(b, b , (b / 2)));
 				
 				b -= 5;
 				if(b <= 0) {
-					Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", 0+"", 0+"", 0+""});
+					PixelColorUtils.setPixel(i, Color.BLACK);
 					stars.remove(i);
 				} else {
 					stars.put(i, b);

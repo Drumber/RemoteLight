@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Fire extends Scene {
 	
@@ -41,7 +42,7 @@ public class Fire extends Scene {
 			pixelHash.put(i, new Color(r1, g1, b1));
 		}
 		
-		Client.sendWS281xList(pixelHash);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		
 		int delay = new Random().nextInt(100) + 50;
 		super.setDelay(delay);

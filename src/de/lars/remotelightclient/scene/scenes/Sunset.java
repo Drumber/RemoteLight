@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Sunset extends Scene {
 	
@@ -24,24 +23,25 @@ public class Sunset extends Scene {
 		initSun();
 		
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
+			PixelColorUtils.shiftRight(1);
 			count++;
 			if(count >= sun.length)
 				count = 0;
-			Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"", sun[count].getRed()+"", sun[count].getGreen()+"", sun[count].getBlue()+""});
+			
+			PixelColorUtils.setPixel(0, sun[count]);
 		}
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
+		PixelColorUtils.shiftRight(1);
 		
 		count++;
 		if(count >= sun.length)
 			count = 0;
 		
-		Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"", sun[count].getRed()+"", sun[count].getGreen()+"", sun[count].getBlue()+""});
+		PixelColorUtils.setPixel(0, sun[count]);
 		
 		super.onLoop();
 	}

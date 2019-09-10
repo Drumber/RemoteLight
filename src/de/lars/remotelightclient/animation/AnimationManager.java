@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RunningLight;
@@ -47,6 +48,7 @@ public class AnimationManager {
 	}
 	
 	public void start(Animation animation) {
+		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Animation);
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();
 		}

@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Jungle extends Scene {
 	
@@ -54,7 +54,7 @@ public class Jungle extends Scene {
 			
 			counter += amount;
 		}
-		Client.sendWS281xList(backgrnd);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(backgrnd));
 		super.onEnable();
 	}
 	
@@ -79,7 +79,7 @@ public class Jungle extends Scene {
 					int green = c.getGreen() / dim;
 					int blue = c.getBlue() / dim;
 					
-					Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", red+"", green+"", blue+""});
+					PixelColorUtils.setPixel(i, new Color(red, green, blue));
 					
 					dim--;
 					
@@ -92,7 +92,7 @@ public class Jungle extends Scene {
 				} else {
 					
 					Color c = points.get(i);
-					Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
+					PixelColorUtils.setPixel(i, c);
 					
 					int red = c.getRed() - (c.getRed() / 6);
 					int green = c.getGreen() - (c.getGreen() / 6);
@@ -100,7 +100,8 @@ public class Jungle extends Scene {
 					
 					if(red < 10 && green < 10 && blue < 10) {
 						Color bg = backgrnd.get(i);
-						Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", bg.getRed()+"", bg.getGreen()+"", bg.getBlue()+""});
+						
+						PixelColorUtils.setPixel(i, bg);
 						points.remove(i);
 						
 					} else {

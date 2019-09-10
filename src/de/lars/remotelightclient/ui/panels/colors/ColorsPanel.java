@@ -162,6 +162,7 @@ public class ColorsPanel extends MenuPanel {
 	private MouseListener ccpMouseListener = new MouseAdapter() {
 		@Override
 		public void mousePressed(MouseEvent e) {
+			Main.getInstance().getEffectManager().stopAll();
 			CustomColorPanel cpanel = (CustomColorPanel) e.getSource();
 			
 			Dimension size = CustomColorPanel.getPanelSize();

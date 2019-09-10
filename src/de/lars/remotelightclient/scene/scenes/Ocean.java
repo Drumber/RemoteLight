@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Ocean extends Scene {
 	
@@ -26,14 +25,12 @@ public class Ocean extends Scene {
 		initOcean();
 		
 		for(int i = 0; i < pixels; i++) {
-			Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
+			PixelColorUtils.shiftRight(1);
 			count++;
 			if(count >= ocean.length)
 				count = 0;
-			Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"",
-					ocean[count].getRed()+"",
-					ocean[count].getGreen()+"",
-					ocean[count].getBlue()+""});
+			
+			PixelColorUtils.setPixel(0, ocean[count]);
 		}
 		super.onEnable();
 	}
@@ -53,21 +50,15 @@ public class Ocean extends Scene {
 		
 		if(right) {
 			
-			Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 1+""});
+			PixelColorUtils.shiftRight(1);
 			
-			Client.send(new String[] {Identifier.WS_COLOR_PIXEL, 0+"",
-					ocean[count].getRed()+"",
-					ocean[count].getGreen()+"",
-					ocean[count].getBlue()+""});
+			PixelColorUtils.setPixel(0, ocean[count]);
 			
 		} else {
 			
-			Client.send(new String[] {Identifier.WS_SHIFT_LEFT, 1+""});
+			PixelColorUtils.shiftLeft(1);
 			
-			Client.send(new String[] {Identifier.WS_COLOR_PIXEL, (pixels - 1)+"",
-					ocean[count].getRed()+"",
-					ocean[count].getGreen()+"",
-					ocean[count].getBlue()+""});
+			PixelColorUtils.setPixel(pixels - 1, ocean[count]);
 		}
 		super.onLoop();
 	}

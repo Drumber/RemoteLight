@@ -2,6 +2,8 @@ package de.lars.remotelightclient.musicsync;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.musicsync.sound.InputFrame;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
@@ -80,6 +82,7 @@ public class MusicSyncManager {
 	}
 	
 	public void start(MusicEffect effect) {
+		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Animation);
 		if(activeEffect != null) {
 			activeEffect.onDisable();
 		} else {

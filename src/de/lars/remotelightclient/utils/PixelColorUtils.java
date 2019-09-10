@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
@@ -47,14 +48,31 @@ public class PixelColorUtils {
 	
 	public static void setPixel(int pixel, Color color) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		if(strip.length < 1) {
+			strip = colorAllPixels(Color.BLACK, Main.getLedNum());
+		}
 		Color[] leds = strip;
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			if(i == pixel)
+			if(i == pixel) {
 				leds[i] = color;
-			else
+				
+			} else {
 				leds[i] = strip[i];
+			}
 		}
 		OutputManager.addToOutput(leds);
+	}
+	
+	public static Color[] pixelHashToColorArray(HashMap<Integer, Color> pixelHash) {
+		Color[] leds = new Color[Main.getLedNum()];
+		for(int i = 0; i < Main.getLedNum(); i++) {
+			if(pixelHash.get(i) == null) {
+				leds[i] = Color.BLACK;
+			} else {
+				leds[i] = pixelHash.get(i);
+			}
+		}
+		return leds;
 	}
 
 }

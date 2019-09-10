@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Random;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.Scene;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class NorthernLights extends Scene {
 	
@@ -115,7 +116,7 @@ public class NorthernLights extends Scene {
 			}
 		}
 		
-		Client.sendWS281xList(pixelHash);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		super.onLoop();
 	}
 	

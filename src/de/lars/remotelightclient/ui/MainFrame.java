@@ -15,6 +15,7 @@ import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.OutputPanel;
+import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 
@@ -179,6 +180,9 @@ public class MainFrame extends JFrame {
 			break;
 		case "animations":
 			this.displayPanel(new AnimationsPanel());
+			break;
+		case "scenes":
+			this.displayPanel(new ScenesPanel());
 			break;
 		}
 	}
