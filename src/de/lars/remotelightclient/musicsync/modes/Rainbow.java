@@ -3,31 +3,46 @@ package de.lars.remotelightclient.musicsync.modes;
 import java.awt.Color;
 import java.util.HashMap;
 
-import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	
+	private SettingsManager s = Main.getInstance().getSettingsManager();
 	private int pix = Main.getLedNum();
 	private int half = pix / 2;
 	private int lastLeds = 0;
 	private Color[] strip;
 	private int step = 0;
 	
-	public boolean smothRise = true;
-	public boolean smothFall = true;
+	public boolean smoothRise = true;
+	public boolean smoothFall = true;
 	public int steps = 5;
 
 	public Rainbow() {
 		super("Rainbow");
+		
+		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "SmoothRise", SettingCategory.MusicEffect, "", true));
+		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "SmoothFall", SettingCategory.MusicEffect, "", true));
+		s.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
+	}
+	
+	private void initOptions() {
+		smoothRise = ((SettingBoolean) s.getSettingFromId("musicsync.rainbow.smoothrise")).getValue();
+		smoothFall= ((SettingBoolean) s.getSettingFromId("musicsync.rainbow.smoothfall")).getValue();
+		steps = ((SettingInt) s.getSettingFromId("musicsync.rainbow.steps")).getValue();
 	}
 	
 	@Override
 	public void onEnable() {
+		this.initOptions();
 		strip = new Color[pix];
 		
 		for(int i = 0; i < half; i++) {
@@ -41,17 +56,12 @@ public class Rainbow extends MusicEffect {
 			//half2
 			strip[(half + i)] = c;
 		}
-		
-		if(DataStorage.isStored(DataStorage.RAINBOW_SMOOTH_RISE)) {
-			smothRise = (boolean) DataStorage.getData(DataStorage.RAINBOW_SMOOTH_RISE);
-			smothFall = (boolean) DataStorage.getData(DataStorage.RAINBOW_SMOOTH_FALL);
-			steps = (int) DataStorage.getData(DataStorage.RAINBOW_STEPS);
-		}
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
+		this.initOptions();
 		boolean bump = this.isBump();
 		SoundProcessing soundProcessor = this.getSoundProcessor();
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
@@ -69,7 +79,7 @@ public class Rainbow extends MusicEffect {
 		if(leds > half) leds = half;
 		
 		//Smooth
-		if(smothRise && smothFall) {
+		if(smoothRise && smoothFall) {
 			if(lastLeds > leds) {
 				leds = lastLeds;
 				lastLeds--;
@@ -79,7 +89,7 @@ public class Rainbow extends MusicEffect {
 				leds = lastLeds;
 			}
 			
-		} else if(smothRise) {
+		} else if(smoothRise) {
 			if(lastLeds > leds) {
 				lastLeds = leds;
 			} else {
@@ -88,7 +98,7 @@ public class Rainbow extends MusicEffect {
 				leds = lastLeds;
 			}
 			
-		} else if(smothFall) {
+		} else if(smoothFall) {
 			if(lastLeds > leds) {
 				leds = lastLeds;
 				lastLeds--;

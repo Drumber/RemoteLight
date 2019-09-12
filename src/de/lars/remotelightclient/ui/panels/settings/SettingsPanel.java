@@ -41,7 +41,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import java.awt.Font;
 
 public class SettingsPanel extends MenuPanel {
 

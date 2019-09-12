@@ -11,10 +11,10 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 public class SettingsManager {
 	
 	/**
-	 * Intern: Not displayed in settings UI
+	 * Intern, MusicEffect: Not displayed in settings UI
 	 */
 	public enum SettingCategory {
-		General, Others, Intern
+		General, Others, Intern, MusicEffect
 	}
 	
 	private List<Setting> settings;
@@ -58,7 +58,6 @@ public class SettingsManager {
 	@SuppressWarnings("unchecked")
 	public <T extends Setting> T getSettingFromType(T type) {
 		if(type.getId() != null) {
-			Setting s = getSettingFromId(type.getId());
 			return (T) getSettingFromId(type.getId());
 		}
 		return null;

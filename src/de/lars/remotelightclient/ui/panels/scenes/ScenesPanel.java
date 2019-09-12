@@ -68,15 +68,15 @@ public class ScenesPanel extends MenuPanel {
 		bgrSettings.setVisible(false);
 		add(bgrSettings);
 		
-		this.addAnimationPanels();
+		this.addScenePanels();
 	}
 	
-	private void addAnimationPanels() {
+	private void addScenePanels() {
 		bgrScenes.removeAll();
 		for(Scene s : scm.getScenes()) {
 			BigTextButton btn = new BigTextButton(s.getDisplayname(), "");
 			btn.setName(s.getName());
-			btn.addMouseListener(btnAniListener);
+			btn.addMouseListener(btnSceneListener);
 			
 			if(scm.getActiveScene() != null && scm.getActiveScene().getName().equals(s.getName())) {
 				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
@@ -86,7 +86,7 @@ public class ScenesPanel extends MenuPanel {
 		updateUI();
 	}
 	
-	private MouseAdapter btnAniListener = new MouseAdapter() {
+	private MouseAdapter btnSceneListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			BigTextButton btn = (BigTextButton) e.getSource();
@@ -101,7 +101,7 @@ public class ScenesPanel extends MenuPanel {
 					}
 				}
 			}
-			addAnimationPanels();
+			addScenePanels();
 		}
 	};
 	

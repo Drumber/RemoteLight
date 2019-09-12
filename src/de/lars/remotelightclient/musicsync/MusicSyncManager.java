@@ -1,17 +1,32 @@
 package de.lars.remotelightclient.musicsync;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.musicsync.modes.Bump;
+import de.lars.remotelightclient.musicsync.modes.EQ;
+import de.lars.remotelightclient.musicsync.modes.Fade;
+import de.lars.remotelightclient.musicsync.modes.LevelBar;
+import de.lars.remotelightclient.musicsync.modes.Pulse;
+import de.lars.remotelightclient.musicsync.modes.Rainbow;
+import de.lars.remotelightclient.musicsync.modes.RunningLight;
 import de.lars.remotelightclient.musicsync.sound.InputFrame;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class MusicSyncManager {
 	
 	private MusicEffect activeEffect;
+	private List<MusicEffect> effects;
 	private boolean active = false;
 	private MusicSyncUtils musicUtils;
 	private SoundProcessing soundProcessor;
@@ -28,13 +43,23 @@ public class MusicSyncManager {
 		inputFrame = new InputFrame(this);
 		inputFrame.pack();
 		
-		if(!SoundProcessing.isMixerSet())
-			return;
-		if(soundProcessor != null) {
-			soundProcessor.stop();
+		if(SoundProcessing.isMixerSet()) {
+			if(soundProcessor != null) {
+				soundProcessor.stop();
+			}
+			soundProcessor = new SoundProcessing(inputFrame, this);
 		}
-		soundProcessor = new SoundProcessing(inputFrame, this);
+		
 		musicUtils = new MusicSyncUtils();
+		
+		effects = new ArrayList<MusicEffect>();
+		this.registerMusicEffects();
+	}
+	
+	private void loadSettings() {
+		SettingsManager s = Main.getInstance().getSettingsManager();
+		s.addSetting(new SettingObject("musicsync.input", "Input", null));
+		
 	}
 	
 	public void openGUI() {
@@ -81,6 +106,14 @@ public class MusicSyncManager {
 		return activeEffect;
 	}
 	
+	public List<MusicEffect> getMusicEffects() {
+		return this.effects;
+	}
+	
+	public List<Setting> getCurrentMusicEffectOptions() {
+		return getActiveEffect().getOptions();
+	}
+	
 	public void start(MusicEffect effect) {
 		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Animation);
 		if(activeEffect != null) {
@@ -102,7 +135,7 @@ public class MusicSyncManager {
 		activeEffect = null;
 		soundProcessor.stop();
 		inputFrame.dispose();
-		Client.send(new String[] {Identifier.WS_COLOR_OFF});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
 	private void loop() {
@@ -140,6 +173,16 @@ public class MusicSyncManager {
 				}
 			}).start();
 		}
+	}
+	
+	private void registerMusicEffects() {
+		effects.add(new LevelBar());
+		effects.add(new Rainbow());
+		effects.add(new RunningLight());
+		effects.add(new Bump());
+		effects.add(new EQ());
+		effects.add(new Fade());
+		effects.add(new Pulse());
 	}
 
 }

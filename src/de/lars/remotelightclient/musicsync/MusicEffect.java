@@ -1,11 +1,16 @@
 package de.lars.remotelightclient.musicsync;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
+import de.lars.remotelightclient.settings.Setting;
 
 public class MusicEffect {
 	
 	private String name;
 	private String displayname;
+	private List<Setting> options;
 	private boolean bump;
 	private float pitch;
 	private double pitchTime;
@@ -18,6 +23,7 @@ public class MusicEffect {
 	public MusicEffect(String name) {
 		this.name = name;
 		this.displayname = name; //TODO Language system
+		this.options = new ArrayList<Setting>();
 	}
 	
 	public String getName() {
@@ -34,6 +40,14 @@ public class MusicEffect {
 
 	public void setDisplayname(String displayname) {
 		this.displayname = displayname;
+	}
+	
+	public void addOption(Setting option) {
+		this.options.add(option);
+	}
+	
+	public List<Setting> getOptions() {
+		return this.options;
 	}
 	
 	public boolean isBump() {
@@ -68,7 +82,7 @@ public class MusicEffect {
 		this.volume = volume;
 	}
 
-	//TODo add onRender()
+	//TODO add onRender()
 	
 	public SoundProcessing getSoundProcessor() {
 		return soundProcessor;
