@@ -1,9 +1,13 @@
 package de.lars.remotelightclient.ui.panels.musicsync;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.musicsync.InputUtil;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.musicsync.sound.Shared;
+import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
@@ -19,12 +23,16 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPan
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
 import de.lars.remotelightclient.utils.UiUtils;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Mixer;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -35,8 +43,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JSlider;
@@ -59,6 +67,10 @@ public class MusicSyncOptionsPanel extends JPanel {
 	private JPanel panelAdjustment;
 	private JLabel lblAdjustment;
 	private JSlider sliderAdjustment;
+	private JPanel panelInput;
+	private JScrollPane scrollPaneOpt;
+	private JPanel bgrOptions;
+	private JLabel lblInput;
 
 	/**
 	 * Create the panel.
@@ -66,6 +78,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	public MusicSyncOptionsPanel() {
 		settingPanels = new ArrayList<SettingPanel>();
 		sm.addSetting(new SettingObject("musicsync.sensitivity", null, 20));
+		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200));
 		
 		Dimension size = new Dimension(Integer.MAX_VALUE, 120);
 		setPreferredSize(size);
@@ -74,12 +87,23 @@ public class MusicSyncOptionsPanel extends JPanel {
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		setLayout(new GridLayout(0, 2, 0, 0));
-		JPanel bgrOptions = new JPanel();
+		JPanel bgrScrollOptions = new JPanel();
+		bgrScrollOptions.setLayout(new BoxLayout(bgrScrollOptions, BoxLayout.Y_AXIS));
+		bgrScrollOptions.setAlignmentY(Component.TOP_ALIGNMENT);
+		bgrScrollOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
+		bgrScrollOptions.setBackground(Style.panelDarkBackground);
+		add(bgrScrollOptions);
+		
+		scrollPaneOpt = new JScrollPane();
+		scrollPaneOpt.setViewportBorder(null);
+		scrollPaneOpt.setBorder(BorderFactory.createEmptyBorder());
+		scrollPaneOpt.getVerticalScrollBar().setUnitIncrement(8);
+		bgrScrollOptions.add(scrollPaneOpt);
+		
+		bgrOptions = new JPanel();
 		bgrOptions.setLayout(new BoxLayout(bgrOptions, BoxLayout.Y_AXIS));
-		bgrOptions.setAlignmentY(Component.TOP_ALIGNMENT);
-		bgrOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgrOptions.setBackground(Style.panelDarkBackground);
-		add(bgrOptions);
+		scrollPaneOpt.setViewportView(bgrOptions);
 		
 		panelSensitivity = new JPanel();
 		panelSensitivity.setLayout(new BoxLayout(panelSensitivity, BoxLayout.Y_AXIS));
@@ -122,6 +146,8 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelAdjustment.add(lblAdjustment);
 		
 		sliderAdjustment = new JSlider();
+		sliderAdjustment.setMinimum(50);
+		sliderAdjustment.setMaximum(700);
 		sliderAdjustment.setPreferredSize(size);
 		sliderAdjustment.setMaximumSize(size);
 		sliderAdjustment.setFocusable(false);
@@ -130,7 +156,15 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setName("adjustment");
 		sliderAdjustment.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);
+		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue());
 		panelAdjustment.add(sliderAdjustment);
+		
+		panelInput = new JPanel();
+		panelInput.setAlignmentY(Component.TOP_ALIGNMENT);
+		panelInput.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelInput.setBackground(Style.panelDarkBackground);
+		bgrOptions.add(panelInput);
+		panelInput.setLayout(new BorderLayout(0, 0));
 		
 		bgrEffectOptionsScroll = new JPanel();
 		bgrEffectOptionsScroll.setVisible(false);
@@ -138,15 +172,18 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrEffectOptionsScroll.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		bgrEffectOptionsScroll.add(scrollPane);
 		
 		bgrEffectOptions = new JPanel();
 		bgrEffectOptions.setBackground(Style.panelDarkBackground);
 		scrollPane.setViewportView(bgrEffectOptions);
 		bgrEffectOptions.setLayout(new BoxLayout(bgrEffectOptions, BoxLayout.Y_AXIS));
+		
+		this.initInputPanel();
 	}
 	
 	
@@ -160,8 +197,8 @@ public class MusicSyncOptionsPanel extends JPanel {
 				msm.setSensitivity(slider.getValue() / 100.0);
 				
 			} else if(slider.getName().equals("adjustment")) {
-				//TODO
-				
+				sm.getSettingObject("musicsync.adjustment").setValue(slider.getValue());
+				msm.setAdjustment(slider.getValue() / 100.0);
 			}
 		}
 	};
@@ -180,7 +217,9 @@ public class MusicSyncOptionsPanel extends JPanel {
 		for(Setting s : settings) {
 			SettingPanel spanel = this.getSettingPanel(s);
 			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			spanel.addMouseListener(effectOptionsChangeListener);
+			spanel.setSettingChangedListener(effectOptionsChangeListener);
+			spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+			spanel.setBackground(Style.panelDarkBackground);
 			bgrEffectOptions.add(spanel);
 			settingPanels.add(spanel);
 		}
@@ -215,12 +254,63 @@ public class MusicSyncOptionsPanel extends JPanel {
 		}
 		return null;
 	}
-
-	private MouseAdapter effectOptionsChangeListener = new MouseAdapter() {
+	
+	private SettingChangedListener effectOptionsChangeListener = new SettingChangedListener() {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void onSettingChanged(Setting setting) {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
+			}
+		}
+	};
+	
+	private void initInputPanel() {
+		String input = (String) sm.getSettingObject("musicsync.input").getValue();
+		
+		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
+		buttonPanel.setBackground(Style.panelDarkBackground);
+		ButtonGroup group = new ButtonGroup();
+		
+		for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
+			Mixer mixer = AudioSystem.getMixer(info);
+
+			if(InputUtil.isLineSupported(mixer)) {
+				JRadioButton button = new JRadioButton();
+				button.setBackground(Style.panelDarkBackground);
+				button.setForeground(Style.textColor);
+				button.setText(Shared.toLocalString(info));
+				buttonPanel.add(button);
+				group.add(button);
+				button.setActionCommand(info.toString());
+				button.addActionListener(inputSelectedListener);
+				//set last time input as selected
+				if(input != null) {
+					if(input.equals(info.toString())) {
+						button.setSelected(true);
+					}
+				}
+			}
+		}
+		
+		lblInput = new JLabel("Select a input");
+		lblInput.setForeground(Style.textColor);
+		panelInput.add(lblInput, BorderLayout.NORTH);
+		panelInput.add(buttonPanel);
+	}
+	
+	private ActionListener inputSelectedListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
+				if(e.getActionCommand().equals(info.toString())){
+					Mixer newMixer = AudioSystem.getMixer(info);
+					SoundProcessing.setMixer(newMixer);
+					//save last selected to data file
+					sm.getSettingObject("musicsync.input").setValue(info.toString());
+					//refresh SoundProcessor
+					Main.getInstance().getMusicSyncManager().newSoundProcessor();
+					break;
+				}
 			}
 		}
 	};

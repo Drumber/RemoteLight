@@ -3,10 +3,11 @@ package de.lars.remotelightclient.musicsync.modes;
 import java.awt.Color;
 import java.util.Random;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.MusicSyncUtils;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Pulse extends MusicEffect {
 	
@@ -61,7 +62,7 @@ public class Pulse extends MusicEffect {
 		pulseLastHz = hz;
 		Color c = MusicSyncUtils.changeBrightness(pulseColor, pulseBrightness);
 		
-		Client.send(new String[] {Identifier.COLOR_COLOR, c.getRed()+"", c.getGreen()+"", c.getBlue()+""});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, Main.getLedNum()));
 		
 		super.onLoop();
 	}

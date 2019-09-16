@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Mixer;
+
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
@@ -15,7 +18,7 @@ import de.lars.remotelightclient.musicsync.modes.LevelBar;
 import de.lars.remotelightclient.musicsync.modes.Pulse;
 import de.lars.remotelightclient.musicsync.modes.Rainbow;
 import de.lars.remotelightclient.musicsync.modes.RunningLight;
-import de.lars.remotelightclient.musicsync.sound.InputFrame;
+import de.lars.remotelightclient.musicsync.sound.Shared;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
@@ -27,27 +30,24 @@ public class MusicSyncManager {
 	
 	private MusicEffect activeEffect;
 	private List<MusicEffect> effects;
+	private String input;
 	private boolean active = false;
 	private MusicSyncUtils musicUtils;
 	private SoundProcessing soundProcessor;
-	private InputFrame inputFrame;
 	private double sensitivity = 1;
+	private double adjustment = 3;
 	private double volume;
 	private float pitch;
 	private double pitchTime;
 	
 	public MusicSyncManager() {
-		if(inputFrame != null) {
-			inputFrame.dispose();
-		}
-		inputFrame = new InputFrame(this);
-		inputFrame.pack();
+		this.loadSettings();
 		
 		if(SoundProcessing.isMixerSet()) {
 			if(soundProcessor != null) {
 				soundProcessor.stop();
 			}
-			soundProcessor = new SoundProcessing(inputFrame, this);
+			soundProcessor = new SoundProcessing(this);
 		}
 		
 		musicUtils = new MusicSyncUtils();
@@ -60,20 +60,16 @@ public class MusicSyncManager {
 		SettingsManager s = Main.getInstance().getSettingsManager();
 		s.addSetting(new SettingObject("musicsync.input", "Input", null));
 		
-	}
-	
-	public void openGUI() {
-		if(inputFrame == null) {
-			inputFrame = new InputFrame(this);
-			inputFrame.pack();
-		}
-		inputFrame.setVisible(true);
-	}
-	
-	public void closeGUI() {
-		if(inputFrame != null) {
-			inputFrame.dispose();
-			System.out.println("Dispose InputFrame");
+		//select last used input
+		input = (String) s.getSettingObject("musicsync.input").getValue();
+		if(input != null) {
+			for(Mixer.Info info : Shared.getMixerInfo(false, true)){
+				if(input.equals(info.toString())){
+					Mixer newValue = AudioSystem.getMixer(info);
+					SoundProcessing.setMixer(newValue);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -81,7 +77,7 @@ public class MusicSyncManager {
 		if(soundProcessor != null) {
 			soundProcessor.stop();
 		}
-		soundProcessor = new SoundProcessing(inputFrame, this);
+		soundProcessor = new SoundProcessing(this);
 	}
 	
 	public void soundToLight(float pitch, double rms, double time) {
@@ -98,6 +94,14 @@ public class MusicSyncManager {
 		return sensitivity;
 	}
 	
+	public void setAdjustment(double adjustment) {
+		this.adjustment = adjustment;
+	}
+	
+	public double getAdjustment() {
+		return adjustment;
+	}
+	
 	public boolean isActive() {
 		return active;
 	}
@@ -111,11 +115,16 @@ public class MusicSyncManager {
 	}
 	
 	public List<Setting> getCurrentMusicEffectOptions() {
-		return getActiveEffect().getOptions();
+		SettingsManager sm = Main.getInstance().getSettingsManager();
+		List<Setting> tmp = new ArrayList<>();
+		for(String s : getActiveEffect().getOptions()) {
+			tmp.add(sm.getSettingFromId(s));
+		}
+		return tmp;
 	}
 	
 	public void start(MusicEffect effect) {
-		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Animation);
+		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.MusicSync);
 		if(activeEffect != null) {
 			activeEffect.onDisable();
 		} else {
@@ -134,7 +143,6 @@ public class MusicSyncManager {
 		}
 		activeEffect = null;
 		soundProcessor.stop();
-		inputFrame.dispose();
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
@@ -156,6 +164,7 @@ public class MusicSyncManager {
 						activeEffect.setPitchTime(pitchTime);
 						activeEffect.setSoundProcessor(soundProcessor);
 						activeEffect.setSensitivity(sensitivity);
+						activeEffect.setAdjustment(adjustment);
 						activeEffect.setMaxSpl(musicUtils.getMaxSpl());
 						activeEffect.setMinSpl(musicUtils.getMinSpl());
 						activeEffect.setSpl(musicUtils.getSpl());

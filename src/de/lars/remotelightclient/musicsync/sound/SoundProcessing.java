@@ -7,6 +7,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
+import org.tinylog.Logger;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -17,12 +19,13 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 
 public class SoundProcessing implements PitchDetectionHandler {
 	
 	private MusicSyncManager manager;
-	private InputFrame gui;
 	private PitchEstimationAlgorithm algo = PitchEstimationAlgorithm.DYNAMIC_WAVELET;
 	private AudioDispatcher dispatcher;
 	private static Mixer mixer;
@@ -34,15 +37,14 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private int overlap = 768 * 4;
 	
 	
-	public SoundProcessing(InputFrame inputFrame, MusicSyncManager manager) {
+	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
-		gui = inputFrame;
 		
 		if(dispatcher!= null){
 			dispatcher.stop();
 		}
 		
-		gui.addText("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()) + "\n");
+		Logger.debug("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()));
 
 		final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
 		final DataLine.Info dataLineInfo = new DataLine.Info(
@@ -68,10 +70,9 @@ public class SoundProcessing implements PitchDetectionHandler {
 			
 			new Thread(dispatcher,"Audio dispatching").start();
 			
-		} catch (LineUnavailableException e) {
-			gui.addText("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
-		} catch(IllegalArgumentException e) {
-			gui.addText("\u25b6" + " ERROR: Input not supported! Please select a Mic or Line-In Input." + "\n");
+		} catch(IllegalArgumentException | LineUnavailableException e) {
+			Main.getInstance().getMainFrame().printNotification("Input not supported! Please select a Mic or Line-In Input.", NotificationType.Error);
+			Logger.error(e, "Error while setting up input line!");
 		}
 	}
 	
@@ -96,8 +97,8 @@ public class SoundProcessing implements PitchDetectionHandler {
 			float pitch = pitchDetectionResult.getPitch(); //what we need (Hz)
 			float probability = pitchDetectionResult.getProbability();
 			double rms = audioEvent.getRMS() * 100; //what we need (loudness)
-			String message = String.format("Pitch detected at %.2fs: %.2fHz ( %.2f probability, RMS: %.5f )\n", timeStamp,pitch,probability,rms);
-			gui.addText(message);
+			String message = String.format("Pitch detected at %.2fs: %.2fHz ( %.2f probability, RMS: %.5f )", timeStamp,pitch,probability,rms);
+			//Logger.debug(message);
 			
 			manager.soundToLight(pitch, rms, timeStamp);
 		}

@@ -4,7 +4,8 @@ import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SettingBooleanPanel extends SettingPanel {
 
@@ -30,9 +31,15 @@ public class SettingBooleanPanel extends SettingPanel {
 		checkBox = new JCheckBox("");
 		checkBox.setOpaque(false);
 		checkBox.setSelected(setting.getValue());
+		checkBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SettingBooleanPanel.this.onChanged(setting);
+			}
+		});
 		add(checkBox);
 		
-		if(setting.getDescription() != null) {
+		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
 			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
 			lblHelp.setToolTipText(setting.getDescription());

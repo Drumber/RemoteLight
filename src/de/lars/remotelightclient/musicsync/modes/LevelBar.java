@@ -7,11 +7,12 @@ import java.util.HashMap;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
-import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingColor;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class LevelBar extends MusicEffect {
 	
@@ -25,22 +26,32 @@ public class LevelBar extends MusicEffect {
 	private ArrayList<Color[]> pattern = new ArrayList<>();
 	private int count;
 	private int lastLeds = 0;
-	private int pix = Main.getLedNum();
+	private int pix;
+	private int half;
 
 	public LevelBar() {
 		super("LevelBar");
 		
 		s.addSetting(new SettingColor("musicsync.levelbar.color1", "Color 1", SettingCategory.MusicEffect, "", Color.RED));
+		this.addOption("musicsync.levelbar.color1");
 		s.addSetting(new SettingColor("musicsync.levelbar.color2", "Color 2", SettingCategory.MusicEffect, "", Color.RED));
+		this.addOption("musicsync.levelbar.color2");
 		s.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
+		this.addOption("musicsync.levelbar.color3");
 		s.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automaticly chnage color", false));
+		this.addOption("musicsync.levelbar.autochange");
 		s.addSetting(new SettingBoolean("musicsync.levelbar.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
+		this.addOption("musicsync.levelbar.smooth");
 	}
 	
 	@Override
 	public void onEnable() {
 		this.initPattern();
 		this.initOptions();
+		
+		pix = Main.getLedNum();
+		half = pix / 2;
+		
 		super.onEnable();
 	}
 	
@@ -49,8 +60,8 @@ public class LevelBar extends MusicEffect {
 		this.initOptions();
 		boolean bump = this.isBump();
 		SoundProcessing soundProcessor = this.getSoundProcessor();
-		int half = pix / 2;
-		double mul = 0.1 * this.getSensitivity(); // multiplier for amount of pixels
+		half = pix / 2;
+		double mul = 0.1 * this.getAdjustment(); // multiplier for amount of pixels
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		int[] amp = soundProcessor.getAmplitudes(); //6 bands
 		int ampAv; //average of all amp bands
@@ -134,7 +145,7 @@ public class LevelBar extends MusicEffect {
 			
 		}
 		
-		Client.sendWS281xList(pixelHash);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		
 		super.onLoop();
 	}
@@ -156,7 +167,7 @@ public class LevelBar extends MusicEffect {
 	private void initOptions() {
 		color1 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color1")).getValue();
 		color2 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color2")).getValue();
-		color2 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color2")).getValue();
+		color3 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color3")).getValue();
 		autoChange = ((SettingBoolean) s.getSettingFromId("musicsync.levelbar.autochange")).getValue();
 		smooth = ((SettingBoolean) s.getSettingFromId("musicsync.levelbar.smooth")).getValue();
 	}

@@ -3,6 +3,8 @@ package de.lars.remotelightclient.ui.panels.settings.settingComps;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.ui.Style;
@@ -30,9 +32,15 @@ public class SettingIntPanel extends SettingPanel {
 		
 		spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(setting.getValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		spinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				SettingIntPanel.this.onChanged(setting);
+			}
+		});
 		add(spinner);
 		
-		if(setting.getDescription() != null) {
+		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
 			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
 			lblHelp.setToolTipText(setting.getDescription());

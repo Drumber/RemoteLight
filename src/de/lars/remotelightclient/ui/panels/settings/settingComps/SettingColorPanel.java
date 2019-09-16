@@ -41,13 +41,14 @@ public class SettingColorPanel extends SettingPanel {
 				Color color = JColorChooser.showDialog(null, "Choose a color", panelColor.getBackground());
 				if(color != null) {
 					panelColor.setBackground(color);
+					SettingColorPanel.this.onChanged(setting);
 				}
 			}
 		});
 		panelColor.setPreferredSize(new Dimension(15, 15));
 		add(panelColor);
 		
-		if(setting.getDescription() != null) {
+		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
 			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
 			lblHelp.setToolTipText(setting.getDescription());

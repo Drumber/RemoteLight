@@ -1,8 +1,9 @@
 package de.lars.remotelightclient.musicsync.modes;
 
+import java.awt.Color;
+
 import de.lars.remotelightclient.musicsync.MusicEffect;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class RunningLight extends MusicEffect {
 	
@@ -16,6 +17,8 @@ public class RunningLight extends MusicEffect {
 	public void onLoop() {
 		double pitch = this.getPitch();
 		double time = this.getPitchTime();
+		
+		PixelColorUtils.shiftRight(3);
 		
 		if(time != lastTime) {
 			lastTime = time;
@@ -40,14 +43,12 @@ public class RunningLight extends MusicEffect {
 				g = 150;
 			}
 			
-			Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 3+""});
 			for(int i = 0; i < 3; i++) {
-				Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", r+"", g+"", b+""});
+				PixelColorUtils.setPixel(i, new Color(r, g, b));
 			}
 		} else {
-			Client.send(new String[] {Identifier.WS_SHIFT_RIGHT, 3+""});
 			for(int i = 0; i < 3; i++) {
-				Client.send(new String[] {Identifier.WS_COLOR_PIXEL, i+"", 0+"", 0+"", 0+""});
+				PixelColorUtils.setPixel(i, Color.BLACK);
 			}
 		}
 		super.onLoop();

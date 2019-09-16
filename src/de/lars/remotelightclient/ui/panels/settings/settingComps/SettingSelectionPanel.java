@@ -8,6 +8,8 @@ import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.JComboBox;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.swing.ButtonGroup;
@@ -43,6 +45,13 @@ public class SettingSelectionPanel extends SettingPanel {
 			}
 			add(boxValues);
 			
+			boxValues.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SettingSelectionPanel.this.onChanged(setting);
+				}
+			});
+			
 		} else if(setting.getModel() == Model.RadioButton) {
 			group = new ButtonGroup();
 			for(String s : setting.getValues()) {
@@ -55,10 +64,17 @@ public class SettingSelectionPanel extends SettingPanel {
 				}
 				group.add(btn);
 				add(btn);
+				
+				btn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						SettingSelectionPanel.this.onChanged(setting);
+					}
+				});
 			}
 		}
 		
-		if(setting.getDescription() != null) {
+		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
 			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
 			lblHelp.setToolTipText(setting.getDescription());

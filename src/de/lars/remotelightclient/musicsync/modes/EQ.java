@@ -6,7 +6,8 @@ import java.util.HashMap;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
-import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class EQ extends MusicEffect {
 
@@ -20,7 +21,7 @@ public class EQ extends MusicEffect {
 		int pix = Main.getLedNum();
 		int half = pix / 2;
 		int pixBand = half / 6; // pixels per frequency at each side(left/right) (6 bands)
-		double mul = 0.318 * this.getSensitivity(); // multiplier for brightness
+		double mul = 0.318 * this.getAdjustment(); // multiplier for brightness
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		int[] amp = soundProcessor.getAmplitudes();
 
@@ -99,7 +100,7 @@ public class EQ extends MusicEffect {
 			pixelHash.put(half + 5 * pixBand + p, new Color(0, 0, ch2));
 		}
 
-		Client.sendWS281xList(pixelHash);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		
 		super.onLoop();
 	}

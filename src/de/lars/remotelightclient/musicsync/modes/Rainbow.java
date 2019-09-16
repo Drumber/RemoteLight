@@ -6,18 +6,19 @@ import java.util.HashMap;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
-import de.lars.remotelightclient.network.Client;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingInt;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
-	private int pix = Main.getLedNum();
-	private int half = pix / 2;
+	private int pix;
+	private int half;
 	private int lastLeds = 0;
 	private Color[] strip;
 	private int step = 0;
@@ -30,8 +31,11 @@ public class Rainbow extends MusicEffect {
 		super("Rainbow");
 		
 		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "SmoothRise", SettingCategory.MusicEffect, "", true));
+		this.addOption("musicsync.rainbow.smoothrise");
 		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "SmoothFall", SettingCategory.MusicEffect, "", true));
+		this.addOption("musicsync.rainbow.smoothfall");
 		s.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
+		this.addOption("musicsync.rainbow.steps");
 	}
 	
 	private void initOptions() {
@@ -43,6 +47,9 @@ public class Rainbow extends MusicEffect {
 	@Override
 	public void onEnable() {
 		this.initOptions();
+		
+		pix = Main.getLedNum();
+		half = pix / 2;
 		strip = new Color[pix];
 		
 		for(int i = 0; i < half; i++) {
@@ -66,7 +73,7 @@ public class Rainbow extends MusicEffect {
 		SoundProcessing soundProcessor = this.getSoundProcessor();
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		
-		double mul = 0.1 * this.getSensitivity(); // multiplier for amount of pixels
+		double mul = 0.1 * this.getAdjustment(); // multiplier for amount of pixels
 		int[] amp = soundProcessor.getAmplitudes(); //6 bands
 		
 		int x = 0;
@@ -142,7 +149,7 @@ public class Rainbow extends MusicEffect {
 			pixelHash.put(pix - 1 - i, Color.BLACK);
 		}
 		
-		Client.sendWS281xList(pixelHash);
+		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		
 		super.onLoop();
 	}

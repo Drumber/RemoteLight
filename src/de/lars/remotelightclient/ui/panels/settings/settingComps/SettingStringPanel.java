@@ -2,6 +2,10 @@ package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
 import de.lars.remotelightclient.settings.types.SettingString;
 import de.lars.remotelightclient.ui.Style;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -30,8 +34,14 @@ public class SettingStringPanel extends SettingPanel {
 		fieldValue.setText(setting.getValue());
 		add(fieldValue);
 		fieldValue.setColumns(20);
+		fieldValue.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SettingStringPanel.this.onChanged(setting);
+			}
+		});
 		
-		if(setting.getDescription() != null) {
+		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
 			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
 			lblHelp.setToolTipText(setting.getDescription());

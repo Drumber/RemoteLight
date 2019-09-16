@@ -33,9 +33,9 @@ public class InputPanel extends JPanel {
 	
 	Mixer mixer = null;
 	
-	public InputPanel(){
+	public InputPanel() {
 		super(new BorderLayout());
-		this.setBorder(new TitledBorder("Choose a microphone input"));
+		this.setBorder(new TitledBorder("Choose a input"));
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
 		ButtonGroup group = new ButtonGroup();
 		String data = (String) DataStorage.getData(DataStorage.SOUND_INPUT_STOREKEY);

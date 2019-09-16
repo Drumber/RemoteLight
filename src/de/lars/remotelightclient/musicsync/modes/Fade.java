@@ -2,10 +2,11 @@ package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.MusicSyncUtils;
-import de.lars.remotelightclient.network.Client;
-import de.lars.remotelightclient.network.Identifier;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Fade extends MusicEffect {
 	
@@ -26,7 +27,7 @@ public class Fade extends MusicEffect {
 			else color = 0;
 			fadeLastColor = colors[color];
 		}
-		Client.send(new String[] {Identifier.COLOR_COLOR, fadeLastColor.getRed()+"", fadeLastColor.getGreen()+"", fadeLastColor.getBlue()+""});
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(fadeLastColor, Main.getLedNum()));
 		
 		if((fadeLastColor.getRed() != 0) || (fadeLastColor.getGreen() != 0) || (fadeLastColor.getBlue() != 0)) fadeLastColor = MusicSyncUtils.dimColor(fadeLastColor, 2);
 		else {

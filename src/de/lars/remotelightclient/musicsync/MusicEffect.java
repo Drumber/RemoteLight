@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
-import de.lars.remotelightclient.settings.Setting;
 
 public class MusicEffect {
 	
 	private String name;
 	private String displayname;
-	private List<Setting> options;
+	private List<String> options;
 	private boolean bump;
 	private float pitch;
 	private double pitchTime;
 	private double volume;
 	private SoundProcessing soundProcessor;
 	private double sensitivity;
+	private double adjustment;
 	private double maxSpl, minSpl, spl;
 	
 	
 	public MusicEffect(String name) {
 		this.name = name;
 		this.displayname = name; //TODO Language system
-		this.options = new ArrayList<Setting>();
+		this.options = new ArrayList<String>();
 	}
 	
 	public String getName() {
@@ -42,11 +42,15 @@ public class MusicEffect {
 		this.displayname = displayname;
 	}
 	
-	public void addOption(Setting option) {
-		this.options.add(option);
+	/**
+	 * 
+	 * @param id ID of the setting
+	 */
+	public void addOption(String id) {
+		this.options.add(id);
 	}
 	
-	public List<Setting> getOptions() {
+	public List<String> getOptions() {
 		return this.options;
 	}
 	
@@ -98,6 +102,14 @@ public class MusicEffect {
 
 	public void setSensitivity(double sensitivity) {
 		this.sensitivity = sensitivity;
+	}
+	
+	public void setAdjustment(double adjustment) {
+		this.adjustment = adjustment;
+	}
+	
+	public double getAdjustment() {
+		return adjustment;
 	}
 
 	public double getMaxSpl() {
