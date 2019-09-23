@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,6 +44,7 @@ public class MusicSyncPanel extends MenuPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrScroll = new JPanel();
+		bgrScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE, 300));
 		add(bgrScroll);
 		bgrScroll.setLayout(new BorderLayout(0, 0));
 		

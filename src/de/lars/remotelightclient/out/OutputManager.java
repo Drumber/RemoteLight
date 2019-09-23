@@ -6,10 +6,13 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.devices.ConnectionState;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class OutputManager {
 	
+	private SettingsManager sm;
 	private volatile Output activeOutput;
 	private Color[] outputPixels;
 	private Color[] lastPixels;
@@ -18,6 +21,7 @@ public class OutputManager {
 	private boolean active;
 	
 	public OutputManager() {
+		sm = Main.getInstance().getSettingsManager();
 		active = false;
 	}
 
@@ -67,6 +71,9 @@ public class OutputManager {
 	}
 	
 	public int getDelay() {
+		if(((SettingInt) sm.getSettingFromId("out.delay")) != null) {
+			delay = ((SettingInt) sm.getSettingFromId("out.delay")).getValue();
+		}
 		return delay;
 	}
 	
@@ -102,9 +109,9 @@ public class OutputManager {
 			deactivate(activeOutput);
 		}
 		//save last output before closing
-		Main.getInstance().getSettingsManager().getSettingObject("out.lastoutput").setValue(activeOutput);
+		sm.getSettingObject("out.lastoutput").setValue(activeOutput);
 		//save brightness
-		Main.getInstance().getSettingsManager().getSettingObject("out.brightness").setValue(getBrightness());
+		sm.getSettingObject("out.brightness").setValue(getBrightness());
 	}
 	
 	public static void addToOutput(Color[] pixels) {
@@ -137,7 +144,7 @@ public class OutputManager {
 							activeOutput.onOutput(out);
 							
 							try {
-								Thread.sleep(delay);
+								Thread.sleep(getDelay());
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}

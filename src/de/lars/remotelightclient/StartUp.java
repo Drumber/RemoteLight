@@ -14,6 +14,7 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
@@ -151,6 +152,7 @@ public class StartUp {
 	public void registerSettings() {
 		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", LangUtil.langCodeToName(LangUtil.LANGUAGES), "English", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
+		s.addSetting(new SettingInt("out.delay", "Output delay", SettingCategory.General, "Delay (ms) between sending output packets.", 50, 5, 500, 5));
 		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
 		s.addSetting(new SettingObject("out.brightness", null, 100));

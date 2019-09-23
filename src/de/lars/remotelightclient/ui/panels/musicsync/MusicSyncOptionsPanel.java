@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JSlider;
 import java.awt.GridLayout;
+import javax.swing.border.EmptyBorder;
 
 public class MusicSyncOptionsPanel extends JPanel {
 
@@ -80,14 +81,15 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sm.addSetting(new SettingObject("musicsync.sensitivity", null, 20));
 		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200));
 		
-		Dimension size = new Dimension(Integer.MAX_VALUE, 120);
-		setPreferredSize(size);
-		setMaximumSize(size);
+		Dimension size = new Dimension(Integer.MAX_VALUE, 150);
+		//setPreferredSize(size);
+		//setMaximumSize(size);
 		setBackground(Style.panelDarkBackground);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		setLayout(new GridLayout(0, 2, 0, 0));
 		JPanel bgrScrollOptions = new JPanel();
+		bgrScrollOptions.setBorder(new EmptyBorder(4, 4, 0, 0));
 		bgrScrollOptions.setLayout(new BoxLayout(bgrScrollOptions, BoxLayout.Y_AXIS));
 		bgrScrollOptions.setAlignmentY(Component.TOP_ALIGNMENT);
 		bgrScrollOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -179,6 +181,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrEffectOptionsScroll.add(scrollPane);
 		
 		bgrEffectOptions = new JPanel();
+		bgrEffectOptions.setBorder(new EmptyBorder(4, 4, 0, 0));
 		bgrEffectOptions.setBackground(Style.panelDarkBackground);
 		scrollPane.setViewportView(bgrEffectOptions);
 		bgrEffectOptions.setLayout(new BoxLayout(bgrEffectOptions, BoxLayout.Y_AXIS));
