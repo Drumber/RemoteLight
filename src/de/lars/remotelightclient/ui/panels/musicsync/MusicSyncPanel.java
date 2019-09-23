@@ -107,7 +107,6 @@ public class MusicSyncPanel extends MenuPanel {
 	private void showMusicEffectOptions() {
 		if(msm.getCurrentMusicEffectOptions() != null && msm.getCurrentMusicEffectOptions().size() > 0) {
 			List<Setting> options = msm.getCurrentMusicEffectOptions();
-			System.out.println("options: " + options.size());
 			muiscEffectOptions.addMusicEffectOptions(options);
 		} else {
 			muiscEffectOptions.removeMusicEffectOptions();

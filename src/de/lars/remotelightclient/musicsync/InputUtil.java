@@ -8,10 +8,10 @@ import javax.sound.sampled.TargetDataLine;
 public class InputUtil {
 	
 	public static boolean isLineSupported(Mixer mixer) {
+        TargetDataLine line = null;
 		try {
 			mixer.open();
 	        Line.Info linfo = new Line.Info(TargetDataLine.class);
-	        TargetDataLine line = null;
 	        try {
 	            line = (TargetDataLine)mixer.getLine(linfo);
 	            line.open();
@@ -20,10 +20,11 @@ public class InputUtil {
 	        } catch (LineUnavailableException ex) {
 	        	return true;
 	        }
-			mixer.close();
 		} catch(LineUnavailableException e) {
 			return true;
 		}
+		mixer.close();
+		line.close();
 		return true;
 	}
 
