@@ -17,6 +17,7 @@ import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.musicsync.MusicSyncPanel;
 import de.lars.remotelightclient.ui.panels.output.OutputPanel;
 import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
+import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 
@@ -24,6 +25,8 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
+
+import org.tinylog.Logger;
 
 public class MainFrame extends JFrame {
 
@@ -188,6 +191,12 @@ public class MainFrame extends JFrame {
 		case "musicsync":
 			this.displayPanel(new MusicSyncPanel());
 			break;
+		case "screencolor":
+			this.displayPanel(new ScreenColorPanel());
+			break;
+			
+		default:
+			Logger.info("MenuPanel '" + menu + "' not found!");
 		}
 	}
 	
