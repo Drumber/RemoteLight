@@ -7,14 +7,16 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
-public class WS281xScreenColorDetector {
+import org.tinylog.Logger;
+
+public class ScreenColorDetector {
 	
 	private int pixel;
 	private int offsetY;
 	private int x, y;
 	private int width, height;
 	
-	public WS281xScreenColorDetector(int pixel, GraphicsDevice monitor, int offsetY) {
+	public ScreenColorDetector(int pixel, GraphicsDevice monitor, int offsetY) {
 		this.pixel = pixel;
 		this.offsetY = offsetY;
 		x = monitor.getDefaultConfiguration().getBounds().x;
@@ -22,7 +24,7 @@ public class WS281xScreenColorDetector {
 		width = monitor.getDefaultConfiguration().getBounds().width;
 		height = monitor.getDefaultConfiguration().getBounds().height;
 		
-		System.out.println(width + " | " + height);
+		Logger.debug(width + " | " + height);
 	}
 	
 	
