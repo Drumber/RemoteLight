@@ -21,6 +21,7 @@ public class ImagePanel extends JPanel {
 	private static final long serialVersionUID = -5453343680456337041L;
 	private Image img;
 	private JLabel lbl;
+	private boolean blur;
 	
 	public ImagePanel(Image img, Dimension size) {
 		this(img, "", size);
@@ -50,9 +51,22 @@ public class ImagePanel extends JPanel {
 		this.img = img;
 	}
 	
+	public void setBlur(boolean active) {
+		blur = active;
+	}
+	
+	public boolean isBlurred() {
+		return blur;
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.drawImage(this.resize(img, getWidth(), getHeight()), 0, 0, null);
+		
+		if(blur) {
+			g.setColor(new Color(0, 0, 0, 150));
+			g.fillRect(0, 0, getWidth(), getHeight());
+		}
 		repaint();
 	}
 	
