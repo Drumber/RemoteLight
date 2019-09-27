@@ -61,13 +61,13 @@ public class ImagePanel extends JPanel {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(this.resize(img, getWidth(), getHeight()), 0, 0, null);
 		
 		if(blur) {
 			g.setColor(new Color(0, 0, 0, 150));
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
-		repaint();
 	}
 	
 	private Image resize(Image im, int width, int height) {

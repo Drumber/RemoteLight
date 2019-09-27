@@ -77,6 +77,7 @@ public class ScreenColorManager {
 					}
 					
 					Logger.info("Stopped ScreenColor thread.");
+					OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 				}
 			}).start();
 		}
@@ -89,7 +90,6 @@ public class ScreenColorManager {
 	public void stop() {
 		if(active) {
 			active = false;
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 		}
 	}
 	
