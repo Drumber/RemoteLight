@@ -25,6 +25,7 @@ public class SettingColorPanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingColorPanel(SettingColor setting) {
+		super(setting);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -41,7 +42,7 @@ public class SettingColorPanel extends SettingPanel {
 				Color color = JColorChooser.showDialog(null, "Choose a color", panelColor.getBackground());
 				if(color != null) {
 					panelColor.setBackground(color);
-					SettingColorPanel.this.onChanged(setting);
+					SettingColorPanel.this.onChanged(SettingColorPanel.this);
 				}
 			}
 		});

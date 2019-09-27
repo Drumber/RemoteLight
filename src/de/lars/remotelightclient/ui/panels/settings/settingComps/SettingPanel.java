@@ -15,16 +15,23 @@ public abstract class SettingPanel extends JPanel {
 	private int width = 2000;
 	private int height = 40;
 	private SettingChangedListener listener;
+	private Setting setting;
 	
-	public SettingPanel() {
+	public SettingPanel(Setting setting) {
+		this.setting = setting;
+		
 		setPreferredSize(new Dimension(width, height));
 		setMaximumSize(new Dimension(width, height));
 		FlowLayout flowLayout = (FlowLayout) getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 	}
 	
+	public Setting getSetting() {
+		return setting;
+	}
+	
 	public interface SettingChangedListener {
-		public void onSettingChanged(Setting setting);
+		public void onSettingChanged(SettingPanel settingPanel);
 	}
 	
 	public abstract void setValue();
@@ -33,9 +40,9 @@ public abstract class SettingPanel extends JPanel {
 		this.listener = l;
 	}
 	
-	public void onChanged(Setting setting) {
+	public void onChanged(SettingPanel settingPanel) {
 		if(listener != null) {
-			listener.onSettingChanged(setting);
+			listener.onSettingChanged(settingPanel);
 		}
 	}
 	

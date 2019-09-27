@@ -6,6 +6,7 @@ import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
+import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class EffectManager {
@@ -13,6 +14,7 @@ public class EffectManager {
 	private AnimationManager am;
 	private MusicSyncManager msm;
 	private SceneManager sm;
+	private ScreenColorManager scm;
 	
 	public enum EffectType {
 		Animation, Scene, MusicSync, ScreenColor
@@ -23,6 +25,7 @@ public class EffectManager {
 		am = main.getAnimationManager();
 		msm = main.getMusicSyncManager();
 		sm = main.getSceneManager();
+		scm = main.getScreenColorManager();
 	}
 	
 	public void stopAll() {
@@ -32,6 +35,8 @@ public class EffectManager {
 			msm.stop();
 		if(sm.isActive())
 			sm.stop();
+		if(scm.isActive())
+			scm.stop();
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
@@ -46,7 +51,7 @@ public class EffectManager {
 			msm.stop();
 		}
 		if(type != EffectType.ScreenColor) {
-			//TODO
+			scm.stop();
 		}
 	}
 

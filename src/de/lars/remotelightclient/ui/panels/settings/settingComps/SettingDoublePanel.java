@@ -22,6 +22,7 @@ public class SettingDoublePanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingDoublePanel(SettingDouble setting) {
+		super(setting);
 		setBackground(Style.panelBackground);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
@@ -36,7 +37,7 @@ public class SettingDoublePanel extends SettingPanel {
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				SettingDoublePanel.this.onChanged(setting);
+				SettingDoublePanel.this.onChanged(SettingDoublePanel.this);
 			}
 		});
 		add(spinner);

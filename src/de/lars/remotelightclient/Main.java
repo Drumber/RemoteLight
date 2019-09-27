@@ -14,6 +14,7 @@ import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
+import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
@@ -30,6 +31,7 @@ public class Main {
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
+	private ScreenColorManager screenColorManager;
 	private DeviceManager deviceManager;
 	private OutputManager outputManager;
 	private SettingsManager settingsManager;
@@ -68,6 +70,7 @@ public class Main {
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
+		screenColorManager = new ScreenColorManager();
 		effectManager = new EffectManager();
 		EventQueue.invokeLater(new Runnable() {
 		public void run() {
@@ -95,6 +98,10 @@ public class Main {
 	
 	public MusicSyncManager getMusicSyncManager() {
 		return musicManager;
+	}
+	
+	public ScreenColorManager getScreenColorManager() {
+		return screenColorManager;
 	}
 	
 	public EffectManager getEffectManager() {

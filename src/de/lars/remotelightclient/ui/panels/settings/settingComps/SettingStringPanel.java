@@ -22,6 +22,7 @@ public class SettingStringPanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingStringPanel(SettingString setting) {
+		super(setting);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -37,7 +38,7 @@ public class SettingStringPanel extends SettingPanel {
 		fieldValue.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SettingStringPanel.this.onChanged(setting);
+				SettingStringPanel.this.onChanged(SettingStringPanel.this);
 			}
 		});
 		

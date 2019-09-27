@@ -105,6 +105,9 @@ public class OutputManager {
 		setEnabled(false);
 		if(activeOutput != null) {
 			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {}
 			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 			deactivate(activeOutput);
 		}

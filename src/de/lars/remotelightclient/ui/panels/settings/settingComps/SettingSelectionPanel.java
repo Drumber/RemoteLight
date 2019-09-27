@@ -29,6 +29,7 @@ public class SettingSelectionPanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingSelectionPanel(SettingSelection setting) {
+		super(setting);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -48,7 +49,7 @@ public class SettingSelectionPanel extends SettingPanel {
 			boxValues.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					SettingSelectionPanel.this.onChanged(setting);
+					SettingSelectionPanel.this.onChanged(SettingSelectionPanel.this);
 				}
 			});
 			
@@ -68,7 +69,7 @@ public class SettingSelectionPanel extends SettingPanel {
 				btn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						SettingSelectionPanel.this.onChanged(setting);
+						SettingSelectionPanel.this.onChanged(SettingSelectionPanel.this);
 					}
 				});
 			}

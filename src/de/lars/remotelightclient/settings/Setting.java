@@ -55,6 +55,5 @@ public class Setting implements Serializable {
 	public void setCategory(SettingCategory category) {
 		this.category = category;
 	}
-	
 
 }

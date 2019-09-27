@@ -20,6 +20,7 @@ public class SettingBooleanPanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingBooleanPanel(SettingBoolean setting) {
+		super(setting);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -34,7 +35,7 @@ public class SettingBooleanPanel extends SettingPanel {
 		checkBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SettingBooleanPanel.this.onChanged(setting);
+				SettingBooleanPanel.this.onChanged(SettingBooleanPanel.this);
 			}
 		});
 		add(checkBox);

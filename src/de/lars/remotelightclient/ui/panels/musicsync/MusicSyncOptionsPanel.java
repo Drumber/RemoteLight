@@ -10,22 +10,11 @@ import de.lars.remotelightclient.musicsync.sound.Shared;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.settings.types.SettingDouble;
-import de.lars.remotelightclient.settings.types.SettingInt;
+import de.lars.remotelightclient.settings.SettingsUtil;
 import de.lars.remotelightclient.settings.types.SettingObject;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingString;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
 import de.lars.remotelightclient.utils.UiUtils;
 
 import javax.sound.sampled.AudioSystem;
@@ -218,7 +207,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrEffectOptions.add(lblTitle);
 		
 		for(Setting s : settings) {
-			SettingPanel spanel = this.getSettingPanel(s);
+			SettingPanel spanel = SettingsUtil.getSettingPanel(s);
 			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			spanel.setSettingChangedListener(effectOptionsChangeListener);
 			spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
@@ -235,32 +224,9 @@ public class MusicSyncOptionsPanel extends JPanel {
 		updateUI();
 	}
 	
-	
-	private SettingPanel getSettingPanel(Setting s) {
-		if(s instanceof SettingString) {
-			return new SettingStringPanel((SettingString) s);
-		}
-		if(s instanceof SettingBoolean) {
-			return new SettingBooleanPanel((SettingBoolean) s);
-		}
-		if(s instanceof SettingColor) {
-			return new SettingColorPanel((SettingColor) s);
-		}
-		if(s instanceof SettingDouble) {
-			return new SettingDoublePanel((SettingDouble) s);
-		}
-		if(s instanceof SettingInt) {
-			return new SettingIntPanel((SettingInt) s);
-		}
-		if(s instanceof SettingSelection) {
-			return new SettingSelectionPanel((SettingSelection) s);
-		}
-		return null;
-	}
-	
 	private SettingChangedListener effectOptionsChangeListener = new SettingChangedListener() {
 		@Override
-		public void onSettingChanged(Setting setting) {
+		public void onSettingChanged(SettingPanel settingPanel) {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
 			}

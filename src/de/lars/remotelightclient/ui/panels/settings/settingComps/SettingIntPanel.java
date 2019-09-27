@@ -22,6 +22,7 @@ public class SettingIntPanel extends SettingPanel {
 	 * Create the panel.
 	 */
 	public SettingIntPanel(SettingInt setting) {
+		super(setting);
 		this.setting = setting;
 		setBackground(Style.panelBackground);
 		
@@ -35,7 +36,7 @@ public class SettingIntPanel extends SettingPanel {
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				SettingIntPanel.this.onChanged(setting);
+				SettingIntPanel.this.onChanged(SettingIntPanel.this);
 			}
 		});
 		add(spinner);
