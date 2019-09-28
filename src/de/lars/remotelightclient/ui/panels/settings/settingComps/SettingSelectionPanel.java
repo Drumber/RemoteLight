@@ -92,4 +92,8 @@ public class SettingSelectionPanel extends SettingPanel {
 		}
 	}
 
+	@Override
+	public void updateComponents() {
+	}
+
 }

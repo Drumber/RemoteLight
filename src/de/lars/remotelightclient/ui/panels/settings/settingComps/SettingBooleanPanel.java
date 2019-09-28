@@ -53,4 +53,9 @@ public class SettingBooleanPanel extends SettingPanel {
 		setting.setValue(checkBox.isSelected());
 	}
 
+	@Override
+	public void updateComponents() {
+		checkBox.setSelected(setting.getValue());
+	}
+
 }

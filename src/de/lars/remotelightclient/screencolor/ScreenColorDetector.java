@@ -12,21 +12,40 @@ import org.tinylog.Logger;
 public class ScreenColorDetector {
 	
 	private int pixel;
-	private int offsetY;
+	private int offsetY, yHeight;
 	private int x, y;
 	private int width, height;
 	
-	public ScreenColorDetector(int pixel, GraphicsDevice monitor, int offsetY) {
+	public ScreenColorDetector(int pixel, GraphicsDevice monitor, int offsetY, int yHeight) {
 		this.pixel = pixel;
-		this.offsetY = offsetY;
+		this.setMonitor(monitor);
+		this.setYPos(offsetY);
+		this.setYHeight(yHeight);
+	}
+	
+	
+	public void setYPos(int ypos) {
+		this.offsetY = ypos;
+		if(offsetY + yHeight > height) {
+			this.offsetY = height - yHeight;
+		}
+	}
+	
+	public void setYHeight(int yHeight) {
+		this.yHeight = yHeight;
+		if(yHeight + offsetY > height) {
+			offsetY = height - yHeight;
+		}
+	}
+	
+	public void setMonitor(GraphicsDevice monitor) {
 		x = monitor.getDefaultConfiguration().getBounds().x;
 		y = monitor.getDefaultConfiguration().getBounds().y;
 		width = monitor.getDefaultConfiguration().getBounds().width;
 		height = monitor.getDefaultConfiguration().getBounds().height;
 		
-		Logger.debug(width + " | " + height);
+		Logger.debug("Selected monitor: " + monitor.getIDstring() + " " + width + " | " + height);
 	}
-	
 	
 	public Color[] getColors() {
 		try {
@@ -36,15 +55,16 @@ public class ScreenColorDetector {
 			
 			int space = width / pixel;
 			int x = 0;
+			
 			for(int i = 0; i < pixel; i++) {
-				BufferedImage section = img.getSubimage(x, offsetY, space, (int) (height / 50));
+				BufferedImage section = img.getSubimage(x, offsetY, space, yHeight);
 				c[i] = getAvgColor(section);
 				x += space;
 			}
 			return c;
 			
 		} catch(AWTException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		return null;
 	}

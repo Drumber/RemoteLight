@@ -56,4 +56,10 @@ public class SettingStringPanel extends SettingPanel {
 		setting.setValue(fieldValue.getText());
 	}
 
+
+	@Override
+	public void updateComponents() {
+		fieldValue.setText(setting.getValue());
+	}
+
 }

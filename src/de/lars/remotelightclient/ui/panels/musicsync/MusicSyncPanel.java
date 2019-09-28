@@ -4,11 +4,11 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.settings.Setting;
-import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.WrapLayout;
 
 import javax.swing.BorderFactory;
@@ -32,13 +32,14 @@ public class MusicSyncPanel extends MenuPanel {
 	private static final long serialVersionUID = -5524656198416878733L;
 	private MainFrame mainFrame;
 	private MusicSyncManager msm;
-	private SettingsManager sm = Main.getInstance().getSettingsManager();
 	private MusicSyncOptionsPanel muiscEffectOptions;
 	private JPanel bgrMusicEffects;
 	
 	public MusicSyncPanel() {
 		mainFrame = Main.getInstance().getMainFrame();
 		msm = Main.getInstance().getMusicSyncManager();
+		mainFrame.showControlBar(true);
+		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
 		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

@@ -20,13 +20,17 @@ public class ScreenColorManager {
 	private boolean active;
 	private SettingsManager sm;
 	private GraphicsDevice currentMonitor;
+	private ScreenColorDetector detector;
+	private boolean inverted = false;
+	private int delay;
 	
 	public ScreenColorManager() {
 		active = false;
 		sm = Main.getInstance().getSettingsManager();
 		sm.addSetting(new SettingObject("screencolor.monitor", "", ""));
 		sm.addSetting(new SettingInt("screencolor.delay", "Delay", SettingCategory.Intern, "Delay (ms) between scanning the screen", 150, 25, 2000, 5));
-		sm.addSetting(new SettingInt("screencolor.ypos", "Scan height", SettingCategory.Intern, "Y-position at which the pixels are scanned (0 is at the top)", 1000, 0, 2160, 1));
+		sm.addSetting(new SettingInt("screencolor.ypos", "Scan Y-position", SettingCategory.Intern, "Y-position at which the pixels are scanned (0 is at the top)", 500, 0, 2160, 5));
+		sm.addSetting(new SettingInt("screencolor.yheight", "Area height", SettingCategory.Intern, "The height of the scan area", 20, 0, 200, 5));
 		sm.addSetting(new SettingBoolean("screencolor.invert", "Invert", SettingCategory.Intern, "", false));
 		
 		String lastMonitor = (String) sm.getSettingObject("screencolor.monitor").getValue();
@@ -35,20 +39,22 @@ public class ScreenColorManager {
 		}
 	}
 	
-	public void start(int yPos, int delay, boolean invert, GraphicsDevice monitor) {
+	public void start(int yPos, int yHeight, int delay, boolean invert, GraphicsDevice monitor) {
 		if(!active) {
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
 					active = true;
+					inverted = invert;
+					ScreenColorManager.this.delay = delay;
 					currentMonitor = monitor;
 					//save monitor in settings
 					sm.getSettingObject("screencolor.monitor").setValue(monitor.getIDstring());
 					Logger.info("Started ScreenColor thread.");
 					
 					int pixels = Main.getLedNum();
-					ScreenColorDetector detector = new ScreenColorDetector(pixels, monitor, yPos);
+					detector = new ScreenColorDetector(pixels, monitor, yPos, yHeight);
 					
 					while(active) {
 						Color[] c = detector.getColors();
@@ -56,7 +62,7 @@ public class ScreenColorManager {
 						if(c.length <= pixels) {
 							Color[] out = new Color[c.length];
 							
-							if(invert) {
+							if(inverted) {
 								for(int i = 0; i < c.length; i++) {
 									out[i] = c[c.length - 1 - i];
 								}
@@ -70,7 +76,7 @@ public class ScreenColorManager {
 						}
 						
 						try {
-							Thread.sleep(delay);
+							Thread.sleep(ScreenColorManager.this.delay);
 						} catch (InterruptedException e) {
 							Logger.error(e);
 						}
@@ -95,6 +101,34 @@ public class ScreenColorManager {
 	
 	public GraphicsDevice getCurrentMonitor() {
 		return currentMonitor;
+	}
+	
+	public void setInverted(boolean invert) {
+		this.inverted = invert;
+	}
+	
+	public void setYPos(int ypos) {
+		if(detector != null) {
+			detector.setYPos(ypos);
+		}
+	}
+	
+	public void setYHeight(int yHeight) {
+		if(detector != null) {
+			detector.setYHeight(yHeight);
+		}
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
+	
+	public void setMonitor(GraphicsDevice monitor) {
+		sm.getSettingObject("screencolor.monitor").setValue(monitor.getIDstring());
+		currentMonitor = monitor;
+		if(detector != null) {
+			detector.setMonitor(monitor);
+		}
 	}
 	
 	public static GraphicsDevice[] getMonitors() {

@@ -32,6 +32,10 @@ public class SettingDoublePanel extends SettingPanel {
 		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
+		if(setting.getValue() > setting.getMax()) {
+			setting.setValue(setting.getMax());
+		}
+		
 		spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(setting.getValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 		spinner.addChangeListener(new ChangeListener() {
@@ -53,6 +57,11 @@ public class SettingDoublePanel extends SettingPanel {
 	@Override
 	public void setValue() {
 		setting.setValue((double) spinner.getValue());
+	}
+
+	@Override
+	public void updateComponents() {
+		spinner.setModel(new SpinnerNumberModel(setting.getValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 	}
 
 }

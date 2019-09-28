@@ -23,7 +23,7 @@ public class WS281xScreenColorHandler {
 				public void run() {
 					active = true;
 					int pixels = Main.getLedNum();
-					ScreenColorDetector detector = new ScreenColorDetector(pixels, monitor, yPos);
+					ScreenColorDetector detector = new ScreenColorDetector(pixels, monitor, yPos, 20);
 					
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new TimerTask() {

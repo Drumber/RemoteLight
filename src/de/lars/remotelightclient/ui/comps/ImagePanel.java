@@ -22,6 +22,8 @@ public class ImagePanel extends JPanel {
 	private Image img;
 	private JLabel lbl;
 	private boolean blur;
+	private boolean line;
+	private int x1, x2, y1, y2; //cordinates for the line
 	
 	public ImagePanel(Image img, Dimension size) {
 		this(img, "", size);
@@ -68,10 +70,28 @@ public class ImagePanel extends JPanel {
 			g.setColor(new Color(0, 0, 0, 150));
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
+		if(line) {
+			g.setColor(new Color(255, 0, 0, 180));
+			g.fillRect(x1, y1, x2, y2);
+			//System.out.println(x1 + "/" + y1 + " ; " + x2 + "/" + y2);
+		}
 	}
 	
 	private Image resize(Image im, int width, int height) {
 		return im.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+	}
+	
+	public void enableLine(int x1, int y1, int x2, int y2) {
+		line = true;
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+	}
+	
+	public void disableLine() {
+		line = false;
+		repaint();
 	}
 
 }

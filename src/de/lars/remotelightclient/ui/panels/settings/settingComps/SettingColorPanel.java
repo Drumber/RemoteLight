@@ -62,4 +62,9 @@ public class SettingColorPanel extends SettingPanel {
 		setting.setValue(panelColor.getBackground());
 	}
 
+	@Override
+	public void updateComponents() {
+		panelColor.setBackground(setting.getValue());
+	}
+
 }

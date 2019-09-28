@@ -35,6 +35,7 @@ public abstract class SettingPanel extends JPanel {
 	}
 	
 	public abstract void setValue();
+	public abstract void updateComponents();
 
 	public synchronized void setSettingChangedListener(SettingChangedListener l) {
 		this.listener = l;
