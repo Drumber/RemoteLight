@@ -11,6 +11,7 @@ import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingSelection;
+import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
@@ -194,6 +195,9 @@ public class MainFrame extends JFrame {
 			break;
 		case "screencolor":
 			this.displayPanel(new ScreenColorPanel());
+			break;
+		case "about":
+			this.displayPanel(new AboutPanel());
 			break;
 			
 		default:

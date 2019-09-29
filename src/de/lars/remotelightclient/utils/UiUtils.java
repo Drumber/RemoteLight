@@ -2,6 +2,8 @@ package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
@@ -10,11 +12,14 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
@@ -158,4 +163,19 @@ public class UiUtils {
 		}
 	};
 
+	
+	public static void addWebsiteHyperlink(JLabel lbl, String url) {
+        lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lbl.setToolTipText(url);
+        lbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					Desktop.getDesktop().browse(new URI(url));
+				} catch (URISyntaxException | IOException ex) {
+				}
+			}
+		});
+	}
+	
 }

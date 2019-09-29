@@ -35,7 +35,7 @@ public class Style {
 	public static Color hoverBackground = new Color(100, 100, 100);
 	public static Color buttonBackground = new Color(70, 70, 70);
 	public static Color textColor = new Color(255, 255, 255);
-	public static Color textColorDarker = new Color(220, 220, 220);
+	public static Color textColorDarker = new Color(200, 200, 200);
 	public static Color accent = new Color(255, 160, 60);
 	
 	
@@ -49,7 +49,7 @@ public class Style {
 		hoverBackground = new Color(195, 195, 195);
 		buttonBackground = new Color(205, 205, 205);
 		textColor = new Color(0, 0, 0);
-		textColorDarker = new Color(20, 20, 20);
+		textColorDarker = new Color(30, 30, 30);
 		accent = new Color(255, 160, 60);
 	}
 	
@@ -63,7 +63,7 @@ public class Style {
 		hoverBackground = new Color(100, 100, 100);
 		buttonBackground = new Color(70, 70, 70);
 		textColor = new Color(255, 255, 255);
-		textColorDarker = new Color(220, 220, 220);
+		textColorDarker = new Color(200, 200, 200);
 		accent = new Color(255, 160, 60);
 	}
 	
