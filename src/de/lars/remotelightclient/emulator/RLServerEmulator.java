@@ -14,14 +14,16 @@ import org.tinylog.Logger;
 public class RLServerEmulator {
 	
 	private final static int PORT = 20002;
-	private boolean running;
+	private boolean running = false;
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private ObjectInputStream ois;
-	private List<InputReiceiveListener> listeners;
+	private List<InputReiceiveListener> listenersInput;
+	private List<ConnectionStateChangeListener> listenersState;
 	
 	public RLServerEmulator() {
-		listeners = new ArrayList<>();
+		listenersInput = new ArrayList<>();
+		listenersState = new ArrayList<>();
 	}
 	
 	public void start() {
@@ -35,35 +37,36 @@ public class RLServerEmulator {
 						serverSocket = new ServerSocket(PORT);
 						running = true;
 						Logger.info("[Emulator] Wating for connection...");
+						onStateChanged("Waiting for connection...");
+						
 						socket = serverSocket.accept();
 						Logger.info("[Emulator] Client connected: " + socket.getRemoteSocketAddress());
+						onStateChanged("Connected");
 						
 						ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 						
 						while(running) {
-							Object o = ois.readObject();
 							
-							if(o instanceof Color[]) {
-								onInput((Color[]) o);
+							if(ois.readObject() instanceof Color[]) {
+								onInput((Color[]) ois.readObject());
 								
 							} else {
 								Logger.error("[Emulator] Wrong protocol format! Expected color array.");
 							}
 						}
 						
-					} catch (IOException e) {
-						Logger.error(e);
-					} catch (ClassNotFoundException e) {
+					} catch (Exception e) {
 						Logger.error(e);
 					}
 				}
-			}).start();
+			}, "Emulator thread").start();
 		}
 	}
 	
 	public void stop() {
 		if(running) {
 			running = false;
+			onStateChanged("Disconnected");
 			try {
 				if(ois != null)
 					ois.close();
@@ -87,12 +90,26 @@ public class RLServerEmulator {
 	}
 	
 	public synchronized void addReceiveListener(InputReiceiveListener l) {
-		listeners.add(l);
+		listenersInput.add(l);
 	}
 	
 	private void onInput(Color[] input) {
-		for(InputReiceiveListener l : listeners) {
+		for(InputReiceiveListener l : listenersInput) {
 			l.onInputReceived(input);
+		}
+	}
+	
+	public interface ConnectionStateChangeListener {
+		public void onConnectionStateChanged(String status);
+	}
+	
+	public synchronized void addStateChangeListener(ConnectionStateChangeListener l) {
+		listenersState.add(l);
+	}
+	
+	private void onStateChanged(String text) {
+		for(ConnectionStateChangeListener l : listenersState) {
+			l.onConnectionStateChanged(text);
 		}
 	}
 

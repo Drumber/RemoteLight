@@ -9,6 +9,7 @@ import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightclient.emulator.EmulatorFrame;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
@@ -52,6 +53,7 @@ public class OutputPanel extends MenuPanel {
 	 */
 	private static final long serialVersionUID = 8004937110428129961L;
 	private MainFrame mainFrame;
+	private EmulatorFrame emulator;
 	private OutputManager om = Main.getInstance().getOutputManager();
 	private DeviceManager dm = Main.getInstance().getDeviceManager();
 	private JPanel bgrMenu;
@@ -140,7 +142,12 @@ public class OutputPanel extends MenuPanel {
 		lblEmulator.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//TODO open emulator
+				if(emulator == null || !emulator.isDisplayable()) {
+					emulator = new EmulatorFrame();
+				} else {
+					emulator.setVisible(true);
+					emulator.toFront();
+				}
 			}
 		});
 		lblEmulator.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
