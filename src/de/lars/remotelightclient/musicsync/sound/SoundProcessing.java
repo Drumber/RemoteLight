@@ -40,7 +40,13 @@ public class SoundProcessing implements PitchDetectionHandler {
 	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
 		
-		if(dispatcher!= null){
+		if(dispatcher != null){
+			dispatcher.stop();
+		}
+	}
+	
+	public void start() {
+		if(dispatcher != null){
 			dispatcher.stop();
 		}
 		
@@ -77,8 +83,10 @@ public class SoundProcessing implements PitchDetectionHandler {
 	}
 	
 	public void stop() {
-		if(dispatcher != null)
+		if(dispatcher != null) {
 			dispatcher.stop();
+		}
+		Logger.debug("Stopped SoundProcessor");
 	}
 	
 	public static void setMixer(Mixer mixer) {
@@ -120,7 +128,6 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 		@Override
 		public void processingFinished() {
-			// TODO Auto-generated method stub
 		}
 
 		@Override

@@ -28,6 +28,7 @@ import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
 
 import org.tinylog.Logger;
+import java.awt.Toolkit;
 
 public class MainFrame extends JFrame {
 
@@ -53,6 +54,7 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/resourcen/Icon-128x128.png")));
 		sm = Main.getInstance().getSettingsManager();
 		setTitle("RemoteLight");
 		setMinimumSize(new Dimension(400, 350));

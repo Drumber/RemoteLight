@@ -75,9 +75,8 @@ public class MusicSyncManager {
 	
 	public void newSoundProcessor() {
 		if(soundProcessor != null) {
-			soundProcessor.stop();
+			soundProcessor.start();
 		}
-		soundProcessor = new SoundProcessing(this);
 	}
 	
 	public void soundToLight(float pitch, double rms, double time) {
@@ -127,9 +126,8 @@ public class MusicSyncManager {
 		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.MusicSync);
 		if(activeEffect != null) {
 			activeEffect.onDisable();
-		} else {
-			this.newSoundProcessor();
 		}
+		soundProcessor.start();
 		if(effect != null) {
 			effect.onEnable();
 		}
@@ -180,7 +178,7 @@ public class MusicSyncManager {
 					active = false;
 					Logger.info("Stopped MusicSync Thread.");
 				}
-			}).start();
+			}, "MusicSync loop").start();
 		}
 	}
 	

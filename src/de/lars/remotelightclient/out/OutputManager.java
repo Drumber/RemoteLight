@@ -149,13 +149,13 @@ public class OutputManager {
 							try {
 								Thread.sleep(getDelay());
 							} catch (InterruptedException e) {
-								e.printStackTrace();
+								Logger.error(e);
 							}
 						}
 					}
 					Logger.info("Stopped output loop.");
 				}
-			}).start();
+			}, "Output loop").start();
 		}
 	}
 	

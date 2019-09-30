@@ -42,6 +42,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenu;
+import javax.swing.Box;
+import java.awt.Cursor;
 
 public class OutputPanel extends MenuPanel {
 
@@ -121,10 +123,29 @@ public class OutputPanel extends MenuPanel {
 		this.configureAddPopup(itemChain, "chain");
 		mnLink.add(itemChain);
 		
+		JPanel panelTitle = new JPanel();
+		bgrDevices.add(panelTitle, BorderLayout.NORTH);
+		panelTitle.setBackground(Style.panelBackground);
+		panelTitle.setLayout(new BoxLayout(panelTitle, BoxLayout.X_AXIS));
+		
 		JLabel lblDevices = new JLabel("Outputs");
+		panelTitle.add(lblDevices);
 		lblDevices.setFont(Style.getFontBold(12));
 		lblDevices.setForeground(Style.accent);
-		bgrDevices.add(lblDevices, BorderLayout.NORTH);
+		
+		Component glue = Box.createGlue();
+		panelTitle.add(glue);
+		
+		JLabel lblEmulator = new JLabel("Open Emulator");
+		lblEmulator.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//TODO open emulator
+			}
+		});
+		lblEmulator.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblEmulator.setForeground(Style.accent);
+		panelTitle.add(lblEmulator);
 		
 		bgrMenu = new JPanel();
 		bgrMenu.setBackground(Style.panelBackground);
