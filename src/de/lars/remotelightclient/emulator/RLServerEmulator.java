@@ -3,13 +3,15 @@ package de.lars.remotelightclient.emulator;
 import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.tinylog.Logger;
+
+import com.google.gson.Gson;
 
 public class RLServerEmulator {
 	
@@ -17,13 +19,14 @@ public class RLServerEmulator {
 	private boolean running = false;
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private ObjectInputStream ois;
-	private List<InputReiceiveListener> listenersInput;
+	private Scanner scanner;
+	private Gson gson;
+	private Color[] inputPixels;
 	private List<ConnectionStateChangeListener> listenersState;
 	
 	public RLServerEmulator() {
-		listenersInput = new ArrayList<>();
 		listenersState = new ArrayList<>();
+		gson = new Gson();
 	}
 	
 	public void start() {
@@ -43,15 +46,13 @@ public class RLServerEmulator {
 						Logger.info("[Emulator] Client connected: " + socket.getRemoteSocketAddress());
 						onStateChanged("Connected");
 						
-						ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+						scanner = new Scanner(new BufferedInputStream(socket.getInputStream()));
 						
 						while(running) {
 							
-							if(ois.readObject() instanceof Color[]) {
-								onInput((Color[]) ois.readObject());
-								
-							} else {
-								Logger.error("[Emulator] Wrong protocol format! Expected color array.");
+							if(scanner.hasNextLine()) {
+								String input = scanner.nextLine();
+								inputPixels = gson.fromJson(input, Color[].class);
 							}
 						}
 						
@@ -68,8 +69,8 @@ public class RLServerEmulator {
 			running = false;
 			onStateChanged("Disconnected");
 			try {
-				if(ois != null)
-					ois.close();
+				if(scanner != null)
+					scanner.close();
 				if(socket != null)
 					socket.close();
 				if(serverSocket != null)
@@ -85,18 +86,8 @@ public class RLServerEmulator {
 		return running;
 	}
 	
-	public interface InputReiceiveListener {
-		public void onInputReceived(Color[] pixel);
-	}
-	
-	public synchronized void addReceiveListener(InputReiceiveListener l) {
-		listenersInput.add(l);
-	}
-	
-	private void onInput(Color[] input) {
-		for(InputReiceiveListener l : listenersInput) {
-			l.onInputReceived(input);
-		}
+	public Color[] getPixels() {
+		return inputPixels;
 	}
 	
 	public interface ConnectionStateChangeListener {

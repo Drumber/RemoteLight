@@ -2,12 +2,14 @@ package de.lars.remotelightclient.devices.remotelightserver;
 
 import java.awt.Color;
 import java.io.BufferedOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import org.tinylog.Logger;
+
+import com.google.gson.Gson;
 
 import de.lars.remotelightclient.devices.ConnectionState;
 
@@ -22,12 +24,14 @@ public class RLClient implements Serializable {
 	private boolean connected;
 	private InetSocketAddress address;
 	private Socket socket;
-	private ObjectOutputStream out;
+	private PrintWriter out;
 	private ConnectionState state = ConnectionState.DISCONNECTED;
+	private Gson gson;
 	
 	public RLClient(String hostname) {
 		this.hostname = hostname;
 		connected = false;
+		gson = new Gson();
 	}
 	
 	public ConnectionState connect() {
@@ -39,7 +43,8 @@ public class RLClient implements Serializable {
 				Logger.info("[Client] Connecting to " + address.toString());
 				
 				socket.connect(address, 5000);
-				out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+				out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()));
+				
 				state = ConnectionState.CONNECTED;
 				return state;
 				
@@ -87,13 +92,18 @@ public class RLClient implements Serializable {
 	public void send(Color[] pixels) {
 		if(connected) {
 			try {
-				out.writeObject(pixels);
+				String json = serializeToJSON(pixels);
+				out.println(json);
 				out.flush();
 			} catch (Exception e) {
 				Logger.error(e, "Could not send color array to server!");
 				this.disconnect();
 			}
 		}
+	}
+	
+	public String serializeToJSON(Color[] pixels) {
+		return gson.toJson(pixels);
 	}
 
 }

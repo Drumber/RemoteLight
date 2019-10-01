@@ -10,19 +10,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.emulator.RLServerEmulator.ConnectionStateChangeListener;
-import de.lars.remotelightclient.emulator.RLServerEmulator.InputReiceiveListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import org.tinylog.Logger;
+
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -34,7 +38,9 @@ public class EmulatorFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 2752076462014410311L;
 	private RLServerEmulator emulator;
+	private boolean loopActive = false;
 	private Dimension pixelPanelSize = new Dimension(20, 20);
+	private List<JPanel> pixelPanels;
 	private JPanel contentPane;
 	private JPanel panelPixel;
 	private JLabel lblStatus;
@@ -43,8 +49,8 @@ public class EmulatorFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public EmulatorFrame() {
+		pixelPanels = new ArrayList<>();
 		emulator = new RLServerEmulator();
-		emulator.addReceiveListener(inputListener);
 		emulator.addStateChangeListener(stateListener);
 		setFrameTitle("Disconnected");
 		addWindowListener(closeListener);
@@ -131,6 +137,7 @@ public class EmulatorFrame extends JFrame {
 			JButton btn = (JButton) e.getSource();
 			switch (btn.getName()) {
 			case "enable":
+				pixelPanels.clear();
 				btn.setText(!emulator.isRunning() ? "Disable" : "Enable");
 				toggleEmulator(!emulator.isRunning());
 				break;
@@ -143,18 +150,48 @@ public class EmulatorFrame extends JFrame {
 	public void toggleEmulator(boolean enable) {
 		if(enable) {
 			emulator.start();
+			startLoop();
 		} else {
 			emulator.stop();
+			stopLoop();
 		}
 	}
 	
-	private InputReiceiveListener inputListener = new InputReiceiveListener() {
-		@Override
-		public void onInputReceived(Color[] pixel) {
-			addPixelPanels(pixel);
-			lblStatus.setText("Number of pixels: " + pixel.length);
+	private void startLoop() {
+		if(!loopActive) {
+			loopActive = true;
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Logger.info("Started Emulator loop");
+					
+					while(loopActive) {
+						if(emulator.getPixels() != null) {
+							Color[] pixel = emulator.getPixels();
+							
+							if(pixelPanels.size() != pixel.length) {
+								addPixelPanels(pixel);
+								lblStatus.setText("Number of pixels: " + pixel.length);
+							} else {
+								setPanelColors(pixel);
+							}
+						}
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException e) {
+						}
+					}
+					Logger.info("Stopped Emulator loop");
+				}
+				
+			}, "Emulator loop").start();
 		}
-	};
+	}
+	
+	private void stopLoop() {
+		loopActive = false;
+	}
 	
 	private ConnectionStateChangeListener stateListener = new ConnectionStateChangeListener() {
 		@Override
@@ -166,16 +203,26 @@ public class EmulatorFrame extends JFrame {
 	
 	public void addPixelPanels(Color[] pixels) {
 		panelPixel.removeAll();
+		pixelPanels.clear();
 		
 		for(Color c : pixels) {
 			JPanel panel = new JPanel();
 			panel.setBackground(c);
-			
 			panel.setPreferredSize(pixelPanelSize);
 			
 			panelPixel.add(panel);
+			pixelPanels.add(panel);
 		}
-		
+		panelPixel.updateUI();
+	}
+	
+	public void setPanelColors(Color[] pixels) {
+		if(pixels.length >= pixelPanels.size()) {
+			for(int i = 0; i < pixelPanels.size(); i++) {
+				pixelPanels.get(i).setBackground(pixels[i]);
+			}
+			
+		}
 	}
 
 }
