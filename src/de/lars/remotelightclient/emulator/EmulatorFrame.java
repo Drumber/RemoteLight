@@ -141,7 +141,12 @@ public class EmulatorFrame extends JFrame {
 				btn.setText(!emulator.isRunning() ? "Disable" : "Enable");
 				toggleEmulator(!emulator.isRunning());
 				break;
-				
+			case "minus":
+				changePanelSize(-2);
+				break;
+			case "plus":
+				changePanelSize(2);
+				break;
 			}
 		}
 	};
@@ -221,8 +226,21 @@ public class EmulatorFrame extends JFrame {
 			for(int i = 0; i < pixelPanels.size(); i++) {
 				pixelPanels.get(i).setBackground(pixels[i]);
 			}
-			
 		}
+	}
+	
+	public void changePanelSize(int value) {
+		pixelPanelSize.setSize(pixelPanelSize.width + value, pixelPanelSize.height + value);
+		if(pixelPanelSize.width <= 0) {
+			pixelPanelSize.setSize(2, 2);
+		} else if(pixelPanelSize.width > 200) {
+			pixelPanelSize.setSize(200, 200);
+		}
+		
+		for(JPanel panel : pixelPanels) {
+			panel.setPreferredSize(pixelPanelSize);
+		}
+		panelPixel.updateUI();
 	}
 
 }
