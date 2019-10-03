@@ -112,7 +112,6 @@ public class Rainbow extends MusicEffect {
 			} else {
 				lastLeds = leds;
 			}
-			
 		}
 		
 		

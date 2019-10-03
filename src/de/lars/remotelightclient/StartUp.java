@@ -29,13 +29,13 @@ public class StartUp {
 	public StartUp() {
 		//delete old logs
 		DirectoryUtil.deleteOldLogs(2);
-		//register default setting
+		//register default settings
 		registerSettings();
 		
 		//set language
 		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) s.getSettingFromId("ui.language")).getSelected())));
 		
-		//auto connect feauture
+		//auto connect feature
 		if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {
 			Output output = (Output) s.getSettingFromType(new SettingObject("out.lastoutput", null, null)).getValue();
 			if(output != null) {
@@ -97,7 +97,6 @@ public class StartUp {
 	
 	private void init() {
 		RainbowWheel.init();
-		//Rainbow.init();
 	}
 
 	// try 10 times every 5 seconds to connect to client
@@ -150,10 +149,16 @@ public class StartUp {
 	}
 	
 	public void registerSettings() {
+		//General
 		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", LangUtil.langCodeToName(LangUtil.LANGUAGES), "English", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", new String[] {"Light", "Dark"}, "Dark", Model.ComboBox));
 		s.addSetting(new SettingInt("out.delay", "Output delay", SettingCategory.General, "Delay (ms) between sending output packets.", 50, 5, 500, 5));
 		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
+		
+		//Others
+		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
+		
+		//Intern
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
 		s.addSetting(new SettingObject("out.brightness", null, 100));
 		

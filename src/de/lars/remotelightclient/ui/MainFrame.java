@@ -7,9 +7,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
@@ -113,7 +113,7 @@ public class MainFrame extends JFrame {
 	
 	WindowListener closeListener = new WindowAdapter() {
 		public void windowClosing(WindowEvent windowEvent) {
-			if(DataStorage.isStored(DataStorage.SETTINGS_HIDE) && (boolean) DataStorage.getData(DataStorage.SETTINGS_HIDE)) {
+			if(((SettingBoolean) sm.getSettingFromId("ui.hideintray")).getValue()) {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {

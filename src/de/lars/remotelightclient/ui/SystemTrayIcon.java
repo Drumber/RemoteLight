@@ -15,7 +15,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 
-import de.lars.remotelightclient.DataStorage;
+import org.tinylog.Logger;
+
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.StartUp;
 
 public class SystemTrayIcon {
@@ -30,70 +32,51 @@ public class SystemTrayIcon {
 		    Image image = new ImageIcon(StartUp.class.getResource("/resourcen/Icon-16x16.png")).getImage();
 
 		    PopupMenu popup = new PopupMenu();
-		    MenuItem show = new MenuItem("Show Gui");
+		    MenuItem show = new MenuItem("Show UI");
 		    show.addActionListener(listenerShow);
 		    popup.add(show);
 		    MenuItem exit = new MenuItem("Exit");
 		    exit.addActionListener(listenerExit);
 		    popup.add(exit);
 
-		    trayIcon = new TrayIcon(image, "RemoteLightClient", popup);
+		    trayIcon = new TrayIcon(image, "RemoteLight", popup);
 		    trayIcon.setImageAutoSize(true);
 		    trayIcon.addActionListener(listenerShow);
 		    trayIcon.addMouseListener(mouseListener);
 		    try {
 		    	tray.remove(trayIcon);
 		    	tray.add(trayIcon);
-		    	trayIcon.displayMessage("RemoteLight", "I am here!", MessageType.NONE);
+		    	trayIcon.displayMessage("RemoteLight", "Minimized in system tray", MessageType.NONE);
 		    } catch (AWTException e) {
-		        System.err.println(e);
+		    	Logger.error(e);
 		    }
 		} else {
-			System.out.println("ERROR: TrayIcon not supported!");
+			Logger.error("ERROR: TrayIcon not supported!");
 		}
 	}
+	
 	
 	private static ActionListener listenerShow = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			tray.remove(trayIcon);
-			if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
-				String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
-				if(mode.toUpperCase().equals("RGB")) {
-					//TODO
-				} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-					
-				} else {
-					
-				}
-			} else {
-				
-			}
+			Main.getInstance().getMainFrame().setVisible(true);
 		}
     };
+    
     private static ActionListener listenerExit = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			tray.remove(trayIcon);
-			System.exit(0);
+			Main.getInstance().close(true);
 		}
     };
+    
     private static MouseListener mouseListener = new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON1) {
             	tray.remove(trayIcon);
-				if(DataStorage.isStored(DataStorage.SETTINGS_CONTROL_MODEKEY)) {
-					String mode = (String) DataStorage.getData(DataStorage.SETTINGS_CONTROL_MODEKEY);
-					if(mode.toUpperCase().equals("RGB")) {
-						//TODO
-					} else if(mode.toUpperCase().equals("WS281X") || mode.toUpperCase().equals("ARDUINO")) {
-						
-					} else {
-						
-					}
-				} else {
-					
-				}
+            	Main.getInstance().getMainFrame().setVisible(true);
             }
         }
 	};
