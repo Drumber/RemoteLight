@@ -89,6 +89,13 @@ public class SoundProcessing implements PitchDetectionHandler {
 		Logger.debug("Stopped SoundProcessor");
 	}
 	
+	public boolean isActive() {
+		if(dispatcher != null) {
+			return !dispatcher.isStopped();
+		}
+		return false;
+	}
+	
 	public static void setMixer(Mixer mixer) {
 		SoundProcessing.mixer = mixer;
 	}

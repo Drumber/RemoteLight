@@ -386,6 +386,11 @@ public class OutputPanel extends MenuPanel {
 						om.setActiveOutput(device);
 					}
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
+					if(device.getConnectionState() == ConnectionState.FAILED) {
+						mainFrame.printNotification("Could not connect!", NotificationType.Error);
+					} else {
+						mainFrame.printNotification(null, null);
+					}
 				}
 			//CANCEL clicked
 			} else if(name.equals("cancel")) {

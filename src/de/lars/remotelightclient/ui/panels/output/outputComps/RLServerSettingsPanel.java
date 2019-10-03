@@ -90,6 +90,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
+		spinnerPixels.setPreferredSize(new Dimension(50, 20));
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		

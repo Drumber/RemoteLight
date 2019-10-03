@@ -127,9 +127,13 @@ public class MusicSyncManager {
 		if(activeEffect != null) {
 			activeEffect.onDisable();
 		}
-		soundProcessor.start();
+		if(!soundProcessor.isActive()) {
+			soundProcessor.start();
+		}
 		if(effect != null) {
 			effect.onEnable();
+		} else {
+			soundProcessor.stop();
 		}
 		activeEffect = effect;
 		this.loop();
