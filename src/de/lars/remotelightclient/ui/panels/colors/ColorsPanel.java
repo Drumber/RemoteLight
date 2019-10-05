@@ -18,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
@@ -66,12 +67,12 @@ public class ColorsPanel extends MenuPanel {
 		Main.getInstance().getMainFrame().setControlBarPanel(new DefaultControlBar());
 		colors = new ArrayList<>();
 		ccp = new ArrayList<>();
-		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered
-		sm.addSetting(new SettingObject("colorspanel.panelsize", null, CustomColorPanel.getPanelSize()));
-		sm.addSetting(new SettingObject("colorspanel.panelsizelbl", null, 50+""));
-		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").getValue()));
+		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered //$NON-NLS-1$
+		sm.addSetting(new SettingObject("colorspanel.panelsize", null, CustomColorPanel.getPanelSize())); //$NON-NLS-1$
+		sm.addSetting(new SettingObject("colorspanel.panelsizelbl", null, 50+"")); //$NON-NLS-1$ //$NON-NLS-2$
+		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").getValue())); //$NON-NLS-1$
 		CustomColorPanel.resetPanelSize();
-		CustomColorPanel.setPanelSize((Dimension) sm.getSettingObject("colorspanel.panelsize").getValue());
+		CustomColorPanel.setPanelSize((Dimension) sm.getSettingObject("colorspanel.panelsize").getValue()); //$NON-NLS-1$
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
@@ -101,24 +102,24 @@ public class ColorsPanel extends MenuPanel {
 		panelButtons.setBackground(Style.panelDarkBackground);
 		bgrMenu.add(panelButtons, BorderLayout.WEST);
 		
-		btnReset = new JButton("");
+		btnReset = new JButton(""); //$NON-NLS-1$
 		UiUtils.configureButton(btnReset);
-		btnReset.setName("reset");
-		btnReset.setIcon(Style.getUiIcon("reset.png"));
+		btnReset.setName("reset"); //$NON-NLS-1$
+		btnReset.setIcon(Style.getUiIcon("reset.png")); //$NON-NLS-1$
 		btnReset.addActionListener(btnListener);
 		panelButtons.add(btnReset);
 		
-		btnRemove = new JButton("");
+		btnRemove = new JButton(""); //$NON-NLS-1$
 		UiUtils.configureButton(btnRemove);
-		btnRemove.setName("remove");
-		btnRemove.setIcon(Style.getUiIcon("remove.png"));
+		btnRemove.setName("remove"); //$NON-NLS-1$
+		btnRemove.setIcon(Style.getUiIcon("remove.png")); //$NON-NLS-1$
 		btnRemove.addActionListener(btnListener);
 		panelButtons.add(btnRemove);
 		
-		btnAdd = new JButton("");
+		btnAdd = new JButton(""); //$NON-NLS-1$
 		UiUtils.configureButton(btnAdd);
-		btnAdd.setName("add");
-		btnAdd.setIcon(Style.getUiIcon("add.png"));
+		btnAdd.setName("add"); //$NON-NLS-1$
+		btnAdd.setIcon(Style.getUiIcon("add.png")); //$NON-NLS-1$
 		btnAdd.addActionListener(btnListener);
 		panelButtons.add(btnAdd);
 		
@@ -126,20 +127,20 @@ public class ColorsPanel extends MenuPanel {
 		panelSize.setBackground(Style.panelDarkBackground);
 		bgrMenu.add(panelSize, BorderLayout.EAST);
 		
-		btnMinus = new JButton("-");
-		btnMinus.setName("minus");
+		btnMinus = new JButton("-"); //$NON-NLS-1$
+		btnMinus.setName("minus"); //$NON-NLS-1$
 		btnMinus.addActionListener(btnListener);
 		UiUtils.configureButton(btnMinus);
 		panelSize.add(btnMinus);
 		
-		int curSize = Integer.parseInt((String) sm.getSettingObject("colorspanel.panelsizelbl").getValue());
-		lblCurrentSize = new JLabel(curSize + "%");
-		lblCurrentSize.setName(curSize +"");
+		int curSize = Integer.parseInt((String) sm.getSettingObject("colorspanel.panelsizelbl").getValue()); //$NON-NLS-1$
+		lblCurrentSize = new JLabel(curSize + "%"); //$NON-NLS-1$
+		lblCurrentSize.setName(curSize +""); //$NON-NLS-1$
 		lblCurrentSize.setForeground(Style.textColor);
 		panelSize.add(lblCurrentSize);
 		
-		btnPlus = new JButton("+");
-		btnPlus.setName("plus");
+		btnPlus = new JButton("+"); //$NON-NLS-1$
+		btnPlus.setName("plus"); //$NON-NLS-1$
 		btnPlus.addActionListener(btnListener);
 		UiUtils.configureButton(btnPlus);
 		panelSize.add(btnPlus);
@@ -183,9 +184,9 @@ public class ColorsPanel extends MenuPanel {
 	
 	@Override
 	public void onEnd(MenuPanel newPanel) {
-		sm.getSettingObject("colorspanel.colors").setValue(colors.toArray(new Color[colors.size()]));
-		sm.getSettingObject("colorspanel.panelsize").setValue(CustomColorPanel.getPanelSize());
-		sm.getSettingObject("colorspanel.panelsizelbl").setValue(lblCurrentSize.getName());
+		sm.getSettingObject("colorspanel.colors").setValue(colors.toArray(new Color[colors.size()])); //$NON-NLS-1$
+		sm.getSettingObject("colorspanel.panelsize").setValue(CustomColorPanel.getPanelSize()); //$NON-NLS-1$
+		sm.getSettingObject("colorspanel.panelsizelbl").setValue(lblCurrentSize.getName()); //$NON-NLS-1$
 		super.onEnd(newPanel);
 	}
 	
@@ -195,16 +196,16 @@ public class ColorsPanel extends MenuPanel {
 			JButton btn = (JButton) e.getSource();
 			
 			switch (btn.getName()) {
-			case "minus":
+			case "minus": //$NON-NLS-1$
 				changePanelSize(-STEP_SIZE);
 				break;
-			case "plus":
+			case "plus": //$NON-NLS-1$
 				changePanelSize(STEP_SIZE);
 				break;
-			case "add":
+			case "add": //$NON-NLS-1$
 				showColorChooser();
 				break;
-			case "remove":
+			case "remove": //$NON-NLS-1$
 				colors.clear();
 				ccp.remove(CustomColorPanel.getSelectedPanel());
 				for(CustomColorPanel panel : ccp) {
@@ -213,7 +214,7 @@ public class ColorsPanel extends MenuPanel {
 				ccp.clear();
 				addColorPanels();
 				break;
-			case "reset":
+			case "reset": //$NON-NLS-1$
 				ccp.clear();
 				colors = new LinkedList<>(Arrays.asList(defaultColors));
 				addColorPanels();
@@ -233,7 +234,7 @@ public class ColorsPanel extends MenuPanel {
 				CustomColorPanel.setPanelSize(new Dimension(curSize.width + factor, curSize.height + factor));
 				addColorPanels();
 				
-				lblCurrentSize.setText(String.valueOf(newValue) + "%");
+				lblCurrentSize.setText(String.valueOf(newValue) + "%"); //$NON-NLS-1$
 				lblCurrentSize.setName(String.valueOf(newValue));
 			}
 		}
@@ -250,11 +251,11 @@ public class ColorsPanel extends MenuPanel {
 		preview.setBorder(BorderFactory.createLineBorder(Style.panelBackground, 4));
 		preview.setPreferredSize(new Dimension(0, 40));
 		
-		UIManager.put("ColorChooser.background", Style.panelBackground);
-		UIManager.put("ColorChooser.swatchesRecentSwatchSize", new Dimension(15, 15));
-		UIManager.put("ColorChooser.swatchesSwatchSize", new Dimension(20, 20));
-		UIManager.put("TabbedPane.opaque", true);
-		UIManager.put("TabbedPane.contentOpaque", true);
+		UIManager.put("ColorChooser.background", Style.panelBackground); //$NON-NLS-1$
+		UIManager.put("ColorChooser.swatchesRecentSwatchSize", new Dimension(15, 15)); //$NON-NLS-1$
+		UIManager.put("ColorChooser.swatchesSwatchSize", new Dimension(20, 20)); //$NON-NLS-1$
+		UIManager.put("TabbedPane.opaque", true); //$NON-NLS-1$
+		UIManager.put("TabbedPane.contentOpaque", true); //$NON-NLS-1$
 		
 		JColorChooser cc = new JColorChooser();
 		cc.setBorder(BorderFactory.createEmptyBorder());
@@ -276,8 +277,8 @@ public class ColorsPanel extends MenuPanel {
 			}
 		});
 		
-		Dimension btnSize = new Dimension(80, 20);
-		JButton btnCancel = new JButton("Cancel");
+		Dimension btnSize = new Dimension(90, 20);
+		JButton btnCancel = new JButton(i18n.getString("Baisc.Cancel")); //$NON-NLS-1$
 		btnCancel.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
@@ -290,7 +291,7 @@ public class ColorsPanel extends MenuPanel {
 		});
 		preview.add(btnCancel);
 		
-		JButton btnOk = new JButton("Ok");
+		JButton btnOk = new JButton(i18n.getString("Baisc.Ok")); //$NON-NLS-1$
 		btnOk.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnOk);
 		btnOk.addActionListener(new ActionListener() {

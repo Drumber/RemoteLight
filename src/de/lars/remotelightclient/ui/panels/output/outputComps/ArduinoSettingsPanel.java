@@ -2,6 +2,7 @@ package de.lars.remotelightclient.ui.panels.output.outputComps;
 
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.arduino.ComPort;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -53,7 +54,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelId.setBackground(Style.panelBackground);
 		add(panelId);
 		
-		JLabel lblNameId = new JLabel("Name / ID:");
+		JLabel lblNameId = new JLabel(i18n.getString("OutputPanel.NameID")); //$NON-NLS-1$
 		lblNameId.setForeground(Style.textColor);
 		panelId.add(lblNameId);
 		
@@ -70,7 +71,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelPort.setBackground(Style.panelBackground);
 		add(panelPort);
 		
-		JLabel lblComport = new JLabel("ComPort:");
+		JLabel lblComport = new JLabel(i18n.getString("OutputPanel.ComPort")); //$NON-NLS-1$
 		lblComport.setForeground(Style.textColor);
 		panelPort.add(lblComport);
 		
@@ -86,7 +87,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelPixels);
 		
-		JLabel lblPixels = new JLabel("Pixels:");
+		JLabel lblPixels = new JLabel(i18n.getString("OutputPanel.Pixels")); //$NON-NLS-1$
 		lblPixels.setForeground(Style.textColor);
 		panelPixels.add(lblPixels);
 		

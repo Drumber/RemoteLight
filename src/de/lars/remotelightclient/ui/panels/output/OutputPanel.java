@@ -10,6 +10,7 @@ import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.emulator.EmulatorFrame;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
@@ -96,33 +97,33 @@ public class OutputPanel extends MenuPanel {
 		scrollPane.setViewportView(panelDevices);
 		
 		popupMenu = new JPopupMenu();
-		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent));
+		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent)); //$NON-NLS-1$
 		panelDevices.add(popupMenu);
 		
-		BigImageButton add =  new BigImageButton(Style.getUiIcon("add.png"), "Add");
+		BigImageButton add =  new BigImageButton(Style.getUiIcon("add.png"), i18n.getString("Basic.Add")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.addPopupListener(add, popupMenu);
 		panelDevices.add(add);
 		
-		JMenuItem itemArduino = new JMenuItem("Arduino");
-		itemArduino.setIcon(Style.getUiIcon("arduino.png"));
-		this.configureAddPopup(itemArduino, "arduino");
+		JMenuItem itemArduino = new JMenuItem("Arduino"); //$NON-NLS-1$
+		itemArduino.setIcon(Style.getUiIcon("arduino.png")); //$NON-NLS-1$
+		this.configureAddPopup(itemArduino, "arduino"); //$NON-NLS-1$
 		popupMenu.add(itemArduino);
 		
-		JMenuItem itemRLServer = new JMenuItem("RLServer (Raspberry)");
-		itemRLServer.setIcon(Style.getUiIcon("raspberry.png"));
-		this.configureAddPopup(itemRLServer, "rlserver");
+		JMenuItem itemRLServer = new JMenuItem("RLServer (Raspberry)"); //$NON-NLS-1$
+		itemRLServer.setIcon(Style.getUiIcon("raspberry.png")); //$NON-NLS-1$
+		this.configureAddPopup(itemRLServer, "rlserver"); //$NON-NLS-1$
 		popupMenu.add(itemRLServer);
 		
-		JMenu mnLink = new JMenu("Link");
-		this.configureAddPopup(mnLink, "menulink");
+		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
+		this.configureAddPopup(mnLink, "menulink"); //$NON-NLS-1$
 		popupMenu.add(mnLink);
 		
-		JMenuItem itemMultiOutput = new JMenuItem("MultiOutput");
-		this.configureAddPopup(itemMultiOutput, "multioutput");
+		JMenuItem itemMultiOutput = new JMenuItem(i18n.getString("OutputPanel.MultiOutput")); //$NON-NLS-1$
+		this.configureAddPopup(itemMultiOutput, "multioutput"); //$NON-NLS-1$
 		mnLink.add(itemMultiOutput);
 		
-		JMenuItem itemChain = new JMenuItem("Chain");
-		this.configureAddPopup(itemChain, "chain");
+		JMenuItem itemChain = new JMenuItem(i18n.getString("OutputPanel.Chain")); //$NON-NLS-1$
+		this.configureAddPopup(itemChain, "chain"); //$NON-NLS-1$
 		mnLink.add(itemChain);
 		
 		JPanel panelTitle = new JPanel();
@@ -130,7 +131,7 @@ public class OutputPanel extends MenuPanel {
 		panelTitle.setBackground(Style.panelBackground);
 		panelTitle.setLayout(new BoxLayout(panelTitle, BoxLayout.X_AXIS));
 		
-		JLabel lblDevices = new JLabel("Outputs");
+		JLabel lblDevices = new JLabel(i18n.getString("OutputPanel.Outputs")); //$NON-NLS-1$
 		panelTitle.add(lblDevices);
 		lblDevices.setFont(Style.getFontBold(12));
 		lblDevices.setForeground(Style.accent);
@@ -138,7 +139,7 @@ public class OutputPanel extends MenuPanel {
 		Component glue = Box.createGlue();
 		panelTitle.add(glue);
 		
-		JLabel lblEmulator = new JLabel("Open Emulator");
+		JLabel lblEmulator = new JLabel(i18n.getString("OutputPanel.OpenEmulator")); //$NON-NLS-1$
 		lblEmulator.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -178,31 +179,31 @@ public class OutputPanel extends MenuPanel {
 		bgrDeviceSettings.add(panelOptions, BorderLayout.SOUTH);
 		panelOptions.setBackground(Style.panelBackground);
 		
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(i18n.getString("Basic.Cancel")); //$NON-NLS-1$
 		btnCancel.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnCancel);
-		btnCancel.setName("cancel");
+		btnCancel.setName("cancel"); //$NON-NLS-1$
 		btnCancel.addActionListener(optionsButtonListener);
 		panelOptions.add(btnCancel);
 		
-		JButton btnRemove = new JButton("Remove");
+		JButton btnRemove = new JButton(i18n.getString("Basic.Remove")); //$NON-NLS-1$
 		btnRemove.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnRemove);
-		btnRemove.setName("remove");
+		btnRemove.setName("remove"); //$NON-NLS-1$
 		btnRemove.addActionListener(optionsButtonListener);
 		panelOptions.add(btnRemove);
 		
-		JButton btnSave = new JButton("Save");
+		JButton btnSave = new JButton(i18n.getString("Basic.Save")); //$NON-NLS-1$
 		btnSave.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnSave);
-		btnSave.setName("save");
+		btnSave.setName("save"); //$NON-NLS-1$
 		btnSave.addActionListener(optionsButtonListener);
 		panelOptions.add(btnSave);
 		
-		btnActivate = new JButton("Activate");
+		btnActivate = new JButton(i18n.getString("Baisc.Activate")); //$NON-NLS-1$
 		btnActivate.setPreferredSize(btnSize);
 		UiUtils.configureButton(btnActivate);
-		btnActivate.setName("activate");
+		btnActivate.setName("activate"); //$NON-NLS-1$
 		btnActivate.addActionListener(optionsButtonListener);
 		panelOptions.add(btnActivate);
 		
@@ -217,11 +218,11 @@ public class OutputPanel extends MenuPanel {
 	
 	public void addDeviceButtons(JPanel panel) {
 		for(Device d : dm.getDevices()) {
-			String icon = "error.png";
+			String icon = "error.png"; //$NON-NLS-1$
 			if(d instanceof Arduino) {
-				icon = "arduino.png";
+				icon = "arduino.png"; //$NON-NLS-1$
 			} else if(d instanceof RemoteLightServer) {
-				icon = "raspberry.png";
+				icon = "raspberry.png"; //$NON-NLS-1$
 			}
 			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
 			btn.setName(d.getId());
@@ -265,7 +266,7 @@ public class OutputPanel extends MenuPanel {
 		}
 		
 		if(d.getConnectionState() == ConnectionState.CONNECTED) {
-			btnActivate.setText("Deactivate");
+			btnActivate.setText(i18n.getString("Basic.Deactivate")); //$NON-NLS-1$
 		}
 		
 		if(panel != null) {
@@ -314,16 +315,16 @@ public class OutputPanel extends MenuPanel {
 			Device device = null;
 			
 			switch (item.getName()) {
-			case "arduino":
+			case "arduino": //$NON-NLS-1$
 				device = new Arduino(null, null);
 				break;
-			case "rlserver":
+			case "rlserver": //$NON-NLS-1$
 				device = new RemoteLightServer(null, null);
 				break;
-			case "multioutput": //TODO
+			case "multioutput": //TODO //$NON-NLS-1$
 				
 				break;
-			case "chain":
+			case "chain": //$NON-NLS-1$
 				
 				break;
 			}
@@ -340,7 +341,7 @@ public class OutputPanel extends MenuPanel {
 			String name = btn.getName();
 			
 			//SAVE clicked
-			if(name.equals("save") && currentSettingsPanel != null) {
+			if(name.equals("save") && currentSettingsPanel != null) { //$NON-NLS-1$
 				if(!currentSettingsPanel.getId().isEmpty()) {
 					
 					if(!dm.isIdUsed(currentSettingsPanel.getId()) || currentSettingsPanel.getId().equals(currentSettingsPanel.getDevice().getId())) {
@@ -351,32 +352,32 @@ public class OutputPanel extends MenuPanel {
 						if(currentSettingsPanel.isSetup()) {
 							if(dm.addDevice(device)) {
 								mainFrame.displayPanel(new OutputPanel(mainFrame));
-								mainFrame.printNotification("Added new device.", NotificationType.Success);
+								mainFrame.printNotification(i18n.getString("OutputPanel.AddedDevice"), NotificationType.Success); //$NON-NLS-1$
 							} else {
-								mainFrame.printNotification("Name / ID already used!", NotificationType.Error);
+								mainFrame.printNotification(i18n.getString("OutputPanel.NameAlreadyUsed"), NotificationType.Error); //$NON-NLS-1$
 							}
 						} else {
 							mainFrame.displayPanel(new OutputPanel(mainFrame));
-							mainFrame.printNotification("Saved changes.", NotificationType.Unimportant);
+							mainFrame.printNotification(i18n.getString("OutputPanel.SavedChanges"), NotificationType.Unimportant); //$NON-NLS-1$
 						}
 					} else {
-						mainFrame.printNotification("Name / ID already used!", NotificationType.Error);
+						mainFrame.printNotification(i18n.getString("OutputPanel.NameAlreadyUsed"), NotificationType.Error); //$NON-NLS-1$
 					}
 				} else {
-					mainFrame.printNotification("Name / ID field cannot be empty!", NotificationType.Error);
+					mainFrame.printNotification(i18n.getString("OutputPanel.NameCouldNotEmpty"), NotificationType.Error); //$NON-NLS-1$
 				}
 			//REMOVE clicked
-			} else if(name.equals("remove") && currentSettingsPanel != null) {
+			} else if(name.equals("remove") && currentSettingsPanel != null) { //$NON-NLS-1$
 				Device device = currentSettingsPanel.getDevice();
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
 					dm.removeDevice(device);
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
-					mainFrame.printNotification("Removed device.", NotificationType.Info);
+					mainFrame.printNotification(i18n.getString("OutputPanel.RemovedDevice"), NotificationType.Info); //$NON-NLS-1$
 				} else {
-					mainFrame.printNotification("Could not remove device!", NotificationType.Error);
+					mainFrame.printNotification(i18n.getString("OutputPanel.CouldNotRemoveDevice"), NotificationType.Error); //$NON-NLS-1$
 				}
 			//ACTIVATE clicked
-			} else if(name.equals("activate") && currentSettingsPanel != null) {
+			} else if(name.equals("activate") && currentSettingsPanel != null) { //$NON-NLS-1$
 				Device device = currentSettingsPanel.getDevice();
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
 					
@@ -387,13 +388,13 @@ public class OutputPanel extends MenuPanel {
 					}
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
 					if(device.getConnectionState() == ConnectionState.FAILED) {
-						mainFrame.printNotification("Could not connect!", NotificationType.Error);
+						mainFrame.printNotification(i18n.getString("OutputPanel.CouldNotConnect"), NotificationType.Error); //$NON-NLS-1$
 					} else {
 						mainFrame.printNotification(null, null);
 					}
 				}
 			//CANCEL clicked
-			} else if(name.equals("cancel")) {
+			} else if(name.equals("cancel")) { //$NON-NLS-1$
 				hideSettingsPanel();
 				mainFrame.printNotification(null, null);
 			}

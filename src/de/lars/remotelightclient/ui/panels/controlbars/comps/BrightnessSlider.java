@@ -3,6 +3,7 @@ package de.lars.remotelightclient.ui.panels.controlbars.comps;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 
@@ -23,7 +24,7 @@ public class BrightnessSlider extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4537780229514767590L;
-	private String textBrightness = "Brightness";
+	private String textBrightness = i18n.getString("Baisc.Brightness"); //$NON-NLS-1$
 	private Dimension size;
 
 	/**
@@ -51,13 +52,13 @@ public class BrightnessSlider extends JPanel {
 		JSlider slider = new JSlider();
 		bgrSlider.add(slider);
 		slider.setAlignmentX(Component.LEFT_ALIGNMENT);
-		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue());
+		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue()); //$NON-NLS-1$
 		Main.getInstance().getOutputManager().setBrightness(slider.getValue());
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Main.getInstance().getOutputManager().setBrightness(slider.getValue());
-				Main.getInstance().getSettingsManager().getSettingObject("out.brightness").setValue(slider.getValue());
-				lblBrightness.setText(textBrightness + " " + slider.getValue() + "%");
+				Main.getInstance().getSettingsManager().getSettingObject("out.brightness").setValue(slider.getValue()); //$NON-NLS-1$
+				lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		});
 		slider.setBackground(c);
@@ -66,7 +67,7 @@ public class BrightnessSlider extends JPanel {
 		slider.setMajorTickSpacing(0);
 		slider.setPaintTicks(true);
 		slider.setPaintTrack(true);
-		lblBrightness.setText(textBrightness + " " + slider.getValue() + "%");
+		lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 		UiUtils.addSliderMouseWheelListener(slider);
 	}
 

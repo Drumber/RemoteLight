@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.ui.panels.screencolor;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsUtil;
@@ -84,7 +85,7 @@ public class ScreenColorPanel extends MenuPanel {
 		
 		
 		panelMonitors = new JPanel();
-		panelMonitors.setBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), "Select a monitor", TitledBorder.LEADING, TitledBorder.TOP, null, Style.accent));
+		panelMonitors.setBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), i18n.getString("ScreenColorPanel.SelectMonitor"), TitledBorder.LEADING, TitledBorder.TOP, null, Style.accent)); //$NON-NLS-1$
 		WrapLayout wlayout = new WrapLayout(FlowLayout.CENTER);
 		panelMonitors.setLayout(wlayout);
 		panelMonitors.setBackground(Style.panelDarkBackground);
@@ -135,7 +136,7 @@ public class ScreenColorPanel extends MenuPanel {
 			updateUI();
 			
 		} catch (AWTException e) {
-			Logger.error(e, "Could not add monitors panel!");
+			Logger.error(e, i18n.getString("ScreenColorPanel.CouldNotAddMonitor")); //$NON-NLS-1$
 		}
 	}
 	
@@ -168,8 +169,8 @@ public class ScreenColorPanel extends MenuPanel {
 	private void drawYPosLine() {
 		for(ImagePanel ip : monitorPanels) {
 			if(ip.getName().equals(scm.getCurrentMonitor().getIDstring())) {
-				int ypos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue();
-				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue();
+				int ypos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(); //$NON-NLS-1$
+				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(); //$NON-NLS-1$
 				
 				int y = ypos / MONITOR_SCALE;
 				ip.enableLine(0, y, ip.getWidth(), yHeight / MONITOR_SCALE);
@@ -185,16 +186,16 @@ public class ScreenColorPanel extends MenuPanel {
 		panel.removeAll();
 		settingPanels.clear();
 		
-		SettingPanel spDelay = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.delay"));
+		SettingPanel spDelay = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.delay")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spDelay));
 		settingPanels.add(spDelay);
-		SettingPanel spYPos = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.ypos"));
+		SettingPanel spYPos = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.ypos")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spYPos));
 		settingPanels.add(spYPos);
-		SettingPanel spYHeight = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.yheight"));
+		SettingPanel spYHeight = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.yheight")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spYHeight));
 		settingPanels.add(spYHeight);
-		SettingPanel spInvert = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.invert"));
+		SettingPanel spInvert = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.invert")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spInvert));
 		settingPanels.add(spInvert);
 		
@@ -207,9 +208,9 @@ public class ScreenColorPanel extends MenuPanel {
 		panel.add(btnEnable);
 		
 		if(scm.isActive()) {
-			btnEnable.setText("Disable");
+			btnEnable.setText(i18n.getString("ScreenColorPanel.Disable")); //$NON-NLS-1$
 		} else {
-			btnEnable.setText("Enable");
+			btnEnable.setText(i18n.getString("ScreenColorPanel.Enable")); //$NON-NLS-1$
 		}
 		btnEnable.addActionListener(new ActionListener() {
 			@Override
@@ -236,11 +237,11 @@ public class ScreenColorPanel extends MenuPanel {
 			
 			if(scm.getCurrentMonitor() != null) {
 				int height = scm.getCurrentMonitor().getDefaultConfiguration().getBounds().height;
-				int yPos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue();
-				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue();
+				int yPos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(); //$NON-NLS-1$
+				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(); //$NON-NLS-1$
 				
-				((SettingInt) sm.getSettingFromId("screencolor.ypos")).setMax(height - yHeight);
-				((SettingInt) sm.getSettingFromId("screencolor.yheight")).setMax(height - yPos);
+				((SettingInt) sm.getSettingFromId("screencolor.ypos")).setMax(height - yHeight); //$NON-NLS-1$
+				((SettingInt) sm.getSettingFromId("screencolor.yheight")).setMax(height - yPos); //$NON-NLS-1$
 				
 				for(SettingPanel sp : settingPanels) {
 					sp.updateComponents();
@@ -253,28 +254,28 @@ public class ScreenColorPanel extends MenuPanel {
 		if(enable) {
 			if(selectedMonitorPanel != null) {
 				Main.getInstance().getMainFrame().printNotification(null, null);
-				btnEnable.setText("Disable");
+				btnEnable.setText(i18n.getString("ScreenColorPanel.Disable")); //$NON-NLS-1$
 				
-				scm.start(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(),	//YPos
-						((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(),	//YHeight
-						((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue(),		//Delay
-						((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue(),//Invert
+				scm.start(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(),	//YPos //$NON-NLS-1$
+						((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(),	//YHeight //$NON-NLS-1$
+						((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue(),		//Delay //$NON-NLS-1$
+						((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue(),//Invert //$NON-NLS-1$
 						ScreenColorManager.getMonitorByID(selectedMonitorPanel.getName()));		//Monitor
 				
 			} else {
-				Main.getInstance().getMainFrame().printNotification("You need to select a monitor", NotificationType.Error);
+				Main.getInstance().getMainFrame().printNotification(i18n.getString("ScreenColorPanel.NeedSelectMonitor"), NotificationType.Error); //$NON-NLS-1$
 			}
 		} else {
-			btnEnable.setText("Enable");
+			btnEnable.setText(i18n.getString("ScreenColorPanel.Enable")); //$NON-NLS-1$
 			scm.stop();
 		}
 	}
 	
 	private void setScreenColorSettings() {
-		scm.setInverted(((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue());
-		scm.setDelay(((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue());
-		scm.setYPos(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue());
-		scm.setYHeight(((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue());
+		scm.setInverted(((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue()); //$NON-NLS-1$
+		scm.setDelay(((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue()); //$NON-NLS-1$
+		scm.setYPos(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue()); //$NON-NLS-1$
+		scm.setYHeight(((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue()); //$NON-NLS-1$
 	}
 	
 }

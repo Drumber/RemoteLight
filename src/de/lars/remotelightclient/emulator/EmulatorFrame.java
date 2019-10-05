@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.emulator.RLServerEmulator.ConnectionStateChangeListener;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
@@ -52,7 +53,7 @@ public class EmulatorFrame extends JFrame {
 		pixelPanels = new ArrayList<>();
 		emulator = new RLServerEmulator();
 		emulator.addStateChangeListener(stateListener);
-		setFrameTitle("Disconnected");
+		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
 		addWindowListener(closeListener);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -74,8 +75,8 @@ public class EmulatorFrame extends JFrame {
 		panelControl.setBackground(Style.panelDarkBackground);
 		panelToolbar.add(panelControl);
 		
-		JButton btnEnable = new JButton("Enable");
-		btnEnable.setName("enable");
+		JButton btnEnable = new JButton(i18n.getString("EmulatorFrame.Enable")); //$NON-NLS-1$
+		btnEnable.setName("enable"); //$NON-NLS-1$
 		btnEnable.addActionListener(btnListener);
 		UiUtils.configureButton(btnEnable);
 		panelControl.add(btnEnable);
@@ -89,14 +90,14 @@ public class EmulatorFrame extends JFrame {
 		panelToolbar.add(panelScale);
 		panelScale.setLayout(new BoxLayout(panelScale, BoxLayout.X_AXIS));
 		
-		JButton btnMinus = new JButton("-");
-		btnMinus.setName("minus");
+		JButton btnMinus = new JButton("-"); //$NON-NLS-1$
+		btnMinus.setName("minus"); //$NON-NLS-1$
 		btnMinus.addActionListener(btnListener);
 		UiUtils.configureButton(btnMinus);
 		panelScale.add(btnMinus);
 		
-		JButton btnPlus = new JButton("+");
-		btnPlus.setName("plus");
+		JButton btnPlus = new JButton("+"); //$NON-NLS-1$
+		btnPlus.setName("plus"); //$NON-NLS-1$
 		btnPlus.addActionListener(btnListener);
 		UiUtils.configureButton(btnPlus);
 		panelScale.add(btnPlus);
@@ -128,7 +129,7 @@ public class EmulatorFrame extends JFrame {
 	};
 	
 	public void setFrameTitle(String text) {
-		setTitle("[Emulator] " + text);
+		setTitle(i18n.getString("EmulatorFrame.Title") + text); //$NON-NLS-1$
 	}
 	
 	private ActionListener btnListener = new ActionListener() {
@@ -136,15 +137,15 @@ public class EmulatorFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
 			switch (btn.getName()) {
-			case "enable":
+			case "enable": //$NON-NLS-1$
 				pixelPanels.clear();
-				btn.setText(!emulator.isRunning() ? "Disable" : "Enable");
+				btn.setText(!emulator.isRunning() ? i18n.getString("EmulatorFrame.Disable") : i18n.getString("EmulatorFrame.Enable")); //$NON-NLS-1$ //$NON-NLS-2$
 				toggleEmulator(!emulator.isRunning());
 				break;
-			case "minus":
+			case "minus": //$NON-NLS-1$
 				changePanelSize(-2);
 				break;
-			case "plus":
+			case "plus": //$NON-NLS-1$
 				changePanelSize(2);
 				break;
 			}
@@ -169,7 +170,7 @@ public class EmulatorFrame extends JFrame {
 				
 				@Override
 				public void run() {
-					Logger.info("Started Emulator loop");
+					Logger.info("Started Emulator loop"); //$NON-NLS-1$
 					
 					while(loopActive) {
 						if(emulator.getPixels() != null) {
@@ -177,7 +178,7 @@ public class EmulatorFrame extends JFrame {
 							
 							if(pixelPanels.size() != pixel.length) {
 								addPixelPanels(pixel);
-								lblStatus.setText("Number of pixels: " + pixel.length);
+								lblStatus.setText(i18n.getString("EmulatorFrame.PixelNumber") + pixel.length); //$NON-NLS-1$
 							} else {
 								setPanelColors(pixel);
 							}
@@ -187,10 +188,10 @@ public class EmulatorFrame extends JFrame {
 						} catch (InterruptedException e) {
 						}
 					}
-					Logger.info("Stopped Emulator loop");
+					Logger.info("Stopped Emulator loop"); //$NON-NLS-1$
 				}
 				
-			}, "Emulator loop").start();
+			}, "Emulator loop").start(); //$NON-NLS-1$
 		}
 	}
 	

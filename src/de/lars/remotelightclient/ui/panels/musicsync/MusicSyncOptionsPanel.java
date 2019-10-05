@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.musicsync.InputUtil;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.musicsync.sound.Shared;
@@ -67,8 +68,8 @@ public class MusicSyncOptionsPanel extends JPanel {
 	 */
 	public MusicSyncOptionsPanel() {
 		settingPanels = new ArrayList<SettingPanel>();
-		sm.addSetting(new SettingObject("musicsync.sensitivity", null, 20));
-		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200));
+		sm.addSetting(new SettingObject("musicsync.sensitivity", null, 20)); //$NON-NLS-1$
+		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200)); //$NON-NLS-1$
 		
 		Dimension size = new Dimension(Integer.MAX_VALUE, 150);
 		//setPreferredSize(size);
@@ -103,7 +104,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelSensitivity.setBackground(Style.panelDarkBackground);
 		bgrOptions.add(panelSensitivity);
 		
-		lblSensitivity = new JLabel("Sensitivity");
+		lblSensitivity = new JLabel(i18n.getString("MusicSync.Sensitivity")); //$NON-NLS-1$
 		lblSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
 		lblSensitivity.setForeground(Style.textColor);
 		panelSensitivity.add(lblSensitivity);
@@ -118,10 +119,10 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderSensitivity.setFocusable(false);
 		sliderSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
 		sliderSensitivity.setBackground(Style.panelDarkBackground);
-		sliderSensitivity.setName("sensitivity");
+		sliderSensitivity.setName("sensitivity"); //$NON-NLS-1$
 		sliderSensitivity.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderSensitivity);
-		sliderSensitivity.setValue((int) sm.getSettingObject("musicsync.sensitivity").getValue());
+		sliderSensitivity.setValue((int) sm.getSettingObject("musicsync.sensitivity").getValue()); //$NON-NLS-1$
 		panelSensitivity.add(sliderSensitivity);
 		
 		panelAdjustment = new JPanel();
@@ -131,7 +132,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelAdjustment.setBackground(Style.panelDarkBackground);
 		bgrOptions.add(panelAdjustment);
 		
-		lblAdjustment = new JLabel("Adjustment");
+		lblAdjustment = new JLabel(i18n.getString("MusicSync.Adjustment")); //$NON-NLS-1$
 		lblAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
 		lblAdjustment.setForeground(Style.textColor);
 		panelAdjustment.add(lblAdjustment);
@@ -144,10 +145,10 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setFocusable(false);
 		sliderAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
 		sliderAdjustment.setBackground(Style.panelDarkBackground);
-		sliderAdjustment.setName("adjustment");
+		sliderAdjustment.setName("adjustment"); //$NON-NLS-1$
 		sliderAdjustment.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);
-		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue());
+		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue()); //$NON-NLS-1$
 		panelAdjustment.add(sliderAdjustment);
 		
 		panelInput = new JPanel();
@@ -184,12 +185,12 @@ public class MusicSyncOptionsPanel extends JPanel {
 		public void stateChanged(ChangeEvent e) {
 			JSlider slider = (JSlider) e.getSource();
 			
-			if(slider.getName().equals("sensitivity")) {
-				sm.getSettingObject("musicsync.sensitivity").setValue(slider.getValue());
+			if(slider.getName().equals("sensitivity")) { //$NON-NLS-1$
+				sm.getSettingObject("musicsync.sensitivity").setValue(slider.getValue()); //$NON-NLS-1$
 				msm.setSensitivity(slider.getValue() / 100.0);
 				
-			} else if(slider.getName().equals("adjustment")) {
-				sm.getSettingObject("musicsync.adjustment").setValue(slider.getValue());
+			} else if(slider.getName().equals("adjustment")) { //$NON-NLS-1$
+				sm.getSettingObject("musicsync.adjustment").setValue(slider.getValue()); //$NON-NLS-1$
 				msm.setAdjustment(slider.getValue() / 100.0);
 			}
 		}
@@ -200,7 +201,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrEffectOptionsScroll.setVisible(true);
 		bgrEffectOptions.removeAll();
 		
-		JLabel lblTitle = new JLabel("Effect options", SwingConstants.LEFT);
+		JLabel lblTitle = new JLabel(i18n.getString("MusicSync.EffectOptions"), SwingConstants.LEFT); //$NON-NLS-1$
 		lblTitle.setFont(Style.getFontBold(11));
 		lblTitle.setForeground(Style.accent);
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -234,7 +235,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	};
 	
 	private void initInputPanel() {
-		String input = (String) sm.getSettingObject("musicsync.input").getValue();
+		String input = (String) sm.getSettingObject("musicsync.input").getValue(); //$NON-NLS-1$
 		
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
 		buttonPanel.setBackground(Style.panelDarkBackground);
@@ -261,7 +262,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			}
 		}
 		
-		lblInput = new JLabel("Select a input");
+		lblInput = new JLabel(i18n.getString("MusicSync.SelectInput")); //$NON-NLS-1$
 		lblInput.setForeground(Style.textColor);
 		panelInput.add(lblInput, BorderLayout.NORTH);
 		panelInput.add(buttonPanel);
@@ -275,7 +276,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 					Mixer newMixer = AudioSystem.getMixer(info);
 					SoundProcessing.setMixer(newMixer);
 					//save last selected to data file
-					sm.getSettingObject("musicsync.input").setValue(info.toString());
+					sm.getSettingObject("musicsync.input").setValue(info.toString()); //$NON-NLS-1$
 					//refresh SoundProcessor
 					Main.getInstance().getMusicSyncManager().newSoundProcessor();
 					break;

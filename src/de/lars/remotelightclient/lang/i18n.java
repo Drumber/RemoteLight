@@ -4,7 +4,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class i18n {
-	private static final String BUNDLE_NAME = "de.lars.remotelightclient.lang.mainFrame.basic"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "de.lars.remotelightclient.lang.bundles.bundle"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 

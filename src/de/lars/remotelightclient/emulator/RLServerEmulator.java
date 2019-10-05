@@ -13,6 +13,8 @@ import org.tinylog.Logger;
 
 import com.google.gson.Gson;
 
+import de.lars.remotelightclient.lang.i18n;
+
 public class RLServerEmulator {
 	
 	private final static int PORT = 20002;
@@ -40,11 +42,11 @@ public class RLServerEmulator {
 						serverSocket = new ServerSocket(PORT);
 						running = true;
 						Logger.info("[Emulator] Wating for connection...");
-						onStateChanged("Waiting for connection...");
+						onStateChanged(i18n.getString("RLServerEmulator.WaitingConnection")); //$NON-NLS-1$
 						
 						socket = serverSocket.accept();
 						Logger.info("[Emulator] Client connected: " + socket.getRemoteSocketAddress());
-						onStateChanged("Connected");
+						onStateChanged(i18n.getString("RLServerEmulator.Connected")); //$NON-NLS-1$
 						
 						scanner = new Scanner(new BufferedInputStream(socket.getInputStream()));
 						
@@ -67,7 +69,7 @@ public class RLServerEmulator {
 	public void stop() {
 		if(running) {
 			running = false;
-			onStateChanged("Disconnected");
+			onStateChanged(i18n.getString("RLServerEmulator.Disconnected")); //$NON-NLS-1$
 			try {
 				if(scanner != null)
 					scanner.close();

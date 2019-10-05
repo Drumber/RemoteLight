@@ -3,6 +3,7 @@ package de.lars.remotelightclient.ui.panels.settings;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -67,10 +68,10 @@ public class SettingsPanel extends MenuPanel {
 		main.setBackground(Style.panelBackground);
 		main.setAlignmentX(Component.LEFT_ALIGNMENT);
 		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-		main.add(getSettingsBgr(SettingCategory.General, "General"));
-		main.add(getSettingsBgr(SettingCategory.Others, "Others"));
+		main.add(getSettingsBgr(SettingCategory.General, i18n.getString("SettingsPanel.General"))); //$NON-NLS-1$
+		main.add(getSettingsBgr(SettingCategory.Others, i18n.getString("SettingsPanel.Others"))); //$NON-NLS-1$
 		
-		JButton btnSave = new JButton("Save");
+		JButton btnSave = new JButton(i18n.getString("SettingsPanel.Save")); //$NON-NLS-1$
         btnSave.setContentAreaFilled(false);
         btnSave.setBorderPainted(false);
         btnSave.setFocusPainted(false);
@@ -161,7 +162,7 @@ public class SettingsPanel extends MenuPanel {
 			mainFrame.updateFrame();
 			//display settings
 			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
-			mainFrame.printNotification("Saved settings", NotificationType.Info);
+			mainFrame.printNotification(i18n.getString("SettingsPanel.SavedSettings"), NotificationType.Info); //$NON-NLS-1$
 		}
 	};
 	

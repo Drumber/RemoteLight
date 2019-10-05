@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.ui.panels.about;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
@@ -46,7 +47,7 @@ public class AboutPanel extends MenuPanel {
 		Box horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
 		
-		JLabel lblRemoteLight = new JLabel("RemoteLight");
+		JLabel lblRemoteLight = new JLabel("RemoteLight"); //$NON-NLS-1$
 		lblRemoteLight.setFont(Style.getFontBold(30));
 		lblRemoteLight.setForeground(new Color(20, 110, 170));
 		horizontalBox.add(lblRemoteLight);
@@ -62,7 +63,7 @@ public class AboutPanel extends MenuPanel {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(5);
 		horizontalBox.add(horizontalStrut_1);
 		
-		JLabel lblCopyright = new JLabel("by Lars Obrath");
+		JLabel lblCopyright = new JLabel("by Lars Obrath"); //$NON-NLS-1$
 		lblCopyright.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(lblCopyright);
 		lblCopyright.setFont(Style.getFontLight(13));
@@ -74,7 +75,7 @@ public class AboutPanel extends MenuPanel {
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox_1);
 		
-		JLabel lblWebsite = new JLabel("Website");
+		JLabel lblWebsite = new JLabel(i18n.getString("AboutPanel.Website")); //$NON-NLS-1$
 		lblWebsite.setForeground(Style.accent);
 		UiUtils.addWebsiteHyperlink(lblWebsite, Main.WEBSITE);
 		lblWebsite.setFont(Style.getFontRegualar(14));
@@ -83,7 +84,7 @@ public class AboutPanel extends MenuPanel {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(10);
 		horizontalBox_1.add(horizontalStrut_2);
 		
-		JLabel lblGithub = new JLabel("GitHub");
+		JLabel lblGithub = new JLabel("GitHub"); //$NON-NLS-1$
 		lblGithub.setForeground(Style.accent);
 		UiUtils.addWebsiteHyperlink(lblGithub, Main.GITHUB);
 		lblGithub.setFont(Style.getFontRegualar(14));
@@ -109,7 +110,7 @@ public class AboutPanel extends MenuPanel {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		panelContent.add(verticalStrut_2);
 		
-		JLabel lblCredits = new JLabel("Credits");
+		JLabel lblCredits = new JLabel(i18n.getString("AboutPanel.Credits")); //$NON-NLS-1$
 		lblCredits.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblCredits.setFont(Style.getFontBold(18));
 		lblCredits.setForeground(Style.accent);
@@ -118,38 +119,38 @@ public class AboutPanel extends MenuPanel {
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		panelContent.add(verticalStrut_1);
 		
-		JLabel lblIcons8 = new JLabel("Icons by ICONS8");
+		JLabel lblIcons8 = new JLabel(i18n.getString("AboutPanel.Icons8")); //$NON-NLS-1$
 		lblIcons8.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblIcons8.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblIcons8, "https://icons8.com");
+		UiUtils.addWebsiteHyperlink(lblIcons8, "https://icons8.com"); //$NON-NLS-1$
 		lblIcons8.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblIcons8);
 		
-		JLabel lblJserialcomm = new JLabel("jSerialComm");
+		JLabel lblJserialcomm = new JLabel("jSerialComm"); //$NON-NLS-1$
 		lblJserialcomm.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblJserialcomm.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblJserialcomm, "https://fazecast.github.io/jSerialComm/");
+		UiUtils.addWebsiteHyperlink(lblJserialcomm, "https://fazecast.github.io/jSerialComm/"); //$NON-NLS-1$
 		lblJserialcomm.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblJserialcomm);
 		
-		JLabel lblSimplefilestorage = new JLabel("SimpleFileStorage");
+		JLabel lblSimplefilestorage = new JLabel("SimpleFileStorage"); //$NON-NLS-1$
 		lblSimplefilestorage.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblSimplefilestorage.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblSimplefilestorage, "https://github.com/DeBukkIt/SimpleFileStorage");
+		UiUtils.addWebsiteHyperlink(lblSimplefilestorage, "https://github.com/DeBukkIt/SimpleFileStorage"); //$NON-NLS-1$
 		lblSimplefilestorage.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblSimplefilestorage);
 		
-		JLabel lblTarosdsp = new JLabel("TarosDSP");
+		JLabel lblTarosdsp = new JLabel("TarosDSP"); //$NON-NLS-1$
 		lblTarosdsp.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTarosdsp.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblTarosdsp, "https://github.com/JorenSix/TarsosDSP");
+		UiUtils.addWebsiteHyperlink(lblTarosdsp, "https://github.com/JorenSix/TarsosDSP"); //$NON-NLS-1$
 		lblTarosdsp.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblTarosdsp);
 		
-		JLabel lblTinylog = new JLabel("tinylog");
+		JLabel lblTinylog = new JLabel("tinylog"); //$NON-NLS-1$
 		lblTinylog.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTinylog.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblTinylog, "https://tinylog.org");
+		UiUtils.addWebsiteHyperlink(lblTinylog, "https://tinylog.org"); //$NON-NLS-1$
 		lblTinylog.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblTinylog);
 	}
