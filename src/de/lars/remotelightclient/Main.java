@@ -144,7 +144,7 @@ public class Main {
 			DataStorage.save();
 			
 			//copy log file and rename
-			DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date().getTime()) + ".txt");
+			DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");
 			
 			try {
 				ProviderRegistry.getLoggingProvider().shutdown();

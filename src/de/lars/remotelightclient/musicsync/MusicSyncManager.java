@@ -24,6 +24,7 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class MusicSyncManager {
@@ -124,6 +125,14 @@ public class MusicSyncManager {
 	
 	public void start(MusicEffect effect) {
 		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.MusicSync);
+		
+		if(!SoundProcessing.isMixerSet()) {
+			Main.getInstance().getMainFrame().printNotification("Please select a input!", NotificationType.Error);
+			return;
+		}
+		if(soundProcessor == null) {
+			soundProcessor = new SoundProcessing(this);
+		}
 		if(activeEffect != null) {
 			activeEffect.onDisable();
 		}

@@ -112,7 +112,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 			float pitch = pitchDetectionResult.getPitch(); //what we need (Hz)
 			float probability = pitchDetectionResult.getProbability();
 			double rms = audioEvent.getRMS() * 100; //what we need (loudness)
-			String message = String.format("Pitch detected at %.2fs: %.2fHz ( %.2f probability, RMS: %.5f )", timeStamp,pitch,probability,rms);
+			String.format("Pitch detected at %.2fs: %.2fHz ( %.2f probability, RMS: %.5f )", timeStamp,pitch,probability,rms);
 			//Logger.debug(message);
 			
 			manager.soundToLight(pitch, rms, timeStamp);

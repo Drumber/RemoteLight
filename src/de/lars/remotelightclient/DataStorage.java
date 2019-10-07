@@ -17,38 +17,6 @@ public class DataStorage {
 	public final static String SOUND_INPUT_STOREKEY = "soundinput";
 	public final static String DEVICES_LIST = "devices_list";
 	
-	public final static String SETTINGS_CONTROL_MODEKEY = "settings_control_mode";
-	public final static String SETTINGS_COMPORT = "settings_comport";
-	public final static String SETTINGS_COMPORT_AUTOOPEN = "settings_comport_autoopen";
-	public final static String SETTINGS_AUTOSTART = "settings_autostart";
-	public final static String SETTINGS_HIDE = "settings_hide";
-	public final static String SETTINGS_AUTOCONNECT = "settings_autoconnect";
-	public final static String SETTINGS_AUTOSHUTDOWN = "settings_autoshutdown";
-	public final static String SETTINGS_LED_NUM = "settings_led_num";
-	public final static String SETTINGS_BRIGHTNESS = "settings_brightness";
-	public final static String SETTINGS_BOOT_ANI = "settings_boot_ani";
-	public final static String SETTINGS_BOOT_SHOWLAST = "settings_boot_showlast";
-	
-	public final static String SETTINGS_SCREENCOLOR_INTERVAL = "settings_screenncolor_interval";
-	public final static String SETTINGS_SCREENCOLOR_YPOS = "settings_screenncolor_ypos";
-	public final static String SETTINGS_SCREENCOLOR_INVERT = "settings_screenncolor_invert";
-	public final static String SETTINGS_SCREENCOLOR_MONITOR = "settings_screencolor_monitor";
-	
-	public final static String SETTINGS_MUSICSYNC_SENSITIVITY = "settings_musicsync_sensitivity";
-	public final static String MUSICSYNC_MODE = "musicsync_mode";
-	
-	public final static String LEVELBAR_COLOR1 = "levelbar_color1";
-	public final static String LEVELBAR_COLOR2 = "levelbar_color2";
-	public final static String LEVELBAR_COLOR3 = "levelbar_color3";
-	public final static String LEVELBAR_AUTOCHANGE = "levelbar_autochange";
-	public final static String LEVELBAR_SMOOTH = "levelbar_smooth";
-	
-	public final static String RAINBOW_SMOOTH_RISE = "rainbow_smooth_rise";
-	public final static String RAINBOW_SMOOTH_FALL = "rainbow_smooth_fall";
-	public final static String RAINBOW_STEPS = "rainbow_steps";
-	
-	public final static String CUSTOM_COLORS_ARRAY = "custom_colors_array";
-	
 	public static void start() {
 		try {
 			new File(DirectoryUtil.getDataStoragePath()).mkdirs();

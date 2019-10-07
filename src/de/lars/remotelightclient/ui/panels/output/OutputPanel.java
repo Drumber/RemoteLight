@@ -116,6 +116,7 @@ public class OutputPanel extends MenuPanel {
 		
 		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
 		this.configureAddPopup(mnLink, "menulink"); //$NON-NLS-1$
+		mnLink.setVisible(false); //TODO
 		popupMenu.add(mnLink);
 		
 		JMenuItem itemMultiOutput = new JMenuItem(i18n.getString("OutputPanel.MultiOutput")); //$NON-NLS-1$
