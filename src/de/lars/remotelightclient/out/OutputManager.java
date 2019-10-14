@@ -50,8 +50,8 @@ public class OutputManager {
 			deactivate(this.activeOutput);
 		}
 		if(outputPixels == null) {
-			outputPixels = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
-			lastPixels = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+			outputPixels = PixelColorUtils.colorAllPixels(Color.BLACK, activeOutput.getPixels());
+			lastPixels = PixelColorUtils.colorAllPixels(Color.BLACK, activeOutput.getPixels());
 		}
 
 		activate(activeOutput);
