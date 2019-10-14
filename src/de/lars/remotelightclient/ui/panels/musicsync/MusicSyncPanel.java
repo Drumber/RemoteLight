@@ -94,6 +94,7 @@ public class MusicSyncPanel extends MenuPanel {
 			
 			if(msm.getActiveEffect() != null && msm.getActiveEffect().getName().equals(m.getName())) {
 				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				showMusicEffectOptions();
 			}
 			bgrMusicEffects.add(btn);
 		}
