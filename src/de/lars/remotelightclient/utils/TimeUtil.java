@@ -50,5 +50,9 @@ public class TimeUtil {
 	public void setInterval(int interval) {
 		this.interval = interval;
 	}
+	
+	public int getInterval() {
+		return this.interval;
+	}
 
 }

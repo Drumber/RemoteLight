@@ -88,5 +88,27 @@ public class PixelColorUtils {
 		}
 		return leds;
 	}
+	
+	/**
+	 * 
+	 * @param pixels
+	 * @param right Flip the right side to the left if true
+	 */
+	public static Color[] centered(Color[] pixels, boolean right) {
+		int half = pixels.length / 2;
+		Color[] strip = pixels;
+		
+		if(right) {
+			for(int i = 0; i < half; i++) {
+				strip[i] = pixels[pixels.length - 1 - i];
+			}
+		}
+		else {
+			for(int i = 0; i < half; i++) {
+				strip[half + i] = pixels[half - 1 - i];
+			}
+		}
+		return strip;
+	}
 
 }
