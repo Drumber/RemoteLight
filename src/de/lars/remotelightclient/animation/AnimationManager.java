@@ -25,6 +25,8 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
+import de.lars.remotelightclient.animation.animations.Shake;
+import de.lars.remotelightclient.animation.animations.TheaterChase;
 import de.lars.remotelightclient.animation.animations.Wipe;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.utils.PixelColorUtils;
@@ -126,6 +128,8 @@ public class AnimationManager {
 		animations.add(new RunningLight());
 		animations.add(new Scanner());
 		animations.add(new Wipe());
+		animations.add(new TheaterChase());
+		animations.add(new Shake());
 	}
 
 }

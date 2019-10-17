@@ -34,6 +34,10 @@ public class RainbowWheel {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return color array from 0 to 360(excluded)
+	 */
 	public static Color[] getRainbow() {
 		return rainbow;
 	}

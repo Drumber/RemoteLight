@@ -21,7 +21,7 @@ import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Rainbow extends Animation {
 	
-	int step;
+	private int step;
 
 	public Rainbow() {
 		super("Rainbow");
