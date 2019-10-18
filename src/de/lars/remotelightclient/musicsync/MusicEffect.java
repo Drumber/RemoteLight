@@ -99,8 +99,6 @@ public class MusicEffect {
 	public void setVolume(double volume) {
 		this.volume = volume;
 	}
-
-	//TODO add onRender()
 	
 	public SoundProcessing getSoundProcessor() {
 		return soundProcessor;
@@ -153,5 +151,7 @@ public class MusicEffect {
 	public void onEnable() {}
 	public void onDisable() {}
 	public void onLoop() {}
+
+	//TODO add onRender()
 
 }

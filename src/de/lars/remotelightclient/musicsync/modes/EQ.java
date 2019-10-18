@@ -37,7 +37,7 @@ public class EQ extends MusicEffect {
 		int pixBand = half / 6; // pixels per frequency at each side(left/right) (6 bands)
 		double mul = 0.318 * this.getAdjustment(); // multiplier for brightness
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
-		int[] amp = soundProcessor.getAmplitudes();
+		int[] amp = soundProcessor.getSimpleAmplitudes();
 
 		/*
 		 *  half 1 (left)

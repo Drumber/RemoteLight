@@ -88,7 +88,7 @@ public class Rainbow extends MusicEffect {
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		
 		double mul = 0.1 * this.getAdjustment(); // multiplier for amount of pixels
-		int[] amp = soundProcessor.getAmplitudes(); //6 bands
+		int[] amp = soundProcessor.getSimpleAmplitudes(); //6 bands
 		
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {

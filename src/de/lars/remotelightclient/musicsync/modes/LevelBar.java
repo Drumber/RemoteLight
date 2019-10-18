@@ -52,7 +52,7 @@ public class LevelBar extends MusicEffect {
 		this.addOption("musicsync.levelbar.color2");
 		s.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
 		this.addOption("musicsync.levelbar.color3");
-		s.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automaticly chnage color", false));
+		s.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automatically change color", false));
 		this.addOption("musicsync.levelbar.autochange");
 		s.addSetting(new SettingBoolean("musicsync.levelbar.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
 		this.addOption("musicsync.levelbar.smooth");
@@ -77,7 +77,7 @@ public class LevelBar extends MusicEffect {
 		half = pix / 2;
 		double mul = 0.1 * this.getAdjustment(); // multiplier for amount of pixels
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
-		int[] amp = soundProcessor.getAmplitudes(); //6 bands
+		int[] amp = soundProcessor.getSimpleAmplitudes(); //6 bands
 		int ampAv; //average of all amp bands
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {
