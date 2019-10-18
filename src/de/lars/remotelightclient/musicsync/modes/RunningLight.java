@@ -18,10 +18,14 @@ import java.awt.Color;
 
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.TimeUtil;
 
 public class RunningLight extends MusicEffect {
 	
 	private double lastTime = 0;
+	private final double multiplier = 0.2;
+	private int delay = 0;
 
 	public RunningLight() {
 		super("RunningLight");
@@ -29,6 +33,10 @@ public class RunningLight extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
+		if(++delay < 2) {
+			return;
+		}
+		delay = 0;
 		double pitch = this.getPitch();
 		double time = this.getPitchTime();
 		
@@ -58,7 +66,7 @@ public class RunningLight extends MusicEffect {
 			}
 			
 			for(int i = 0; i < 3; i++) {
-				PixelColorUtils.setPixel(i, new Color(r, g, b));
+				PixelColorUtils.setPixel(i, getColor(pitch));
 			}
 		} else {
 			for(int i = 0; i < 3; i++) {
@@ -66,6 +74,22 @@ public class RunningLight extends MusicEffect {
 			}
 		}
 		super.onLoop();
+	}
+	
+	private Color getColor(double pitch) {
+		int value = (int) (multiplier * pitch);
+		if(value >= RainbowWheel.getRainbow().length) {
+			value = RainbowWheel.getRainbow().length - 1;
+		}
+		if(value < 0) {
+			value = 0;
+		}
+		//show more red colors
+		if(pitch < 60) {
+			value /= 2;
+		}
+		
+		return RainbowWheel.getRainbow()[value];
 	}
 
 }
