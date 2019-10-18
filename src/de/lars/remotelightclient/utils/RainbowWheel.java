@@ -15,6 +15,7 @@
 package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
+import java.util.Random;
 
 /*
  * adapted from https://stackoverflow.com/a/52498075
@@ -42,4 +43,9 @@ public class RainbowWheel {
 		return rainbow;
 	}
 
+	public static Color getRandomColor() {
+		int rnd = new Random().nextInt(getRainbow().length);
+		return getRainbow()[rnd];
+	}
+	
 }

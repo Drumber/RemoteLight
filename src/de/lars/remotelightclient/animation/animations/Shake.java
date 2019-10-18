@@ -57,7 +57,6 @@ public class Shake extends Animation {
 	@Override
 	public void onLoop() {
 		if(timeMode.hasReached()) {
-			System.out.println(modeChangeCounter);
 			if(++modeChangeCounter >= 10) {
 				if(++mode > 1) {
 					mode = 0;

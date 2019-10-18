@@ -22,13 +22,16 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.animation.animations.Breath;
 import de.lars.remotelightclient.animation.animations.Close;
 import de.lars.remotelightclient.animation.animations.Fade;
 import de.lars.remotelightclient.animation.animations.Jump;
 import de.lars.remotelightclient.animation.animations.Meteor;
+import de.lars.remotelightclient.animation.animations.Open;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RandomColor;
 import de.lars.remotelightclient.animation.animations.RandomColor2;
+import de.lars.remotelightclient.animation.animations.RedGreen;
 import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
@@ -148,6 +151,9 @@ public class AnimationManager {
 		animations.add(new RandomColor());
 		animations.add(new RandomColor2());
 		animations.add(new Close());
+		animations.add(new Open());
+		animations.add(new Breath());
+		animations.add(new RedGreen());
 	}
 
 }
