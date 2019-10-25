@@ -16,80 +16,119 @@ package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
+import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
-import de.lars.remotelightclient.utils.TimeUtil;
 
 public class RunningLight extends MusicEffect {
-	
+
+	private int pDelay; //previous delay
+	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private boolean centered;
+	private Color[] strip;
 	private double lastTime = 0;
 	private final double multiplier = 0.2;
-	private int delay = 0;
+	private int groupSize;
 
 	public RunningLight() {
 		super("RunningLight");
+
+		s.addSetting(new SettingBoolean("musicsync.runninglight.centered", "Centered", SettingCategory.MusicEffect, "", false));
+		this.addOption("musicsync.runninglight.centered");
+		s.addSetting(new SettingInt("musicsync.runninglight.groupsize", "Group size", SettingCategory.MusicEffect, "Number of LEDs per group", 3, 1, 5, 1));
+		this.addOption("musicsync.runninglight.groupsize");
+	}
+
+	@Override
+	public void onEnable() {
+		strip = Main.getInstance().getOutputManager().getLastColors();
+		pDelay = Main.getInstance().getMusicSyncManager().getDelay();
+		Main.getInstance().getMusicSyncManager().setDelay(60);
+		super.onEnable();
 	}
 	
 	@Override
+	public void onDisable() {
+		Main.getInstance().getMusicSyncManager().setDelay(pDelay);
+		super.onDisable();
+	}
+
+	@Override
 	public void onLoop() {
-		if(++delay < 2) {
-			return;
-		}
-		delay = 0;
+		centered = ((SettingBoolean) s.getSettingFromId("musicsync.runninglight.centered")).getValue();
+		groupSize = ((SettingInt) s .getSettingFromId("musicsync.runninglight.groupsize")).getValue();
+		
+		int half = Main.getLedNum() / 2;
 		double pitch = this.getPitch();
 		double time = this.getPitchTime();
-		
-		PixelColorUtils.shiftRight(3);
-		
-		if(time != lastTime) {
+
+		if (!centered) {
+			PixelColorUtils.shiftRight(groupSize);
+		}
+
+		if (time != lastTime) {
 			lastTime = time;
-			int r = 0, g = 0, b = 0;
-			
-			if(pitch < 50) {
-				r = 180;
-			} else if(pitch < 200) {
-				r = 250;
-				g = 20;
-			} else if(pitch < 400) {
-				r = 50; g = 250;
-			} else if(pitch < 800) {
-				g = 250;
-			} else if(pitch < 1000) {
-				g = 250;
-				b = 50;
-			} else if(pitch < 1600) {
-				b = 250;
-			} else {
-				b = 250;
-				g = 150;
-			}
-			
-			for(int i = 0; i < 3; i++) {
-				PixelColorUtils.setPixel(i, getColor(pitch));
+
+			for (int i = 0; i < groupSize; i++) {
+				if (!centered) {
+					strip[i] = getColor(pitch);
+
+				} else {
+					strip[half - 1 - i] = getColor(pitch); //right
+					strip[half - i] = getColor(pitch); //left
+				}
 			}
 		} else {
-			for(int i = 0; i < 3; i++) {
-				PixelColorUtils.setPixel(i, Color.BLACK);
+			for (int i = 0; i < groupSize; i++) {
+				if (!centered) {
+					strip[i] = Color.BLACK;
+
+				} else {
+					strip[half - 1 - i] = Color.BLACK;
+					strip[half - i] = Color.BLACK;
+				}
 			}
 		}
+		
+		if(centered) {
+			this.center();
+		}
+			
+		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
-	
+
 	private Color getColor(double pitch) {
 		int value = (int) (multiplier * pitch);
-		if(value >= RainbowWheel.getRainbow().length) {
+		if (value >= RainbowWheel.getRainbow().length) {
 			value = RainbowWheel.getRainbow().length - 1;
 		}
-		if(value < 0) {
+		if (value < 0) {
 			value = 0;
 		}
-		//show more red colors
-		if(pitch < 60) {
+		// show more red colors
+		if (pitch < 60) {
 			value /= 2;
 		}
-		
 		return RainbowWheel.getRainbow()[value];
+	}
+	
+	
+	private void center() {
+		int half = Main.getLedNum() / 2;
+		
+		for(int a = 0; a < groupSize; a++) {
+			for(int i = 0; i < half - 1; i++) {
+				strip[i] = strip[i + 1];
+				strip[Main.getLedNum() - 1 - i] = strip[Main.getLedNum() - 2 - i];
+			}
+		}
 	}
 
 }

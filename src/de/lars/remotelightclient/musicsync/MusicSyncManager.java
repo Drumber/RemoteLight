@@ -50,6 +50,7 @@ public class MusicSyncManager {
 	private boolean active = false;
 	private MusicSyncUtils musicUtils;
 	private SoundProcessing soundProcessor;
+	private int delay = 20;
 	private double sensitivity = 1;
 	private double adjustment = 3;
 	private double volume;
@@ -103,6 +104,14 @@ public class MusicSyncManager {
 		this.volume = rms;
 		this.pitch = pitch;
 		this.pitchTime = time;
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
+	
+	public int getDelay() {
+		return delay;
 	}
 	
 	public void setSensitivity(double sensitivity) {
@@ -202,7 +211,7 @@ public class MusicSyncManager {
 						activeEffect.onLoop();
 						
 						try {
-							Thread.sleep(20);
+							Thread.sleep(delay);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
