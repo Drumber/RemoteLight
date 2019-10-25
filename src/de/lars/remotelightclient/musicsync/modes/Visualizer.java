@@ -55,7 +55,6 @@ public class Visualizer extends MusicEffect {
 		if(ampl < 3.0) {
 			return 0;
 		}
-		//System.out.println((int) (ampl * getAdjustment()));
 		return (int) (ampl * getAdjustment());
 	}
 	

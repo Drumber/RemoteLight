@@ -14,6 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightclient;
 
+import java.awt.Dimension;
 import java.util.Locale;
 
 import de.lars.remotelightclient.lang.LangUtil;
@@ -71,6 +72,7 @@ public class StartUp {
 		//Intern
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
 		s.addSetting(new SettingObject("out.brightness", null, 100));
+		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
 		
 	}
 	

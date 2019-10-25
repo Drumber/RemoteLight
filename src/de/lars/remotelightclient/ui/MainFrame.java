@@ -77,6 +77,8 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		addWindowListener(closeListener);
 		
+		setSize((Dimension) sm.getSettingObject("mainFrame.size").getValue());
+		
 		this.setFrameContetPane();
 		this.displayPanel(new OutputPanel(this));
 	}
@@ -134,6 +136,7 @@ public class MainFrame extends JFrame {
 				if(displayedPanel != null) {
 					displayedPanel.onEnd(null);
 				}
+				sm.getSettingObject("mainFrame.size").setValue(getSize());
 				Main.getInstance().close(true);
 			}
 		}

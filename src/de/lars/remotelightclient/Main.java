@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
@@ -37,7 +39,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre-0.2.0.1";
+	public final static String VERSION = "pre-0.2.0.2";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLightClient";
 	
@@ -92,7 +94,7 @@ public class Main {
 				mainFrame = new MainFrame();
 				mainFrame.setVisible(true);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	});
