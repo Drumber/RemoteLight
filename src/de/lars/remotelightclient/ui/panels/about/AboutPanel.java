@@ -167,6 +167,13 @@ public class AboutPanel extends MenuPanel {
 		UiUtils.addWebsiteHyperlink(lblTinylog, "https://tinylog.org"); //$NON-NLS-1$
 		lblTinylog.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblTinylog);
+		
+		JLabel lblGson = new JLabel("Gson"); //$NON-NLS-1$
+		lblGson.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblGson.setForeground(Style.textColor);
+		UiUtils.addWebsiteHyperlink(lblGson, "https://github.com/google/gson"); //$NON-NLS-1$
+		lblGson.setFont(Style.getFontRegualar(14));
+		panelContent.add(lblGson);
 	}
 
 }
