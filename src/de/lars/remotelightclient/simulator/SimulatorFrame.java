@@ -12,7 +12,7 @@
  * 
  * This file is part of RemoteLight.
  ******************************************************************************/
-package de.lars.remotelightclient.emulator;
+package de.lars.remotelightclient.simulator;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,8 +31,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.lars.remotelightclient.emulator.RLServerEmulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.UiUtils;
 import de.lars.remotelightclient.utils.WrapLayout;
@@ -46,13 +46,13 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
-public class EmulatorFrame extends JFrame {
+public class SimulatorFrame extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2752076462014410311L;
-	private RLServerEmulator emulator;
+	private RLServerSimulator emulator;
 	private boolean loopActive = false;
 	private Dimension pixelPanelSize = new Dimension(20, 20);
 	private List<JPanel> pixelPanels;
@@ -63,9 +63,9 @@ public class EmulatorFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmulatorFrame() {
+	public SimulatorFrame() {
 		pixelPanels = new ArrayList<>();
-		emulator = new RLServerEmulator();
+		emulator = new RLServerSimulator();
 		emulator.addStateChangeListener(stateListener);
 		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
 		addWindowListener(closeListener);
@@ -184,7 +184,7 @@ public class EmulatorFrame extends JFrame {
 				
 				@Override
 				public void run() {
-					Logger.info("Started Emulator loop"); //$NON-NLS-1$
+					Logger.info("Started Simulator loop"); //$NON-NLS-1$
 					
 					while(loopActive) {
 						if(emulator.getPixels() != null) {
@@ -202,10 +202,10 @@ public class EmulatorFrame extends JFrame {
 						} catch (InterruptedException e) {
 						}
 					}
-					Logger.info("Stopped Emulator loop"); //$NON-NLS-1$
+					Logger.info("Stopped Simulator loop"); //$NON-NLS-1$
 				}
 				
-			}, "Emulator loop").start(); //$NON-NLS-1$
+			}, "Simulator loop").start(); //$NON-NLS-1$
 		}
 	}
 	

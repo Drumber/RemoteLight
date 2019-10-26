@@ -199,35 +199,11 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 				d += z;
 			}
-
-			// System.out.println(low1 + " | " + low2 + " | " + mid1 + " | " + mid2 + " | "
-			// + high1 + " | " + high2);
-
-			indc = "";
-			shz = "";
-//			System.out.println("=====================");
-//			formMessage(indc, shz, 30);
-//			formMessage(indc, shz, 60);
-//			formMessage(indc, shz, 100);
-//			formMessage(indc, shz, 200);
-//			formMessage(indc, shz, 400);
-//			formMessage(indc, shz, 800);
-//			formMessage(indc, shz, 1200);
-//			formMessage(indc, shz, 2000);
-//			System.out.println(indc);
-//			System.out.println(shz);
 			
 			return true;
 		}
 
 	};
-	
-	private String indc = "", shz = "";
-	
-	private void formMessage(String indca, String shza, int hz) {
-		indc += hz + " | ";
-		shz += amplitudes[hzToBin(hz)] + " | ";
-	}
 
 	public int[] getSimpleAmplitudes() {
 		return new int[] { low1, low2, mid1, mid2, high1, high2 };

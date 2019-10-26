@@ -12,7 +12,7 @@
  * 
  * This file is part of RemoteLight.
  ******************************************************************************/
-package de.lars.remotelightclient.emulator;
+package de.lars.remotelightclient.simulator;
 
 import java.awt.Color;
 import java.io.BufferedInputStream;
@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 
 import de.lars.remotelightclient.lang.i18n;
 
-public class RLServerEmulator {
+public class RLServerSimulator {
 	
 	private final static int PORT = 20002;
 	private boolean running = false;
@@ -40,7 +40,7 @@ public class RLServerEmulator {
 	private Color[] inputPixels;
 	private List<ConnectionStateChangeListener> listenersState;
 	
-	public RLServerEmulator() {
+	public RLServerSimulator() {
 		listenersState = new ArrayList<>();
 		gson = new Gson();
 	}
@@ -55,11 +55,11 @@ public class RLServerEmulator {
 					try {
 						serverSocket = new ServerSocket(PORT);
 						running = true;
-						Logger.info("[Emulator] Wating for connection...");
+						Logger.info("[Simulator] Wating for connection...");
 						onStateChanged(i18n.getString("RLServerEmulator.WaitingConnection")); //$NON-NLS-1$
 						
 						socket = serverSocket.accept();
-						Logger.info("[Emulator] Client connected: " + socket.getRemoteSocketAddress());
+						Logger.info("[Simulator] Client connected: " + socket.getRemoteSocketAddress());
 						onStateChanged(i18n.getString("RLServerEmulator.Connected")); //$NON-NLS-1$
 						
 						scanner = new Scanner(new BufferedInputStream(socket.getInputStream()));
@@ -76,7 +76,7 @@ public class RLServerEmulator {
 						Logger.error(e);
 					}
 				}
-			}, "Emulator thread").start();
+			}, "Simulator thread").start();
 		}
 	}
 	
@@ -91,9 +91,9 @@ public class RLServerEmulator {
 					socket.close();
 				if(serverSocket != null)
 					serverSocket.close();
-				Logger.info("[Emulator] Server stopped...");
+				Logger.info("[Simulator] Server stopped...");
 			} catch (IOException e) {
-				Logger.error(e, "[Emulator] Could not stop the Server!");
+				Logger.error(e, "[Simulator] Could not stop the Server!");
 			}
 		}
 	}

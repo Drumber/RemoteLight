@@ -23,9 +23,9 @@ import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
-import de.lars.remotelightclient.emulator.EmulatorFrame;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.simulator.SimulatorFrame;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
@@ -68,7 +68,7 @@ public class OutputPanel extends MenuPanel {
 	 */
 	private static final long serialVersionUID = 8004937110428129961L;
 	private MainFrame mainFrame;
-	private EmulatorFrame emulator;
+	private SimulatorFrame emulator;
 	private OutputManager om = Main.getInstance().getOutputManager();
 	private DeviceManager dm = Main.getInstance().getDeviceManager();
 	private JPanel bgrMenu;
@@ -159,7 +159,7 @@ public class OutputPanel extends MenuPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(emulator == null || !emulator.isDisplayable()) {
-					emulator = new EmulatorFrame();
+					emulator = new SimulatorFrame();
 				} else {
 					emulator.setVisible(true);
 					emulator.toFront();
