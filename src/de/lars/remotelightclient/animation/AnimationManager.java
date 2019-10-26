@@ -22,6 +22,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.animation.animations.BouncingBalls;
 import de.lars.remotelightclient.animation.animations.Breath;
 import de.lars.remotelightclient.animation.animations.Close;
 import de.lars.remotelightclient.animation.animations.Fade;
@@ -154,6 +155,7 @@ public class AnimationManager {
 		animations.add(new Open());
 		animations.add(new Breath());
 		animations.add(new RedGreen());
+		animations.add(new BouncingBalls());
 	}
 
 }
