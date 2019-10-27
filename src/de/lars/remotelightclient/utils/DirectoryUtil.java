@@ -28,6 +28,10 @@ public class DirectoryUtil {
 	public final static String DATA_FILE_NAME = "data.dat";
 	public final static String LOG_DIR_NAME = "logs";
 	
+	/**
+	 * 
+	 * @return Main directory of RemoteLight
+	 */
 	public static String getDataStoragePath() {
 		return (System.getProperty("user.home") + File.separator  + DATA_DIR_NAME + File.separator);
 	}
@@ -52,6 +56,11 @@ public class DirectoryUtil {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param logfile Log file you want to copy
+	 * @param newName Name of the new log file
+	 */
 	public static void copyAndRenameLog(File logfile, String newName) {
 		try {
 			Files.copy(logfile.toPath(), new File(getLogsPath() + newName).toPath(), StandardCopyOption.REPLACE_EXISTING);

@@ -25,7 +25,7 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 public class SettingsManager {
 	
 	/**
-	 * Intern, MusicEffect: Not displayed in settings UI
+	 * Intern + MusicEffect: Not displayed in settings UI
 	 */
 	public enum SettingCategory {
 		General, Others, Intern, MusicEffect
@@ -37,10 +37,18 @@ public class SettingsManager {
 		settings = new ArrayList<Setting>();
 	}
 	
+	/**
+	 * 
+	 * @return A list with all settings
+	 */
 	public List<Setting> getSettings() {
 		return this.settings;
 	}
 	
+	/**
+	 * 
+	 * @return A list with all settings from defined category
+	 */
 	public List<Setting> getSettingsFromCategory(SettingCategory category) {
 		List<Setting> tmp = new ArrayList<Setting>();
 		for(Setting s : settings) {
@@ -67,7 +75,6 @@ public class SettingsManager {
 	/**
 	 * 
 	 * @param type Setting subclass WITH defined ID
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Setting> T getSettingFromType(T type) {
@@ -77,6 +84,9 @@ public class SettingsManager {
 		return null;
 	}
 	
+	/**
+	 * Checks if setting with defined ID is registered
+	 */
 	public boolean isRegistered(String id) {
 		return getSettingFromId(id) != null;
 	}
@@ -92,15 +102,26 @@ public class SettingsManager {
 		settings.add(setting);
 	}
 	
+	/**
+	 * Deletes ALL settings
+	 */
 	public void deleteSettings() {
 		settings = new ArrayList<Setting>();
 	}
 	
+	/**
+	 * Stores the settings in the data file
+	 * @param key DataStorage Key
+	 */
 	public void save(String key) {
 		DataStorage.store(key, settings);
 		Logger.info("Stored " + settings.size() + " setting to data file.");
 	}
 	
+	/**
+	 * Loads settings from data file
+	 * @param key DataStorage Key
+	 */
 	@SuppressWarnings("unchecked")
 	public void load(String key) {
 		if(DataStorage.getData(key) != null && DataStorage.getData(key) instanceof List<?>) {

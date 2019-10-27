@@ -39,6 +39,10 @@ public class DeviceManager {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return List of all devices
+	 */
 	public List<Device> getDevices() {
 		return devices;
 	}
@@ -52,6 +56,10 @@ public class DeviceManager {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @return List with all Arduinos
+	 */
 	public List<Arduino> getArduinos() {
 		List<Arduino> tmp = new ArrayList<Arduino>();
 		for(Device d : devices) {
@@ -62,6 +70,10 @@ public class DeviceManager {
 		return tmp;
 	}
 	
+	/**
+	 * 
+	 * @return List with all RemoteLightServer (Raspberry Pi's)
+	 */
 	public List<RemoteLightServer> getRemoteLightServer() {
 		List<RemoteLightServer> tmp = new ArrayList<RemoteLightServer>();
 		for(Device d : devices) {
@@ -74,7 +86,7 @@ public class DeviceManager {
 	
 	/**
 	 * 
-	 * @return returns true when ID is already used
+	 * @return true when ID is already used
 	 */
 	public boolean isIdUsed(String id) {
 		return this.getDevice(id) != null;
@@ -82,7 +94,7 @@ public class DeviceManager {
 	
 	/**
 	 * 
-	 * @return returns false when ID is already used
+	 * @return false when ID is already used
 	 */
 	public boolean addDevice(Device device) {
 		if(this.isIdUsed(device.getId())) { //ID is already used
@@ -92,6 +104,10 @@ public class DeviceManager {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * Removes device
+	 */
 	public boolean removeDevice(Device device) {
 		if(this.getDevice(device.getId()) == null) { //No device with this ID
 			return false;
@@ -105,10 +121,18 @@ public class DeviceManager {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * Deletes ALL devices
+	 */
 	public void removeAllDevices() {
 		devices.clear();
 	}
 	
+	/**
+	 * 
+	 * Stores devices in data file
+	 */
 	public void saveDevices() {
 		Device[] storedDevices = new Device[devices.size()];
 		storedDevices = devices.toArray(storedDevices);

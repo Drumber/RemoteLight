@@ -30,6 +30,11 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPa
 
 public class SettingsUtil {
 	
+	/**
+	 * 
+	 * @param s Setting subclass
+	 * @return The corresponding setting panel
+	 */
 	public static SettingPanel getSettingPanel(Setting s) {
 		if(s instanceof SettingString) {
 			return new SettingStringPanel((SettingString) s);

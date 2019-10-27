@@ -27,10 +27,11 @@ public class DataStorage {
 	
 	private static FileStorage storage;
 	public static final String SETTINGSMANAGER_KEY = "settingsmanager_key";
-	public final static String IP_STOREKEY = "serverip";
-	public final static String SOUND_INPUT_STOREKEY = "soundinput";
 	public final static String DEVICES_LIST = "devices_list";
 	
+	/**
+	 * Creates data file if it does not exist
+	 */
 	public static void start() {
 		try {
 			new File(DirectoryUtil.getDataStoragePath()).mkdirs();
@@ -41,6 +42,11 @@ public class DataStorage {
 		if(!isCreated()) Logger.error("Could not create data file!");;
 	}
 	
+	/**
+	 * 
+	 * @param key Key of the setting
+	 * @param data Data you want to store
+	 */
 	public static void store(String key, Object data) {
 		try {
 			if(isCreated()) {
@@ -54,6 +60,10 @@ public class DataStorage {
 		}
 	}
 	
+	/**
+	 * Deletes the data of the corresponding key
+	 * 
+	 */
 	public static void remove(String key) {
 		try {
 			storage.remove(key);
@@ -62,6 +72,9 @@ public class DataStorage {
 		}
 	}
 	
+	/**
+	 * Saves the data file
+	 */
 	public static void save() {
 		if(isCreated()) {
 			try {
@@ -72,6 +85,11 @@ public class DataStorage {
 		}
 	}
 	
+	/**
+	 * Get data of the corresponding key
+	 * @param key Key of the data
+	 * @return stored data or null if key is not stored
+	 */
 	public static Object getData(String key) {
 		try {
 			if(isCreated())
@@ -82,10 +100,18 @@ public class DataStorage {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @return FileStorage
+	 */
 	public static FileStorage getstorage() {
 		return storage;
 	}
 	
+	/**
+	 * Checks if key is stored
+	 *
+	 */
 	public static boolean isStored(String key) {
 		try {
 			Object data = DataStorage.getData(key);
@@ -97,6 +123,10 @@ public class DataStorage {
 		return false;
 	}
 	
+	/**
+	 * Checks if data file exist
+	 * 
+	 */
 	public static boolean isCreated() {
 		if(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME).isFile())
 			return true;

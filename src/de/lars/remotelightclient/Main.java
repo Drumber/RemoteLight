@@ -39,7 +39,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre-0.2.0.2";
+	public final static String VERSION = "pre-0.2.0.3";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLightClient";
 	
@@ -72,22 +72,24 @@ public class Main {
 	}
 	
 	public Main() {
-		this.configureLogger();
+		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
-		Style.loadFonts();
-		DataStorage.start();
+		Style.loadFonts();				// Load custom fonts
+		DataStorage.start();			// Load data file
 		settingsManager = new SettingsManager();
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
 		
-		new StartUp();
+		new StartUp();					// Includes some things that need to be executed at startup
 		
+		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
 		screenColorManager = new ScreenColorManager();
 		effectManager = new EffectManager();
+		// Start UI
 		EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
@@ -140,6 +142,10 @@ public class Main {
 		return mainFrame;
 	}
 	
+	/**
+	 * Returns the number of LEDs of the active output
+	 * @return
+	 */
 	public static int getLedNum() {
 		if(instance.getOutputManager().getActiveOutput() != null) {
 			return instance.getOutputManager().getActiveOutput().getPixels();
@@ -151,13 +157,13 @@ public class Main {
 	public void close(boolean autoexit) {
 		shuttingDown = true;
 		try {
-			this.getEffectManager().stopAll();
-			this.getOutputManager().close();
+			this.getEffectManager().stopAll();		// Stop all active effects
+			this.getOutputManager().close();		// Close active output
 			
-			this.getDeviceManager().saveDevices();
-			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);
+			this.getDeviceManager().saveDevices();	// Save device list
+			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);	// Save all settings
 			
-			DataStorage.save();
+			DataStorage.save();						// Save data file
 			
 			//copy log file and rename
 			DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");

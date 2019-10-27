@@ -22,7 +22,9 @@ import java.util.Random;
  */
 
 public class RainbowWheel {
-	
+	/**
+	 * Length of the rainbow array
+	 */
 	private final static int SIZE = 360;
 	private static Color[] rainbow = new Color[SIZE];
 	
@@ -43,6 +45,10 @@ public class RainbowWheel {
 		return rainbow;
 	}
 
+	/**
+	 * 
+	 * @return A random color from the rainbow array
+	 */
 	public static Color getRandomColor() {
 		int rnd = new Random().nextInt(getRainbow().length);
 		return getRainbow()[rnd];

@@ -80,10 +80,18 @@ public class OutputManager {
 		}
 	}
 	
+	/**
+	 * 
+	 * Sets the delay of the output loop
+	 */
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
 	
+	/**
+	 * 
+	 * @return Delay of the output loop
+	 */
 	public int getDelay() {
 		if(((SettingInt) sm.getSettingFromId("out.delay")) != null) {
 			delay = ((SettingInt) sm.getSettingFromId("out.delay")).getValue();
@@ -103,14 +111,26 @@ public class OutputManager {
 		return brightness;
 	}
 	
+	/**
+	 * 
+	 * @return Color array that was last sent
+	 */
 	public Color[] getLastColors() {
 		return lastPixels;
 	}
 	
+	/**
+	 * 
+	 * Toggle output loop
+	 */
 	public void setEnabled(boolean enabled) {
 		active = enabled;
 	}
 	
+	/**
+	 * 
+	 * @return True if output loop is running
+	 */
 	public boolean isEnabled() {
 		return active;
 	}
@@ -131,6 +151,10 @@ public class OutputManager {
 		sm.getSettingObject("out.brightness").setValue(getBrightness());
 	}
 	
+	/**
+	 * 
+	 * @param pixels Color array which length must be equal the number of LEDs
+	 */
 	public static void addToOutput(Color[] pixels) {
 		Main.getInstance().getOutputManager().setOutputPixels(pixels);
 	}

@@ -160,6 +160,7 @@ public class UiUtils {
 		}
 	}
 	
+	
 	public static void addSliderMouseWheelListener(JSlider slider) {
 		slider.addMouseWheelListener(sliderWheelListener);
 	}

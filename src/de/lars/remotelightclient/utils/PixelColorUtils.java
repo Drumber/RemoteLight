@@ -22,6 +22,12 @@ import de.lars.remotelightclient.out.OutputManager;
 
 public class PixelColorUtils {
 	
+	/**
+	 * 
+	 * @param color The color you want to apply to the whole array
+	 * @param size Size of the array
+	 * @return Color array of the defined color
+	 */
 	public static Color[] colorAllPixels(Color color, int size) {
 		Color[] pixels = new Color[size];
 		for(int i = 0; i < size; i++) {
@@ -30,6 +36,10 @@ public class PixelColorUtils {
 		return pixels;
 	}
 	
+	/**
+	 * 
+	 * @param amount Number of places you want to move the LEDs by
+	 */
 	public static void shiftRight(int amount) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
 		Color[] leds = strip;
@@ -45,6 +55,10 @@ public class PixelColorUtils {
 		OutputManager.addToOutput(leds);
 	}
 	
+	/**
+	 * 
+	 * @param amount Number of places you want to move the LEDs by
+	 */
 	public static void shiftLeft(int amount) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
 		Color[] leds = strip;
@@ -60,6 +74,10 @@ public class PixelColorUtils {
 		OutputManager.addToOutput(leds);
 	}
 	
+	/**
+	 * Sets the color of a single pixel/LED
+	 *
+	 */
 	public static void setPixel(int pixel, Color color) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
 		if(strip.length < 1) {
@@ -91,7 +109,6 @@ public class PixelColorUtils {
 	
 	/**
 	 * 
-	 * @param pixels
 	 * @param right Flip the right side to the left if true
 	 */
 	public static Color[] centered(Color[] pixels, boolean right) {
