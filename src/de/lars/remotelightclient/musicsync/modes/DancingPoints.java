@@ -9,6 +9,7 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
@@ -29,6 +30,10 @@ public class DancingPoints extends MusicEffect {
 	public DancingPoints() {
 		super("DancingPoints");
 		
+		s.addSetting(new SettingBoolean("musicsync.dancingpoints.randomcolor", "Random color", SettingCategory.MusicEffect, "", true));
+		this.addOption("musicsync.dancingpoints.randomcolor");
+		s.addSetting(new SettingColor("musicsync.dancingpoints.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		this.addOption("musicsync.dancingpoints.color");
 		s.addSetting(new SettingBoolean("musicsync.dancingpoints.idleactivity", "Idle activity", SettingCategory.MusicEffect, "Move points randomly when no music is playing.", false));
 		this.addOption("musicsync.dancingpoints.idleactivity");
 	}
@@ -46,8 +51,7 @@ public class DancingPoints extends MusicEffect {
 		for(int i = 0; i < numPoints; i++) {
 			pos[i] = numLEDs / numPoints * i;
 			targetPos[i] = pos[i];
-			int rainbowPos = RainbowWheel.getRainbow().length / numPoints * i;
-			color[i] = RainbowWheel.getRainbow()[rainbowPos];
+			setColor(i);
 			strip[pos[i]] = color[i];	// Place point on strip
 		}
 		super.onEnable();
@@ -69,6 +73,7 @@ public class DancingPoints extends MusicEffect {
 				setNewTargetPos(i);
 			}
 			moveToTargetPos(i);
+			setColor(i);
 			
 			strip[pos[i]] = color[i];
 		}
@@ -102,6 +107,16 @@ public class DancingPoints extends MusicEffect {
 		}
 		if(targetPos[i] < pos[i]) {	// Target pos is under current pos
 			pos[i]--;
+		}
+	}
+	
+	
+	private void setColor(int i) {
+		if(((SettingBoolean) s.getSettingFromId("musicsync.dancingpoints.randomcolor")).getValue()) {	// Random color
+			int rainbowPos = RainbowWheel.getRainbow().length / numPoints * i;
+			color[i] = RainbowWheel.getRainbow()[rainbowPos];
+		} else {
+			color[i] = ((SettingColor) s.getSettingFromId("musicsync.dancingpoints.color")).getValue();
 		}
 	}
 
