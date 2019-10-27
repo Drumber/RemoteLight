@@ -26,6 +26,7 @@ import org.tinylog.Logger;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.musicsync.modes.Bump;
+import de.lars.remotelightclient.musicsync.modes.DancingPoints;
 import de.lars.remotelightclient.musicsync.modes.EQ;
 import de.lars.remotelightclient.musicsync.modes.Fade;
 import de.lars.remotelightclient.musicsync.modes.LevelBar;
@@ -232,6 +233,7 @@ public class MusicSyncManager {
 		effects.add(new Fade());
 		effects.add(new Pulse());
 		effects.add(new Visualizer());
+		effects.add(new DancingPoints());
 	}
 
 }
