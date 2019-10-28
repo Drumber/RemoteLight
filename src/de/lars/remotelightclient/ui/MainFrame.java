@@ -138,7 +138,9 @@ public class MainFrame extends JFrame {
 				if(displayedPanel != null) {
 					displayedPanel.onEnd(null);
 				}
-				sm.getSettingObject("mainFrame.size").setValue(getSize());
+				if(getExtendedState() == NORMAL) {
+					sm.getSettingObject("mainFrame.size").setValue(getSize());
+				}
 				Main.getInstance().close(true);
 			}
 		}
