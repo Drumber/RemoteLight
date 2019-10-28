@@ -55,7 +55,7 @@ A new window will open. Click on '*Enable*' to activate the simulator. Now go ba
 <img src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" width="300"> <img src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" width="380">
 
 ## Video Demo
-[![Music Visualizer](https://img.youtube.com/vi/u8ptqaTGteg/0.jpg =280x)](https://www.youtube.com/watch?v=u8ptqaTGteg) [![Music Visualizer](https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg =280x)](https://www.youtube.com/watch?v=-5hKRAyPDT8)
+<a href="https://www.youtube.com/watch?v=u8ptqaTGteg"><img src="https://img.youtube.com/vi/u8ptqaTGteg/0.jpg" width="280"></a>  <a href="https://www.youtube.com/watch?v=-5hKRAyPDT8"><img src="https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg" width="280"></a>
 
 ## TODO
 - [ ] Create wiki / documentation
