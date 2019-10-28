@@ -119,15 +119,13 @@ public class AnimationManager {
 							try {
 								Thread.sleep(delay);
 							} catch (InterruptedException e) {
-								Logger.error("Animation Thread could not wait for delay! (delay: " + delay + ")");
-								e.printStackTrace();
+								Logger.error(e, "Animation Thread could not wait for delay! (delay: " + delay + ")");
 							}
 						} else {
 							try {
 								Thread.sleep(activeAnimation.getDelay());
 							} catch (InterruptedException e) {
-								Logger.error("Animation Thread could not wait for delay! (delay: " + activeAnimation.getDelay() + ")");
-								e.printStackTrace();
+								Logger.error(e, "Animation Thread could not wait for delay! (delay: " + activeAnimation.getDelay() + ")");
 							}
 						}
 					}

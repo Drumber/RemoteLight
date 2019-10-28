@@ -39,6 +39,8 @@ import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import java.awt.SystemTray;
+
 import javax.swing.border.EmptyBorder;
 
 import org.tinylog.Logger;
@@ -129,7 +131,7 @@ public class MainFrame extends JFrame {
 	
 	WindowListener closeListener = new WindowAdapter() {
 		public void windowClosing(WindowEvent windowEvent) {
-			if(((SettingBoolean) sm.getSettingFromId("ui.hideintray")).getValue()) {
+			if(((SettingBoolean) sm.getSettingFromId("ui.hideintray")).getValue() && SystemTray.isSupported()) {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {

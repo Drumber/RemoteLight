@@ -107,7 +107,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerPixels = new JSpinner();
 		spinnerPixels.setPreferredSize(new Dimension(50, 20));
-		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		
 		setValues();
@@ -128,6 +128,9 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			if(ports.contains(pname)) {
 				comboPorts.setSelectedItem(pname);
 			}
+		}
+		if(arduino.getPixels() <= 0) {
+			arduino.setPixels(1);
 		}
 		spinnerPixels.setValue(arduino.getPixels());
 	}

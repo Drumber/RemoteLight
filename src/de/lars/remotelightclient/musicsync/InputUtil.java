@@ -34,8 +34,10 @@ public class InputUtil {
 	        } catch (LineUnavailableException ex) {
 	        	return true;
 	        }
-		} catch(LineUnavailableException e) {
+		} catch(LineUnavailableException | IllegalStateException e) {
 			return true;
+		} catch(Exception e) {
+			return false;
 		}
 		mixer.close();
 		line.close();
