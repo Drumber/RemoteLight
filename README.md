@@ -46,6 +46,17 @@ Now start RemoteLight on your computer and click on '*Add*' > '*RLServer (Raspbe
 Enter the number of pixels and click Save. If the server is running, you can click on '*Activate*'.
 > Note: You can also use the Raspberry Pi without an additional computer. For this you need an OS with a graphical desktop installed on the Raspberry Pi. Start the server (as described above) + the RemoteLight control software and enter 'localhost' or '127.0.0.1' in the 'Hostname / IP' field.
 
+#### Start server automatically on startup
+1. Install screen: `sudo apt-get install screen`
+2. Edit root startup script: `sudo nano /etc/rc.local`
+3. Insert the following line before '*exit 0*':  
+`su - pi -c "screen -dm -S [name] sudo java -jar /path/to/RemoteLightServer.jar"`
+4. Edit the name of the screen and the file path, e.g.:  
+*`su - pi -c "screen -dm -S remotelight sudo java -jar /home/pi/RemoteLightServer-pre0.2.0.1.jar"`*
+
+The RemoteLightServer will now start automatically in a new screen when booting.  
+To open the screen use `screen -r [name]`. Type `end` or press `Ctrl + C` to stop the server. To leave the screen press `Ctrl + A and D`.
+
 ### Simulator
 RemoteLight comes with a LED strip simulator in which you can test the effects without a WS2811/WS2812 strip. However, the effects look a thousand times better with a real LED strip 😉.  
 To use the simulator you need to go to the output menu and click on '*Open simulator*' in the upper right corner.  
