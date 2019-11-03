@@ -21,6 +21,8 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.TimeUtil;
 
@@ -33,13 +35,13 @@ public class Twinkle extends Animation {
 
 	public Twinkle() {
 		super("Twinkle");
+		this.addSetting(new SettingColor("animation.twinkle.color", "Color", SettingCategory.Intern,	null, new Color(255, 240, 255)));
 	}
 	
 	@Override
 	public void onEnable() {
 		am = Main.getInstance().getAnimationManager();
 		max = Main.getLedNum() / 10;
-		color = new Color(255, 240, 255);
 		time = new TimeUtil(am.getDelay());
 		super.onEnable();
 	}
@@ -48,6 +50,8 @@ public class Twinkle extends Animation {
 	public void onLoop() {
 		if(time.hasReached()) {
 			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			color = ((SettingColor) getSetting("animation.twinkle.color")).getValue();
+			
 			for(int i = 0; i <= max; i++) {
 				if(new Random().nextInt(3) == 0) {
 					PixelColorUtils.setPixel(new Random().nextInt(Main.getLedNum()), color);

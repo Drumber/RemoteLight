@@ -57,7 +57,6 @@ public class MusicEffect {
 	}
 	
 	/**
-	 * 
 	 * @param id ID of the setting
 	 */
 	public void addOption(String id) {

@@ -37,6 +37,13 @@ public class PixelColorUtils {
 	}
 	
 	/**
+	 * Set all pixels to black
+	 */
+	public static void setAllPixelsBlack() {
+		OutputManager.addToOutput(colorAllPixels(Color.BLACK, Main.getLedNum()));
+	}
+	
+	/**
 	 * 
 	 * @param amount Number of places you want to move the LEDs by
 	 */

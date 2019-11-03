@@ -51,6 +51,7 @@ public class AnimationsPanel extends MenuPanel {
 	private MainFrame mainFrame;
 	private AnimationManager am = Main.getInstance().getAnimationManager();
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
+	private AnimationOptionsPanel optionsPanel;
 	private JPanel bgrAnimations;
 	private JPanel bgrSettings;
 
@@ -85,9 +86,11 @@ public class AnimationsPanel extends MenuPanel {
 		
 		bgrSettings = new JPanel();
 		bgrSettings.setBackground(Style.panelDarkBackground);
-		bgrSettings.setVisible(false);
+		bgrSettings.setLayout(new BorderLayout(0, 0));
 		add(bgrSettings);
 		
+		optionsPanel = new AnimationOptionsPanel(bgrSettings);
+		bgrSettings.add(optionsPanel, BorderLayout.CENTER);
 		this.addAnimationPanels();
 	}
 	
@@ -122,6 +125,7 @@ public class AnimationsPanel extends MenuPanel {
 				}
 			}
 			addAnimationPanels();
+			optionsPanel.showOptions();
 		}
 	};
 	

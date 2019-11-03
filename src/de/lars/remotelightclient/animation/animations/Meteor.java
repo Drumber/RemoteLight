@@ -15,11 +15,12 @@
 package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
-import java.util.Random;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Meteor extends Animation {
@@ -30,12 +31,18 @@ public class Meteor extends Animation {
 
 	public Meteor() {
 		super("Meteor");
-		rndmColor();
+		color = RainbowWheel.getRandomColor();
+		this.addSetting(new SettingBoolean("animation.meteor.randomcolor", "Random color", SettingCategory.Intern, null, true));
+		this.addSetting(new SettingColor("animation.meteor.color", "Color", SettingCategory.Intern,	null, Color.RED));
 	}
 	
 	@Override
 	public void onLoop() {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		
+		if(!((SettingBoolean) getSetting("animation.meteor.randomcolor")).getValue()) {
+			color = ((SettingColor) getSetting("animation.meteor.color")).getValue();
+		}
 		
 		for(int i = 0; i < Main.getLedNum(); i++) {
 			strip[i] = dim(strip[i]);
@@ -52,16 +59,12 @@ public class Meteor extends Animation {
 			if(--pos < 0) {
 				pos = 0;
 				right = true;
-				rndmColor();
+				color = RainbowWheel.getRandomColor();
 			}
 		}
 		OutputManager.addToOutput(strip);
 		
 		super.onLoop();
-	}
-	
-	private void rndmColor() {
-		color = RainbowWheel.getRainbow()[new Random().nextInt(RainbowWheel.getRainbow().length)];
 	}
 	
 	private Color dim(Color c) {
