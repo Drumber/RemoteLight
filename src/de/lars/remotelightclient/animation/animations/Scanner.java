@@ -35,9 +35,8 @@ public class Scanner extends Animation {
 	
 	@Override
 	public void onEnable() {
-		Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.PINK, Color.MAGENTA,
+		colors = new Color[] {Color.RED, Color.ORANGE, Color.YELLOW, Color.PINK, Color.MAGENTA,
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
-		this.colors = colors;
 		c = Color.RED;
 		strip = Main.getInstance().getOutputManager().getLastColors();
 		pix = 0;

@@ -26,7 +26,7 @@ public class TheaterChase extends Animation {
 	private boolean swtch;
 	private int hsv = 0;
 	private int counter = 0;
-	private Color[] strip = new Color[Main.getLedNum()];
+	private Color[] strip;
 
 	public TheaterChase() {
 		super("TheaterChase");
@@ -34,6 +34,7 @@ public class TheaterChase extends Animation {
 	
 	@Override
 	public void onEnable() {
+		strip = new Color[Main.getLedNum()];
 		for(int i = 0; i < strip.length; i++) {
 			strip[i] = Color.BLACK;
 		}
@@ -43,16 +44,16 @@ public class TheaterChase extends Animation {
 	@Override
 	public void onLoop() {
 		if(swtch) {
-			counter++;
-			if(counter == 2) {
+			
+			for(int i = strip.length-1; i > 0; i--) {
+				strip[i] = strip[i-1];
+			}
+			
+			if(counter++ == 2) {
 				strip[0] = RainbowWheel.getRainbow()[hsv];
 				counter = 0;
 			} else {
 				strip[0] = Color.BLACK;
-			}
-			
-			for(int i = strip.length-1; i > 0; i--) {
-				strip[i] = strip[i-1];
 			}
 			
 			hsv++;

@@ -30,9 +30,7 @@ public class RainbowWheel {
 	
 	public static void init() {
 		double jump = 1.0 / (SIZE * 1.0);
-		int[] colors = new int[SIZE];
-		for(int i = 0; i < colors.length; i++) {
-			colors[i] = Color.HSBtoRGB((float) (jump * i), 1.0f, 1.0f);
+		for(int i = 0; i < SIZE; i++) {
 			rainbow[i] = Color.getHSBColor((float) (jump * i), 1.0f, 1.0f);
 		}
 	}
@@ -50,8 +48,8 @@ public class RainbowWheel {
 	 * @return A random color from the rainbow array
 	 */
 	public static Color getRandomColor() {
-		int rnd = new Random().nextInt(getRainbow().length);
-		return getRainbow()[rnd];
+		float random = new Random().nextFloat();
+		return Color.getHSBColor(random, 1.0f, 1.0f);
 	}
 	
 }

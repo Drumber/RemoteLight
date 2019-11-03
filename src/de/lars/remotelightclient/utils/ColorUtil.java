@@ -46,5 +46,15 @@ public class ColorUtil {
 		
 		return (r + g + b) / 3;
 	}
+	
+	
+	public static boolean similar(Color c1, Color c2) {
+		int deltaR = c1.getRed() - c2.getRed();
+		int deltaG = c1.getGreen() - c2.getGreen();
+		int deltaB = c1.getBlue() - c2.getBlue();
+		
+		double distance = deltaR * deltaR + deltaG * deltaG + deltaB * deltaB;
+		return distance < 50000;
+	}
 
 }

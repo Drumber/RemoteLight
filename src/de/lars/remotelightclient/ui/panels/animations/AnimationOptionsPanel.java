@@ -89,7 +89,7 @@ public class AnimationOptionsPanel extends JPanel {
 		
 		JLabel lblExpand = new JLabel("Animation options");
 		lblExpand.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblExpand.setFont(Style.getFontBold(9));
+		lblExpand.setFont(Style.getFontBold(10));
 		lblExpand.setForeground(Style.accent);
 		lblExpand.addMouseListener(expandListener);
 		panelTitel.add(lblExpand);
