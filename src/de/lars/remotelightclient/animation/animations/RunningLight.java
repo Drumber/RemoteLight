@@ -17,6 +17,9 @@ package de.lars.remotelightclient.animation.animations;
 import java.awt.Color;
 
 import de.lars.remotelightclient.animation.Animation;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class RunningLight extends Animation {
@@ -26,44 +29,46 @@ public class RunningLight extends Animation {
 
 	public RunningLight() {
 		super("RunningLight");
+		this.addSetting(new SettingBoolean("animation.runninglight.randomcolor", "Random color", SettingCategory.Intern, null, true));
+		this.addSetting(new SettingColor("animation.runninglight.color", "Color", SettingCategory.Intern,	null, Color.RED));
 	}
 	
 	@Override
 	public void onEnable() {
-	    Color[] color = {Color.RED, Color.ORANGE, Color.PINK, Color.MAGENTA,
+	    this.color = new Color[] {Color.RED, Color.ORANGE, Color.PINK, Color.MAGENTA,
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
-	    this.color = color;
 	    pass = 0; counter = 0;
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
+		if(counter >= color.length) {
+			counter = 0;
+		}
+		Color c = color[counter];
+		
+		if(!((SettingBoolean) getSetting("animation.runninglight.randomcolor")).getValue()) {
+			c = ((SettingColor) getSetting("animation.runninglight.color")).getValue();
+		}
+		
 		if(pass < 5) {
 			switch (pass) {
 			case 0:
-				if(counter >= color.length) counter = 0;
-				PixelColorUtils.setPixel(0, color[counter].darker().darker());
+				PixelColorUtils.setPixel(0, c.darker().darker());
 				break;
 			case 1:
-				if(counter > color.length) counter = 0;
-				PixelColorUtils.setPixel(0, color[counter].darker());
+				PixelColorUtils.setPixel(0, c.darker());
 				break;
 			case 2:
-				if(counter > color.length) counter = 0;
-				PixelColorUtils.setPixel(0, color[counter]);
+				PixelColorUtils.setPixel(0, c);
 				break;
 			case 3:
-				if(counter > color.length) counter = 0;
-				PixelColorUtils.setPixel(0, color[counter].darker());
+				PixelColorUtils.setPixel(0, c.darker());
 				break;
 			case 4:
-				PixelColorUtils.setPixel(0, color[counter].darker().darker());
+				PixelColorUtils.setPixel(0, c.darker().darker());
 				counter++;
-				if(counter >= color.length) counter = 0;
-				break;
-				
-			default:
 				break;
 			}
 			
