@@ -31,7 +31,7 @@ import de.lars.remotelightclient.animation.animations.Meteor;
 import de.lars.remotelightclient.animation.animations.Open;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RandomColor;
-import de.lars.remotelightclient.animation.animations.RedGreen;
+import de.lars.remotelightclient.animation.animations.TwoColors;
 import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
@@ -164,7 +164,7 @@ public class AnimationManager {
 		animations.add(new Close());
 		animations.add(new Open());
 		animations.add(new Breath());
-		animations.add(new RedGreen());
+		animations.add(new TwoColors());
 		animations.add(new BouncingBalls());
 	}
 

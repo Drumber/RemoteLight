@@ -17,15 +17,19 @@ package de.lars.remotelightclient.animation.animations;
 import java.awt.Color;
 
 import de.lars.remotelightclient.animation.Animation;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
-public class RedGreen extends Animation {
+public class TwoColors extends Animation {
 	
 	private int colorCounter = 0;
-	private boolean red = true;
+	private boolean color1 = true;
 
-	public RedGreen() {
-		super("Red & Green");
+	public TwoColors() {
+		super("Two Colors");
+		this.addSetting(new SettingColor("animation.twocolors.color1", "Color 1", SettingCategory.Intern,	null, Color.RED));
+		this.addSetting(new SettingColor("animation.twocolors.color2", "Color 2", SettingCategory.Intern,	null, Color.GREEN));
 	}
 	
 	@Override
@@ -34,14 +38,14 @@ public class RedGreen extends Animation {
 		
 		if(++colorCounter == 2) {
 			colorCounter = 0;
-			red = !red;
+			color1 = !color1;
 		}
 		
 		Color c;
-		if(red) {
-			c = Color.RED;
+		if(color1) {
+			c =((SettingColor) getSetting("animation.twocolors.color1")).getValue();
 		} else {
-			c = Color.GREEN;
+			c = ((SettingColor) getSetting("animation.twocolors.color2")).getValue();
 		}
 		
 		PixelColorUtils.setPixel(0, c);

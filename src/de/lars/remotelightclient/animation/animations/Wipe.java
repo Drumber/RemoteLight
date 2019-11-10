@@ -40,20 +40,28 @@ public class Wipe extends Animation {
 	public void onEnable() {
 		pos = 0;
 		color = RainbowWheel.getRandomColor();
+		if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {
+			color = ((SettingColor) getSetting("animation.wipe.color")).getValue();
+		}
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.wipe.color")).getValue();
-		}
-		
 		PixelColorUtils.setPixel(pos, color);
 		
 		if(++pos == Main.getLedNum()) {
 			pos = 0;
-			color = getRandomColor();
+			
+			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {
+				if(color == Color.BLACK) {
+					color = ((SettingColor) getSetting("animation.wipe.color")).getValue();
+				} else {
+					color = Color.BLACK;
+				}
+			} else {
+				color = getRandomColor();
+			}
 		}
 		super.onLoop();
 	}
