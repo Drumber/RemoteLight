@@ -9,7 +9,9 @@ import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsUtil;
+import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
@@ -47,6 +49,9 @@ public class AnimationOptionsPanel extends JPanel {
 	public AnimationOptionsPanel(JPanel parentPanel) {
 		settingPanels = new ArrayList<SettingPanel>();
 		this.parentPanel = parentPanel;
+		SettingsManager sm = Main.getInstance().getSettingsManager();
+		sm.addSetting(new SettingObject("animationspanel.optionshidden", null, true));
+		
 		setLayout(new BorderLayout(0, 0));
 		
 		panelMain = new JPanel();
@@ -79,7 +84,11 @@ public class AnimationOptionsPanel extends JPanel {
 		panelMain.add(scrollPane);
 		scrollPane.setViewportView(bgrScroll);
 
-		hide();
+		if((boolean) sm.getSettingObject("animationspanel.optionshidden").getValue()) {
+			hide();
+		} else {
+			expand();
+		}
 	}
 	
 	public void hide() {
@@ -144,6 +153,7 @@ public class AnimationOptionsPanel extends JPanel {
 	private MouseAdapter expandListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			Main.getInstance().getSettingsManager().getSettingObject("animationspanel.optionshidden").setValue(!hidden);
 			if(hidden) {
 				expand();
 			} else {
