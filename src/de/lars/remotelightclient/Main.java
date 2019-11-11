@@ -81,12 +81,7 @@ public class Main {
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
 		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new StartUp();			// Includes some things that need to be executed at startup
-			}
-		}, "Startup thread").start();
+		new StartUp();					// Includes some things that need to be executed at startup
 		
 		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();
