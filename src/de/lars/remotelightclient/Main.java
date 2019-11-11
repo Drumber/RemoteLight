@@ -39,7 +39,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre-0.2.0.4";
+	public final static String VERSION = "pre0.2.0.4";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLightClient";
 	
@@ -81,7 +81,12 @@ public class Main {
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
 		
-		new StartUp();					// Includes some things that need to be executed at startup
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new StartUp();			// Includes some things that need to be executed at startup
+			}
+		}, "Startup thread").start();
 		
 		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();
