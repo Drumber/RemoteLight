@@ -22,7 +22,7 @@ RemoteLight is a Java based control software for WS2811/WS2812 LEDs (aka Neopixe
 ## Software
 - [Java](https://java.com)
 - [RemoteLight](https://github.com/Drumber/RemoteLightClient/releases/latest)
-- [RemoteLightServer for Raspberry Pi](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar)
+- [RemoteLightServer](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar) (is required when using a Raspberry Pi)
 
 ## Quick Start
 ### Arduino
@@ -33,9 +33,11 @@ Connect the Arduino to your computer and start RemoteLight. Click '*Add*' to add
 Now you can activate the output by double clicking on it or by clicking on '*Activate*'.
 
 ### Raspberry Pi
+*[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*
+
 First of all your Raspberry Pi must be prepared to control WS2811/WS2812 LEDs. There is a well described tutorial on tutorials-raspberrypi.com. [**> Tutorial <**](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  
 After everything works out, you can move on.  
-Now you just have to load the [RemoteLight-Server.jar](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar) onto your Raspberry Pi and start it.
+Now you just have to upload the [RemoteLight-Server.jar](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar) onto your Raspberry Pi and start it:
 1. Connect to your Raspberry Pi via SSH.
 2. Install Java: `sudo apt-get install oracle-java8-jdk`
 3. Navigate to the directory where the RemoteLight-Server.jar is located, e.g.: `cd /home/pi/`
@@ -44,9 +46,11 @@ Now you just have to load the [RemoteLight-Server.jar](https://bitbucket.org/Dru
 
 Now start RemoteLight on your computer and click on '*Add*' > '*RLServer (Raspberry)*'. Enter the IP address of the Raspberry Pi in the '*Hostname / IP*' field (the Raspberry Pi must be on the same network).
 Enter the number of pixels and click Save. If the server is running, you can click on '*Activate*'.
-> Note: You can also use the Raspberry Pi without an additional computer. For this you need an OS with a graphical desktop installed on the Raspberry Pi. Start the server (as described above) + the RemoteLight control software and enter 'localhost' or '127.0.0.1' in the 'Hostname / IP' field.
+> Note: You can also use the Raspberry Pi without an additional computer. For this you need an OS with a graphical desktop installed on the Raspberry Pi. Start the server (as described above) + the RemoteLight control software, add a new 'RLServer (Raspberry)' output and enter 'localhost' or '127.0.0.1' in the 'Hostname / IP' field.
 
 #### Start server automatically on startup
+*[Youtube Tutorial available](https://youtu.be/FYeQfIqytx4)*
+
 1. Install screen: `sudo apt-get install screen`
 2. Edit root startup script: `sudo nano /etc/rc.local`
 3. Insert the following line before '*exit 0*':  
@@ -60,7 +64,7 @@ To open the screen use `screen -r [name]`. Type `end` or press `Ctrl + C` to sto
 ### Simulator
 RemoteLight comes with a LED strip simulator in which you can test the effects without a WS2811/WS2812 strip. However, the effects look a thousand times better with a real LED strip 😉.  
 To use the simulator you need to go to the output menu and click on '*Open simulator*' in the upper right corner.  
-A new window will open. Click on '*Enable*' to activate the simulator. Now go back to the output menu and add a new '*RLServer (Raspberry)*' output. Enter `localhost` or `127.0.0.1` as hostname / IP and the number of pixels you want to simulate.
+A new window will open. Click on '*Enable*' to activate the simulator. Now go back to the output menu and add a new '*RLServer (Raspberry)*' output. Enter `localhost` or `127.0.0.1` as hostname / IP and the number of pixels you want to simulate. Then click on '*Save*' and activate the output.
 
 ## Images
 <img src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" width="300"> <img src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" width="380">
@@ -70,7 +74,7 @@ A new window will open. Click on '*Enable*' to activate the simulator. Now go ba
 
 ## TODO
 - [ ] Create wiki / documentation
-- [ ] Settings for animations
+- [x] Settings for animations
 - [ ] Link / chain several LED strips
 - [ ] Improve RemoteLightServer protocol
 - [ ] Translate settings
@@ -78,6 +82,12 @@ A new window will open. Click on '*Enable*' to activate the simulator. Now go ba
 Do you have any other suggestions❔
 
 ## Releases
+#### pre0.2.0.4
+- added settings for animations
+- improved start time
+- added update checker
+- added some new animation modes
+
 #### pre0.2.0.3
 First release of the new RemoteLight v0.2 on Github.
 - recoded everything

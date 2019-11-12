@@ -15,11 +15,12 @@
 package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
-import java.util.Random;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
@@ -30,13 +31,19 @@ public class Close extends Animation {
 
 	public Close() {
 		super("Close");
-		color = rndmColor();
+		color = RainbowWheel.getRandomColor();
+		this.addSetting(new SettingBoolean("animation.close.randomcolor", "Random color", SettingCategory.Intern, null, true));
+		this.addSetting(new SettingColor("animation.close.color", "Color", SettingCategory.Intern,	null, Color.RED));
 	}
 	
 	@Override
 	public void onLoop() {
 		int half = Main.getLedNum() / 2;
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		
+		if(!((SettingBoolean) getSetting("animation.close.randomcolor")).getValue()) {
+			color = ((SettingColor) getSetting("animation.close.color")).getValue();
+		}
 		
 		strip[pos] = color;
 		for(int i = 0; i < half; i++) {
@@ -47,7 +54,7 @@ public class Close extends Animation {
 		
 		if(pos++ == half) {
 			pos = 0;
-			color = rndmColor();
+			color = RainbowWheel.getRandomColor();
 			strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
 			strip[0] = color;
 		}
@@ -56,10 +63,6 @@ public class Close extends Animation {
 		
 		OutputManager.addToOutput(strip);
 		super.onLoop();
-	}
-	
-	private Color rndmColor() {
-		return RainbowWheel.getRainbow()[new Random().nextInt(RainbowWheel.getRainbow().length)];
 	}
 
 }

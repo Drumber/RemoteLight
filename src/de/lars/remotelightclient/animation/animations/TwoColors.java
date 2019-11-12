@@ -16,56 +16,40 @@ package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
-import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingColor;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
-public class TheaterChase extends Animation {
+public class TwoColors extends Animation {
 	
-	private boolean swtch;
-	private int hsv = 0;
-	private int counter = 0;
-	private Color[] strip;
+	private int colorCounter = 0;
+	private boolean color1 = true;
 
-	public TheaterChase() {
-		super("TheaterChase");
-	}
-	
-	@Override
-	public void onEnable() {
-		strip = new Color[Main.getLedNum()];
-		for(int i = 0; i < strip.length; i++) {
-			strip[i] = Color.BLACK;
-		}
-		super.onEnable();
+	public TwoColors() {
+		super("Two Colors");
+		this.addSetting(new SettingColor("animation.twocolors.color1", "Color 1", SettingCategory.Intern,	null, Color.RED));
+		this.addSetting(new SettingColor("animation.twocolors.color2", "Color 2", SettingCategory.Intern,	null, Color.GREEN));
 	}
 	
 	@Override
 	public void onLoop() {
-		if(swtch) {
-			
-			for(int i = strip.length-1; i > 0; i--) {
-				strip[i] = strip[i-1];
-			}
-			
-			if(counter++ == 2) {
-				strip[0] = RainbowWheel.getRainbow()[hsv];
-				counter = 0;
-			} else {
-				strip[0] = Color.BLACK;
-			}
-			
-			hsv++;
-			if(hsv >= RainbowWheel.getRainbow().length) {
-				hsv = 0;
-			}
-			
-			OutputManager.addToOutput(strip);
-		}
-		swtch = !swtch;
+		PixelColorUtils.shiftRight(1);
 		
+		if(++colorCounter == 2) {
+			colorCounter = 0;
+			color1 = !color1;
+		}
+		
+		Color c;
+		if(color1) {
+			c =((SettingColor) getSetting("animation.twocolors.color1")).getValue();
+		} else {
+			c = ((SettingColor) getSetting("animation.twocolors.color2")).getValue();
+		}
+		
+		PixelColorUtils.setPixel(0, c);
 		super.onLoop();
 	}
-	
+
 }

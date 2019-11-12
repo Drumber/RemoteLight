@@ -14,12 +14,19 @@
  ******************************************************************************/
 package de.lars.remotelightclient.animation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.settings.Setting;
+
 public class Animation {
 	
 	private String name;
 	private String displayname;
 	private int delay;
 	private boolean adjustable;
+	private List<String> options;
 	
 	/**
 	 * Animation with adjustable speed
@@ -28,6 +35,7 @@ public class Animation {
 		this.name = name;
 		this.displayname = name; //TODO Language system
 		adjustable = true;
+		options = new ArrayList<String>();
 	}
 	
 	/**
@@ -38,6 +46,7 @@ public class Animation {
 		this.displayname = name; //TODO Language system
 		this.delay = delay;
 		adjustable = false;
+		options = new ArrayList<String>();
 	}
 
 	public String getName() {
@@ -62,6 +71,22 @@ public class Animation {
 	
 	public int getDelay() {
 		return this.delay;
+	}
+	
+	public void addSetting(Setting setting) {
+		Main.getInstance().getSettingsManager().addSetting(setting);
+		options.add(setting.getId());
+	}
+	
+	public Setting getSetting(String id) {
+		return Main.getInstance().getSettingsManager().getSettingFromId(id);
+	}
+	
+	/**
+	 * @return A list with all setting IDs the animation use
+	 */
+	public List<String> getOptions() {
+		return options;
 	}
 	
 	public void onEnable() {}

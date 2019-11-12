@@ -15,11 +15,11 @@
 package de.lars.remotelightclient.out;
 
 import java.awt.Color;
-
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.devices.ConnectionState;
+import de.lars.remotelightclient.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.PixelColorUtils;
@@ -28,6 +28,7 @@ public class OutputManager {
 	
 	private SettingsManager sm;
 	private volatile Output activeOutput;
+	private OutputActionListener actionListener;
 	private Color[] outputPixels;
 	private Color[] lastPixels;
 	private int delay = 50;
@@ -37,6 +38,16 @@ public class OutputManager {
 	public OutputManager() {
 		sm = Main.getInstance().getSettingsManager();
 		active = false;
+	}
+	
+	public void addOutputActionListener(OutputActionListener l) {
+		actionListener = l;
+	}
+	
+	private void fireOutputAction(Output output, OutputActionType type) {
+		if(actionListener != null) {
+			actionListener.onOutputAction(output, type);
+		}
 	}
 
 	public Output getActiveOutput() {
@@ -56,8 +67,8 @@ public class OutputManager {
 
 		activate(activeOutput);
 		this.activeOutput = activeOutput;
+		fireOutputAction(activeOutput, OutputActionType.ACTIVE_OUTPUT_CHANGED);
 		this.loop();
-		
 	}
 	
 	/**
@@ -68,6 +79,7 @@ public class OutputManager {
 		if(output.getState() != ConnectionState.CONNECTED) {
 			output.onActivate();
 		}
+		fireOutputAction(activeOutput, OutputActionType.ACTIVATED);
 	}
 	
 	/**
@@ -78,6 +90,7 @@ public class OutputManager {
 		if(output.getState() == ConnectionState.CONNECTED) {
 			output.onDeactivate();
 		}
+		fireOutputAction(activeOutput, OutputActionType.DEACTIVATED);
 	}
 	
 	/**

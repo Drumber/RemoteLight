@@ -14,8 +14,14 @@
  ******************************************************************************/
 package de.lars.remotelightclient;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
+
+import javax.swing.JOptionPane;
 
 import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.out.Output;
@@ -28,12 +34,15 @@ import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.utils.DirectoryUtil;
 import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.UpdateChecker;
 
 public class StartUp {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
 
 	public StartUp() {
+		//methods which need to be initialized on start up
+		this.init();
 		//delete old logs
 		DirectoryUtil.deleteOldLogs(2);
 		//register default settings
@@ -42,17 +51,36 @@ public class StartUp {
 		//set language
 		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) s.getSettingFromId("ui.language")).getSelected())));
 		
-		//auto connect feature
-		if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {
-			Output output = (Output) s.getSettingFromType(new SettingObject("out.lastoutput", null, null)).getValue();
-			if(output != null) {
-				Main.getInstance().getOutputManager().setActiveOutput(output);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				
+				//auto connect feature
+				if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {
+					Output output = (Output) s.getSettingFromType(new SettingObject("out.lastoutput", null, null)).getValue();
+					if(output != null) {
+						Main.getInstance().getOutputManager().setActiveOutput(output);
+					}
+				}
+				
+				//check for update (this block blocks the thread)
+				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue()) {
+					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
+					if(updateChecker.isNewVersionAvailable()) {
+						int option = JOptionPane.showOptionDialog(null, "New Version of RemoteLight available!\nCurrent: " + Main.VERSION + " New: " + updateChecker.getNewTag(),
+								"Download new version", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+								new String[] {"Download", "Ignore"}, "Download");
+						if(option == 0) { // when user click Download, open Browser
+							try {
+								Desktop.getDesktop().browse(new URI(updateChecker.getNewUrl()));
+							} catch (URISyntaxException | IOException ex) {
+							}
+						}
+					}
+				}
+				
 			}
-		}
-		
-		//methods which need to be init on start up
-		this.init();
-		
+		}, "Startup thread").start();
 	}
 	
 	private void init() {
@@ -68,6 +96,7 @@ public class StartUp {
 		
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
+		s.addSetting(new SettingBoolean("main.checkupdates", "Check for updates", SettingCategory.Others, "Shows a notification when a new version is available.", true));
 		
 		//Intern
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));

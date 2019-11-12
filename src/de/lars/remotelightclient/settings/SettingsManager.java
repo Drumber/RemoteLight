@@ -103,6 +103,21 @@ public class SettingsManager {
 	}
 	
 	/**
+	 * Remove setting if available
+	 */
+	public void removeSetting(String id) {
+		if(getSettingFromId(id) != null) {
+			for(int i = 0; i < settings.size(); i++) {
+				if(settings.get(i).getId().equals(id)) {
+					settings.remove(i);
+					Logger.info("Removed Setting '" + id + "'.");
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Deletes ALL settings
 	 */
 	public void deleteSettings() {

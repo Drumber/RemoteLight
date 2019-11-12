@@ -15,8 +15,6 @@
 package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
-import java.util.Random;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
@@ -43,10 +41,9 @@ public class Jump extends Animation {
 		time.setInterval(Main.getInstance().getAnimationManager().getDelay()*3);
 		
 		if(time.hasReached()) {
-			Color color = RainbowWheel.getRainbow()[new Random().nextInt(RainbowWheel.getRainbow().length)];
+			Color color = RainbowWheel.getRandomColor();
 			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(color, Main.getLedNum()));
 		}
-		
 		super.onLoop();
 	}
 

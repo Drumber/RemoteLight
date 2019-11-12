@@ -19,6 +19,9 @@ import java.awt.Color;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.utils.ColorUtil;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
@@ -33,10 +36,15 @@ public class Breath extends Animation {
 	public Breath() {
 		super("Breath");
 		color = RainbowWheel.getRandomColor();
+		this.addSetting(new SettingBoolean("animation.breath.randomcolor", "Random color", SettingCategory.Intern, null, true));
+		this.addSetting(new SettingColor("animation.breath.color", "Color", SettingCategory.Intern,	null, Color.RED));
 	}
 	
 	@Override
 	public void onLoop() {
+		if(!((SettingBoolean) getSetting("animation.breath.randomcolor")).getValue()) {
+			color = ((SettingColor) getSetting("animation.breath.color")).getValue();
+		}
 		Color tmp = color;
 		
 		if(darker) {
@@ -46,7 +54,7 @@ public class Breath extends Animation {
 		} else {
 			if(++brghtns >= 100) {
 				darker = true;
-				if(++nxtColorCounter == 3) {
+				if(++nxtColorCounter == 2) {
 					color = RainbowWheel.getRandomColor();
 					nxtColorCounter = 0;
 				}

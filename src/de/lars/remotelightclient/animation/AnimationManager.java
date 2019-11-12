@@ -31,8 +31,7 @@ import de.lars.remotelightclient.animation.animations.Meteor;
 import de.lars.remotelightclient.animation.animations.Open;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RandomColor;
-import de.lars.remotelightclient.animation.animations.RandomColor2;
-import de.lars.remotelightclient.animation.animations.RedGreen;
+import de.lars.remotelightclient.animation.animations.TwoColors;
 import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
@@ -40,6 +39,8 @@ import de.lars.remotelightclient.animation.animations.TheaterChase;
 import de.lars.remotelightclient.animation.animations.Twinkle;
 import de.lars.remotelightclient.animation.animations.Wipe;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class AnimationManager {
@@ -72,6 +73,18 @@ public class AnimationManager {
 	
 	public List<Animation> getAnimations() {
 		return animations;
+	}
+	
+	public List<Setting> getCurrentAnimationOptions() {
+		SettingsManager sm = Main.getInstance().getSettingsManager();
+		List<Setting> tmp = new ArrayList<>();
+		if(getActiveAnimation() == null) {
+			return tmp;
+		}
+		for(String s : getActiveAnimation().getOptions()) {
+			tmp.add(sm.getSettingFromId(s));
+		}
+		return tmp;
 	}
 	
 	public void start(Animation animation) {
@@ -148,11 +161,10 @@ public class AnimationManager {
 		animations.add(new Fade());
 		animations.add(new Meteor());
 		animations.add(new RandomColor());
-		animations.add(new RandomColor2());
 		animations.add(new Close());
 		animations.add(new Open());
 		animations.add(new Breath());
-		animations.add(new RedGreen());
+		animations.add(new TwoColors());
 		animations.add(new BouncingBalls());
 	}
 
