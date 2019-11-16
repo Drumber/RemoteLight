@@ -17,12 +17,12 @@ RemoteLight is a Java based control software for WS2811/WS2812 LEDs (aka Neopixe
 ## Hardware
 - Windows/Linux/MacOS computer (not required when using Raspberry Pi)
 - Arduino or Raspberry Pi
-- WS2811, WS2812 or WS2812B LED strip
+- WS2811, WS2812(B) or similar LED strip
 
 ## Software
 - [Java](https://java.com)
 - [RemoteLight](https://github.com/Drumber/RemoteLightClient/releases/latest)
-- [RemoteLightServer](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar) (is required when using a Raspberry Pi)
+- [RemoteLightServer](https://github.com/Drumber/RemoteLightServer/releases/latest) (is required when using a Raspberry Pi)
 
 ## Quick Start
 ### Arduino
@@ -33,11 +33,12 @@ Connect the Arduino to your computer and start RemoteLight. Click '*Add*' to add
 Now you can activate the output by double clicking on it or by clicking on '*Activate*'.
 
 ### Raspberry Pi
-*[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*
+*[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*  
+[RemoteLightServer repository](https://github.com/Drumber/RemoteLightServer)
 
 First of all your Raspberry Pi must be prepared to control WS2811/WS2812 LEDs. There is a well described tutorial on tutorials-raspberrypi.com. [**> Tutorial <**](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  
 After everything works out, you can move on.  
-Now you just have to upload the [RemoteLight-Server.jar](https://bitbucket.org/Drumber/remotelight/downloads/RemoteLightServer-pre0.2.0.1.jar) onto your Raspberry Pi and start it:
+Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer/releases/latest) onto your Raspberry Pi and start it:
 1. Connect to your Raspberry Pi via SSH.
 2. Install Java: `sudo apt-get install oracle-java8-jdk`
 3. Navigate to the directory where the RemoteLight-Server.jar is located, e.g.: `cd /home/pi/`
