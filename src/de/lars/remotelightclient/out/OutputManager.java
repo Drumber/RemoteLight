@@ -192,7 +192,7 @@ public class OutputManager {
 					Logger.info("Started output loop.");
 					
 					while(active) {
-						if((outputPixels != null) && (activeOutput != null)) {
+						if((outputPixels != null) && (activeOutput != null) && (activeOutput.getState() == ConnectionState.CONNECTED)) {
 							
 							Color[] out = getOutputPixels();
 							activeOutput.onOutput(out);
@@ -202,6 +202,13 @@ public class OutputManager {
 							} catch (InterruptedException e) {
 								Logger.error(e);
 							}
+						} else if(activeOutput.getState() != ConnectionState.CONNECTED) {
+							Logger.info("Output not connected, deactivate Output!");
+							setEnabled(false);
+							fireOutputAction(activeOutput, OutputActionType.DISCONNECTED);
+						} else {
+							Logger.info("Invalid output data, disable Output loop!");
+							setEnabled(false);
 						}
 					}
 					Logger.info("Stopped output loop.");

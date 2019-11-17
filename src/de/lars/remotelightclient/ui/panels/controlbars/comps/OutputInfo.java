@@ -43,8 +43,10 @@ public class OutputInfo extends JPanel {
 	 * @param c Background color
 	 */
 	public OutputInfo(Color c) {
-		setBorder(new EmptyBorder(8, 0, 10, 0));
 		om = Main.getInstance().getOutputManager();
+		//om.addOutputActionListener(outputListener);
+		
+		setBorder(new EmptyBorder(8, 0, 10, 0));
 		setBackground(c);
 		setLayout(new GridLayout(2, 0, 0, 0));
 		
@@ -74,5 +76,12 @@ public class OutputInfo extends JPanel {
 			lblConnection.setText(state);
 		}
 	}
+	
+//	private OutputActionListener outputListener = new OutputActionListener() {
+//		@Override
+//		public void onOutputAction(Output output, OutputActionType type) {
+//			setLabelInfo();
+//		}
+//	};
 
 }
