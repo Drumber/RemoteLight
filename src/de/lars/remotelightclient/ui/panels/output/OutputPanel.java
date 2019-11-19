@@ -22,6 +22,7 @@ import de.lars.remotelightclient.devices.ConnectionState;
 import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
+import de.lars.remotelightclient.devices.artnet.Artnet;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.out.Output;
@@ -35,6 +36,7 @@ import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.utils.UiUtils;
@@ -132,6 +134,11 @@ public class OutputPanel extends MenuPanel {
 		this.configureAddPopup(itemRLServer, "rlserver"); //$NON-NLS-1$
 		popupMenu.add(itemRLServer);
 		
+		JMenuItem itemArtnet = new JMenuItem("Artnet");
+		itemArtnet.setIcon(Style.getUiIcon("artnet.png")); //$NON-NLS-1$
+		this.configureAddPopup(itemArtnet, "artnet");
+		popupMenu.add(itemArtnet);
+		
 		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
 		this.configureAddPopup(mnLink, "menulink"); //$NON-NLS-1$
 		mnLink.setVisible(false); //TODO
@@ -176,20 +183,35 @@ public class OutputPanel extends MenuPanel {
 		
 		bgrMenu = new JPanel();
 		bgrMenu.setBackground(Style.panelBackground);
-		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 150));
+		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 165));
 		bgrMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
 		add(bgrMenu);
 		bgrMenu.setLayout(new BorderLayout(0, 0));
 
 	}
 	
-	private JPanel getDeviceSettingsBgr(boolean setup) {
+	private JPanel getDeviceSettingsBgr(boolean setup, JPanel deviceSettingsPanel) {
 		Dimension btnSize = new Dimension(100, 25);
 		
 		JPanel bgrDeviceSettings = new JPanel();
 		bgrDeviceSettings.setBackground(Style.panelBackground);
 		bgrDeviceSettings.setLayout(new BorderLayout(0, 0));
 		bgrDeviceSettings.setPreferredSize(bgrMenu.getSize());
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportBorder(null);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(8);
+		bgrDeviceSettings.add(scrollPane, BorderLayout.CENTER);
+		
+		JPanel panelDeviceSettings = new JPanel();
+		panelDeviceSettings.setBackground(Style.panelBackground);
+		panelDeviceSettings.setLayout(new BorderLayout(0, 0));
+		scrollPane.setViewportView(panelDeviceSettings);
+		
+		panelDeviceSettings.add(deviceSettingsPanel, BorderLayout.CENTER);
 		
 		JPanel panelOptions = new JPanel();
 		WrapLayout wlayout = new WrapLayout();
@@ -231,7 +253,6 @@ public class OutputPanel extends MenuPanel {
 			btnRemove.setVisible(false);
 			btnActivate.setVisible(false);
 		}
-		
 		return bgrDeviceSettings;
 	}
 	
@@ -242,6 +263,8 @@ public class OutputPanel extends MenuPanel {
 				icon = "arduino.png"; //$NON-NLS-1$
 			} else if(d instanceof RemoteLightServer) {
 				icon = "raspberry.png"; //$NON-NLS-1$
+			} else if(d instanceof Artnet) {
+				icon = "artnet.png"; //$NON-NLS-1$
 			}
 			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
 			btn.setName(d.getId());
@@ -275,22 +298,24 @@ public class OutputPanel extends MenuPanel {
 	};
 	
 	public void showSettingsPanel(Device d, boolean setup) {
-		JPanel bgr = getDeviceSettingsBgr(setup);
 		DeviceSettingsPanel panel = null;
 		
 		if(d instanceof Arduino) {
 			panel = new ArduinoSettingsPanel((Arduino) d, setup);
 		} else if(d instanceof RemoteLightServer) {
 			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
-		}
-		
-		if(d.getConnectionState() == ConnectionState.CONNECTED) {
-			btnActivate.setText(i18n.getString("Basic.Deactivate")); //$NON-NLS-1$
+		} else if(d instanceof Artnet) {
+			panel = new ArtnetSettingsPanel((Artnet) d, setup);
 		}
 		
 		if(panel != null) {
 			currentSettingsPanel = panel;
-			bgr.add(panel, BorderLayout.CENTER);
+			JPanel bgr = getDeviceSettingsBgr(setup, panel);
+			
+			if(d.getConnectionState() == ConnectionState.CONNECTED) {
+				btnActivate.setText(i18n.getString("Basic.Deactivate")); //$NON-NLS-1$
+			}
+			
 			bgrMenu.removeAll();
 			bgrMenu.add(bgr, BorderLayout.CENTER);
 			bgrMenu.updateUI();
@@ -339,6 +364,9 @@ public class OutputPanel extends MenuPanel {
 				break;
 			case "rlserver": //$NON-NLS-1$
 				device = new RemoteLightServer(null, null);
+				break;
+			case "artnet":
+				device = new Artnet(null);
 				break;
 			case "multioutput": //TODO //$NON-NLS-1$
 				
