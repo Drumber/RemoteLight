@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsUtil;
@@ -64,7 +65,7 @@ public class AnimationOptionsPanel extends JPanel {
 		settingPanels = new ArrayList<SettingPanel>();
 		this.parentPanel = parentPanel;
 		SettingsManager sm = Main.getInstance().getSettingsManager();
-		sm.addSetting(new SettingObject("animationspanel.optionshidden", null, true));
+		sm.addSetting(new SettingObject("animationspanel.optionshidden", null, true)); //$NON-NLS-1$
 		
 		setLayout(new BorderLayout(0, 0));
 		
@@ -98,7 +99,7 @@ public class AnimationOptionsPanel extends JPanel {
 		panelMain.add(scrollPane);
 		scrollPane.setViewportView(bgrScroll);
 
-		if((boolean) sm.getSettingObject("animationspanel.optionshidden").getValue()) {
+		if((boolean) sm.getSettingObject("animationspanel.optionshidden").getValue()) { //$NON-NLS-1$
 			hide();
 		} else {
 			expand();
@@ -110,7 +111,7 @@ public class AnimationOptionsPanel extends JPanel {
 		scrollPane.setVisible(false);
 		panelTitel.removeAll();
 		
-		JLabel lblExpand = new JLabel("Animation options");
+		JLabel lblExpand = new JLabel(i18n.getString("AnimationOptionsPanel.AnimationOptions")); //$NON-NLS-1$
 		lblExpand.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblExpand.setFont(Style.getFontBold(10));
 		lblExpand.setForeground(Style.accent);
@@ -128,7 +129,7 @@ public class AnimationOptionsPanel extends JPanel {
 		panelBackground.removeAll();
 		panelTitel.removeAll();
 		
-		JLabel lblHide = new JLabel("Hide");
+		JLabel lblHide = new JLabel(i18n.getString("AnimationOptionsPanel.Hide")); //$NON-NLS-1$
 		lblHide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblHide.setFont(Style.getFontBold(9));
 		lblHide.setForeground(Style.textColorDarker);
@@ -142,14 +143,14 @@ public class AnimationOptionsPanel extends JPanel {
 	
 	public void showOptions() {
 		panelBackground.removeAll();
-		JLabel lblTitel = new JLabel("Options");
+		JLabel lblTitel = new JLabel(i18n.getString("AnimationOptionsPanel.Options")); //$NON-NLS-1$
 		lblTitel.setFont(Style.getFontBold(11));
 		lblTitel.setForeground(Style.textColor);
 		panelBackground.add(lblTitel);
 		
 		List<Setting> settings = Main.getInstance().getAnimationManager().getCurrentAnimationOptions();
 		if(settings == null || settings.size() <= 0) {
-			lblTitel.setText("The current animation has no options.");
+			lblTitel.setText(i18n.getString("AnimationOptionsPanel.CurrentAnimationNoOption")); //$NON-NLS-1$
 		} else {
 			for(Setting s : settings) {
 				SettingPanel spanel = SettingsUtil.getSettingPanel(s);
@@ -167,7 +168,7 @@ public class AnimationOptionsPanel extends JPanel {
 	private MouseAdapter expandListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Main.getInstance().getSettingsManager().getSettingObject("animationspanel.optionshidden").setValue(!hidden);
+			Main.getInstance().getSettingsManager().getSettingObject("animationspanel.optionshidden").setValue(!hidden); //$NON-NLS-1$
 			if(hidden) {
 				expand();
 			} else {
