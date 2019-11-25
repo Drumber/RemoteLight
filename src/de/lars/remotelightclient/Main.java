@@ -39,9 +39,9 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre0.2.0.4";
+	public final static String VERSION = "pre0.2.0.5";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
-	public final static String GITHUB = "https://github.com/Drumber/RemoteLightClient";
+	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
 	private static Main instance;
 	private AnimationManager aniManager;

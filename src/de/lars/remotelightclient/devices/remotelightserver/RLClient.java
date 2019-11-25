@@ -108,7 +108,10 @@ public class RLClient implements Serializable {
 			try {
 				String json = serializeToJSON(pixels);
 				out.println(json);
-				out.flush();
+				if(out.checkError()) {
+					// Server is disconnected
+					disconnect();
+				}
 			} catch (Exception e) {
 				Logger.error(e, "Could not send color array to server!");
 				this.disconnect();
