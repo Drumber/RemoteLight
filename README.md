@@ -1,12 +1,13 @@
 # RemoteLight v0.2 - Multifunctional LED Control Software
 
-RemoteLight is a Java based control software for WS2811/WS2812 LEDs (aka Neopixel). It offers a modern, user-friendly UI and a lot of features.
+RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) and some other addressable LED strips. It offers a modern, user-friendly UI and a lot of features.
 
 <img src="https://user-images.githubusercontent.com/29163322/67694588-df215580-f9a3-11e9-8666-b8a64ea08465.PNG" width="400"> <img src="https://user-images.githubusercontent.com/29163322/67695256-0b89a180-f9a5-11e9-839e-5b585c7783f2.PNG" width="400">
 
 ## Features
 - Easy to use
 - Supports **Arduino** and **Raspberry Pi**
+- Artnet output
 - Custom colors
 - Animations
 - Scenes
@@ -78,11 +79,15 @@ A new window will open. Click on '*Enable*' to activate the simulator. Now go ba
 - [x] Settings for animations
 - [ ] Link / chain several LED strips
 - [ ] Improve RemoteLightServer protocol
-- [ ] Translate settings
-
-Do you have any other suggestions❔
+- [x] Translate settings
+- [ ] Lua scripts
 
 ## Releases
+#### pre0.2.0.5
+- added artnet protocol
+- added multi language support for settings
+- some small improvements
+
 #### pre0.2.0.4
 - added settings for animations
 - improved start time
