@@ -16,6 +16,7 @@ package de.lars.remotelightclient.settings;
 
 import java.io.Serializable;
 
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 
 public class Setting implements Serializable {
@@ -39,6 +40,8 @@ public class Setting implements Serializable {
 	}
 
 	public String getName() {
+		if(i18n.getSettingString(id + ".name") != null)
+			return i18n.getSettingString(id + ".name");
 		return name;
 	}
 
@@ -55,6 +58,8 @@ public class Setting implements Serializable {
 	}
 
 	public String getDescription() {
+		if(i18n.getSettingString(id + ".description") != null)
+			return i18n.getSettingString(id + ".description");
 		return description;
 	}
 
