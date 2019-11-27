@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-impl-2.0.0.jar"/>
 	<classpathentry kind="lib" path="D:/Development/APIs_Libs/Gson/gson-2.8.5.jar" sourcepath="D:/Development/APIs_Libs/Gson/gson-2.8.5-sources.jar"/>
 	<classpathentry kind="lib" path="D:/Development/APIs_Libs/artnet4j-fixed/artnet4j-0.6.1.1.jar" sourcepath="D:/Development/APIs_Libs/artnet4j/src"/>
+	<classpathentry kind="lib" path="D:/Development/APIs_Libs/luaj-3.0.1/lib/luaj-jse-3.0.1.jar" sourcepath="D:/Development/APIs_Libs/luaj-3.0.1/lib/luaj-sources-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
