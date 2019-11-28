@@ -94,6 +94,12 @@ public class SideMenuSmall extends JPanel {
 		this.configureButton(btnScreenColor);
 		add(btnScreenColor);
 		
+		JButton btnScripts = new JButton("");
+		btnScripts.setName("scripts");
+		btnScripts.setIcon(Style.getMenuIcon("scripts.png"));
+		this.configureButton(btnScripts);
+		add(btnScripts);
+		
 		JButton btnSettings = new JButton("");
 		btnSettings.setIcon(Style.getMenuIcon("settings.png"));
 		btnSettings.setName("settings");

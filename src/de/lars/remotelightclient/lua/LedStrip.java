@@ -27,7 +27,7 @@ public class LedStrip {
 	public static ZeroArgFunction ledNumber = new ZeroArgFunction() {
 		@Override
 		public LuaValue call() {
-			return LuaValue.valueOf(60);
+			return LuaValue.valueOf(Main.getLedNum());
 		}
 	};
 	
@@ -55,6 +55,16 @@ public class LedStrip {
 				Logger.error(TAG + "Expected a table length of " + Main.getLedNum() + ", got " + strip.length());
 			}
 			return NIL;
+		}
+	};
+	
+	/**
+	 * Return true if the user defined delay/speed is over
+	 */
+	public static ZeroArgFunction delayReached = new ZeroArgFunction() {
+		@Override
+		public LuaValue call() {
+			return LuaValue.valueOf(Main.getInstance().getLuaManager().getTimer().hasReached());
 		}
 	};
 

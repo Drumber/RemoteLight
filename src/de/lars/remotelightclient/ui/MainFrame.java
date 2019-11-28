@@ -33,6 +33,7 @@ import de.lars.remotelightclient.ui.panels.musicsync.MusicSyncPanel;
 import de.lars.remotelightclient.ui.panels.output.OutputPanel;
 import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
 import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
+import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 
@@ -218,6 +219,9 @@ public class MainFrame extends JFrame {
 			break;
 		case "screencolor":
 			this.displayPanel(new ScreenColorPanel());
+			break;
+		case "scripts":
+			this.displayPanel(new ScriptsPanel());
 			break;
 		case "about":
 			this.displayPanel(new AboutPanel());

@@ -16,6 +16,7 @@ package de.lars.remotelightclient;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -85,6 +86,7 @@ public class StartUp {
 	
 	private void init() {
 		RainbowWheel.init();
+		new File(DirectoryUtil.getLuaPath()).mkdir();
 	}
 	
 	public void registerSettings() {
