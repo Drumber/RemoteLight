@@ -27,6 +27,7 @@ import org.tinylog.provider.ProviderRegistry;
 
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.devices.DeviceManager;
+import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
@@ -52,6 +53,7 @@ public class Main {
 	private OutputManager outputManager;
 	private SettingsManager settingsManager;
 	private EffectManager effectManager;
+	private LuaManager luaManager;
 	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
@@ -80,6 +82,7 @@ public class Main {
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
+		luaManager = new LuaManager();
 		
 		new StartUp();					// Includes some things that need to be executed at startup
 		
@@ -136,6 +139,10 @@ public class Main {
 	
 	public SettingsManager getSettingsManager() {
 		return settingsManager;
+	}
+	
+	public LuaManager getLuaManager() {
+		return luaManager;
 	}
 	
 	public MainFrame getMainFrame() {

@@ -27,6 +27,7 @@ public class DirectoryUtil {
 	public final static String DATA_DIR_NAME = ".RemoteLight";
 	public final static String DATA_FILE_NAME = "data.dat";
 	public final static String LOG_DIR_NAME = "logs";
+	public final static String LUA_DIR_NAME = "lua_scripts";
 	
 	/**
 	 * 
@@ -38,6 +39,10 @@ public class DirectoryUtil {
 	
 	public static String getLogsPath() {
 		return (getDataStoragePath() + LOG_DIR_NAME + File.separator);
+	}
+	
+	public static String getLuaPath() {
+		return (getDataStoragePath() + LUA_DIR_NAME + File.separator);
 	}
 	
 	/**
@@ -67,6 +72,17 @@ public class DirectoryUtil {
 		} catch (IOException e) {
 			Logger.error(e, "Could not copy log file! (" + logfile.getAbsolutePath() + " -> " + getLogsPath() + newName + ")");
 		}
+	}
+	
+	/**
+	 * Get the name of the file without extension
+	 */
+	public static String getFileName(File file) {
+		int index = file.getName().lastIndexOf('.');
+		if(index < 0) {
+			return file.getName();
+		}
+		return file.getName().substring(0, index - 1);
 	}
 
 }
