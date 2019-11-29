@@ -5,12 +5,15 @@ import java.awt.Color;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
+import org.luaj.vm2.lib.OneArgFunction;
+import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class LedStrip {
 	/**
@@ -65,6 +68,49 @@ public class LedStrip {
 		@Override
 		public LuaValue call() {
 			return LuaValue.valueOf(Main.getInstance().getLuaManager().getTimer().hasReached());
+		}
+	};
+	
+	/**
+	 * Set the whole strip to the given color
+	 */
+	public static OneArgFunction setAll = new OneArgFunction() {
+		@Override
+		public LuaValue call(LuaValue arg) {
+			LuaTable rgb = arg.checktable();
+			if(rgb.length() == 3) {
+				int r = rgb.get(1).checkint();
+				int g = rgb.get(2).checkint();
+				int b = rgb.get(3).checkint();
+				PixelColorUtils.colorAllPixels(new Color(r, g, b), Main.getLedNum());
+			} else {
+				Logger.error(TAG + "Expected a table length of 3, got " + rgb.length());
+			}
+			return NIL;
+		}
+	};
+	
+	/**
+	 * Set the color of a single pixel
+	 */
+	public static TwoArgFunction setPixel = new TwoArgFunction() {
+		@Override
+		public LuaValue call(LuaValue led, LuaValue color) {
+			int pixel = led.checkinteger().toint();
+			LuaTable rgb = color.checktable();
+			if(rgb.length() == 3) {
+				int r = rgb.get(1).checkint();
+				int g = rgb.get(2).checkint();
+				int b = rgb.get(3).checkint();
+				if(pixel > 0 && pixel <= Main.getLedNum()) {
+					PixelColorUtils.setPixel(pixel, new Color(r, g, b));
+				} else {
+					Logger.error(TAG + "Inavlid LED number '" + pixel + "'. Should be > 0 and <= " + Main.getLedNum());
+				}
+			} else {
+				Logger.error(TAG + "Expected a table length of 3, got " + rgb.length());
+			}
+			return NIL;
 		}
 	};
 

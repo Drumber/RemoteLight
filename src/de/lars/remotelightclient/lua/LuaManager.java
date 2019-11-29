@@ -8,7 +8,9 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
+import org.tinylog.Logger;
 
+import de.lars.remotelightclient.lua.CustomLuaDebugLib.ScriptInterruptException;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.TimeUtil;
 
@@ -19,6 +21,7 @@ public class LuaManager {
 	private List<File> luaScripts;
 	private String activeScriptPath;
 	
+	private LuaExceptionListener listener;
 	private TimeUtil timer;
 	private int delay;
 	
@@ -36,13 +39,21 @@ public class LuaManager {
 	}
 	
 	public void runLuaScript(String luaFilePath) {
+		stopLuaScript();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				activeScriptPath = luaFilePath;
 				debugLib.setInterrupted(false);
 				LuaValue chunk = globals.loadfile(luaFilePath);
-				chunk.call();
+				try {
+					chunk.call();
+				} catch(Exception e) {
+					if(!(e.getCause() instanceof ScriptInterruptException)) {
+						Logger.error(e);
+						onException(e);
+					}
+				}
 			}
 		}, "Lua thread").start();
 	}
@@ -104,6 +115,20 @@ public class LuaManager {
 			scanLuaScripts(path);
 		}
 		return luaScripts;
+	}
+	
+	public interface LuaExceptionListener {
+		public void onLuaException(Exception e);
+	}
+	
+	public synchronized void setLuaExceptionListener(LuaExceptionListener l) {
+		this.listener = l;
+	}
+	
+	private void onException(Exception e) {
+		if(listener != null) {
+			listener.onLuaException(e);
+		}
 	}
 	
 }

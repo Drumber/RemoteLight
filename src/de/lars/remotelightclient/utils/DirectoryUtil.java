@@ -82,7 +82,7 @@ public class DirectoryUtil {
 		if(index < 0) {
 			return file.getName();
 		}
-		return file.getName().substring(0, index - 1);
+		return file.getName().substring(0, index);
 	}
 
 }

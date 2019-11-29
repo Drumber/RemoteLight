@@ -1,7 +1,10 @@
 package de.lars.remotelightclient.ui.panels.scripts;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,13 +12,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -24,6 +28,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lua.LuaManager;
+import de.lars.remotelightclient.lua.LuaManager.LuaExceptionListener;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -45,17 +50,54 @@ public class ScriptsPanel extends MenuPanel {
 	private MainFrame mainFrame;
 	private SettingsManager sm;
 	private LuaManager luaManager;
-	private JPanel bgrScripts, bgrOptions;
+	private JPanel bgrScripts, bgrOptions, bgrNotification;
+	private JTextArea textNotification;
 	
 	public ScriptsPanel() {
 		sm = Main.getInstance().getSettingsManager();
 		luaManager = Main.getInstance().getLuaManager();
+		luaManager.setLuaExceptionListener(exceptionListener);
 		mainFrame = Main.getInstance().getMainFrame();
 		
 		sm.addSetting(new SettingObject("scripts.speed", null, 50));
 		addControlBar();
 		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		bgrNotification = new JPanel();
+		bgrNotification.setBackground(Style.panelDarkBackground);
+		bgrNotification.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+		bgrNotification.setVisible(false);
+		bgrNotification.setLayout(new BorderLayout());
+		add(bgrNotification);
+		
+		JScrollPane scrollNotification = new JScrollPane();
+		scrollNotification.getVerticalScrollBar().setUnitIncrement(16);
+		scrollNotification.setViewportBorder(null);
+		scrollNotification.setBorder(BorderFactory.createEmptyBorder());
+		scrollNotification.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		bgrNotification.add(scrollNotification, BorderLayout.CENTER);
+		
+		textNotification = new JTextArea();
+		textNotification.setForeground(new Color(255, 60, 60));
+		textNotification.setBackground(Style.panelDarkBackground);
+		textNotification.setWrapStyleWord(true);
+		textNotification.setLineWrap(true);
+		textNotification.setEditable(false);
+		scrollNotification.setViewportView(textNotification);
+		
+		JLabel lblCloseNotification = new JLabel(" X ");
+		lblCloseNotification.setForeground(new Color(255, 60, 60));
+		lblCloseNotification.setFont(Style.getFontBold(12));
+		lblCloseNotification.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		lblCloseNotification.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bgrNotification.setVisible(false);
+				updateUI();
+			}
+		});
+		bgrNotification.add(lblCloseNotification, BorderLayout.EAST);
 		
 		JPanel bgrScroll = new JPanel();
 		add(bgrScroll);
@@ -179,6 +221,17 @@ public class ScriptsPanel extends MenuPanel {
 			int speed = ((JSlider) e.getSource()).getValue();
 			sm.getSettingObject("scripts.speed").setValue(speed);
 			luaManager.setDelay(speed);
+		}
+	};
+	
+	
+	private LuaExceptionListener exceptionListener = new LuaExceptionListener() {
+		@Override
+		public void onLuaException(Exception e) {
+			String text = e.getMessage().substring(0, e.getMessage().indexOf("stack traceback:"));
+			textNotification.setText(text);
+			bgrNotification.setVisible(true);
+			updateUI();
 		}
 	};
 	
