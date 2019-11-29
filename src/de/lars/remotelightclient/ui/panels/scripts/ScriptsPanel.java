@@ -228,7 +228,10 @@ public class ScriptsPanel extends MenuPanel {
 	private LuaExceptionListener exceptionListener = new LuaExceptionListener() {
 		@Override
 		public void onLuaException(Exception e) {
-			String text = e.getMessage().substring(0, e.getMessage().indexOf("stack traceback:"));
+			String text = e.getMessage();
+			if(text.contains("stack traceback:")) {
+				text = e.getMessage().substring(0, e.getMessage().indexOf("stack traceback:"));
+			}
 			textNotification.setText(text);
 			bgrNotification.setVisible(true);
 			updateUI();
