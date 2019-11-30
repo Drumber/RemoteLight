@@ -79,6 +79,7 @@ public class ScriptsPanel extends MenuPanel {
 		bgrNotification.add(scrollNotification, BorderLayout.CENTER);
 		
 		textNotification = new JTextArea();
+		textNotification.setRows(2);
 		textNotification.setForeground(new Color(255, 60, 60));
 		textNotification.setBackground(Style.panelDarkBackground);
 		textNotification.setWrapStyleWord(true);

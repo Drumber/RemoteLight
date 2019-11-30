@@ -1,65 +1,107 @@
 package de.lars.remotelightclient.lua;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Timer;
+
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaError;
+import org.luaj.vm2.LuaThread;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.lua.CustomLuaDebugLib.ScriptInterruptException;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.TimeUtil;
 
 public class LuaManager {
 
+	private final int MAX_INSTRUCTIONS = 16;	// instruction per ms
+	
 	private Globals globals;
 	private CustomLuaDebugLib debugLib;
+	private LuaThread lThread;
+	private Timer timer;
 	private List<File> luaScripts;
 	private String activeScriptPath;
 	
 	private LuaExceptionListener listener;
-	private TimeUtil timer;
+	private TimeUtil timeUtil;
 	private int delay;
 	
 	public LuaManager() {
+		LuaThread.thread_orphan_check_interval = 5;
 		globals = JsePlatform.standardGlobals();
-		debugLib = new CustomLuaDebugLib();
+		debugLib = new CustomLuaDebugLib(globals, MAX_INSTRUCTIONS);
 		globals.load(debugLib);
 		globals.set("strip", CoerceJavaToLua.coerce(new LedStrip()));
 		
-		timer = new TimeUtil(delay, true);
-		
-//		String lua = "c = {{255, 0, 0}, {0, 255, 0}} \n" +
-//		"print('strip', strip.show(c))";
-//		globals.load(lua).call();
+		timeUtil = new TimeUtil(delay, true);
+		timer = new Timer(1, timerUpdate);
 	}
 	
+	/**
+	 * Run a lua script file
+	 * @param luaFilePath Path to the lua file
+	 */
 	public void runLuaScript(String luaFilePath) {
-		stopLuaScript();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				// stop active scripts
+				if(activeScriptPath != null) {
+					stopLuaScript();
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {}
+				}
+				
+				Logger.info("Started new thread for lua script: " + luaFilePath);
 				activeScriptPath = luaFilePath;
 				debugLib.setInterrupted(false);
-				LuaValue chunk = globals.loadfile(luaFilePath);
+				
 				try {
-					chunk.call();
-				} catch(Exception e) {
-					if(!(e.getCause() instanceof ScriptInterruptException)) {
-						Logger.error(e);
-						onException(e);
+					LuaValue chunk = globals.loadfile(luaFilePath);
+					lThread = new LuaThread(globals, chunk);
+					Varargs error = lThread.resume(LuaValue.NIL);
+					
+					if(error.arg(2) != LuaValue.NIL) {
+						throw new LuaError(error.arg(2).tojstring());
 					}
+					timer.start();
+				} catch(LuaError e) {
+					Logger.error(e);
+					onException(e);
 				}
 			}
 		}, "Lua thread").start();
 	}
 	
+	/**
+	 * Checks every millisecond if the lua script has instructions left
+	 */
+	private ActionListener timerUpdate = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			debugLib.addInstructions(MAX_INSTRUCTIONS);
+			if(debugLib.getInstructionsLeft() > 0) {	// check if instructionsleft is > 0
+				lThread.resume(LuaValue.NIL);
+			}
+		}
+	};
+	
+	/**
+	 * Stop the current lua script
+	 */
 	public void stopLuaScript() {
 		debugLib.setInterrupted(true);
+		Logger.info("Stopped lua script: " + activeScriptPath);
 		activeScriptPath = null;
 		PixelColorUtils.setAllPixelsBlack();
 	}
@@ -69,7 +111,7 @@ public class LuaManager {
 	}
 	
 	public void setDelay(int delay) {
-		timer.setInterval(delay);
+		timeUtil.setInterval(delay);
 		this.delay = delay;
 	}
 	
@@ -78,7 +120,7 @@ public class LuaManager {
 	}
 	
 	public TimeUtil getTimer() {
-		return timer;
+		return timeUtil;
 	}
 	
 	/**
