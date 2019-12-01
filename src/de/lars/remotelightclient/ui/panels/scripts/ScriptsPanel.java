@@ -27,6 +27,7 @@ import javax.swing.event.ChangeListener;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.lua.LuaManager.LuaExceptionListener;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -130,13 +131,13 @@ public class ScriptsPanel extends MenuPanel {
 	private void addOptionButtons() {
 		bgrOptions.removeAll();
 		
-		JButton btnScriptDir = new JButton("Open scripts folder");
+		JButton btnScriptDir = new JButton(i18n.getString("ScriptsPanel.openScriptsFolder"));
 		UiUtils.configureButton(btnScriptDir);
 		btnScriptDir.setName("scriptdir");
 		btnScriptDir.addActionListener(optionButtonsListener);
 		bgrOptions.add(btnScriptDir);
 		
-		JButton btnScan = new JButton("Scan");
+		JButton btnScan = new JButton(i18n.getString("ScriptsPanel.scan"));
 		UiUtils.configureButton(btnScan);
 		btnScan.setName("scan");
 		btnScan.addActionListener(optionButtonsListener);

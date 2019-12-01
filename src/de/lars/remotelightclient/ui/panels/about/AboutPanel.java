@@ -181,6 +181,13 @@ public class AboutPanel extends MenuPanel {
 		UiUtils.addWebsiteHyperlink(lblArtnet4j, "https://github.com/cansik/artnet4j"); //$NON-NLS-1$
 		lblArtnet4j.setFont(Style.getFontRegualar(14));
 		panelContent.add(lblArtnet4j);
+		
+		JLabel lblLuaj = new JLabel("Luaj"); //$NON-NLS-1$
+		lblLuaj.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblLuaj.setForeground(Style.textColor);
+		UiUtils.addWebsiteHyperlink(lblLuaj, "https://sourceforge.net/projects/luaj"); //$NON-NLS-1$
+		lblLuaj.setFont(Style.getFontRegualar(14));
+		panelContent.add(lblLuaj);
 	}
 
 }

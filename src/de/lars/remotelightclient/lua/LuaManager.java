@@ -9,20 +9,33 @@ import java.util.List;
 import javax.swing.Timer;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaThread;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
+import org.luaj.vm2.compiler.LuaC;
+import org.luaj.vm2.lib.Bit32Lib;
+import org.luaj.vm2.lib.MathLib;
+import org.luaj.vm2.lib.PackageLib;
+import org.luaj.vm2.lib.StringLib;
+import org.luaj.vm2.lib.TableLib;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.TimeUtil;
 
 public class LuaManager {
 
-	private final int MAX_INSTRUCTIONS = 16;	// instruction per ms
+	private int MAX_INSTRUCTIONS = 16;	// instruction per ms
 	
 	private Globals globals;
 	private CustomLuaDebugLib debugLib;
@@ -37,9 +50,31 @@ public class LuaManager {
 	
 	public LuaManager() {
 		LuaThread.thread_orphan_check_interval = 5;
-		globals = JsePlatform.standardGlobals();
+		// settings
+		SettingsManager sm = Main.getInstance().getSettingsManager();
+		sm.addSetting(new SettingBoolean("lua.advanced", "Lua Advanced", SettingCategory.Others, "Allow Lua scripts access to insecure libraries, such as OS and IO lib.", false));
+		sm.addSetting(new SettingInt("lua.instructions", "Lua instruction per ms", SettingCategory.Others, "Number of instructions a Lua script can execute per millisecond.", 16, 1, 100, 1));
+		MAX_INSTRUCTIONS = ((SettingInt) sm.getSettingFromId("lua.instructions")).getValue();
+		boolean advanced = ((SettingBoolean) sm.getSettingFromId("lua.advanced")).getValue();
+		
+		// set up globals
+		if(advanced) {	// allow access to all libraries
+			globals = JsePlatform.standardGlobals();
+		} else {		// access only to necessary libraries
+			globals = new Globals();
+			globals.load(new JseBaseLib());
+			globals.load(new PackageLib());
+			globals.load(new Bit32Lib());
+			globals.load(new TableLib());
+			globals.load(new StringLib());
+			globals.load(new MathLib());
+			LoadState.install(globals);
+			LuaC.install(globals);
+		}
+		// add custom custom debug lib to limit lua instructions per ms
 		debugLib = new CustomLuaDebugLib(globals, MAX_INSTRUCTIONS);
 		globals.load(debugLib);
+		// coerce LedStrip class
 		globals.set("strip", CoerceJavaToLua.coerce(new LedStrip()));
 		
 		timeUtil = new TimeUtil(delay, true);
@@ -57,6 +92,7 @@ public class LuaManager {
 				// stop active scripts
 				if(activeScriptPath != null) {
 					stopLuaScript();
+					activeScriptPath = luaFilePath;
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {}
