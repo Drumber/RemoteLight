@@ -2,6 +2,7 @@ package de.lars.remotelightclient.lua;
 
 import java.awt.Color;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -9,8 +10,6 @@ import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
-import org.tinylog.Logger;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.utils.PixelColorUtils;
@@ -20,7 +19,6 @@ public class LedStrip {
 	 * This class allows controlling LED strips from Lua
 	 */
 	
-	private final static String TAG = "[LUA] ";
 	public LedStrip() {}
 
 	/**
@@ -55,7 +53,7 @@ public class LedStrip {
 				}
 				OutputManager.addToOutput(outPixels);
 			} else {
-				Logger.error(TAG + "Expected a table length of " + Main.getLedNum() + ", got " + strip.length());
+				throw new LuaError("Expected a table length of " + Main.getLedNum() + ", got " + strip.length());
 			}
 			return NIL;
 		}
@@ -84,7 +82,7 @@ public class LedStrip {
 				int b = rgb.get(3).checkint();
 				PixelColorUtils.colorAllPixels(new Color(r, g, b), Main.getLedNum());
 			} else {
-				Logger.error(TAG + "Expected a table length of 3, got " + rgb.length());
+				throw new LuaError("Expected a table length of 3, got " + rgb.length());
 			}
 			return NIL;
 		}
@@ -103,13 +101,35 @@ public class LedStrip {
 				int g = rgb.get(2).checkint();
 				int b = rgb.get(3).checkint();
 				if(pixel > 0 && pixel <= Main.getLedNum()) {
-					PixelColorUtils.setPixel(pixel, new Color(r, g, b));
+					PixelColorUtils.setPixel(pixel - 1, new Color(r, g, b));
 				} else {
-					Logger.error(TAG + "Inavlid LED number '" + pixel + "'. Should be > 0 and <= " + Main.getLedNum());
+					throw new LuaError("Inavlid LED number '" + pixel + "'. Should be > 0 and <= " + Main.getLedNum());
 				}
 			} else {
-				Logger.error(TAG + "Expected a table length of 3, got " + rgb.length());
+				throw new LuaError("Expected a table length of 3, got " + rgb.length());
 			}
+			return NIL;
+		}
+	};
+	
+	/**
+	 * Shift all colors in strip x times to right
+	 */
+	public static OneArgFunction shiftRight = new OneArgFunction() {
+		@Override
+		public LuaValue call(LuaValue arg) {
+			PixelColorUtils.shiftRight(arg.checkint());
+			return NIL;
+		}
+	};
+	
+	/**
+	 * Shift all colors in strip x times to left
+	 */
+	public static OneArgFunction shiftLeft = new OneArgFunction() {
+		@Override
+		public LuaValue call(LuaValue arg) {
+			PixelColorUtils.shiftLeft(arg.checkint());
 			return NIL;
 		}
 	};

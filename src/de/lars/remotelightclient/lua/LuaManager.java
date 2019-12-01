@@ -35,7 +35,7 @@ import de.lars.remotelightclient.utils.TimeUtil;
 
 public class LuaManager {
 
-	private int MAX_INSTRUCTIONS = 16;	// instruction per ms
+	private int MAX_INSTRUCTIONS;	// instruction per ms
 	
 	private Globals globals;
 	private CustomLuaDebugLib debugLib;
@@ -53,7 +53,7 @@ public class LuaManager {
 		// settings
 		SettingsManager sm = Main.getInstance().getSettingsManager();
 		sm.addSetting(new SettingBoolean("lua.advanced", "Lua Advanced", SettingCategory.Others, "Allow Lua scripts access to insecure libraries, such as OS and IO lib.", false));
-		sm.addSetting(new SettingInt("lua.instructions", "Lua instruction per ms", SettingCategory.Others, "Number of instructions a Lua script can execute per millisecond.", 16, 1, 100, 1));
+		sm.addSetting(new SettingInt("lua.instructions", "Lua instruction per ms", SettingCategory.Others, "Number of instructions a Lua script can execute per millisecond.", 40, 1, 500, 1));
 		MAX_INSTRUCTIONS = ((SettingInt) sm.getSettingFromId("lua.instructions")).getValue();
 		boolean advanced = ((SettingBoolean) sm.getSettingFromId("lua.advanced")).getValue();
 		
