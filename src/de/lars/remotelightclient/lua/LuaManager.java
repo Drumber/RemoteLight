@@ -142,6 +142,10 @@ public class LuaManager {
 		PixelColorUtils.setAllPixelsBlack();
 	}
 	
+	public boolean isActive() {
+		return activeScriptPath != null;
+	}
+	
 	public String getActiveLuaScriptPath() {
 		return activeScriptPath;
 	}

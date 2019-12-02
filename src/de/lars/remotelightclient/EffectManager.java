@@ -17,6 +17,7 @@ package de.lars.remotelightclient;
 import java.awt.Color;
 
 import de.lars.remotelightclient.animation.AnimationManager;
+import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
@@ -29,9 +30,10 @@ public class EffectManager {
 	private MusicSyncManager msm;
 	private SceneManager sm;
 	private ScreenColorManager scm;
+	private LuaManager lua;
 	
 	public enum EffectType {
-		Animation, Scene, MusicSync, ScreenColor
+		Animation, Scene, MusicSync, ScreenColor, Lua
 	}
 	
 	public EffectManager() {
@@ -40,6 +42,7 @@ public class EffectManager {
 		msm = main.getMusicSyncManager();
 		sm = main.getSceneManager();
 		scm = main.getScreenColorManager();
+		lua = main.getLuaManager();
 	}
 	
 	public void stopAll() {
@@ -51,6 +54,8 @@ public class EffectManager {
 			sm.stop();
 		if(scm.isActive())
 			scm.stop();
+		if(lua.isActive())
+			lua.stopLuaScript();
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
 	}
 	
@@ -64,8 +69,11 @@ public class EffectManager {
 		if(type != EffectType.MusicSync && msm.isActive()) {
 			msm.stop();
 		}
-		if(type != EffectType.ScreenColor) {
+		if(type != EffectType.ScreenColor && scm.isActive()) {
 			scm.stop();
+		}
+		if(type != EffectType.Lua && lua.isActive()) {
+			lua.stopLuaScript();
 		}
 	}
 

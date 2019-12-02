@@ -86,7 +86,13 @@ public class StartUp {
 	
 	private void init() {
 		RainbowWheel.init();
-		new File(DirectoryUtil.getLuaPath()).mkdir();
+		// Lua
+		File luaDir = new File(DirectoryUtil.getLuaPath());
+		// copy Lua example files
+		try {
+			DirectoryUtil.copyFolderFromJar("resourcen/lua_examples", luaDir, false);
+		} catch (IOException e) {
+		}
 	}
 	
 	public void registerSettings() {

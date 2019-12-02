@@ -15,10 +15,16 @@
 package de.lars.remotelightclient.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.tinylog.Logger;
 
@@ -84,5 +90,63 @@ public class DirectoryUtil {
 		}
 		return file.getName().substring(0, index);
 	}
+	
+	/**
+	 * Copy the contents of a folder from Jar
+	 * @param folderName Name of the folder you want to copy
+	 * @param destFolder Destination folder
+	 * @param replace Delete file if exists
+	 * @throws IOException 
+	 */
+	public static void copyFolderFromJar(String folderName, File destFolder, boolean replace) throws IOException {
+		// adapted from https://github.com/wysohn/TriggerReactor/blob/master/core/src/main/java/io/github/wysohn/triggerreactor/tools/JarUtil.java
+        if (!destFolder.exists()) {
+            destFolder.mkdirs();
+        }
+		String path = DirectoryUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File fullPath = null;
+		try {
+			if(!path.startsWith("file")) {
+				path = "file://" + path;
+			}
+			fullPath = new File(new URI(path));
+		} catch(URISyntaxException e) {
+			Logger.error(e);
+		}
+		ZipInputStream zis = new ZipInputStream(new FileInputStream(fullPath));
+		ZipEntry entry;
+		while((entry = zis.getNextEntry()) != null) {
+			if(!entry.getName().startsWith(folderName + '/')) {
+				continue;
+			}
+			
+			String fileName = entry.getName();
+			File filePath = new File(destFolder + File.separator + fileName);
+			File file = new File(destFolder + File.separator + filePath.getName());
+			if(!file.getName().contains(".")) {
+				continue;
+			}
+			if (!replace && file.exists()) {
+				continue;
+			}
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileOutputStream fos = new FileOutputStream(file);
+
+			int len;
+			byte[] buffer = new byte[1024];
+			while ((len = zis.read(buffer)) > 0) {
+				fos.write(buffer, 0, len);
+			}
+			fos.close();
+		}
+		zis.closeEntry();
+		zis.close();
+	}
+	
 
 }

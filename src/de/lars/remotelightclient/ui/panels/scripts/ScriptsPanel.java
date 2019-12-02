@@ -202,6 +202,9 @@ public class ScriptsPanel extends MenuPanel {
 					}
 				}
 			}
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e1) {}
 			addScriptPanels();
 		}
 	};

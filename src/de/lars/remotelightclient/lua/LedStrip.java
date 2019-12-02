@@ -13,6 +13,7 @@ import org.luaj.vm2.lib.ZeroArgFunction;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class LedStrip {
 	/**
@@ -80,7 +81,7 @@ public class LedStrip {
 				int r = rgb.get(1).checkint();
 				int g = rgb.get(2).checkint();
 				int b = rgb.get(3).checkint();
-				PixelColorUtils.colorAllPixels(new Color(r, g, b), Main.getLedNum());
+				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(new Color(r, g, b), Main.getLedNum()));
 			} else {
 				throw new LuaError("Expected a table length of 3, got " + rgb.length());
 			}
@@ -131,6 +132,18 @@ public class LedStrip {
 		public LuaValue call(LuaValue arg) {
 			PixelColorUtils.shiftLeft(arg.checkint());
 			return NIL;
+		}
+	};
+	
+	/**
+	 * Returns a LuaTable with RGB values of a random color
+	 */
+	public static ZeroArgFunction randomColor = new ZeroArgFunction() {
+		@Override
+		public LuaValue call() {
+			Color c = RainbowWheel.getRandomColor();
+			Varargs rgb = LuaTable.varargsOf( LuaValue.valueOf(c.getRed()) , LuaValue.valueOf(c.getGreen()) , LuaValue.valueOf(c.getBlue()) );
+			return new LuaTable(rgb);
 		}
 	};
 
