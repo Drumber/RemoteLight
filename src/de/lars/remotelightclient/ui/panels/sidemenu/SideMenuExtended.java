@@ -95,6 +95,12 @@ public class SideMenuExtended extends JPanel {
 		this.configureButton(btnScreenColor);
 		add(btnScreenColor);
 		
+		JButton btnScripts = new JButton(i18n.getString("Basic.Scripts")); //$NON-NLS-1$
+		btnScripts.setName("scripts");
+		btnScripts.setIcon(Style.getMenuIcon("scripts.png")); //$NON-NLS-1$
+		this.configureButton(btnScripts);
+		add(btnScripts);
+		
 		JButton btnSettings = new JButton(i18n.getString("Basic.Settings")); //$NON-NLS-1$
 		btnSettings.setIcon(Style.getMenuIcon("settings.png")); //$NON-NLS-1$
 		btnSettings.setName("settings"); //$NON-NLS-1$

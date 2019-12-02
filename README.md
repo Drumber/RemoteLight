@@ -13,6 +13,7 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 - Scenes
 - Music reactive effects / Visualizer
 - Ambilight
+- Lua scripts
 - Neopixel simulator
 
 ## Hardware
@@ -68,6 +69,23 @@ RemoteLight comes with a LED strip simulator in which you can test the effects w
 To use the simulator you need to go to the output menu and click on '*Open simulator*' in the upper right corner.  
 A new window will open. Click on '*Enable*' to activate the simulator. Now go back to the output menu and add a new '*RLServer (Raspberry)*' output. Enter `localhost` or `127.0.0.1` as hostname / IP and the number of pixels you want to simulate. Then click on '*Save*' and activate the output.
 
+## Lua scripts
+With the latest update it is possible to write animations in Lua. All Lua files located in ``C:\Users\[user]\.RemoteLight\lua_scripts`` (``/home/[user]/.RemoteLight/lua_scripts`` on Linux) are listed in the 'Scripts' menu.  
+```
+Methods:
+strip.ledNumber()                   Returns the LED number of the current strip
+strip.show(table{table{r,g,b}})     Shows the colors in the table on the strip
+                                    Expects a table with RGB values in a table which is as long as the  led strip
+                                    e.g.: {{255, 0, 0}, {250, 15, 0}, {0, 255, 255}, ...}
+ 		                                   \ 1. LED  /  \ 2. LED   /   \ 3. LED   /  ...
+strip.delayReached()                Returns true when the user defined delay/speed is reached
+strip.setAll(table{r,g,b})          Sets the entire strip to the given color
+strip.setPixel(led, table{r,g,b})   Sets the color of a single pixel
+strip.shiftRight(x)                 Shift all colors on the strip x times to the right
+strip.shiftLeft(x)                  Shift all colors on the strip x times to the left
+strip.randomColor()                 Returns a random color (a table with an RGB value)
+```
+
 ## Images
 <img src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" width="300"> <img src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" width="380">
 
@@ -80,9 +98,12 @@ A new window will open. Click on '*Enable*' to activate the simulator. Now go ba
 - [ ] Link / chain several LED strips
 - [ ] Improve RemoteLightServer protocol
 - [x] Translate settings
-- [ ] Lua scripts
+- [x] Lua scripts
 
 ## Releases
+#### pre0.2.0.6
+- added Lua scripts feature
+
 #### pre0.2.0.5
 - added artnet protocol
 - added multi language support for settings
