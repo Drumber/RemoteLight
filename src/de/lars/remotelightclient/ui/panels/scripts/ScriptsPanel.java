@@ -171,7 +171,9 @@ public class ScriptsPanel extends MenuPanel {
 		}
 	};
 	
-	
+	/**
+	 * Adds the script panels of lua scripts in /.RemoteLight/lua_scripts/
+	 */
 	public void addScriptPanels() {
 		bgrScripts.removeAll();
 		for(File script : luaManager.getLuaScripts(DirectoryUtil.getLuaPath())) {
@@ -188,6 +190,9 @@ public class ScriptsPanel extends MenuPanel {
 		updateUI();
 	}
 	
+	/**
+	 * Lister for mouse click events on the script panels
+	 */
 	private MouseAdapter scriptPanelsListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -209,7 +214,9 @@ public class ScriptsPanel extends MenuPanel {
 		}
 	};
 	
-	
+	/**
+	 * Adds control bar with a speed slider
+	 */
 	private void addControlBar() {
 		DefaultControlBar controlBar = new DefaultControlBar();
 		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);

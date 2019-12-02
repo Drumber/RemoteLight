@@ -60,7 +60,7 @@ public class LuaManager {
 		// set up globals
 		if(advanced) {	// allow access to all libraries
 			globals = JsePlatform.standardGlobals();
-		} else {		// access only to necessary libraries
+		} else {		// allow access only to necessary libraries
 			globals = new Globals();
 			globals.load(new JseBaseLib());
 			globals.load(new PackageLib());
@@ -142,23 +142,43 @@ public class LuaManager {
 		PixelColorUtils.setAllPixelsBlack();
 	}
 	
+	/**
+	 * 
+	 * @return True if no lua script is active
+	 */
 	public boolean isActive() {
 		return activeScriptPath != null;
 	}
 	
+	/**
+	 * 
+	 * @return The path of the current active lua script
+	 */
 	public String getActiveLuaScriptPath() {
 		return activeScriptPath;
 	}
 	
+	/**
+	 * Set the delay for the delayReached() function in lua
+	 * @param delay in ms
+	 */
 	public void setDelay(int delay) {
 		timeUtil.setInterval(delay);
 		this.delay = delay;
 	}
 	
+	/**
+	 * 
+	 * @return The delay
+	 */
 	public int getDelay() {
 		return delay;
 	}
 	
+	/**
+	 * 
+	 * @return TimeUtil for the delayReached() function in lua 
+	 */
 	public TimeUtil getTimer() {
 		return timeUtil;
 	}

@@ -19,7 +19,6 @@ public class LedStrip {
 	/**
 	 * This class allows controlling LED strips from Lua
 	 */
-	
 	public LedStrip() {}
 
 	/**
@@ -61,7 +60,7 @@ public class LedStrip {
 	};
 	
 	/**
-	 * Return true if the user defined delay/speed is over
+	 * Returns true if the user defined delay/speed is over
 	 */
 	public static ZeroArgFunction delayReached = new ZeroArgFunction() {
 		@Override
