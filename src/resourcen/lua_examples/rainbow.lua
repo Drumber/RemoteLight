@@ -1,3 +1,4 @@
+-- Rainbow functions by dln
 num = strip.ledNumber()
 c = {}
 stepping = 0
