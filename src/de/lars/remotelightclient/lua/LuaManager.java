@@ -25,6 +25,7 @@ import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -89,6 +90,7 @@ public class LuaManager {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Lua);
 				// stop active scripts
 				if(activeScriptPath != null) {
 					stopLuaScript();
