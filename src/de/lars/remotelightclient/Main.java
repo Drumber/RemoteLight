@@ -40,7 +40,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre0.2.0.6";
+	public final static String VERSION = "pre0.2.0.7";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -62,7 +62,7 @@ public class Main {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
 		
-		new Main();
+		new Main(true);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -73,7 +73,7 @@ public class Main {
 		});
 	}
 	
-	public Main() {
+	public Main(boolean uiMode) {
 		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
 		Style.loadFonts();				// Load custom fonts
@@ -93,6 +93,12 @@ public class Main {
 		screenColorManager = new ScreenColorManager();
 		effectManager = new EffectManager();
 		// Start UI
+		if(uiMode) {
+			startMainFrame();
+		}
+	}
+	
+	public void startMainFrame() {
 		EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
