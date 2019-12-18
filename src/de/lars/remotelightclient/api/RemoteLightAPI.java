@@ -9,13 +9,6 @@ public class RemoteLightAPI extends Main {
 		super(false);
 	}
 	
-	/**
-	 * Starts the UI
-	 */
-	public void startUI() {
-		super.startMainFrame();
-	}
-	
 	
 	//////////////////////////////
 	// Directory things

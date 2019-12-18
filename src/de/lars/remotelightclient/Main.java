@@ -57,11 +57,6 @@ public class Main {
 	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
-		
 		new Main(true);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -98,17 +93,26 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Starts the UI
+	 */
 	public void startMainFrame() {
+		// set look and feel
+		try {
+			UIManager.setLookAndFeel("com.jgoodies.looks.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
+		
 		EventQueue.invokeLater(new Runnable() {
-		public void run() {
-			try {
-				mainFrame = new MainFrame();
-				mainFrame.setVisible(true);
-			} catch (Exception e) {
-				Logger.error(e);
+			public void run() {
+				try {
+					mainFrame = new MainFrame();
+					mainFrame.setVisible(true);
+				} catch (Exception e) {
+					Logger.error(e);
+				}
 			}
-		}
-	});
+		});
 	}
 	
 	public static Main getInstance() {

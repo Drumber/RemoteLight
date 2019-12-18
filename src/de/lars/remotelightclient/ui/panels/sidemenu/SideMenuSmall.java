@@ -123,7 +123,7 @@ public class SideMenuSmall extends JPanel {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setOpaque(true);
-        btn.setPreferredSize(new Dimension(30, 30));
+        btn.setMaximumSize(new Dimension(40, 30));
         btn.setBackground(null);
         btn.addMouseListener(buttonHoverListener);
         btn.addActionListener(buttonActionListener);

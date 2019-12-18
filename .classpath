@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/SimpleFileStorage-1.2.0.jar"/>
-	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/TarsosDSP-2.4.jar"/>
-	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/jSerialComm-2.5.1.jar"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-api-2.0.0.jar" sourcepath="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-api-2.0.0-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/tinylog-2.0.0/tinylog-impl-2.0.0.jar"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/Gson/gson-2.8.5.jar" sourcepath="D:/Development/APIs_Libs/Gson/gson-2.8.5-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/artnet4j-fixed/artnet4j-0.6.1.1.jar" sourcepath="D:/Development/APIs_Libs/artnet4j/src"/>
-	<classpathentry kind="lib" path="D:/Development/APIs_Libs/luaj-3.0.1/lib/luaj-jse-3.0.1.jar" sourcepath="D:/Development/APIs_Libs/luaj-3.0.1/lib/luaj-sources-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/artnet4j-0.6.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.8.5.jar"/>
+	<classpathentry kind="lib" path="libs/jgoodies-common-1.8.1.jar"/>
+	<classpathentry kind="lib" path="libs/jgoodies-looks-2.7.0.jar"/>
+	<classpathentry kind="lib" path="libs/jSerialComm-2.5.1.jar"/>
+	<classpathentry kind="lib" path="libs/luaj-jse-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/SimpleFileStorage-1.2.0.jar"/>
+	<classpathentry kind="lib" path="libs/TarsosDSP-2.4.jar"/>
+	<classpathentry kind="lib" path="libs/tinylog-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/tinylog-impl-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
