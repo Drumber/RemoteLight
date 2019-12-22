@@ -102,7 +102,7 @@ public class SettingSelectionPanel extends SettingPanel {
 		if(setting.getModel() == Model.ComboBox) {
 			setting.setSelected((String) boxValues.getSelectedItem());
 		} else if(setting.getModel() == Model.RadioButton) {
-			group.getSelection().getActionCommand();
+			setting.setSelected(group.getSelection().getActionCommand());
 		}
 	}
 

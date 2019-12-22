@@ -49,6 +49,7 @@ public class BouncingBalls extends Animation {
 	public void onEnable() {
 		this.numLEDs = Main.getLedNum();
 		this.numBalls = numLEDs / 12;
+		if(numBalls > 12) this.numBalls = 12;	// max 12 balls
 		this.h = new float[numBalls];
 		this.vImpact0 = (float) Math.sqrt(-2 * GRAVITY * h0);
 		this.vImpact = new float[numBalls];

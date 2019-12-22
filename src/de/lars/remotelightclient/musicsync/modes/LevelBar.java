@@ -75,7 +75,7 @@ public class LevelBar extends MusicEffect {
 		boolean bump = this.isBump();
 		SoundProcessing soundProcessor = this.getSoundProcessor();
 		half = pix / 2;
-		double mul = 0.1 * this.getAdjustment(); // multiplier for amount of pixels
+		double mul = 0.1 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
 		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		int[] amp = soundProcessor.getSimpleAmplitudes(); //6 bands
 		int ampAv; //average of all amp bands
