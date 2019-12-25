@@ -113,11 +113,6 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	}
 	
 	private void setValues() {
-		List<String> ports = new ArrayList<String>();
-		for(SerialPort port : ComPort.getComPorts()) {
-			ports.add(port.getSystemPortName());
-		}
-		
 		if(rlServer.getId() != null) {
 			fieldId.setText(rlServer.getId());
 		}
