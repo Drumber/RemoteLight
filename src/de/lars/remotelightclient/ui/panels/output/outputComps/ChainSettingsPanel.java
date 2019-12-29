@@ -2,6 +2,7 @@ package de.lars.remotelightclient.ui.panels.output.outputComps;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.BoxLayout;
@@ -56,12 +57,15 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		}
 		
 		panelDevices = new JPanel();
+		panelDevices.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelDevices.setLayout(new WrapLayout(FlowLayout.LEFT));
-		panelDevices.setBackground(Style.panelDarkBackground);
+		panelDevices.setBackground(Style.panelBackground);
 		addDevicesToPanel();
 		add(panelDevices);
 		
 		panelAdd = new JPanel();
+		panelAdd.setLayout(new WrapLayout(FlowLayout.LEFT));
+		panelAdd.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelAdd.setBackground(Style.panelBackground);
 		addControlsToPanel();
 		add(panelAdd);
@@ -72,7 +76,9 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		
 		for(Device d : chain.getDevices()) {
 			JPanel dPanel = new JPanel();
-			dPanel.setBackground(Style.panelBackground);
+			dPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 1));
+			dPanel.setBackground(Style.buttonBackground);
+			
 			JLabel name = new JLabel(d.getId());
 			name.setForeground(Style.textColor);
 			dPanel.add(name);
@@ -85,14 +91,16 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 				addDevicesToPanel();
 			});
 			dPanel.add(btnRemove);
+			dPanel.setPreferredSize(new Dimension((int) dPanel.getPreferredSize().getWidth(), 27));
 			panelDevices.add(dPanel);
 		}
+		updateUI();
 	}
 	
 	private void addControlsToPanel() {
 		JComboBox<String> boxOutputs = new JComboBox<>();
 		for(Device d : Main.getInstance().getDeviceManager().getDevices()) {
-			if(!(d instanceof Chain)) { //TODO add multioutput
+			if(!(d instanceof Chain) && !chain.getDevices().contains(d)) {
 				boxOutputs.addItem(d.getId());
 			}
 		}
