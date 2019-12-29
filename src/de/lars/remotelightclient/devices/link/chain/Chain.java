@@ -37,7 +37,7 @@ public class Chain extends Device {
 	}
 	
 	public void removeDevice(Device d) {
-		devices.add(d);
+		devices.remove(d);
 		updatePixelNum();
 	}
 	
@@ -50,7 +50,7 @@ public class Chain extends Device {
 		for(Device d : devices)
 			pix += d.getPixels();
 		super.setPixels(pix);
-		Logger.debug("Updatetd pixelnum: " + super.getPixels());
+		Logger.debug("[Chain] Updatetd pixel number: " + super.getPixels());
 	}
 	
 
@@ -95,15 +95,11 @@ public class Chain extends Device {
 	public void send(Color[] pixels) {
 		if(super.getPixels() == pixels.length) {
 			int index = 0;
-			Logger.debug(">> New output array! Lenghth: " + pixels.length);
 			for(Device d : devices) {
-				Logger.debug("Device " + d.getId() + " Index: " + index + " Pixels: " + d.getPixels());
 				Color[] subArray = Arrays.copyOfRange(pixels, index, index + d.getPixels());
-				Logger.debug("Subarray lenghth: " + subArray.length);
 				d.send(subArray);
 				index += d.getPixels();
 			}
-			Logger.debug("<< END");
 		} else {
 			Logger.error("Wrong output packet lenght! Expected " + super.getPixels() + ", got " + pixels.length);
 		}
