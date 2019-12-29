@@ -27,8 +27,6 @@ import javax.swing.ScrollPaneConstants;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.scene.Scene;
 import de.lars.remotelightclient.scene.SceneManager;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
@@ -44,7 +42,6 @@ public class ScenesPanel extends MenuPanel {
 	private static final long serialVersionUID = 4955214837008536168L;
 	private MainFrame mainFrame;
 	private SceneManager scm = Main.getInstance().getSceneManager();
-	private SettingsManager sm = Main.getInstance().getSettingsManager();
 	private JPanel bgrScenes;
 	private JPanel bgrSettings;
 
