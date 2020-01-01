@@ -25,6 +25,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.animations.BouncingBalls;
 import de.lars.remotelightclient.animation.animations.Breath;
 import de.lars.remotelightclient.animation.animations.Close;
+import de.lars.remotelightclient.animation.animations.ColorWave;
 import de.lars.remotelightclient.animation.animations.Fade;
 import de.lars.remotelightclient.animation.animations.Jump;
 import de.lars.remotelightclient.animation.animations.Meteor;
@@ -166,6 +167,7 @@ public class AnimationManager {
 		animations.add(new Breath());
 		animations.add(new TwoColors());
 		animations.add(new BouncingBalls());
+		animations.add(new ColorWave());
 	}
 
 }

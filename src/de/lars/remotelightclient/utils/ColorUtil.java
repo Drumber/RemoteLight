@@ -56,5 +56,28 @@ public class ColorUtil {
 		double distance = deltaR * deltaR + deltaG * deltaG + deltaB * deltaB;
 		return distance < 50000;
 	}
+	
+	
+	/**
+	 * Fade from one to another color
+	 * @param oldColor old color
+	 * @param newColor new color
+	 * @param step step between 0.0f and 1.0f
+	 * @return the faded color for step x
+	 */
+	public static Color fadeToColor(Color oldColor, Color newColor, float step) {
+		float inverseStep = 1 - step;
+		float red = newColor.getRed() * step + oldColor.getRed() * inverseStep;
+		float green = newColor.getGreen() * step + oldColor.getGreen() * inverseStep;
+		float blue = newColor.getBlue() * step + oldColor.getBlue() * inverseStep;
+		red /= 255;
+		green /= 255;
+		blue /= 255;
+		if(red >= 1) red = 1;
+		if(green >= 1) green = 1;
+		if(blue >= 1) blue = 1;
+		//System.out.println(step + " : " + red + "/" + green + "/" + blue);
+		return new Color(red, green, blue);
+	}
 
 }
