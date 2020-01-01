@@ -68,7 +68,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelIpAddress.setBackground(Style.panelBackground);
 		add(panelIpAddress);
 		
-		JLabel lblIpAddress = new JLabel(i18n.getString("OutputPanel.ComPort")); //$NON-NLS-1$
+		JLabel lblIpAddress = new JLabel("IP Address:"); //$NON-NLS-1$
 		lblIpAddress.setForeground(Style.textColor);
 		panelIpAddress.add(lblIpAddress);
 		

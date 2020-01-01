@@ -134,10 +134,12 @@ public class Artnet extends Device {
 	}
 	
 	private void sendDmxData(byte[] dmxData, int universe) {
-		if(broadcast) {
-			artnet.broadcastDmx(subnet, universe, dmxData);
-		} else {
-			artnet.unicastDmx(address, subnet, universe, dmxData);
+		if(artnet.isRunning()) {
+			if(broadcast) {
+				artnet.broadcastDmx(subnet, universe, dmxData);
+			} else {
+				artnet.unicastDmx(address, subnet, universe, dmxData);
+			}
 		}
 	}
 	

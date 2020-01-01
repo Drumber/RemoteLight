@@ -40,7 +40,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class Main {
 	private boolean shuttingDown = false;
 	
-	public final static String VERSION = "pre0.2.0.6";
+	public final static String VERSION = "pre0.2.0.7";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -57,12 +57,7 @@ public class Main {
 	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
-		
-		new Main();
+		new Main(true);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -73,7 +68,7 @@ public class Main {
 		});
 	}
 	
-	public Main() {
+	public Main(boolean uiMode) {
 		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
 		Style.loadFonts();				// Load custom fonts
@@ -93,16 +88,31 @@ public class Main {
 		screenColorManager = new ScreenColorManager();
 		effectManager = new EffectManager();
 		// Start UI
-		EventQueue.invokeLater(new Runnable() {
-		public void run() {
-			try {
-				mainFrame = new MainFrame();
-				mainFrame.setVisible(true);
-			} catch (Exception e) {
-				Logger.error(e);
-			}
+		if(uiMode) {
+			startMainFrame();
 		}
-	});
+	}
+	
+	/**
+	 * Starts the UI
+	 */
+	public void startMainFrame() {
+		// set look and feel
+		try {
+			UIManager.setLookAndFeel("com.jgoodies.looks.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					mainFrame = new MainFrame();
+					mainFrame.setVisible(true);
+				} catch (Exception e) {
+					Logger.error(e);
+				}
+			}
+		});
 	}
 	
 	public static Main getInstance() {

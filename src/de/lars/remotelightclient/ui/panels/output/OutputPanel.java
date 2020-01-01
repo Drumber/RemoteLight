@@ -23,6 +23,7 @@ import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.artnet.Artnet;
+import de.lars.remotelightclient.devices.link.chain.Chain;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.out.Output;
@@ -37,6 +38,7 @@ import de.lars.remotelightclient.ui.comps.BigImageButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.utils.UiUtils;
@@ -141,12 +143,11 @@ public class OutputPanel extends MenuPanel {
 		
 		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
 		this.configureAddPopup(mnLink, "menulink"); //$NON-NLS-1$
-		mnLink.setVisible(false); //TODO
 		popupMenu.add(mnLink);
 		
 		JMenuItem itemMultiOutput = new JMenuItem(i18n.getString("OutputPanel.MultiOutput")); //$NON-NLS-1$
 		this.configureAddPopup(itemMultiOutput, "multioutput"); //$NON-NLS-1$
-		mnLink.add(itemMultiOutput);
+		//mnLink.add(itemMultiOutput); TODO
 		
 		JMenuItem itemChain = new JMenuItem(i18n.getString("OutputPanel.Chain")); //$NON-NLS-1$
 		this.configureAddPopup(itemChain, "chain"); //$NON-NLS-1$
@@ -306,6 +307,8 @@ public class OutputPanel extends MenuPanel {
 			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
 		} else if(d instanceof Artnet) {
 			panel = new ArtnetSettingsPanel((Artnet) d, setup);
+		} else if(d instanceof Chain) {
+			panel = new ChainSettingsPanel((Chain) d, setup);
 		}
 		
 		if(panel != null) {
@@ -372,7 +375,7 @@ public class OutputPanel extends MenuPanel {
 				
 				break;
 			case "chain": //$NON-NLS-1$
-				
+				device = new Chain(null);
 				break;
 			}
 			if(device != null) {

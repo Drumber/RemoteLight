@@ -198,7 +198,7 @@ public class SimulatorFrame extends JFrame {
 							}
 						}
 						try {
-							Thread.sleep(25);
+							Thread.sleep(1000 / 30);	// running at 30 fps
 						} catch (InterruptedException e) {
 						}
 					}

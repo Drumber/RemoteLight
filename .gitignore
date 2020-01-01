@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 /bin/
 /libs/
 /docs/
 *.class
 .project
+=======
+*.class
+/bin/
+/libs/
+/docs/
+>>>>>>> master

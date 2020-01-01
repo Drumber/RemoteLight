@@ -14,7 +14,6 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.output.outputComps;
 
-import de.lars.remotelightclient.devices.arduino.ComPort;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
@@ -23,13 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-
-import com.fazecast.jSerialComm.SerialPort;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -113,11 +107,6 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	}
 	
 	private void setValues() {
-		List<String> ports = new ArrayList<String>();
-		for(SerialPort port : ComPort.getComPorts()) {
-			ports.add(port.getSystemPortName());
-		}
-		
 		if(rlServer.getId() != null) {
 			fieldId.setText(rlServer.getId());
 		}

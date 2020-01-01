@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libs/artnet4j-0.6.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.8.5.jar"/>
+	<classpathentry kind="lib" path="libs/jgoodies-common-1.8.1.jar"/>
+	<classpathentry kind="lib" path="libs/jgoodies-looks-2.7.0.jar"/>
+	<classpathentry kind="lib" path="libs/jSerialComm-2.5.1.jar"/>
+	<classpathentry kind="lib" path="libs/luaj-jse-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/SimpleFileStorage-1.2.0.jar"/>
+	<classpathentry kind="lib" path="libs/TarsosDSP-2.4.jar"/>
+	<classpathentry kind="lib" path="libs/tinylog-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/tinylog-impl-2.0.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

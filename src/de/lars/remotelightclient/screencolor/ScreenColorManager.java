@@ -21,6 +21,7 @@ import java.awt.GraphicsEnvironment;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -59,6 +60,7 @@ public class ScreenColorManager {
 				
 				@Override
 				public void run() {
+					Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.ScreenColor);
 					active = true;
 					inverted = invert;
 					ScreenColorManager.this.delay = delay;

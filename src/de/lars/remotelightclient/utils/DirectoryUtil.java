@@ -30,17 +30,36 @@ import org.tinylog.Logger;
 
 public class DirectoryUtil {
 	
-	public final static String DATA_DIR_NAME = ".RemoteLight";
+	private static String rootPath = System.getProperty("user.home");
+	public static String DATA_DIR_NAME = ".RemoteLight";
 	public final static String DATA_FILE_NAME = "data.dat";
 	public final static String LOG_DIR_NAME = "logs";
 	public final static String LUA_DIR_NAME = "lua_scripts";
+	
+	/**
+	 * Sets the root directory path of all stored files <br/>
+	 * Default: <code>user.home</code>
+	 * @param path Path as String
+	 */
+	public static void setRootPath(String path) {
+		rootPath = path;
+	}
+	
+	/**
+	 * Get the root directory path <br/>
+	 * Default: <code>user.home</code>
+	 * @return Path as String
+	 */
+	public static String getRootPath() {
+		return rootPath;
+	}
 	
 	/**
 	 * 
 	 * @return Main directory of RemoteLight
 	 */
 	public static String getDataStoragePath() {
-		return (System.getProperty("user.home") + File.separator  + DATA_DIR_NAME + File.separator);
+		return (rootPath + File.separator  + DATA_DIR_NAME + File.separator);
 	}
 	
 	public static String getLogsPath() {
