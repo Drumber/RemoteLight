@@ -28,6 +28,7 @@ import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.musicsync.modes.Bump;
 import de.lars.remotelightclient.musicsync.modes.DancingPoints;
 import de.lars.remotelightclient.musicsync.modes.EQ;
+import de.lars.remotelightclient.musicsync.modes.Energy;
 import de.lars.remotelightclient.musicsync.modes.Fade;
 import de.lars.remotelightclient.musicsync.modes.LevelBar;
 import de.lars.remotelightclient.musicsync.modes.Pulse;
@@ -169,6 +170,7 @@ public class MusicSyncManager {
 			soundProcessor.start();
 		}
 		if(effect != null) {
+			effect.setSoundProcessor(soundProcessor);
 			effect.onEnable();
 		} else {
 			soundProcessor.stop();
@@ -234,6 +236,7 @@ public class MusicSyncManager {
 		effects.add(new Pulse());
 		effects.add(new Visualizer());
 		effects.add(new DancingPoints());
+		effects.add(new Energy());
 	}
 
 }
