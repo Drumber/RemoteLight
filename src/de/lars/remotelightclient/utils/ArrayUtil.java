@@ -49,6 +49,31 @@ public class ArrayUtil {
 	}
 	
 	
+	public static int maxIndexOfArray(float[] array) {
+		int index = 0;
+		float max = 0;
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] > max) {
+				max = array[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+	public static int maxIndexFromRangeOfArray(float[] array, int start, int end) {
+		int index = 0;
+		float max = 0;
+		for(int i = start; i < end; i++) {
+			if(array[i] > max) {
+				max = array[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+	
 	/**
 	 * Get subarray of an array
 	 * @param ampl Original array

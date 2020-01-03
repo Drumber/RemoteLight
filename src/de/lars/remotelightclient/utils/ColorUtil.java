@@ -118,5 +118,50 @@ public class ColorUtil {
 		}
 		return out;
 	}
+	
+	
+	/**
+	 * Convert audio tones to the visible spectrum of light
+	 * <br> Source:
+	 * <br>https://roelhollander.eu/tuning-frequency/sound-light-colour
+	 * @param h Hertz
+	 * @return Color
+	 */
+	public static Color soundToColor(int h) {
+		if(h < 392)
+			return new Color(140, 0, 2);
+		if(h < 397)
+			return new Color(213, 3, 6);
+		if(h < 431)
+			return new Color(243, 123, 0);
+		if(h < 440)
+			return new Color(248, 148, 0);
+		if(h < 464)
+			return new Color(238, 250, 0);
+		if(h < 494)
+			return new Color(144, 230, 19);
+		if(h < 497)
+			return new Color(124, 227, 17);
+		if(h < 523)
+			return new Color(66, 211, 47);
+		if(h < 531)
+			return new Color(42, 192, 67);
+		if(h < 565)
+			return new Color(2, 156, 157);
+		if(h < 587)
+			return new Color(1, 73, 212);
+		if(h < 598)
+			return new Color(2, 8, 251);
+		if(h < 632)
+			return new Color(69, 0, 220);
+		if(h < 659)
+			return new Color(79, 0, 217);
+		if(h < 665)
+			return new Color(73, 3, 193);
+		if(h < 698)
+			return new Color(43, 1, 107);
+		
+		return new Color(21, 0, 60);
+	}
 
 }

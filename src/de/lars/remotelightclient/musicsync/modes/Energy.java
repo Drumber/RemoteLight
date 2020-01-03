@@ -7,9 +7,11 @@ import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingColor;
+import de.lars.remotelightclient.settings.types.SettingSelection;
+import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.utils.ArrayUtil;
+import de.lars.remotelightclient.utils.ColorUtil;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Energy extends MusicEffect {
@@ -23,10 +25,9 @@ public class Energy extends MusicEffect {
 	
 	public Energy() {
 		super("Energy");
-		s.addSetting(new SettingBoolean("musicsync.energy.rgbmode", "RGB Mode", SettingCategory.MusicEffect, "", true));
-		this.addOption("musicsync.energy.rgbmode");
-		s.addSetting(new SettingBoolean("musicsync.energy.staticcolor", "Static color", SettingCategory.MusicEffect, "", false));
-		this.addOption("musicsync.energy.staticcolor");
+		String[] modes = new String[] {"RGB", "Mix", "Frequency", "Static"};
+		s.addSetting(new SettingSelection("musicsync.energy.mode", "Mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
+		this.addOption("musicsync.energy.mode");
 		s.addSetting(new SettingColor("musicsync.energy.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
 		this.addOption("musicsync.energy.color");
 	}
@@ -42,17 +43,18 @@ public class Energy extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
+		String mode = ((SettingSelection) s.getSettingFromId("musicsync.energy.mode")).getSelected();
 		float[] ampl = getSoundProcessor().getAmplitudes();
 		double mul = 0.01 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
 		
 		/* function: -a(x - ledNum/2)² + 255 */
 		
-		if(!((SettingBoolean) s.getSettingFromId("musicsync.energy.staticcolor")).getValue()) {
+		if(mode.equals("RGB") || mode.equals("Mix")) {
 			// amplitude to b of each rgb channel
 			double avgLow = ArrayUtil.maxOfArray(ArrayUtil.subArray(ampl, binMin, binLowMax));		// red
 			double avgMid = ArrayUtil.maxOfArray(ArrayUtil.subArray(ampl, binLowMax, binMidMax));	// green
 			double avgHigh = ArrayUtil.maxOfArray(ArrayUtil.subArray(ampl, binMidMax, binHighMax));	// blue
-			//System.out.println(avgLow + " | " + avgMid + " | " + avgHigh);
+			
 			avgLow *= mul;
 			avgMid *= mul;
 			avgHigh *= mul;
@@ -65,11 +67,11 @@ public class Energy extends MusicEffect {
 				aArray[i] = a;
 			}
 			
-			if(!((SettingBoolean) s.getSettingFromId("musicsync.energy.rgbmode")).getValue()) {
+			if(mode.equals("RGB")) {
 				Color[] colors = {Color.RED, Color.GREEN, Color.BLUE};
 				show(aArray, colors);
 			} else {
-				showRGB(aArray[0], aArray[1], aArray[2]);
+				showMix(aArray[0], aArray[1], aArray[2]);
 			}
 			
 		} else {
@@ -79,8 +81,19 @@ public class Energy extends MusicEffect {
 			if(avg != 0) {
 				a = 1.0 / avg;
 			}
-			Color color = ((SettingColor) s.getSettingFromId("musicsync.energy.color")).getValue();
-			show(a, color);
+			
+			if(mode.equals("Static")) {
+				Color color = ((SettingColor) s.getSettingFromId("musicsync.energy.color")).getValue();
+				show(a, color);
+			} else {
+				int start = getSoundProcessor().hzToBin(350);	// range from 350Hz...
+				int end = getSoundProcessor().hzToBin(800);		// ... to 800Hz
+				int binMax = ArrayUtil.maxIndexFromRangeOfArray(ampl, start, end);
+				int hzMax = (int) getSoundProcessor().binToHz(binMax);
+				System.out.println(hzMax);
+				Color color = ColorUtil.soundToColor(hzMax);
+				show(a, color);
+			}
 		}
 		
 		super.onLoop();
@@ -113,7 +126,7 @@ public class Energy extends MusicEffect {
 		OutputManager.addToOutput(strip);
 	}
 	
-	private void showRGB(double aR, double aG, double aB) {
+	private void showMix(double aR, double aG, double aB) {
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
 		int half = strip.length / 2;
 		
