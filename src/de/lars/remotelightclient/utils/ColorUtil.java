@@ -16,6 +16,8 @@ package de.lars.remotelightclient.utils;
 
 import java.awt.Color;
 
+import de.lars.remotelightclient.devices.arduino.RgbOrder;
+
 public class ColorUtil {
 	
 	/**
@@ -78,6 +80,43 @@ public class ColorUtil {
 		if(blue >= 1) blue = 1;
 		//System.out.println(step + " : " + red + "/" + green + "/" + blue);
 		return new Color(red, green, blue);
+	}
+	
+	
+	/**
+	 * Return a new color with swapped RGB order
+	 * @param c Input color
+	 * @param order RGB order
+	 * @return Out color with swapped RGB order
+	 */
+	public static Color matchRgbOrder(Color c, RgbOrder order) {
+		Color out;
+		switch (order) {
+		
+		case RGB:
+			out = c;
+			break;
+		case RBG:
+			out = new Color(c.getRed(), c.getBlue(), c.getGreen());
+			break;
+		case GRB:
+			out = new Color(c.getGreen(), c.getRed(), c.getBlue());
+			break;
+		case GBR:
+			out = new Color(c.getGreen(), c.getBlue(), c.getRed());
+			break;
+		case BRG:
+			out = new Color(c.getBlue(), c.getRed(), c.getGreen());
+			break;
+		case BGR:
+			out = new Color(c.getBlue(), c.getGreen(), c.getRed());
+			break;
+
+		default:
+			out = c;
+			break;
+		}
+		return out;
 	}
 
 }

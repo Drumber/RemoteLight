@@ -27,6 +27,7 @@ public class Arduino extends Device {
 	private static final long serialVersionUID = 7893775235554866836L;
 	private String serialPort;
 	private transient ComPort out;
+	private RgbOrder rgbOrder = RgbOrder.GRB;
 
 	public Arduino(String id, String port) {
 		super(id, 0);
@@ -42,10 +43,18 @@ public class Arduino extends Device {
 		this.serialPort = port;
 		out.setPort(ComPort.getComPortByName(port));
 	}
+	
+	public void setRgbOrder(RgbOrder rgbOrder) {
+		this.rgbOrder = rgbOrder;
+	}
+	
+	public RgbOrder getRgbOrder() {
+		return rgbOrder;
+	}
 
 	@Override
 	public void send(Color[] pixels) {
-		byte[] outputBuffer = GlediatorProtocol.doOutput(pixels);
+		byte[] outputBuffer = GlediatorProtocol.doOutput(pixels, rgbOrder);
 		out.send(outputBuffer, outputBuffer.length);
 	}
 

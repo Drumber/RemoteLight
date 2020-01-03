@@ -16,6 +16,7 @@ package de.lars.remotelightclient.ui.panels.output.outputComps;
 
 import de.lars.remotelightclient.devices.arduino.Arduino;
 import de.lars.remotelightclient.devices.arduino.ComPort;
+import de.lars.remotelightclient.devices.arduino.RgbOrder;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.BoxLayout;
@@ -46,6 +47,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 	private JTextField fieldId;
 	private JSpinner spinnerPixels;
 	private JComboBox<String> comboPorts;
+	private JComboBox<RgbOrder> comboOrder;
 	private Dimension size;
 
 	/**
@@ -110,6 +112,23 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		
+		JPanel panelOrder = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelOrder.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		panelOrder.setPreferredSize(size);
+		panelOrder.setMaximumSize(size);
+		panelOrder.setBackground(Style.panelBackground);
+		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelOrder);
+		
+		JLabel lblRgbOrder = new JLabel("RGB order:"); //$NON-NLS-1$
+		lblRgbOrder.setForeground(Style.textColor);
+		panelOrder.add(lblRgbOrder);
+		
+		comboOrder = new JComboBox<RgbOrder>();
+		comboOrder.setModel(new DefaultComboBoxModel<>(RgbOrder.values()));
+		panelOrder.add(comboOrder);
+		
 		setValues();
 	}
 	
@@ -133,6 +152,11 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			arduino.setPixels(1);
 		}
 		spinnerPixels.setValue(arduino.getPixels());
+		
+		if(arduino.getRgbOrder() == null) {
+			arduino.setRgbOrder(RgbOrder.GRB);
+		}
+		comboOrder.setSelectedItem(arduino.getRgbOrder());
 	}
 
 	@Override
