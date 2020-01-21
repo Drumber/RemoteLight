@@ -84,6 +84,12 @@ public class MainFrame extends JFrame {
 		
 		this.setFrameContetPane();
 		this.displayPanel(new OutputPanel(this));
+		
+		Main.getInstance();
+		if(Main.startParameter.tray) {
+			SystemTrayIcon.showTrayIcon();
+			dispose();
+		}
 	}
 	
 	private void setFrameContetPane() {

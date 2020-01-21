@@ -26,6 +26,7 @@ import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
 import de.lars.remotelightclient.animation.AnimationManager;
+import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
@@ -45,6 +46,7 @@ public class Main {
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
 	private static Main instance;
+	public static StartParameterHandler startParameter;
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
@@ -57,7 +59,8 @@ public class Main {
 	private MainFrame mainFrame;
 
 	public static void main(String[] args) {
-		new Main(true);
+		startParameter = new StartParameterHandler(args);
+		new Main(!startParameter.headless);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -79,7 +82,7 @@ public class Main {
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
 		
-		new StartUp();					// Includes some things that need to be executed at startup
+		new StartUp(startParameter);	// Includes some things that need to be executed at startup
 		
 		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();
@@ -107,7 +110,7 @@ public class Main {
 			public void run() {
 				try {
 					mainFrame = new MainFrame();
-					mainFrame.setVisible(true);
+					mainFrame.setVisible(!startParameter.tray);
 				} catch (Exception e) {
 					Logger.error(e);
 				}

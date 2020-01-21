@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
+import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.out.Output;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -41,7 +42,7 @@ public class StartUp {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
 
-	public StartUp() {
+	public StartUp(StartParameterHandler startParameter) {
 		//methods which need to be initialized on start up
 		this.init();
 		//delete old logs
@@ -57,7 +58,7 @@ public class StartUp {
 			public void run() {
 				
 				//auto connect feature
-				if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue()) {
+				if(s.getSettingFromType(new SettingBoolean("out.autoconnect", null, null, null, false)).getValue() || startParameter.autoConnect) {
 					Output output = (Output) s.getSettingFromType(new SettingObject("out.lastoutput", null, null)).getValue();
 					if(output != null) {
 						Main.getInstance().getOutputManager().setActiveOutput(output);
@@ -65,7 +66,7 @@ public class StartUp {
 				}
 				
 				//check for update (this block blocks the thread)
-				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue()) {
+				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
 					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
 					if(updateChecker.isNewVersionAvailable()) {
 						int option = JOptionPane.showOptionDialog(null, "New Version of RemoteLight available!\nCurrent: " + Main.VERSION + " New: " + updateChecker.getNewTag(),
