@@ -86,6 +86,14 @@ strip.shiftLeft(x)                  Shift all colors on the strip x times to the
 strip.randomColor()                 Returns a random color (a table with an RGB value)
 ```
 
+## Start parameters
+```
+java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
+-tray | -t               start minimized in the system tray
+-autoconnect | -ac       automatically connect to last used output
+-updatechecker | -uc     check for updates
+```
+
 ## Images
 <img src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" width="300"> <img src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" width="380">
 
@@ -95,12 +103,22 @@ strip.randomColor()                 Returns a random color (a table with an RGB 
 ## TODO
 - [ ] Create wiki / documentation
 - [x] Settings for animations
-- [ ] Link / chain several LED strips
+- [x] Link / chain several LED strips
 - [ ] Improve RemoteLightServer protocol
 - [x] Translate settings
 - [x] Lua scripts
 
 ## Releases
+#### pre0.2.0.7
+- added API
+- added Windows Look and Feel
+- added Chain output
+- new animation and music visualizer
+- added RGB order option to Arduino output
+- added start parameters
+- added output patch
+- some improvements and optimizations
+
 #### pre0.2.0.6
 - added Lua scripts feature
 
