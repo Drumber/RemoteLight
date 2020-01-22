@@ -3,7 +3,6 @@ package de.lars.remotelightclient.cmd;
 public class StartParameterHandler {
 	private static final String PARAMETER_PREFIX = "-";
 	
-	public boolean headless;
 	public boolean tray;
 	public boolean autoConnect;
 	public boolean updateChecker;
@@ -17,10 +16,7 @@ public class StartParameterHandler {
 			if(args[i].startsWith(PARAMETER_PREFIX)) {
 				String arg = args[i].substring(1);
 				
-				if(arg.equalsIgnoreCase("headless") || arg.equalsIgnoreCase("hl")) {
-					headless = true;
-				}
-				else if(arg.equalsIgnoreCase("tray") || arg.equalsIgnoreCase("t")) {
+				if(arg.equalsIgnoreCase("tray") || arg.equalsIgnoreCase("t")) {
 					tray = true;
 				}
 				else if(arg.equalsIgnoreCase("autoconnect") || arg.equalsIgnoreCase("ac")) {

@@ -60,7 +60,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		startParameter = new StartParameterHandler(args);
-		new Main(!startParameter.headless);
+		new Main(true);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
