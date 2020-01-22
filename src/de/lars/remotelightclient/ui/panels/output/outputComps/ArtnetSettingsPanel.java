@@ -1,5 +1,6 @@
 package de.lars.remotelightclient.ui.panels.output.outputComps;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.devices.artnet.Artnet;
 import de.lars.remotelightclient.lang.i18n;
@@ -32,6 +34,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private JLabel lblEndUniverse;
 	private JSpinner spinnerSubnet;
 	private JSpinner spinnerStartUniverse;
+	private JSpinner spinnerShift;
 
 	public ArtnetSettingsPanel(Artnet artnet, boolean setup) {
 		super(artnet, setup);
@@ -149,6 +152,35 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		spinnerPixels.addChangeListener(universeUpdateListener);
 		panelPixels.add(spinnerPixels);
 		
+		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
+		lblOutputPatch.setFont(Style.getFontRegualar(11));
+		lblOutputPatch.setForeground(Style.textColor);
+		add(lblOutputPatch);
+		
+		JPanel panelPatch = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelPatch.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		panelPatch.setPreferredSize(new Dimension(800, 40));
+		panelPatch.setMaximumSize(new Dimension(800, 40));
+		panelPatch.setBackground(new Color(40, 40, 40));
+		panelPatch.setAlignmentX(0.0f);
+		add(panelPatch);
+		
+		JLabel lblShift = new JLabel("Shift pixels:");
+		lblShift.setForeground(Color.WHITE);
+		panelPatch.add(lblShift);
+		
+		spinnerShift = new JSpinner();
+		spinnerShift.setModel(new SpinnerNumberModel(artnet.getOutputPatch().getShift(), -artnet.getPixels(), artnet.getPixels(), 1));
+		spinnerShift.setPreferredSize(new Dimension(50, 20));
+		spinnerShift.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				int max = (int) spinnerPixels.getValue() - 1;
+				spinnerShift.setModel(new SpinnerNumberModel((int) spinnerShift.getValue(), -max, max, 1));
+			}
+		});
+		panelPatch.add(spinnerShift);
+		
 		setValues();
 	}
 	
@@ -170,6 +202,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		spinnerSubnet.setValue(artnet.getSubnet());
 		spinnerStartUniverse.setValue(artnet.getStartUniverse());
 		lblEndUniverse.setText(artnet.getEndUniverse(artnet.getStartUniverse(), artnet.getPixels()) +"");
+		spinnerPixels.setValue(artnet.getPixels());
 	}
 	
 	private ChangeListener broadcastCheckboxListener = new ChangeListener() {

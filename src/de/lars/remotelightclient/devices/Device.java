@@ -45,6 +45,7 @@ public abstract class Device extends Output implements Serializable {
 	
 	@Override
 	public void onOutput(Color[] pixels) {
+		pixels = getOutputPatch().patchOutput(pixels);
 		send(pixels);
 	}
 	

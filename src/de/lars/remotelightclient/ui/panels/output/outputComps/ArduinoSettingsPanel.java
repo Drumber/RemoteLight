@@ -30,12 +30,16 @@ import javax.swing.JTextField;
 
 import com.fazecast.jSerialComm.SerialPort;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 
@@ -48,6 +52,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 	private JSpinner spinnerPixels;
 	private JComboBox<String> comboPorts;
 	private JComboBox<RgbOrder> comboOrder;
+	private JSpinner spinnerShift;
 	private Dimension size;
 
 	/**
@@ -129,6 +134,35 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		comboOrder.setModel(new DefaultComboBoxModel<>(RgbOrder.values()));
 		panelOrder.add(comboOrder);
 		
+		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
+		lblOutputPatch.setFont(Style.getFontRegualar(11));
+		lblOutputPatch.setForeground(Style.textColor);
+		add(lblOutputPatch);
+		
+		JPanel panelPatch = new JPanel();
+		FlowLayout flowLayout_4 = (FlowLayout) panelPatch.getLayout();
+		flowLayout_4.setAlignment(FlowLayout.LEFT);
+		panelPatch.setPreferredSize(new Dimension(800, 40));
+		panelPatch.setMaximumSize(new Dimension(800, 40));
+		panelPatch.setBackground(new Color(40, 40, 40));
+		panelPatch.setAlignmentX(0.0f);
+		add(panelPatch);
+		
+		JLabel lblShift = new JLabel("Shift pixels:");
+		lblShift.setForeground(Color.WHITE);
+		panelPatch.add(lblShift);
+		
+		spinnerShift = new JSpinner();
+		spinnerShift.setModel(new SpinnerNumberModel(arduino.getOutputPatch().getShift(), -arduino.getPixels(), arduino.getPixels(), 1));
+		spinnerShift.setPreferredSize(new Dimension(50, 20));
+		spinnerShift.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				int max = (int) spinnerPixels.getValue() - 1;
+				spinnerShift.setModel(new SpinnerNumberModel((int) spinnerShift.getValue(), -max, max, 1));
+			}
+		});
+		panelPatch.add(spinnerShift);
+		
 		setValues();
 	}
 	
@@ -157,6 +191,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			arduino.setRgbOrder(RgbOrder.GRB);
 		}
 		comboOrder.setSelectedItem(arduino.getRgbOrder());
+		spinnerPixels.setValue(arduino.getPixels());
 	}
 
 	@Override

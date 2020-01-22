@@ -24,9 +24,13 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Color;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class RLServerSettingsPanel extends DeviceSettingsPanel {
 
@@ -39,6 +43,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	private JSpinner spinnerPixels;
 	private Dimension size;
 	private JTextField fieldHostname;
+	private JSpinner spinnerShift;
 
 	/**
 	 * Create the panel.
@@ -103,6 +108,35 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		
+		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
+		lblOutputPatch.setFont(Style.getFontRegualar(11));
+		lblOutputPatch.setForeground(Style.textColor);
+		add(lblOutputPatch);
+		
+		JPanel panelPatch = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelPatch.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		panelPatch.setPreferredSize(new Dimension(800, 40));
+		panelPatch.setMaximumSize(new Dimension(800, 40));
+		panelPatch.setBackground(new Color(40, 40, 40));
+		panelPatch.setAlignmentX(0.0f);
+		add(panelPatch);
+		
+		JLabel lblShift = new JLabel("Shift pixels:");
+		lblShift.setForeground(Color.WHITE);
+		panelPatch.add(lblShift);
+		
+		spinnerShift = new JSpinner();
+		spinnerShift.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getShift(), -rlServer.getPixels(), rlServer.getPixels(), 1));
+		spinnerShift.setPreferredSize(new Dimension(50, 20));
+		spinnerShift.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				int max = (int) spinnerPixels.getValue() - 1;
+				spinnerShift.setModel(new SpinnerNumberModel((int) spinnerShift.getValue(), -max, max, 1));
+			}
+		});
+		panelPatch.add(spinnerShift);
+		
 		setValues();
 	}
 	
@@ -127,6 +161,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		rlServer.setId(fieldId.getText());
 		rlServer.setIp(fieldHostname.getText());
 		rlServer.setPixels((int) spinnerPixels.getValue());
+		rlServer.getOutputPatch().setShift((int) spinnerShift.getValue());
 		return true;
 	}
 

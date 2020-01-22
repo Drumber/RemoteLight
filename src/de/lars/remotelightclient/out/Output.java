@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import de.lars.remotelightclient.devices.ConnectionState;
+import de.lars.remotelightclient.out.patch.OutputPatch;
 
 public abstract class Output implements Serializable {
 	
@@ -27,9 +28,11 @@ public abstract class Output implements Serializable {
 	private static final long serialVersionUID = 4585718970709898453L;
 	private String id;
 	private int pixels;
+	private OutputPatch outputPatch;
 	
 	public Output(String id, int pixels) {
 		this.id = id;
+		outputPatch = new OutputPatch();
 	}
 
 	public String getId() {
@@ -46,6 +49,13 @@ public abstract class Output implements Serializable {
 
 	public void setPixels(int pixels) {
 		this.pixels = pixels;
+	}
+	
+	public OutputPatch getOutputPatch() {
+		// backward compatible
+		if(outputPatch == null)
+			outputPatch = new OutputPatch();
+		return outputPatch;
 	}
 	
 	public void onActivate() {
