@@ -3,7 +3,6 @@ package de.lars.remotelightclient.animation.animations;
 import java.awt.Color;
 import java.math.BigDecimal;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
@@ -37,7 +36,7 @@ public class ColorWave extends Animation {
 		PixelColorUtils.shiftRight(1);
 		PixelColorUtils.setPixel(0, calcWave(step, color));
 		
-		step += 0.01 * (60 / Main.getLedNum());
+		step += 0.01;
 		if(step >= 2.0) {
 			step = 0;
 		}
@@ -55,7 +54,7 @@ public class ColorWave extends Animation {
 	}
 	
 	private Color calcWave(double stepping, Color c) {
-		int dim = (int) (40 * Math.sin(Math.PI * stepping) + 60);
+		int dim = (int) (45 * Math.sin(Math.PI * stepping) + 5);
 		if(!((SettingBoolean) getSetting("animation.colorwave.wave")).getValue()) {
 			return c;
 		}

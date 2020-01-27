@@ -19,6 +19,8 @@ import java.awt.Color;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class BouncingBalls extends Animation {
@@ -42,14 +44,14 @@ public class BouncingBalls extends Animation {
 
 	public BouncingBalls() {
 		super("BouncingBalls");
+		this.addSetting(new SettingInt("animation.bouncingballs.numballs", "Number of balls", SettingCategory.Intern, "Changes will be applied next time", 5, 1, 15, 1));
 	}
 	
 	
 	@Override
 	public void onEnable() {
 		this.numLEDs = Main.getLedNum();
-		this.numBalls = numLEDs / 12;
-		if(numBalls > 12) this.numBalls = 12;	// max 12 balls
+		this.numBalls = ((SettingInt) getSetting("animation.bouncingballs.numballs")).getValue();
 		this.h = new float[numBalls];
 		this.vImpact0 = (float) Math.sqrt(-2 * GRAVITY * h0);
 		this.vImpact = new float[numBalls];
