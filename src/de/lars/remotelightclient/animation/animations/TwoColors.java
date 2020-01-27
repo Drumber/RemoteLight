@@ -16,6 +16,7 @@ package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingColor;
@@ -30,6 +31,14 @@ public class TwoColors extends Animation {
 		super("Two Colors");
 		this.addSetting(new SettingColor("animation.twocolors.color1", "Color 1", SettingCategory.Intern,	null, Color.RED));
 		this.addSetting(new SettingColor("animation.twocolors.color2", "Color 2", SettingCategory.Intern,	null, Color.GREEN));
+	}
+	
+	@Override
+	public void onEnable() {
+		for(int i = 0; i < Main.getLedNum(); i++) {
+			onLoop();
+		}
+		super.onEnable();
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import java.awt.Color;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
+import de.lars.remotelightclient.utils.PixelColorUtils;
 import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class TheaterChase extends Animation {
@@ -34,9 +35,9 @@ public class TheaterChase extends Animation {
 	
 	@Override
 	public void onEnable() {
-		strip = new Color[Main.getLedNum()];
-		for(int i = 0; i < strip.length; i++) {
-			strip[i] = Color.BLACK;
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		for(int i = 0; i < strip.length * 2; i++) {
+			onLoop();
 		}
 		super.onEnable();
 	}

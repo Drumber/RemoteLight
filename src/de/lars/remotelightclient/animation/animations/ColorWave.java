@@ -3,6 +3,7 @@ package de.lars.remotelightclient.animation.animations;
 import java.awt.Color;
 import java.math.BigDecimal;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
@@ -27,8 +28,22 @@ public class ColorWave extends Animation {
 		this.addSetting(new SettingBoolean("animation.colorwave.wave", "Wave", SettingCategory.Intern, "Increase and decrease brightness dynamically", true));
 	}
 	
+	
+	@Override
+	public void onEnable() {
+		for(int i = 0; i < Main.getLedNum(); i++) {
+			onLoop();
+		}
+		super.onEnable();
+	}
+	
+	
 	@Override
 	public void onLoop() {
+		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).getValue()) {
+			color = ((SettingColor) getSetting("animation.colorwave.color")).getValue();
+		}
+		
 		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).getValue()) {
 			color = ((SettingColor) getSetting("animation.colorwave.color")).getValue();
 		}
