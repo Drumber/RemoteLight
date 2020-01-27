@@ -46,6 +46,7 @@ public class Main {
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
 	private static Main instance;
+	private static boolean headless;
 	public static StartParameterHandler startParameter;
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
@@ -118,8 +119,17 @@ public class Main {
 		});
 	}
 	
+	
 	public static Main getInstance() {
 		return instance;
+	}
+	
+	/**
+	 * 
+	 * @return True if UI mode, false if headless
+	 */
+	public static boolean isHeadless() {
+		return headless;
 	}
 	
 	public AnimationManager getAnimationManager() {

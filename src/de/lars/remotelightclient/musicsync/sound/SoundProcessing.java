@@ -95,8 +95,10 @@ public class SoundProcessing implements PitchDetectionHandler {
 			new Thread(dispatcher, "Audio dispatching").start();
 
 		} catch (IllegalArgumentException | LineUnavailableException e) {
-			Main.getInstance().getMainFrame().printNotification(
-					"Input not supported! Please select a Mic or Line-In Input.", NotificationType.Error);
+			if(!Main.isHeadless()) {
+				Main.getInstance().getMainFrame().printNotification(
+						"Input not supported! Please select a Mic or Line-In Input.", NotificationType.Error);
+			}
 			Logger.error(e, "Error while setting up input line!");
 		}
 	}
