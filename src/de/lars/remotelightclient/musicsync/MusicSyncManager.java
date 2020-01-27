@@ -34,6 +34,7 @@ import de.lars.remotelightclient.musicsync.modes.LevelBar;
 import de.lars.remotelightclient.musicsync.modes.Pulse;
 import de.lars.remotelightclient.musicsync.modes.Rainbow;
 import de.lars.remotelightclient.musicsync.modes.RunningLight;
+import de.lars.remotelightclient.musicsync.modes.Strobe;
 import de.lars.remotelightclient.musicsync.modes.Visualizer;
 import de.lars.remotelightclient.musicsync.sound.Shared;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
@@ -237,6 +238,7 @@ public class MusicSyncManager {
 		effects.add(new Visualizer());
 		effects.add(new DancingPoints());
 		effects.add(new Energy());
+		effects.add(new Strobe());
 	}
 
 }
