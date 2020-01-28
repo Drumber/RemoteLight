@@ -32,7 +32,7 @@ public abstract class Output implements Serializable {
 	
 	public Output(String id, int pixels) {
 		this.id = id;
-		outputPatch = new OutputPatch();
+		outputPatch = new OutputPatch(pixels);
 	}
 
 	public String getId() {
@@ -49,12 +49,13 @@ public abstract class Output implements Serializable {
 
 	public void setPixels(int pixels) {
 		this.pixels = pixels;
+		getOutputPatch().setPixelNumber(pixels);
 	}
 	
 	public OutputPatch getOutputPatch() {
 		// backward compatible
 		if(outputPatch == null)
-			outputPatch = new OutputPatch();
+			outputPatch = new OutputPatch(pixels);
 		return outputPatch;
 	}
 	

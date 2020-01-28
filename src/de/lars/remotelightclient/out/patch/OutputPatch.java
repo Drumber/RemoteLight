@@ -3,16 +3,30 @@ package de.lars.remotelightclient.out.patch;
 import java.awt.Color;
 import java.io.Serializable;
 
+import de.lars.remotelightclient.utils.PixelColorUtils;
+
 public class OutputPatch implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4502618961495693998L;
+	private int pixel;
 	private int shift;		// shift all colors to left or right
-	private int clone;		// number of time the strip is cloned
+	private int clone;		// number of times the strip is cloned
+	private boolean cloneMirrored;
 
-
+	
+	public OutputPatch(int pixel) {
+		this.pixel = pixel;
+	}
+	
+	
+	public void setPixelNumber(int pixel) {
+		this.pixel = pixel;
+	}
+	
+	
 	public int getShift() {
 		return shift;
 	}
@@ -31,11 +45,26 @@ public class OutputPatch implements Serializable {
 	public void setClone(int clone) {
 		this.clone = clone;
 	}
+	
+	
+	public boolean isCloneMirrored() {
+		return cloneMirrored;
+	}
+	
+	
+	public void setCloneMirrored(boolean cloneMirrored) {
+		this.cloneMirrored = cloneMirrored;
+	}
+	
+	
+	public int getPatchedPixelNumber() {
+		return (int) Math.round(pixel * 1.0D / (clone + 1));
+	}
 
 
 	public Color[] patchOutput(Color[] input) {
 		input = shift(input);
-		clone(input);
+		input = clone(input);
 		return input;
 	}
 	
@@ -70,8 +99,36 @@ public class OutputPatch implements Serializable {
 	 * Clone / mirror the strip x times
 	 * @param input Color array
 	 */
-	private void clone(Color[] input) {
-		//TODO
+	private Color[] clone(Color[] input) {
+		if(clone != 0 && input.length >= getPatchedPixelNumber()) {
+			
+			Color[] tmp = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
+			int counterClone = 0;	// counts the number of clones
+			int indexInput = 0;
+			byte summand = 1;
+			
+			for(int i = 0; i < tmp.length; i++) {
+				tmp[i] = input[indexInput];
+				
+				indexInput += summand;		// +1 or -1 if mirrored
+				
+				if(indexInput >= input.length || indexInput < 0) {
+					if(++counterClone <= clone) {
+						if(cloneMirrored) {
+							indexInput = input.length - 1;
+							summand = -1;
+						} else {
+							indexInput = 0;
+						}
+						
+					} else {
+						break;
+					}
+				}
+			}
+			return tmp;
+		}
+		return input;
 	}
 
 }

@@ -18,6 +18,7 @@ import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
@@ -44,6 +45,8 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	private Dimension size;
 	private JTextField fieldHostname;
 	private JSpinner spinnerShift;
+	private JSpinner spinnerClone;
+	private JCheckBox checkboxCloneMirrored;
 
 	/**
 	 * Create the panel.
@@ -113,18 +116,18 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		lblOutputPatch.setForeground(Style.textColor);
 		add(lblOutputPatch);
 		
-		JPanel panelPatch = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) panelPatch.getLayout();
+		JPanel panelShift = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelShift.getLayout();
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
-		panelPatch.setPreferredSize(new Dimension(800, 40));
-		panelPatch.setMaximumSize(new Dimension(800, 40));
-		panelPatch.setBackground(new Color(40, 40, 40));
-		panelPatch.setAlignmentX(0.0f);
-		add(panelPatch);
+		panelShift.setPreferredSize(new Dimension(800, 40));
+		panelShift.setMaximumSize(new Dimension(800, 40));
+		panelShift.setBackground(new Color(40, 40, 40));
+		panelShift.setAlignmentX(0.0f);
+		add(panelShift);
 		
 		JLabel lblShift = new JLabel("Shift pixels:");
 		lblShift.setForeground(Color.WHITE);
-		panelPatch.add(lblShift);
+		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
 		spinnerShift.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getShift(), -rlServer.getPixels(), rlServer.getPixels(), 1));
@@ -135,7 +138,22 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 				spinnerShift.setModel(new SpinnerNumberModel((int) spinnerShift.getValue(), -max, max, 1));
 			}
 		});
-		panelPatch.add(spinnerShift);
+		panelShift.add(spinnerShift);
+		
+		//TODO
+		spinnerClone = new JSpinner();
+		spinnerClone.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getClone(), 0, rlServer.getPixels() / 2, 1));
+		spinnerClone.setPreferredSize(new Dimension(50, 20));
+		spinnerClone.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				spinnerClone.setModel(new SpinnerNumberModel((Number) spinnerClone.getValue(), 0, rlServer.getPixels() / 2, 1));
+			}
+		});
+		panelShift.add(spinnerClone);
+		
+		checkboxCloneMirrored = new JCheckBox("mirror");
+		checkboxCloneMirrored.setSelected(rlServer.getOutputPatch().isCloneMirrored());
+		panelShift.add(checkboxCloneMirrored);
 		
 		setValues();
 	}
@@ -162,6 +180,8 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		rlServer.setIp(fieldHostname.getText());
 		rlServer.setPixels((int) spinnerPixels.getValue());
 		rlServer.getOutputPatch().setShift((int) spinnerShift.getValue());
+		rlServer.getOutputPatch().setClone((int) spinnerClone.getValue());
+		rlServer.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());
 		return true;
 	}
 

@@ -178,6 +178,9 @@ public class Main {
 	 */
 	public static int getLedNum() {
 		if(instance.getOutputManager().getActiveOutput() != null) {
+			if(instance.getOutputManager().getActiveOutput().getOutputPatch().getClone() > 0) {
+				return instance.getOutputManager().getActiveOutput().getOutputPatch().getPatchedPixelNumber();
+			}
 			return instance.getOutputManager().getActiveOutput().getPixels();
 		}
 		return 0;
