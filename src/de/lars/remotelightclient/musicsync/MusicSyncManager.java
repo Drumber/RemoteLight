@@ -212,7 +212,16 @@ public class MusicSyncManager {
 						activeEffect.setMinSpl(musicUtils.getMinSpl());
 						activeEffect.setSpl(musicUtils.getSpl());
 						
+						try {
+							
 						activeEffect.onLoop();
+						
+						} catch(Exception e) {
+							Logger.error(e, "There was an error executing the MusicEffect '" + activeEffect.getDisplayname() + "'.");
+							// stop on exception
+							stop();
+							break;
+						}
 						
 						try {
 							Thread.sleep(delay);

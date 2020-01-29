@@ -127,7 +127,16 @@ public class AnimationManager {
 				@Override
 				public void run() {
 					while(activeAnimation != null) {
-						activeAnimation.onLoop();
+						try {
+							
+							activeAnimation.onLoop();
+							
+						} catch(Exception e) {
+							Logger.error(e, "There was an error executing the animation '" + activeAnimation.getDisplayname() + "'.");
+							// stop on exception
+							stop();
+							break;
+						}
 						
 						if(activeAnimation.isAdjustable()) {
 							try {

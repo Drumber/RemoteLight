@@ -84,8 +84,16 @@ public class SceneManager {
 				@Override
 				public void run() {
 					while(activeScene != null) {
-						
+						try {
 						activeScene.onLoop();
+						
+						} catch(Exception e) {
+							Logger.error(e, "There was an error executing the scene '" + activeScene.getDisplayname() + "'.");
+							// stop on exception
+							stop();
+							break;
+						}
+						
 						int delay = activeScene.getDelay();
 						
 						try {

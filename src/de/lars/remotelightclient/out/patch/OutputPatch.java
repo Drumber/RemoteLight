@@ -114,11 +114,12 @@ public class OutputPatch implements Serializable {
 				
 				if(indexInput >= input.length || indexInput < 0) {
 					if(++counterClone <= clone) {
-						if(cloneMirrored) {
+						if(cloneMirrored && summand == 1) {
 							indexInput = input.length - 1;
 							summand = -1;
 						} else {
 							indexInput = 0;
+							summand = 1;
 						}
 						
 					} else {
