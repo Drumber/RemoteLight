@@ -35,6 +35,8 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private JSpinner spinnerSubnet;
 	private JSpinner spinnerStartUniverse;
 	private JSpinner spinnerShift;
+	private JSpinner spinnerClone;
+	private JCheckBox checkboxCloneMirrored;
 
 	public ArtnetSettingsPanel(Artnet artnet, boolean setup) {
 		super(artnet, setup);
@@ -157,18 +159,18 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		lblOutputPatch.setForeground(Style.textColor);
 		add(lblOutputPatch);
 		
-		JPanel panelPatch = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) panelPatch.getLayout();
+		JPanel panelShift = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelShift.getLayout();
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
-		panelPatch.setPreferredSize(new Dimension(800, 40));
-		panelPatch.setMaximumSize(new Dimension(800, 40));
-		panelPatch.setBackground(new Color(40, 40, 40));
-		panelPatch.setAlignmentX(0.0f);
-		add(panelPatch);
+		panelShift.setPreferredSize(new Dimension(800, 40));
+		panelShift.setMaximumSize(new Dimension(800, 40));
+		panelShift.setBackground(new Color(40, 40, 40));
+		panelShift.setAlignmentX(0.0f);
+		add(panelShift);
 		
 		JLabel lblShift = new JLabel("Shift pixels:");
 		lblShift.setForeground(Color.WHITE);
-		panelPatch.add(lblShift);
+		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
 		spinnerShift.setModel(new SpinnerNumberModel(artnet.getOutputPatch().getShift(), -artnet.getPixels(), artnet.getPixels(), 1));
@@ -179,7 +181,27 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 				spinnerShift.setModel(new SpinnerNumberModel((int) spinnerShift.getValue(), -max, max, 1));
 			}
 		});
-		panelPatch.add(spinnerShift);
+		panelShift.add(spinnerShift);
+		
+		JLabel lblClone = new JLabel("Clone:");
+		lblClone.setForeground(Color.WHITE);
+		panelShift.add(lblClone);
+		
+		spinnerClone = new JSpinner();
+		spinnerClone.setModel(new SpinnerNumberModel(artnet.getOutputPatch().getClone(), 0, artnet.getPixels() / 2, 1));
+		spinnerClone.setPreferredSize(new Dimension(50, 20));
+		spinnerClone.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				spinnerClone.setModel(new SpinnerNumberModel((Number) spinnerClone.getValue(), 0, artnet.getPixels() / 2, 1));
+			}
+		});
+		panelShift.add(spinnerClone);
+		
+		checkboxCloneMirrored = new JCheckBox("Mirror");
+		checkboxCloneMirrored.setBackground(Style.panelBackground);
+		checkboxCloneMirrored.setForeground(Style.textColor);
+		checkboxCloneMirrored.setSelected(artnet.getOutputPatch().isCloneMirrored());
+		panelShift.add(checkboxCloneMirrored);
 		
 		setValues();
 	}
@@ -235,6 +257,9 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		artnet.setBroadcast(chckbxBroadcast.isSelected());
 		artnet.setSubnet((int) spinnerSubnet.getValue());
 		artnet.setStartUniverse((int) spinnerStartUniverse.getValue());
+		artnet.getOutputPatch().setShift((int) spinnerShift.getValue());
+		artnet.getOutputPatch().setClone((int) spinnerClone.getValue());
+		artnet.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());
 		return true;
 	}
 

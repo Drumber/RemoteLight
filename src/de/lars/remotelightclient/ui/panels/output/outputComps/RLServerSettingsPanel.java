@@ -140,7 +140,10 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		});
 		panelShift.add(spinnerShift);
 		
-		//TODO
+		JLabel lblClone = new JLabel("Clone:");
+		lblClone.setForeground(Color.WHITE);
+		panelShift.add(lblClone);
+		
 		spinnerClone = new JSpinner();
 		spinnerClone.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getClone(), 0, rlServer.getPixels() / 2, 1));
 		spinnerClone.setPreferredSize(new Dimension(50, 20));
@@ -151,7 +154,9 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		});
 		panelShift.add(spinnerClone);
 		
-		checkboxCloneMirrored = new JCheckBox("mirror");
+		checkboxCloneMirrored = new JCheckBox("Mirror");
+		checkboxCloneMirrored.setBackground(Style.panelBackground);
+		checkboxCloneMirrored.setForeground(Style.textColor);
 		checkboxCloneMirrored.setSelected(rlServer.getOutputPatch().isCloneMirrored());
 		panelShift.add(checkboxCloneMirrored);
 		
