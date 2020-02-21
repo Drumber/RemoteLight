@@ -36,6 +36,7 @@ import de.lars.remotelightclient.animation.animations.TwoColors;
 import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
+import de.lars.remotelightclient.animation.animations.Snake;
 import de.lars.remotelightclient.animation.animations.TheaterChase;
 import de.lars.remotelightclient.animation.animations.Twinkle;
 import de.lars.remotelightclient.animation.animations.Wipe;
@@ -177,6 +178,7 @@ public class AnimationManager {
 		animations.add(new TwoColors());
 		animations.add(new BouncingBalls());
 		animations.add(new ColorWave());
+		animations.add(new Snake());
 	}
 
 }

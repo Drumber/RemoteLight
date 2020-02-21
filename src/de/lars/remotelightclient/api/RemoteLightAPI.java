@@ -25,10 +25,11 @@ public class RemoteLightAPI extends Main {
 	/**
 	 * Get the root directory path <br/>
 	 * Default: <code>user.home</code>
+	 * @return 
 	 * @return Path as String
 	 */
-	public static void getRootDirectory(String path) {
-		DirectoryUtil.getRootPath();
+	public static String getRootDirectory() {
+		return DirectoryUtil.getRootPath();
 	}
 	
 	/**
