@@ -147,7 +147,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_4.setAlignment(FlowLayout.LEFT);
 		panelShift.setPreferredSize(new Dimension(800, 40));
 		panelShift.setMaximumSize(new Dimension(800, 40));
-		panelShift.setBackground(new Color(40, 40, 40));
+		panelShift.setBackground(Style.panelBackground);
 		panelShift.setAlignmentX(0.0f);
 		add(panelShift);
 		

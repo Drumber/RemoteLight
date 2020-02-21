@@ -26,16 +26,25 @@ import de.lars.remotelightclient.utils.UiUtils;
 
 public class Style {
 	
+	public static final String[] STYLES = {"Light", "LightBlue", "Dark", "DarkRed", "GrayGreen"};
 	private static String style = "Dark";
+	private static boolean blackIcon = false;
 	
 	public static void setStyle(String style) {
 		if(style.equalsIgnoreCase("Light")) {
 			setLightColors();
-			Style.style = style;
 		} else if(style.equalsIgnoreCase("Dark")) {
 			setDarkColors();
-			Style.style = style;
+		} else if(style.equalsIgnoreCase("DarkRed")) {
+			setDarkRedColors();
+		} else if(style.equalsIgnoreCase("GrayGreen")) {
+			setGrayGreenColors();
+		} else if(style.equalsIgnoreCase("LightBlue")) {
+			setLightBlueColors();
+		} else {
+			return;
 		}
+		Style.style = style;
 	}
 	
 	public static String getStyle() {
@@ -57,6 +66,7 @@ public class Style {
 	 * Light style
 	 */
 	private static void setLightColors() {
+		blackIcon = true;
 		panelBackground = new Color(245, 245, 245);
 		panelAccentBackground = new Color(225, 225, 225);
 		panelDarkBackground = new Color(180, 180, 180);
@@ -71,15 +81,62 @@ public class Style {
 	 * Dark style
 	 */
 	private static void setDarkColors() {
-		panelBackground = new Color(40, 40, 40);
-		panelAccentBackground = new Color(60, 60, 60);
-		panelDarkBackground = new Color(35, 35, 35);
-		hoverBackground = new Color(100, 100, 100);
-		buttonBackground = new Color(70, 70, 70);
+		blackIcon = false;
+		panelBackground = Color.decode("#212121");
+		panelAccentBackground = Color.decode("#333333");
+		panelDarkBackground = Color.decode("#1C1C1C");
+		hoverBackground = Color.decode("#3E3E3E");
+		buttonBackground = Color.decode("#2E2E2E");
 		textColor = new Color(255, 255, 255);
 		textColorDarker = new Color(200, 200, 200);
 		accent = new Color(255, 160, 60);
 	}
+	
+	/*
+	 * DarkRed style
+	 */
+	private static void setDarkRedColors() {
+		blackIcon = false;
+		panelBackground = Color.decode("#1A1A1D");
+		panelAccentBackground = Color.decode("#282828");
+		panelDarkBackground = Color.decode("#141414");
+		hoverBackground = Color.decode("#4E4E50");
+		buttonBackground = Color.decode("#282828");
+		textColor = new Color(255, 255, 255);
+		textColorDarker = new Color(200, 200, 200);
+		accent = Color.decode("#d42219");
+	}
+	
+	/*
+	 * GrayGreen style
+	 */
+	private static void setGrayGreenColors() {
+		blackIcon = false;
+		panelBackground = Color.decode("#36363F");
+		panelAccentBackground = Color.decode("#31323C");
+		panelDarkBackground = Color.decode("#26262E");
+		hoverBackground = Color.decode("#41414F");
+		buttonBackground = Color.decode("#31323C");
+		textColor = new Color(255, 255, 255);
+		textColorDarker = new Color(200, 200, 200);
+		accent = Color.decode("#1EB980");
+	}
+	
+	/*
+	 * LightBlue style
+	 */
+	private static void setLightBlueColors() {
+		blackIcon = true;
+		panelBackground = new Color(245, 245, 245);
+		panelAccentBackground = Color.decode("#B3E5FC");
+		panelDarkBackground = Color.decode("#a6cfe0");
+		hoverBackground = Color.decode("#81D4FA");
+		buttonBackground = Color.decode("#B3E5FC");
+		textColor = new Color(0, 0, 0);
+		textColorDarker = new Color(30, 30, 30);
+		accent = Color.decode("#03A9F4");
+	}
+	
 	
 	public static ImageIcon getMenuIcon(String filename) {
 		return getIcon("menu", filename);
@@ -95,7 +152,7 @@ public class Style {
 	
 	public static ImageIcon getIcon(String parent, String filename) {
 		try {
-			if(style.equalsIgnoreCase("Dark")) {
+			if(!blackIcon) {
 				return new ImageIcon(Style.class.getResource("/resourcen/" + parent + "/white/" + filename));
 			}
 			return new ImageIcon(Style.class.getResource("/resourcen/" + parent + "/black/" + filename));
