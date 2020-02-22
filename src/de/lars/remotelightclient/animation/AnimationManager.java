@@ -38,6 +38,7 @@ import de.lars.remotelightclient.animation.animations.RunningLight;
 import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
 import de.lars.remotelightclient.animation.animations.Snake;
+import de.lars.remotelightclient.animation.animations.SoftTwinkles;
 import de.lars.remotelightclient.animation.animations.TheaterChase;
 import de.lars.remotelightclient.animation.animations.Twinkle;
 import de.lars.remotelightclient.animation.animations.Wipe;
@@ -169,6 +170,7 @@ public class AnimationManager {
 		animations.add(new TheaterChase());
 		animations.add(new Shake());
 		animations.add(new Twinkle());
+		animations.add(new SoftTwinkles());
 		animations.add(new Jump());
 		animations.add(new Fade());
 		animations.add(new Meteor());
