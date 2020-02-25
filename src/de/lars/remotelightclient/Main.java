@@ -40,6 +40,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class Main {
 	private boolean shuttingDown = false;
+	private static long startMillis = System.currentTimeMillis();
 	
 	public final static String VERSION = "pre0.2.0.7.2";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
@@ -184,6 +185,20 @@ public class Main {
 			return instance.getOutputManager().getActiveOutput().getPixels();
 		}
 		return 0;
+	}
+	
+	/**
+	 * Returns the elapsed time in milliseconds since the program started as int value
+	 * @return elapsed time in ms
+	 */
+	public static int getMillis() {
+		long m = System.currentTimeMillis() - startMillis;
+		if(m >= Integer.MAX_VALUE - 1) {	// reset on overflow
+			m = 0;
+			startMillis = System.currentTimeMillis();
+		}
+		//System.out.println(m);
+		return (int) m;
 	}
 	
 	
