@@ -25,6 +25,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.musicsync.modes.Flame;
 import de.lars.remotelightclient.musicsync.modes.Bump;
 import de.lars.remotelightclient.musicsync.modes.DancingPoints;
 import de.lars.remotelightclient.musicsync.modes.EQ;
@@ -248,6 +249,7 @@ public class MusicSyncManager {
 		effects.add(new DancingPoints());
 		effects.add(new Energy());
 		effects.add(new Strobe());
+		effects.add(new Flame());
 	}
 
 }

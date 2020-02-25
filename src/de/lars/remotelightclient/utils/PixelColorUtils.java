@@ -44,8 +44,7 @@ public class PixelColorUtils {
 	}
 	
 	/**
-	 * 
-	 * @param amount Number of places you want to move the LEDs by
+	 * @param amount Number of places you want to move the LEDs
 	 */
 	public static void shiftRight(int amount) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
@@ -63,8 +62,7 @@ public class PixelColorUtils {
 	}
 	
 	/**
-	 * 
-	 * @param amount Number of places you want to move the LEDs by
+	 * @param amount Number of places you want to move the LEDs
 	 */
 	public static void shiftLeft(int amount) {
 		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
@@ -79,6 +77,24 @@ public class PixelColorUtils {
 			}
 		}
 		OutputManager.addToOutput(leds);
+	}
+	
+	/**
+	 * Shift pixels outwards from the center
+	 * @param amount Number of places you want to move the LEDs
+	 */
+	public static void shiftCenter(int amount) {
+		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] leds = strip;
+		for(int r = 0; r < amount; r++) {
+			for(int i = (strip.length - 1); i > (strip.length/2); i--) {	//shift to the right
+				leds[i] = strip[i - 1];
+			}
+			
+			for(int i = 0; i < (strip.length/2); i++) {						//shift to the left
+				leds[i] = strip[i + 1];
+			}
+		}
 	}
 	
 	/**

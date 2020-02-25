@@ -62,6 +62,14 @@ public class MathHelper {
 		return -1 + (4-2*t)*t;
 	}
 	
+	/**
+	 * Accelerating from zero velocity 
+	 * @param t value between 0.0 and 1.0
+	 */
+	public static float easeInCubic(float t) {
+		return t*t*t;
+	}
+	
 	
 	/**
 	 * Map values / interpolate between two points

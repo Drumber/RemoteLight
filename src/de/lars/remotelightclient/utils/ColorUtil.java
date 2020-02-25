@@ -22,7 +22,7 @@ public class ColorUtil {
 	
 	/**
 	 * @param color Color to dim
-	 * @param value Dim value between 0 and 100
+	 * @param value Dim value between 0 and 100 (smaller = darker)
 	 */
 	public static Color dimColor(Color color, int value) {
 		if(value < 0) {
@@ -39,6 +39,44 @@ public class ColorUtil {
 		b = b * value / 100;
 		
 		return new Color(r, g, b);
+	}
+	
+	/**
+	 * @param color Input color
+	 * @param subtract Value between 0 and 255
+	 * @return Color - subtract
+	 */
+	public static Color dimColorSimple(Color color, int subtract) {
+		if(subtract > 255) subtract = 255;
+		if(subtract < 0) subtract = 0;
+		int r = color.getRed() - subtract;
+		int g = color.getGreen() - subtract;
+		int b = color.getBlue() - subtract;
+		if(r < 0) r = 0;
+		if(g < 0) g = 0;
+		if(b < 0) b = 0;
+		return new Color(r, g, b);
+	}
+	
+	/**
+	 * @param strip Color array
+	 * @param subtract Value between 0 and 255
+	 * @return Every color of array - subtract
+	 */
+	public static Color[] dimColorSimple(Color[] strip, int subtract) {
+		if(subtract > 255) subtract = 255;
+		if(subtract < 0) subtract = 0;
+		for(int i = 0; i < strip.length; i++) {
+			Color c = strip[i];
+			int r = c.getRed() - subtract;
+			int g = c.getGreen() - subtract;
+			int b = c.getBlue() - subtract;
+			if(r < 0) r = 0;
+			if(g < 0) g = 0;
+			if(b < 0) b = 0;
+			strip[i] = new Color(r, g, b);
+		}
+		return strip;
 	}
 	
 	public static int getAvgRgbValue(Color color) {
