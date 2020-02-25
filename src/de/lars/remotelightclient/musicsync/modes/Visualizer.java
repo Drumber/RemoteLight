@@ -69,7 +69,7 @@ public class Visualizer extends MusicEffect {
 	}
 	
 	private int amplitudeToBrightness(double ampl) {
-		if(ampl < 3.0) {
+		if(ampl < 1.0) {
 			return 0;
 		}
 		return (int) (ampl * getAdjustment());

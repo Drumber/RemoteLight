@@ -34,7 +34,7 @@ public class Juggle extends Animation {
 		int dotHue = 0;
 		
 		for(int i = 0; i < dotsNum; i++) {
-			int pos = MathHelper.beatsin16(i+7, strip.length, 0, 0.01);
+			int pos = MathHelper.beatsin16(10+i, strip.length, 0, 0.01);
 			strip[pos] = RainbowWheel.getRainbow()[dotHue];
 			
 			dotHue += 32;

@@ -18,20 +18,19 @@ import java.awt.Color;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
-import de.lars.remotelightclient.musicsync.MusicSyncUtils;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingInt;
+import de.lars.remotelightclient.utils.ColorUtil;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class Bump extends MusicEffect {
 	
 	private Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.MAGENTA, Color.WHITE, Color.PINK};
-	private int color = 0;
-	private Color c = Color.black;
+	private int colorIndex = 0;
+	private Color color = Color.black;
 	private int pDelay; //previous delay
-	private boolean background;
 	private SettingsManager s = Main.getInstance().getSettingsManager();
 
 	public Bump() {
@@ -41,6 +40,8 @@ public class Bump extends MusicEffect {
 		this.addOption("musicsync.bump.speed");
 		s.addSetting(new SettingBoolean("musicsync.bump.background", "Background", SettingCategory.MusicEffect, "", true));
 		this.addOption("musicsync.bump.background");
+		s.addSetting(new SettingBoolean("musicsync.bump.center", "Center", SettingCategory.MusicEffect, "", false));
+		this.addOption("musicsync.bump.center");
 	}
 	
 	@Override
@@ -58,31 +59,32 @@ public class Bump extends MusicEffect {
 	@Override
 	public void onLoop() {
 		Main.getInstance().getMusicSyncManager().setDelay(((SettingInt) s .getSettingFromId("musicsync.bump.speed")).getValue());
-		background = ((SettingBoolean) s.getSettingFromId("musicsync.bump.background")).getValue();
-		
-		PixelColorUtils.shiftRight(3);
+		boolean background = ((SettingBoolean) s.getSettingFromId("musicsync.bump.background")).getValue();
+		boolean center = ((SettingBoolean) s.getSettingFromId("musicsync.bump.center")).getValue();
 		
 		if(this.isBump()) {
-			if(color < colors.length - 1) {
-				color++;
+			if(++colorIndex >= colors.length) {
+				colorIndex = 0;
 			}
-			else color = 0;
-			
-			c = colors[color];
-			
-			for(int i = 0; i < 3; i++) {
-				PixelColorUtils.setPixel(i, c);
-			}
-			
+			color = colors[colorIndex];	// bump -> new color
 		} else {
-			Color d = Color.BLACK;
 			if(background) {
-				d = MusicSyncUtils.dimColor(c, 245);
+				color = ColorUtil.dimColor(colors[colorIndex], 5);
+			} else {
+				color = Color.BLACK;
 			}
-			
+		}
+		
+		if(!center) {
+			PixelColorUtils.shiftRight(3);
 			for(int i = 0; i < 3; i++) {
-				PixelColorUtils.setPixel(i, d);
+				PixelColorUtils.setPixel(i, color);
 			}
+		} else {
+			PixelColorUtils.shiftCenter(1);
+			int ledNum = Main.getLedNum();
+			PixelColorUtils.setPixel(ledNum/2, color);
+			PixelColorUtils.setPixel(ledNum/2 - 1, color);
 		}
 		super.onLoop();
 	}
