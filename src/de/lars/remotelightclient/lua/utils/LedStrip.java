@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.lua;
+package de.lars.remotelightclient.lua.utils;
 
 import java.awt.Color;
 
@@ -22,8 +22,7 @@ public class LedStrip {
 	public LedStrip() {}
 
 	/**
-	 * 
-	 * @return LED number of the current strip
+	 * Returns the LED number of the current strip
 	 */
 	public static ZeroArgFunction ledNumber = new ZeroArgFunction() {
 		@Override

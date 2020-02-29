@@ -26,6 +26,8 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.lua.utils.LedStrip;
+import de.lars.remotelightclient.lua.utils.LuaColor;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -72,11 +74,12 @@ public class LuaManager {
 			LoadState.install(globals);
 			LuaC.install(globals);
 		}
-		// add custom custom debug lib to limit lua instructions per ms
+		// add custom debug lib to limit lua instructions per ms
 		debugLib = new CustomLuaDebugLib(globals, MAX_INSTRUCTIONS);
 		globals.load(debugLib);
-		// coerce LedStrip class
+		// coerce LedStrip and LuaColor class
 		globals.set("strip", CoerceJavaToLua.coerce(new LedStrip()));
+		globals.set("colorUtil", CoerceJavaToLua.coerce(new LuaColor()));
 		
 		timeUtil = new TimeUtil(delay, true);
 		timer = new Timer(1, timerUpdate);
