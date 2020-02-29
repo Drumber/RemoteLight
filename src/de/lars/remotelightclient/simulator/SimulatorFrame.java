@@ -31,6 +31,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
@@ -71,8 +72,9 @@ public class SimulatorFrame extends JFrame {
 		addWindowListener(closeListener);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 640, 150);
 		setMinimumSize(new Dimension(200, 100));
+		setSize((Dimension) Main.getInstance().getSettingsManager().getSettingObject("simulatorFrame.size").getValue());
+		
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.setBackground(Style.panelBackground);
@@ -137,6 +139,10 @@ public class SimulatorFrame extends JFrame {
 	
 	WindowListener closeListener = new WindowAdapter() {
 		public void windowClosing(WindowEvent windowEvent) {
+			if(getExtendedState() == NORMAL) {
+				// save window size
+				Main.getInstance().getSettingsManager().getSettingObject("simulatorFrame.size").setValue(getSize());
+			}
 			emulator.stop();
 			dispose();
 		}

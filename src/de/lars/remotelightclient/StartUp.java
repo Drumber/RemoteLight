@@ -114,6 +114,7 @@ public class StartUp {
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));
 		s.addSetting(new SettingObject("out.brightness", null, 100));
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
+		s.addSetting(new SettingObject("simulatorFrame.size", "Simulator Window size", new Dimension(650, 150)));
 		
 	}
 	
