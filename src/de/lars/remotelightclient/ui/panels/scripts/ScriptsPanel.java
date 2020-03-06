@@ -61,6 +61,7 @@ public class ScriptsPanel extends MenuPanel {
 		mainFrame = Main.getInstance().getMainFrame();
 		
 		sm.addSetting(new SettingObject("scripts.speed", null, 50));
+		mainFrame.showControlBar(true);
 		addControlBar();
 		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

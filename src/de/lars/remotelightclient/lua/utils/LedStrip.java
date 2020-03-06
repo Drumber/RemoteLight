@@ -134,6 +134,17 @@ public class LedStrip {
 	};
 	
 	/**
+	 * Shift all colors in strip x times outwards
+	 */
+	public static OneArgFunction shiftOutwards = new OneArgFunction() {
+		@Override
+		public LuaValue call(LuaValue arg) {
+			PixelColorUtils.shiftCenter(arg.checkint());
+			return NIL;
+		}
+	};
+	
+	/**
 	 * Returns a LuaTable with RGB values of a random color
 	 */
 	public static ZeroArgFunction randomColor = new ZeroArgFunction() {
