@@ -15,6 +15,8 @@
 package de.lars.remotelightclient.animation.animations;
 
 import java.awt.Color;
+import java.util.Random;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
@@ -34,6 +36,7 @@ public class Meteor extends Animation {
 		color = RainbowWheel.getRandomColor();
 		this.addSetting(new SettingBoolean("animation.meteor.randomcolor", "Random color", SettingCategory.Intern, null, true));
 		this.addSetting(new SettingColor("animation.meteor.color", "Color", SettingCategory.Intern,	null, Color.RED));
+		this.addSetting(new SettingBoolean("animation.meteor.sparkletrail", "Sparkle trail", SettingCategory.Intern, null, true));
 	}
 	
 	@Override
@@ -45,7 +48,10 @@ public class Meteor extends Animation {
 		}
 		
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			strip[i] = dim(strip[i]);
+			boolean sparkle = ((SettingBoolean) getSetting("animation.meteor.sparkletrail")).getValue();
+			if(!sparkle || new Random().nextInt(10) > 5) {
+				strip[i] = dim(strip[i]);
+			}
 		}
 		strip[pos] = color;
 		
