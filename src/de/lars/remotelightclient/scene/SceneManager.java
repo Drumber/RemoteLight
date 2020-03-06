@@ -27,6 +27,7 @@ import de.lars.remotelightclient.scene.scenes.Fire;
 import de.lars.remotelightclient.scene.scenes.Jungle;
 import de.lars.remotelightclient.scene.scenes.NorthernLights;
 import de.lars.remotelightclient.scene.scenes.Ocean;
+import de.lars.remotelightclient.scene.scenes.SnowSparkle;
 import de.lars.remotelightclient.scene.scenes.Space;
 import de.lars.remotelightclient.scene.scenes.Sunset;
 import de.lars.remotelightclient.utils.PixelColorUtils;
@@ -117,6 +118,7 @@ public class SceneManager {
 		scenes.add(new Jungle());
 		scenes.add(new NorthernLights());
 		scenes.add(new Space());
+		scenes.add(new SnowSparkle());
 		
 	}
 
