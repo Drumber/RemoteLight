@@ -30,6 +30,7 @@ import de.lars.remotelightclient.animation.animations.Confetti;
 import de.lars.remotelightclient.animation.animations.Fade;
 import de.lars.remotelightclient.animation.animations.Jump;
 import de.lars.remotelightclient.animation.animations.Meteor;
+import de.lars.remotelightclient.animation.animations.Muddle;
 import de.lars.remotelightclient.animation.animations.Open;
 import de.lars.remotelightclient.animation.animations.Rainbow;
 import de.lars.remotelightclient.animation.animations.RandomColor;
@@ -40,6 +41,7 @@ import de.lars.remotelightclient.animation.animations.Scanner;
 import de.lars.remotelightclient.animation.animations.Shake;
 import de.lars.remotelightclient.animation.animations.Snake;
 import de.lars.remotelightclient.animation.animations.SoftTwinkles;
+import de.lars.remotelightclient.animation.animations.Spread;
 import de.lars.remotelightclient.animation.animations.Juggle;
 import de.lars.remotelightclient.animation.animations.TheaterChase;
 import de.lars.remotelightclient.animation.animations.Twinkle;
@@ -187,6 +189,8 @@ public class AnimationManager {
 		animations.add(new Confetti());
 		animations.add(new Sinelon());
 		animations.add(new Juggle());
+		animations.add(new Spread());
+		animations.add(new Muddle());
 	}
 
 }

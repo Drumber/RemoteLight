@@ -122,6 +122,24 @@ public class ColorUtil {
 	
 	
 	/**
+	 * Mix two colors
+	 * @param oldColor Color 1
+	 * @param newColor Color 2
+	 * @return new color
+	 */
+	public static Color mixColor(Color oldColor, Color newColor) {
+		double alpha = oldColor.getAlpha() + newColor.getAlpha();
+		double weightOld = oldColor.getAlpha() / alpha;
+		double weightNew = newColor.getAlpha() / alpha;
+		
+		int r = (int) (weightOld * oldColor.getRed() + weightNew * newColor.getRed());
+		int g = (int) (weightOld * oldColor.getGreen() + weightNew * newColor.getGreen());
+		int b = (int) (weightOld * oldColor.getBlue() + weightNew * newColor.getBlue());
+		return new Color(r, g, b);
+	}
+	
+	
+	/**
 	 * Return a new color with swapped RGB order
 	 * @param c Input color
 	 * @param order RGB order
