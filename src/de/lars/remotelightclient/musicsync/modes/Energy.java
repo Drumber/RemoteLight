@@ -90,7 +90,6 @@ public class Energy extends MusicEffect {
 				int end = getSoundProcessor().hzToBin(800);		// ... to 800Hz
 				int binMax = ArrayUtil.maxIndexFromRangeOfArray(ampl, start, end);
 				int hzMax = (int) getSoundProcessor().binToHz(binMax);
-				System.out.println(hzMax);
 				Color color = ColorUtil.soundToColor(hzMax);
 				show(a, color);
 			}

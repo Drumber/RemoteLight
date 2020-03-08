@@ -49,9 +49,9 @@ public class Visualizer extends MusicEffect {
 		
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
 		int bin12khz = getSoundProcessor().hzToBin(6000); //get binIndex of 12kHz
-		int bin50khz = getSoundProcessor().hzToBin(50); //get binIndex of 50Hz
+		int bin50hz = getSoundProcessor().hzToBin(50); //get binIndex of 50Hz
 		if(ampl.length > bin12khz) {
-			ampl = Arrays.copyOfRange(ampl, bin50khz, bin12khz); //we only want to show frequencies from 50Hz up to 12khz
+			ampl = Arrays.copyOfRange(ampl, bin50hz, bin12khz); //we only want to show frequencies from 50Hz up to 12khz
 		}
 		
 		int frequncLed = ampl.length / Main.getLedNum(); //how many frequencies does a led show (frequency range per led)
