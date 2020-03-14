@@ -44,7 +44,7 @@ Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer
 1. Connect to your Raspberry Pi via SSH.
 2. Install Java: `sudo apt-get install oracle-java8-jdk`
 3. Navigate to the directory where the RemoteLight-Server.jar is located, e.g.: `cd /home/pi/`
-4. Start the server: `sudo java -jar RemoteLightServer-pre0.2.0.1.jar`
+4. Start the server: `sudo java -jar RemoteLightServer-pre0.2.0.8.jar`
 5. To stop the server: Type `end` or press `Ctrl + c`
 
 Now start RemoteLight on your computer and click on '*Add*' > '*RLServer (Raspberry)*'. Enter the IP address of the Raspberry Pi in the '*Hostname / IP*' field (the Raspberry Pi must be on the same network).
@@ -59,7 +59,7 @@ Enter the number of pixels and click Save. If the server is running, you can cli
 3. Insert the following line before '*exit 0*':  
 `su - pi -c "screen -dm -S [name] sudo java -jar /path/to/RemoteLightServer.jar"`
 4. Edit the name of the screen and the file path, e.g.:  
-*`su - pi -c "screen -dm -S remotelight sudo java -jar /home/pi/RemoteLightServer-pre0.2.0.1.jar"`*
+*`su - pi -c "screen -dm -S remotelight sudo java -jar /home/pi/RemoteLightServer-pre0.2.0.8.jar"`*
 
 The RemoteLightServer will now start automatically in a new screen when booting.  
 To open the screen use `screen -r [name]`. Type `end` or press `Ctrl + C` to stop the server. To leave the screen press `Ctrl + A and D`.
@@ -83,7 +83,13 @@ strip.setAll(table{r,g,b})          Sets the entire strip to the given color
 strip.setPixel(led, table{r,g,b})   Sets the color of a single pixel
 strip.shiftRight(x)                 Shift all colors on the strip x times to the right
 strip.shiftLeft(x)                  Shift all colors on the strip x times to the left
+strip.shiftOutwards(x)              Shift all colors on the strip x times from the centre outwards
 strip.randomColor()                 Returns a random color (a table with an RGB value)
+
+colorUtil.rainbowWheel(hue)         Hue should be in the range from 0 to 360
+colorUtil.hsv(hue, saturation, brightness)
+colorUtil.rgb(red, green, blue)     Builds a table with the given RGB values
+colorUtil.[RED(), GREEN(), BLUE(), BLACK(), WHITE(), CYAN(), ORANGE(), YELLOW(), MAGENTA(), PINK()]
 ```
 
 ## Start parameters
@@ -109,6 +115,16 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 - [x] Lua scripts
 
 ## Releases
+#### pre0.2.0.8
+- added 7 new animations
+- added 3 new music effects
+- added 2 new lua scripts
+- added new scene
+- improved some effects
+- save the Simulator window size
+- added new Lua functions
+- small improvements and optimizations
+
 #### pre0.2.0.7
 - added API
 - added Windows Look and Feel
