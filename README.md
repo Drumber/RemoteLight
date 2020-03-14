@@ -122,6 +122,7 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 - added new scene
 - improved some effects
 - save the Simulator window size
+- added 3 new styles
 - added new Lua functions
 - small improvements and optimizations
 
