@@ -3,6 +3,8 @@ package de.lars.remotelightclient.out.patch;
 import java.awt.Color;
 import java.io.Serializable;
 
+import de.lars.remotelightclient.devices.arduino.RgbOrder;
+import de.lars.remotelightclient.utils.ColorUtil;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class OutputPatch implements Serializable {
@@ -66,6 +68,22 @@ public class OutputPatch implements Serializable {
 		input = shift(input);
 		input = clone(input);
 		return input;
+	}
+	
+	public Color[] patchOutput(Color[] input, RgbOrder rgbOrder) {
+		input = rgbOrder(input, rgbOrder);
+		input = shift(input);
+		input = clone(input);
+		return input;
+	}
+	
+	
+	private Color[] rgbOrder(Color[] input, RgbOrder rgbOrder) {
+		Color[] out = new Color[input.length];
+		for(int i = 0; i < out.length; i++) {
+			out[i] = ColorUtil.matchRgbOrder(input[i], rgbOrder);
+		}
+		return out;
 	}
 	
 	

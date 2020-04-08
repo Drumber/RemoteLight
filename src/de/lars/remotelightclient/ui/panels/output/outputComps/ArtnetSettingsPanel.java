@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -12,10 +13,12 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
+import de.lars.remotelightclient.devices.arduino.RgbOrder;
 import de.lars.remotelightclient.devices.artnet.Artnet;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
@@ -28,6 +31,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private Artnet artnet;
 	private JTextField fieldId;
 	private JSpinner spinnerPixels;
+	private JComboBox<RgbOrder> comboOrder;
 	private Dimension size;
 	private JTextField fieldIpAddress;
 	private JCheckBox chckbxBroadcast;
@@ -154,14 +158,31 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		spinnerPixels.addChangeListener(universeUpdateListener);
 		panelPixels.add(spinnerPixels);
 		
+		JPanel panelOrder = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) panelOrder.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		panelOrder.setPreferredSize(size);
+		panelOrder.setMaximumSize(size);
+		panelOrder.setBackground(Style.panelBackground);
+		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelOrder);
+		
+		JLabel lblRgbOrder = new JLabel("RGB order:"); //$NON-NLS-1$
+		lblRgbOrder.setForeground(Style.textColor);
+		panelOrder.add(lblRgbOrder);
+		
+		comboOrder = new JComboBox<RgbOrder>();
+		comboOrder.setModel(new DefaultComboBoxModel<>(RgbOrder.values()));
+		panelOrder.add(comboOrder);
+		
 		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
 		lblOutputPatch.setFont(Style.getFontRegualar(11));
 		lblOutputPatch.setForeground(Style.textColor);
 		add(lblOutputPatch);
 		
 		JPanel panelShift = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) panelShift.getLayout();
-		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		FlowLayout flowLayout_Order = (FlowLayout) panelShift.getLayout();
+		flowLayout_Order.setAlignment(FlowLayout.LEFT);
 		panelShift.setPreferredSize(new Dimension(800, 40));
 		panelShift.setMaximumSize(new Dimension(800, 40));
 		panelShift.setBackground(Style.panelBackground);
@@ -224,7 +245,11 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		spinnerSubnet.setValue(artnet.getSubnet());
 		spinnerStartUniverse.setValue(artnet.getStartUniverse());
 		lblEndUniverse.setText(artnet.getEndUniverse(artnet.getStartUniverse(), artnet.getPixels()) +"");
-		spinnerPixels.setValue(artnet.getPixels());
+		
+		if(artnet.getRgbOrder() == null) {
+			artnet.setRgbOrder(RgbOrder.RGB);
+		}
+		comboOrder.setSelectedItem(artnet.getRgbOrder());
 	}
 	
 	private ChangeListener broadcastCheckboxListener = new ChangeListener() {
@@ -253,6 +278,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		}
 		artnet.setId(fieldId.getText());
 		artnet.setPixels((int) spinnerPixels.getValue());
+		artnet.setRgbOrder((RgbOrder) comboOrder.getSelectedItem());
 		artnet.setUnicastAddress(fieldIpAddress.getText());
 		artnet.setBroadcast(chckbxBroadcast.isSelected());
 		artnet.setSubnet((int) spinnerSubnet.getValue());

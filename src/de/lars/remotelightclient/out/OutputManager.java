@@ -22,6 +22,7 @@ import de.lars.remotelightclient.devices.ConnectionState;
 import de.lars.remotelightclient.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingInt;
+import de.lars.remotelightclient.utils.OutputUtil;
 import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class OutputManager {
@@ -75,7 +76,7 @@ public class OutputManager {
 	 * Connects the device if not connected
 	 */
 	public void activate(Output output) {
-		Logger.info("Activate output: " + output.getId());
+		Logger.info("Activate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() != ConnectionState.CONNECTED) {
 			output.onActivate();
 		}
@@ -86,7 +87,7 @@ public class OutputManager {
 	 * Disconnects the device if connected
 	 */
 	public void deactivate(Output output) {
-		Logger.info("Deactivate output: " + output.getId());
+		Logger.info("Deactivate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() == ConnectionState.CONNECTED) {
 			output.onDeactivate();
 		}

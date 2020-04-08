@@ -16,11 +16,9 @@ package de.lars.remotelightclient.devices.arduino;
 
 import java.awt.Color;
 
-import de.lars.remotelightclient.utils.ColorUtil;
-
 public class GlediatorProtocol {
 	
-	public static byte[] doOutput(Color[] leds, RgbOrder order) {
+	public static byte[] doOutput(Color[] leds) {
 		
 		int index = 0;
 		
@@ -31,7 +29,6 @@ public class GlediatorProtocol {
 		
 		for(int i = 0; i < leds.length; i++) {
 			Color tmp = leds[i];
-			tmp = ColorUtil.matchRgbOrder(tmp, order);
 			
 			byte b1 = (byte) tmp.getRed();
 			byte b2 = (byte) tmp.getGreen();

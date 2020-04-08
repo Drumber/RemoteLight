@@ -214,7 +214,6 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			arduino.setRgbOrder(RgbOrder.GRB);
 		}
 		comboOrder.setSelectedItem(arduino.getRgbOrder());
-		spinnerPixels.setValue(arduino.getPixels());
 	}
 
 	@Override
@@ -225,6 +224,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		arduino.setId(fieldId.getText());
 		arduino.setSerialPort((String) comboPorts.getSelectedItem());
 		arduino.setPixels((int) spinnerPixels.getValue());
+		arduino.setRgbOrder((RgbOrder) comboOrder.getSelectedItem());
 		arduino.getOutputPatch().setShift((int) spinnerShift.getValue());
 		arduino.getOutputPatch().setClone((int) spinnerClone.getValue());
 		arduino.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());

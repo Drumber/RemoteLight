@@ -14,11 +14,14 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.output.outputComps;
 
+import de.lars.remotelightclient.devices.arduino.RgbOrder;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
@@ -42,6 +45,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 	private RemoteLightServer rlServer;
 	private JTextField fieldId;
 	private JSpinner spinnerPixels;
+	private JComboBox<RgbOrder> comboOrder;
 	private Dimension size;
 	private JTextField fieldHostname;
 	private JSpinner spinnerShift;
@@ -111,6 +115,23 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		panelPixels.add(spinnerPixels);
 		
+		JPanel panelOrder = new JPanel();
+		FlowLayout flowLayout_Order = (FlowLayout) panelOrder.getLayout();
+		flowLayout_Order.setAlignment(FlowLayout.LEFT);
+		panelOrder.setPreferredSize(size);
+		panelOrder.setMaximumSize(size);
+		panelOrder.setBackground(Style.panelBackground);
+		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelOrder);
+		
+		JLabel lblRgbOrder = new JLabel("RGB order:"); //$NON-NLS-1$
+		lblRgbOrder.setForeground(Style.textColor);
+		panelOrder.add(lblRgbOrder);
+		
+		comboOrder = new JComboBox<RgbOrder>();
+		comboOrder.setModel(new DefaultComboBoxModel<>(RgbOrder.values()));
+		panelOrder.add(comboOrder);
+		
 		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
 		lblOutputPatch.setFont(Style.getFontRegualar(11));
 		lblOutputPatch.setForeground(Style.textColor);
@@ -174,6 +195,11 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 			rlServer.setPixels(1);
 		}
 		spinnerPixels.setValue(rlServer.getPixels());
+		
+		if(rlServer.getRgbOrder() == null) {
+			rlServer.setRgbOrder(RgbOrder.RGB);
+		}
+		comboOrder.setSelectedItem(rlServer.getRgbOrder());
 	}
 
 	@Override
@@ -184,6 +210,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		rlServer.setId(fieldId.getText());
 		rlServer.setIp(fieldHostname.getText());
 		rlServer.setPixels((int) spinnerPixels.getValue());
+		rlServer.setRgbOrder((RgbOrder) comboOrder.getSelectedItem());
 		rlServer.getOutputPatch().setShift((int) spinnerShift.getValue());
 		rlServer.getOutputPatch().setClone((int) spinnerClone.getValue());
 		rlServer.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());

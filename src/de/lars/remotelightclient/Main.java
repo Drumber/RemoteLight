@@ -42,7 +42,7 @@ public class Main {
 	private boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
-	public final static String VERSION = "pre0.2.0.8";
+	public final static String VERSION = "pre0.2.0.8.2";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -76,6 +76,7 @@ public class Main {
 	public Main(boolean uiMode) {
 		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
+		Logger.info("Starting RemoteLight version " + VERSION);
 		Style.loadFonts();				// Load custom fonts
 		DataStorage.start();			// Load data file
 		settingsManager = new SettingsManager();

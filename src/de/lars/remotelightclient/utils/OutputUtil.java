@@ -17,6 +17,8 @@ package de.lars.remotelightclient.utils;
 import de.lars.remotelightclient.devices.ConnectionState;
 import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.arduino.Arduino;
+import de.lars.remotelightclient.devices.artnet.Artnet;
+import de.lars.remotelightclient.devices.link.chain.Chain;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.out.Output;
 
@@ -29,6 +31,12 @@ public class OutputUtil {
 		if(o instanceof RemoteLightServer) {
 			return "RemoteLightServer";
 		}
+		if(o instanceof Artnet) {
+			return "Artnet";
+		}
+		if(o instanceof Chain) {
+			return "Chain";
+		}
 		return "Unknown output";
 	}
 	
@@ -38,6 +46,9 @@ public class OutputUtil {
 		}
 		if(d instanceof RemoteLightServer) {
 			return ((RemoteLightServer)d).getIp();
+		}
+		if(d instanceof Artnet) {
+			return ((Artnet)d).isBroadcast() ? "Broadcast" : ((Artnet)d).getUnicastAddress();
 		}
 		return "No connection info";
 	}
