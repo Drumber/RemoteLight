@@ -40,7 +40,7 @@ public class Arduino extends Device {
 	}
 
 	public void setSerialPort(String port) {
-		if(!this.serialPort.equals(port)) {
+		if(this.serialPort == null || !this.serialPort.equals(port)) {
 			this.serialPort = port;
 			// disconnect if previously connected to another port
 			if(getConnectionState() == ConnectionState.CONNECTED) {
