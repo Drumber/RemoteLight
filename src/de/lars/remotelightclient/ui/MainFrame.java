@@ -142,11 +142,15 @@ public class MainFrame extends JFrame {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {
-				if(displayedPanel != null) {
-					displayedPanel.onEnd(null);
-				}
-				if(getExtendedState() == NORMAL) {
-					sm.getSettingObject("mainFrame.size").setValue(getSize());
+				try {
+					if(displayedPanel != null) {
+						displayedPanel.onEnd(null);
+					}
+					if(getExtendedState() == NORMAL) {
+						sm.getSettingObject("mainFrame.size").setValue(getSize());
+					}
+				} catch(Exception e) {
+					Logger.error(e, "Error while closing frame");
 				}
 				Main.getInstance().close(true);
 			}
