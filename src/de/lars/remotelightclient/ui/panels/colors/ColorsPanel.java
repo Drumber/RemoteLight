@@ -22,7 +22,6 @@ import java.util.List;
 
 import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
-import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -58,8 +57,6 @@ public class ColorsPanel extends MenuPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		ColorPicker.paletteColors = colors.toArray(new Color[colors.size()]);
-		ColorPickerStyle.setBackgrounds(Style.panelBackground);
-		ColorPickerStyle.colorText = Style.textColor;
 		
 		ColorPicker colorPicker =  new ColorPicker(colors.size() > 0 ? colors.get(0) : Color.RED);
 		colorPicker.setMaxPaletteItems(30);

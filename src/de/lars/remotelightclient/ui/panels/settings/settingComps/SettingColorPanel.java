@@ -14,9 +14,9 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 
+import de.lars.colorpicker.ColorPicker;
 import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.ui.Style;
 import javax.swing.JPanel;
@@ -53,7 +53,7 @@ public class SettingColorPanel extends SettingPanel {
 		panelColor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Color color = JColorChooser.showDialog(null, "Choose a color", panelColor.getBackground());
+				Color color = ColorPicker.showSimpleDialog("Choose a color", panelColor.getBackground(), true);
 				if(color != null) {
 					panelColor.setBackground(color);
 					SettingColorPanel.this.onChanged(SettingColorPanel.this);

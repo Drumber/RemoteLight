@@ -25,6 +25,7 @@ import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
 
+import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.utils.ColorUtil;
@@ -54,6 +55,9 @@ public class Style {
 			return;
 		}
 		Style.style = style;
+		// update color picker style
+		ColorPickerStyle.setBackgrounds(Style.panelBackground);
+		ColorPickerStyle.colorText = Style.textColor;
 	}
 	
 	public static void setStyle() {
