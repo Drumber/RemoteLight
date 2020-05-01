@@ -16,17 +16,24 @@ package de.lars.remotelightclient.ui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.settings.types.SettingSelection;
+import de.lars.remotelightclient.utils.ColorUtil;
+import de.lars.remotelightclient.utils.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.UiUtils;
 
 public class Style {
 	
-	public static final String[] STYLES = {"Light", "LightBlue", "Dark", "DarkRed", "GrayGreen"};
+	public static final String[] STYLES = {"Light", "LightBlue", "Dark", "DarkRed", "GrayGreen", "LookAndFeel"};
 	private static String style = "Dark";
 	private static boolean blackIcon = false;
 	
@@ -41,10 +48,17 @@ public class Style {
 			setGrayGreenColors();
 		} else if(style.equalsIgnoreCase("LightBlue")) {
 			setLightBlueColors();
+		} else if(style.equalsIgnoreCase("LookAndFeel")) {
+			setLaFColors();
 		} else {
 			return;
 		}
 		Style.style = style;
+	}
+	
+	public static void setStyle() {
+		String style = ((SettingSelection) Main.getInstance().getSettingsManager().getSettingFromId("ui.style")).getSelected();
+		setStyle(style);
 	}
 	
 	public static String getStyle() {
@@ -137,6 +151,39 @@ public class Style {
 		accent = Color.decode("#03A9F4");
 	}
 	
+	/*
+	 * Look and Feel Colors
+	 */
+	private static void setLaFColors() {
+		panelBackground = UIManager.getColor("Panel.background");
+		panelAccentBackground = UIManager.getColor("Panel.background").brighter();
+		panelDarkBackground = UIManager.getColor("Panel.background").darker();
+		hoverBackground = UIManager.getColor("Button.hoverBackground");
+		Color btnGradientBg = UIManager.getColor("Button.startBackground");
+		buttonBackground = btnGradientBg != null ? btnGradientBg : UIManager.getColor("Button.background");
+		textColor = UIManager.getColor("Label.foreground");
+		textColorDarker = UIManager.getColor("Label.disabledForeground");
+		accent = UIManager.getColor("Component.focusedBorderColor");
+		blackIcon = ColorUtil.getAvgRgbValue(panelBackground) > 180;
+		fixButtonBackgroud();
+	}
+	
+	/**
+	 * Fix for some themes that have the same button background as panel background
+	 */
+	private static void fixButtonBackgroud() {
+		if(panelBackground.getRGB() == buttonBackground.getRGB())
+			buttonBackground = buttonBackground.brighter();
+	}
+	
+	
+	public static List<String> getLookAndFeels() {
+		List<String> laFs = new ArrayList<String>();
+		laFs.add("System default");
+		laFs.add("Java default");
+		laFs.addAll(FlatLafThemesUtil.getAllThemeNames());
+		return laFs;
+	}
 	
 	public static ImageIcon getMenuIcon(String filename) {
 		return getIcon("menu", filename);

@@ -15,12 +15,14 @@
 package de.lars.remotelightclient.settings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.DataStorage;
 import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.settings.types.SettingSelection;
 
 public class SettingsManager {
 	
@@ -43,6 +45,15 @@ public class SettingsManager {
 	 */
 	public List<Setting> getSettings() {
 		return this.settings;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Setting> T getSetting(Class<T> type, String id) {
+		Setting s = getSettingFromId(id);
+		if(s != null && type.isInstance(s)) {
+			return (T) s;
+		}
+		return null;
 	}
 	
 	/**
@@ -93,9 +104,21 @@ public class SettingsManager {
 	
 	/**
 	 * Register setting if not already registered
+	 * @param setting new setting
 	 */
 	public void addSetting(Setting setting) {
+		addSetting(setting, true);
+	}
+	
+	/**
+	 * Register setting if not already registered
+	 * @param setting new setting
+	 * @param update add or remove options if available ({@link SettingSelection} only)
+	 */
+	public void addSetting(Setting setting, boolean update) {
 		if(getSettingFromId(setting.getId()) != null) {
+			if(update && setting instanceof SettingSelection)
+				updateSelectionValues((SettingSelection) getSettingFromId(setting.getId()), (SettingSelection) setting);
 			return;
 		}
 		Logger.info("Registered Setting '" + setting.getId() + "'.");
@@ -122,6 +145,29 @@ public class SettingsManager {
 	 */
 	public void deleteSettings() {
 		settings = new ArrayList<Setting>();
+	}
+	
+	/**
+	 * Update values of a {@link SettingSelection}
+	 * @param oldSetting old setting that will be updated
+	 * @param newSetting setting with new values
+	 */
+	public void updateSelectionValues(SettingSelection oldSetting, SettingSelection newSetting) {
+		if(oldSetting == null || newSetting == null || !oldSetting.getId().equals(newSetting.getId()))
+			return;
+		if((oldSetting.getValues().length == 0 && newSetting.getValues().length == 0) ||
+				Arrays.equals(oldSetting.getValues(), newSetting.getValues()))
+			return;
+		oldSetting.setValues(newSetting.getValues());
+		// check if selected value was removed
+		if(!Arrays.stream(oldSetting.getValues()).anyMatch(oldSetting.getSelected()::equals)) {
+			if(Arrays.stream(oldSetting.getValues()).anyMatch(newSetting.getSelected()::equals)) {
+				oldSetting.setSelected(newSetting.getSelected());
+			} else {
+				oldSetting.setSelected(oldSetting.getValues()[0]);
+			}
+		}
+		Logger.info("Updated Setting '" + oldSetting.getId() + "'. New selection values: " + String.join(", ", newSetting.getValues()) + "; selected: " + oldSetting.getSelected());
 	}
 	
 	/**

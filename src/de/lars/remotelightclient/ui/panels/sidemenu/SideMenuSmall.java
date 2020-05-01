@@ -119,14 +119,13 @@ public class SideMenuSmall extends JPanel {
 	
 	
 	private void configureButton(JButton btn) {
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(true);
-        btn.setMaximumSize(new Dimension(40, 30));
-        btn.setBackground(null);
-        btn.addMouseListener(buttonHoverListener);
-        btn.addActionListener(buttonActionListener);
+		UiUtils.configureButton(btn, false);
+		btn.setBorderPainted(false);
+		btn.setFocusable(false);
+		btn.setBackground(null);
+		btn.setMaximumSize(new Dimension(40, 30));
+		btn.addMouseListener(buttonHoverListener);
+		btn.addActionListener(buttonActionListener);
         if(mainFrame.getSelectedMenu().equals(btn.getName())) {
         	btn.setBackground(Style.accent);
         }

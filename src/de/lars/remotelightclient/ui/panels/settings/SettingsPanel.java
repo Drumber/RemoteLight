@@ -14,48 +14,30 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings;
 
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.settings.types.SettingDouble;
-import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingString;
+import de.lars.remotelightclient.settings.types.*;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
+import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
+import de.lars.remotelightclient.utils.UiUtils;
 
 public class SettingsPanel extends MenuPanel {
 
@@ -86,13 +68,11 @@ public class SettingsPanel extends MenuPanel {
 		main.add(getSettingsBgr(SettingCategory.Others, i18n.getString("SettingsPanel.Others"))); //$NON-NLS-1$
 		
 		JButton btnSave = new JButton(i18n.getString("SettingsPanel.Save")); //$NON-NLS-1$
-        btnSave.setContentAreaFilled(false);
+		UiUtils.configureButton(btnSave);
         btnSave.setBorderPainted(false);
         btnSave.setFocusPainted(false);
-        btnSave.setOpaque(true);
         btnSave.setBackground(Style.buttonBackground);
         btnSave.setForeground(Style.textColor);
-        btnSave.addMouseListener(buttonHoverListener);
         btnSave.addActionListener(btnSaveListener);
 		add(btnSave, BorderLayout.SOUTH);
 		
@@ -152,19 +132,6 @@ public class SettingsPanel extends MenuPanel {
 		return null;
 	}
 	
-	private MouseAdapter buttonHoverListener = new MouseAdapter() {
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			JButton btn = (JButton) e.getSource();
-			btn.setBackground(Style.hoverBackground);
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			JButton btn = (JButton) e.getSource();
-			btn.setBackground(Style.buttonBackground);
-		}
-	};
-	
 	private ActionListener btnSaveListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -172,6 +139,11 @@ public class SettingsPanel extends MenuPanel {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
 			}
+			// set Look And Feel
+			Main.getInstance().setLookAndFeel();
+			// set style
+			Style.setStyle();
+			FlatLaf.updateUILater();
 			//repaint ui
 			mainFrame.updateFrame();
 			//display settings

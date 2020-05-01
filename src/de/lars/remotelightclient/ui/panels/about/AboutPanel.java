@@ -36,11 +36,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class AboutPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1227084275389857291L;
+	
+	JPanel panelContent;
 	
 	public AboutPanel() {
 		MainFrame mainFrame = Main.getInstance().getMainFrame();
@@ -116,7 +114,7 @@ public class AboutPanel extends MenuPanel {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		bgrContent.add(scrollPane, BorderLayout.CENTER);
 		
-		JPanel panelContent = new JPanel();
+		panelContent = new JPanel();
 		panelContent.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(panelContent);
 		panelContent.setLayout(new BoxLayout(panelContent, BoxLayout.Y_AXIS));
@@ -133,61 +131,24 @@ public class AboutPanel extends MenuPanel {
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		panelContent.add(verticalStrut_1);
 		
-		JLabel lblIcons8 = new JLabel(i18n.getString("AboutPanel.Icons8")); //$NON-NLS-1$
-		lblIcons8.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblIcons8.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblIcons8, "https://icons8.com"); //$NON-NLS-1$
-		lblIcons8.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblIcons8);
-		
-		JLabel lblJserialcomm = new JLabel("jSerialComm"); //$NON-NLS-1$
-		lblJserialcomm.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblJserialcomm.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblJserialcomm, "https://fazecast.github.io/jSerialComm/"); //$NON-NLS-1$
-		lblJserialcomm.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblJserialcomm);
-		
-		JLabel lblSimplefilestorage = new JLabel("SimpleFileStorage"); //$NON-NLS-1$
-		lblSimplefilestorage.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblSimplefilestorage.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblSimplefilestorage, "https://github.com/DeBukkIt/SimpleFileStorage"); //$NON-NLS-1$
-		lblSimplefilestorage.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblSimplefilestorage);
-		
-		JLabel lblTarosdsp = new JLabel("TarosDSP"); //$NON-NLS-1$
-		lblTarosdsp.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblTarosdsp.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblTarosdsp, "https://github.com/JorenSix/TarsosDSP"); //$NON-NLS-1$
-		lblTarosdsp.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblTarosdsp);
-		
-		JLabel lblTinylog = new JLabel("tinylog"); //$NON-NLS-1$
-		lblTinylog.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblTinylog.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblTinylog, "https://tinylog.org"); //$NON-NLS-1$
-		lblTinylog.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblTinylog);
-		
-		JLabel lblGson = new JLabel("Gson"); //$NON-NLS-1$
-		lblGson.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblGson.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblGson, "https://github.com/google/gson"); //$NON-NLS-1$
-		lblGson.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblGson);
-		
-		JLabel lblArtnet4j = new JLabel("artnet4j"); //$NON-NLS-1$
-		lblArtnet4j.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblArtnet4j.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblArtnet4j, "https://github.com/cansik/artnet4j"); //$NON-NLS-1$
-		lblArtnet4j.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblArtnet4j);
-		
-		JLabel lblLuaj = new JLabel("Luaj"); //$NON-NLS-1$
-		lblLuaj.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblLuaj.setForeground(Style.textColor);
-		UiUtils.addWebsiteHyperlink(lblLuaj, "https://sourceforge.net/projects/luaj"); //$NON-NLS-1$
-		lblLuaj.setFont(Style.getFontRegualar(14));
-		panelContent.add(lblLuaj);
+		addLabel(i18n.getString("AboutPanel.Icons8"), "https://icons8.com");
+		addLabel("jSerialComm", "https://fazecast.github.io/jSerialComm/");
+		addLabel("SimpleFileStorage", "https://github.com/DeBukkIt/SimpleFileStorage");
+		addLabel("TarosDSP", "https://github.com/JorenSix/TarsosDSP");
+		addLabel("tinylog", "https://tinylog.org");
+		addLabel("Gson", "https://github.com/google/gson");
+		addLabel("artnet4j", "https://github.com/cansik/artnet4j");
+		addLabel("Luaj", "https://sourceforge.net/projects/luaj");
+		addLabel("FlatLaf", "https://github.com/JFormDesigner/FlatLaf");
+	}
+	
+	private void addLabel(String name, String url) {
+		JLabel lbl = new JLabel(name); //$NON-NLS-1$
+		lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lbl.setForeground(Style.textColor);
+		UiUtils.addWebsiteHyperlink(lbl, url); //$NON-NLS-1$
+		lbl.setFont(Style.getFontRegualar(15));
+		panelContent.add(lbl);
 	}
 
 }

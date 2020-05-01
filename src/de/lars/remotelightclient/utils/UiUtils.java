@@ -47,6 +47,12 @@ import de.lars.remotelightclient.ui.Style;
 
 public class UiUtils {
 	
+	private static boolean disableTheming = true;
+	
+	public static void setThemingEnabled(boolean themingEnabled) {
+		disableTheming = !themingEnabled;
+	}
+	
 	public static Font loadFont(String name, int style) {
 		String fName = "/resourcen/fonts/" + name;
 		InputStream is = UiUtils.class.getResourceAsStream(fName);
@@ -85,40 +91,55 @@ public class UiUtils {
 	}
 	
 	public static void configureButton(JButton btn) {
+		configureButton(btn, true);
+	}
+	
+	public static void configureButton(JButton btn, boolean hoverListener) {
+		if(disableTheming) {
+			btn.setContentAreaFilled(true);
+			btn.setFocusable(false);
+			return;
+		}
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
+        btn.setFocusable(true);
         btn.setOpaque(true);
         btn.setBackground(Style.buttonBackground);
         btn.setForeground(Style.textColor);
-        btn.addMouseListener(buttonHoverListener);
+        if(hoverListener)
+        	btn.addMouseListener(buttonHoverListener);
 	}
 	
 	public static void configureButtonWithBorder(JButton btn, Color border) {
-        btn.setContentAreaFilled(false);
         btn.setBorderPainted(true);
+        btn.setBorder(BorderFactory.createLineBorder(border));
+		if(disableTheming) return;
+        btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setOpaque(true);
         btn.setBackground(Style.buttonBackground);
         btn.setForeground(Style.textColor);
-        btn.setBorder(BorderFactory.createLineBorder(border));
         btn.addMouseListener(buttonHoverListener);
 	}
 	
 	private static MouseAdapter buttonHoverListener = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			if(disableTheming) return;
 			JButton btn = (JButton) e.getSource();
 			btn.setBackground(Style.hoverBackground);
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
+			if(disableTheming) return;
 			JButton btn = (JButton) e.getSource();
 			btn.setBackground(Style.buttonBackground);
 		}
 	};
 	
 	public static void configureTabbedPane(JTabbedPane tp) {
+		if(disableTheming) return;
 		tp.setBackground(Style.panelBackground);
 		tp.setBorder(BorderFactory.createEmptyBorder());
 		tp.setOpaque(true);

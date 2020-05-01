@@ -18,13 +18,16 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
+import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.devices.DeviceManager;
@@ -34,15 +37,18 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
+import de.lars.remotelightclient.utils.FlatLafThemesUtil;
+import de.lars.remotelightclient.utils.UiUtils;
 
 public class Main {
 	private boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
-	public final static String VERSION = "pre0.2.0.8.4";
+	public final static String VERSION = "pre0.2.0.9";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -104,10 +110,15 @@ public class Main {
 	 */
 	public void startMainFrame() {
 		// set look and feel
-		try {
-			UIManager.setLookAndFeel("com.jgoodies.looks.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) { System.out.println(e.getMessage()); }
+		boolean failed = !setLookAndFeel();
+		if(failed) {
+			try {
+				UIManager.setLookAndFeel(new MetalLookAndFeel());
+			} catch (UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}
+		Logger.info((failed ? "[FAILED] switch to standard LaF: " : "Selected Look and Feel: ") + UIManager.getLookAndFeel().getName());
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -119,6 +130,35 @@ public class Main {
 				}
 			}
 		});
+	}
+	
+	public boolean setLookAndFeel() {
+		SettingSelection sLaF = (SettingSelection) getSettingsManager().getSettingFromId("ui.laf");
+		UiUtils.setThemingEnabled(true);
+		try {
+			if(sLaF == null || sLaF.getSelected().equalsIgnoreCase("System default")) {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				return true;
+			}
+			String lafName = sLaF.getSelected();
+			
+			if(lafName.equalsIgnoreCase("Java default")) {
+				UIManager.setLookAndFeel(new MetalLookAndFeel());
+				return true;
+			}
+			
+			for(FlatLaf laf : FlatLafThemesUtil.getAllThemes()) {
+				if(laf.getName().equalsIgnoreCase(lafName)) {
+					FlatLaf.install(laf);
+					UiUtils.setThemingEnabled(false);
+					return true;
+				}
+			}
+		} catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
 	}
 	
 	

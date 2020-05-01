@@ -120,10 +120,9 @@ public class SideMenuExtended extends JPanel {
 	
 	
 	private void configureButton(JButton btn) {
-        btn.setContentAreaFilled(false);
+		UiUtils.configureButton(btn, false);
         btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(true);
+        btn.setFocusable(false);
         btn.setBackground(null);
         btn.setForeground(Style.textColor);
         btn.setMaximumSize(new Dimension(150, 30));
@@ -160,6 +159,7 @@ public class SideMenuExtended extends JPanel {
 
 			if(!btn.getName().equals("extend")) { //$NON-NLS-1$
 				UiUtils.getComponentByName(SideMenuExtended.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
+				btn.setBackground(null);
 				btn.setBackground(Style.accent);
 				mainFrame.setSelectedMenu(btn.getName());
 			}
