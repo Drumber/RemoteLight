@@ -57,10 +57,16 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private static Mixer mixer;
 	private SilenceDetector silenceDetector;
 	private int threshold = -100;
+	
+	private boolean useNativeSound = false;
+	private XtSample bitRate = XtSample.INT16;
+	private int xtServiceIndex;
+	private int xtDeviceIndex;
 
 	private float sampleRate = 48000;
 	private int bufferSize = 1024 * 4;
 	private int overlap = 768 * 4;
+	private int channels = 1;
 
 	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
@@ -82,31 +88,35 @@ public class SoundProcessing implements PitchDetectionHandler {
 		TargetDataLine line;
 		try {
 
-			line = (TargetDataLine) mixer.getLine(dataLineInfo);
-			final int numberOfSamples = bufferSize;
-			//line.open(format, numberOfSamples);
-			//line.start();
-			final AudioInputStream stream = new AudioInputStream(line);
-
-			JVMAudioInputStream audioStream = new JVMAudioInputStream(stream);
-			// create a new dispatcher
-			//dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
-			
-			// TEST
-			UniversalAudioInputStream uais = null;
-			try (XtAudio audio = new XtAudio(null, null, null, null)) {
-				NativeSound nsound = Main.getInstance().nativeSound;
-				XtService service = XtAudio.getServiceByIndex(1);
+			if(!useNativeSound) {
 				
-				XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, XtSample.INT16), 2, 0, 0, 0);
-				NativeSoundFormat nformat = new NativeSoundFormat(xformat);
-				NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
-				nsound.openDevice(service, 4, xformat, nsis);
-				uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
+				line = (TargetDataLine) mixer.getLine(dataLineInfo);
+				final int numberOfSamples = bufferSize;
+				line.open(format, numberOfSamples);
+				line.start();
+				final AudioInputStream stream = new AudioInputStream(line);
+	
+				JVMAudioInputStream audioStream = new JVMAudioInputStream(stream);
+				// create a new dispatcher
+				dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
+				
+			} else {
+				
+				UniversalAudioInputStream uais = null;
+				try (XtAudio audio = new XtAudio(null, null, null, null)) {
+					NativeSound nsound = manager.getNativeSound();
+					XtService service = XtAudio.getServiceByIndex(xtServiceIndex);
+					
+					XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, bitRate), channels, 0, 0, 0);
+					NativeSoundFormat nformat = new NativeSoundFormat(xformat);
+					NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
+					
+					nsound.openDevice(service, xtDeviceIndex, xformat, nsis);
+					uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
+				}
+				
+				dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
 			}
-			
-			dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
-			
 
 			// add a processor
 			dispatcher.addAudioProcessor(new PitchProcessor(algo, sampleRate, bufferSize, this));
@@ -129,7 +139,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 		if (dispatcher != null) {
 			dispatcher.stop();
 		}
-		Main.getInstance().nativeSound.closeDevice();
+		manager.getNativeSound().closeDevice();
 		Logger.debug("Stopped SoundProcessor");
 	}
 

@@ -22,8 +22,12 @@ public class NativeSoundFormat {
 	}
 	
 	public Encoding getSampleFormat() {
+		return getSampleFormat(format.mix.sample);
+	}
+	
+	public static Encoding getSampleFormat(XtSample sample) {
 		Encoding e;
-		switch (format.mix.sample) {
+		switch (sample) {
 			case UINT8:
 				e = Encoding.PCM_UNSIGNED;
 				break;
@@ -41,8 +45,27 @@ public class NativeSoundFormat {
 		return e;
 	}
 	
+	public static XtSample bitrateToSample(int bitrate) {
+		switch (bitrate) {
+			case 8:
+				return XtSample.UINT8;
+			case 16:
+				return XtSample.INT16;
+			case 24:
+				return XtSample.INT24;
+			case 32:
+				return XtSample.INT32;
+			default:
+				return XtSample.INT16;
+		}
+	}
+	
 	public int getSampleSizeInBits() {
-		switch (format.mix.sample) {
+		return getSampleSizeInBits(format.mix.sample);
+	}
+	
+	public static int getSampleSizeInBits(XtSample sample) {
+		switch (sample) {
 			case UINT8:
 				return 8;
 			case INT16:

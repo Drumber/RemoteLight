@@ -14,7 +14,10 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 public class NativeSound {
 
 	public static String LIB_CLASSPATH = "resourcen/lib";
+	public static final int[] SAMPLERATES = {11025, 22050, 44100, 48000, 96000, 192000};
 	private static final String LIB_NAME = "xt-core";
+	
+	private List<XtService> listServices;
 	private boolean initialized = false;
 	private XtStream stream;
 
@@ -65,6 +68,7 @@ public class NativeSound {
 				}
 			}
 		}
+		this.setServices();
 	}
 
 	public File copyLibs() throws IOException {
@@ -81,12 +85,15 @@ public class NativeSound {
 	}
 
 	
-	public List<XtService> getServices() {
-		List<XtService> listServices = new ArrayList<>();
+	private void setServices() {
+		listServices = new ArrayList<>();
 		for (int s = 0; s < XtAudio.getServiceCount(); s++) {
 			XtService service = XtAudio.getServiceByIndex(s);
 			listServices.add(service);
 		}
+	}
+	
+	public List<XtService> getServices() {
 		return listServices;
 	}
 
@@ -99,17 +106,36 @@ public class NativeSound {
 		}
 		return listDevices;
 	}
+	
+	public List<String> getDeviceNames(XtService service) {
+		List<String> listNames = new ArrayList<>();
+		for (int d = 0; d < service.getDeviceCount(); d++) {
+			try (XtDevice device = service.openDevice(d)) {
+				listNames.add(device.getName());
+			}
+		}
+		return listNames;
+	}
 
-	public List<XtDevice> getSupportedDevices(XtService service, XtFormat format) {
-		List<XtDevice> listDevices = new ArrayList<>();
+	public List<Integer> getSupportedDevicesIndex(XtService service, XtFormat format) {
+		List<Integer> listDevices = new ArrayList<>();
 		for (int d = 0; d < service.getDeviceCount(); d++) {
 			try (XtDevice device = service.openDevice(d)) {
 				if (device != null && device.supportsFormat(format)) {
-					listDevices.add(device);
+					listDevices.add(d);
 				}
 			}
 		}
 		return listDevices;
+	}
+	
+	public boolean isDeviceSupported(XtService service, int deviceIndex, XtFormat format) {
+		try (XtDevice device = service.openDevice(deviceIndex)) {
+			if (device != null && device.supportsFormat(format)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	

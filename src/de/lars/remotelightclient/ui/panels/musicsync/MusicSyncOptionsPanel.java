@@ -14,9 +14,6 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.musicsync;
 
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.musicsync.InputUtil;
@@ -28,19 +25,13 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsUtil;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.UiUtils;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -51,8 +42,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JSlider;
 import java.awt.GridLayout;
+
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class MusicSyncOptionsPanel extends JPanel {
@@ -164,6 +156,15 @@ public class MusicSyncOptionsPanel extends JPanel {
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);
 		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue()); //$NON-NLS-1$
 		panelAdjustment.add(sliderAdjustment);
+		
+		JButton btnTest = new JButton("Open NativeSound dialog");
+		btnTest.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				NativeSoundConfigPanel.showDialog();
+			}
+		});
+		bgrOptions.add(btnTest);
 		
 		panelInput = new JPanel();
 		panelInput.setAlignmentY(Component.TOP_ALIGNMENT);

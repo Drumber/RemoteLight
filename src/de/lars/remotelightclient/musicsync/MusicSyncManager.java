@@ -40,6 +40,7 @@ import de.lars.remotelightclient.musicsync.modes.Strobe;
 import de.lars.remotelightclient.musicsync.modes.Visualizer;
 import de.lars.remotelightclient.musicsync.sound.Shared;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -55,6 +56,8 @@ public class MusicSyncManager {
 	private boolean active = false;
 	private MusicSyncUtils musicUtils;
 	private SoundProcessing soundProcessor;
+	private NativeSound nativeSound;
+	
 	private int delay = 20;
 	private double sensitivity = 1;
 	private double adjustment = 3;
@@ -70,6 +73,7 @@ public class MusicSyncManager {
 				soundProcessor.stop();
 			}
 			soundProcessor = new SoundProcessing(this);
+			nativeSound = new NativeSound(true);
 		}
 		
 		musicUtils = new MusicSyncUtils();
@@ -103,6 +107,10 @@ public class MusicSyncManager {
 	
 	public SoundProcessing getSoundProcessor() {
 		return soundProcessor;
+	}
+	
+	public NativeSound getNativeSound() {
+		return nativeSound;
 	}
 	
 	public void soundToLight(float pitch, double rms, double time) {
