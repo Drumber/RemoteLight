@@ -33,6 +33,7 @@ import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
@@ -65,6 +66,8 @@ public class Main {
 	private EffectManager effectManager;
 	private LuaManager luaManager;
 	private MainFrame mainFrame;
+	
+	public NativeSound nativeSound;
 
 	public static void main(String[] args) {
 		startParameter = new StartParameterHandler(args);
@@ -92,6 +95,8 @@ public class Main {
 		luaManager = new LuaManager();
 		
 		new StartUp(startParameter);	// Includes some things that need to be executed at startup
+		// test
+		nativeSound = new NativeSound(true);
 		
 		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();

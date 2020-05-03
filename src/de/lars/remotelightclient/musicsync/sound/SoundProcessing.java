@@ -23,10 +23,13 @@ import javax.sound.sampled.TargetDataLine;
 
 import org.tinylog.Logger;
 
+import com.xtaudio.xt.*;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.SilenceDetector;
+import be.tarsos.dsp.io.UniversalAudioInputStream;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
@@ -35,6 +38,9 @@ import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundInputStream;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 
 /*
@@ -52,7 +58,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private SilenceDetector silenceDetector;
 	private int threshold = -100;
 
-	private float sampleRate = 44100;
+	private float sampleRate = 48000;
 	private int bufferSize = 1024 * 4;
 	private int overlap = 768 * 4;
 
@@ -78,13 +84,29 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 			line = (TargetDataLine) mixer.getLine(dataLineInfo);
 			final int numberOfSamples = bufferSize;
-			line.open(format, numberOfSamples);
-			line.start();
+			//line.open(format, numberOfSamples);
+			//line.start();
 			final AudioInputStream stream = new AudioInputStream(line);
 
 			JVMAudioInputStream audioStream = new JVMAudioInputStream(stream);
 			// create a new dispatcher
-			dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
+			//dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
+			
+			// TEST
+			UniversalAudioInputStream uais = null;
+			try (XtAudio audio = new XtAudio(null, null, null, null)) {
+				NativeSound nsound = Main.getInstance().nativeSound;
+				XtService service = XtAudio.getServiceByIndex(1);
+				
+				XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, XtSample.INT16), 2, 0, 0, 0);
+				NativeSoundFormat nformat = new NativeSoundFormat(xformat);
+				NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
+				nsound.openDevice(service, 4, xformat, nsis);
+				uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
+			}
+			
+			dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
+			
 
 			// add a processor
 			dispatcher.addAudioProcessor(new PitchProcessor(algo, sampleRate, bufferSize, this));
@@ -107,6 +129,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 		if (dispatcher != null) {
 			dispatcher.stop();
 		}
+		Main.getInstance().nativeSound.closeDevice();
 		Logger.debug("Stopped SoundProcessor");
 	}
 
@@ -165,7 +188,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 			System.arraycopy(audioFloatBuffer, 0, transformbuffer, 0, audioFloatBuffer.length);
 			fft.forwardTransform(transformbuffer);
 			fft.modulus(transformbuffer, amplitudes);
-
+			
 			// amplitude of 6 bands: ~280/~570/~850/~1120/~1400/>1400
 			low1 = 0;
 			low2 = 0;
