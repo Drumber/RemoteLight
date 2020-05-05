@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFormat;
 
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtFormat;
 import com.xtaudio.xt.XtStream;
 import com.xtaudio.xt.XtStreamCallback;
 
@@ -40,6 +42,9 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	@Override
 	public void callback(XtStream stream, Object input, Object output, int frames, double time, long position,
 			boolean timeValid, long error, Object user) throws Exception {
+		if(frames <= 0) {
+			return;
+		}
 		byte[] data;
 		switch(formatInfo.getXtFormat().mix.sample) {
 			case UINT8:
@@ -61,10 +66,16 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	            throw new IllegalArgumentException();
 		}
 		try {
-			out.write(data);
+			out.write(data, 0, getBufferSize(stream, frames));
 		} catch(IOException e) {
 			close();
 		}
+	}
+	
+	private int getBufferSize(XtStream stream, int frames) {
+		XtFormat format = stream.getFormat();
+		int sampleSize = XtAudio.getSampleAttributes(format.mix.sample).size;
+		return frames * format.inputs * sampleSize;
 	}
 	
 	

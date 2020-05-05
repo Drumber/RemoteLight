@@ -10,9 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.xtaudio.xt.*;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
@@ -22,12 +19,19 @@ import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.DisabledGlassPane;
+import de.lars.remotelightclient.utils.UiUtils;
 
 public class NativeSoundConfigPanel extends JPanel {
 	private static final long serialVersionUID = -3746048418035257056L;
 	
 	private SettingsManager sm;
 	private NativeSound nsound;
+	
+	private JDialog dialog;
+	private DisabledGlassPane glassPane;
+	/** map index of device in combobox to service device index */
+	private List<Integer> currentDeviceIndexes;
 	
 	private JComboBox<String> comboService;
 	private JComboBox<Integer> comboSampleRate;
@@ -36,7 +40,9 @@ public class NativeSoundConfigPanel extends JPanel {
 	private JComboBox<String> comboDevice;
 	private JCheckBox chckbxShowSupportedOnly;
 
-	public NativeSoundConfigPanel() {
+	public NativeSoundConfigPanel(JDialog dialog) {
+		this.dialog = dialog;
+		currentDeviceIndexes = new ArrayList<>();
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowHeights = new int[] { 1, 1, 0, 0 };
@@ -47,11 +53,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		sm = Main.getInstance().getSettingsManager();
 		nsound = Main.getInstance().getMusicSyncManager().getNativeSound();
 		
-		sm.addSetting(new SettingObject("nativesound.serviceindex", "Selected service index", 0));
-		sm.addSetting(new SettingObject("nativesound.deviceindex", "Selected device index", 0));
-		sm.addSetting(new SettingObject("nativesound.samplerate", "Samplerate", 48000));
-		sm.addSetting(new SettingObject("nativesound.bitrate", "Bitrate", 16));
-		sm.addSetting(new SettingObject("nativesound.channels", "Channels", 2));
 		sm.addSetting(new SettingObject("nativesound.panel.showonlysupported", "Show only supported devices", false));
 
 		initLayout();
@@ -60,6 +61,8 @@ public class NativeSoundConfigPanel extends JPanel {
 	
 	public void setValues() {
 		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").getValue();
+		if(serviceIndex == -1)
+			serviceIndex = 0;
 		
 		try (XtAudio audio = new XtAudio(null, null, null, null)) {
 			List<String> listServiceNames = new ArrayList<>();
@@ -87,12 +90,14 @@ public class NativeSoundConfigPanel extends JPanel {
 			
 			updateDeviceList(serviceIndex);
 			int selectedDeviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").getValue();
-			comboDevice.setSelectedIndex(selectedDeviceIndex);
+			comboDevice.setSelectedIndex(currentDeviceIndexes.indexOf(selectedDeviceIndex));
 		} catch(IllegalArgumentException e) {
 		}
 	}
 	
 	public void updateDeviceList(int serviceIndex) {
+		glassPane.activate("Loading...");
+		currentDeviceIndexes.clear();
 		try (XtAudio audio = new XtAudio(null, null, null, null)) {
 			XtService service = XtAudio.getServiceByIndex(serviceIndex);
 			List<String> listDevices = new ArrayList<>();
@@ -106,14 +111,19 @@ public class NativeSoundConfigPanel extends JPanel {
 				for(int dIndex : nsound.getSupportedDevicesIndex(service, format)) {
 					try(XtDevice device = service.openDevice(dIndex)) {
 						listDevices.add(device.getName());
+						currentDeviceIndexes.add(dIndex);
 					}
 				}
 			} else {
-				nsound.getDeviceNames(service).forEach(device -> listDevices.add(device));
+				nsound.getDeviceNames(service).forEach(device -> { 
+					listDevices.add(device);
+					currentDeviceIndexes.add(currentDeviceIndexes.size());
+				});
 				comboDevice.setModel(new DefaultComboBoxModel<>(listDevices.toArray(new String[0])));
 			}
 			comboDevice.setModel(new DefaultComboBoxModel<>(listDevices.toArray(new String[0])));
 		}
+		glassPane.deactivate();
 	}
 	
 	private ItemListener serviceChangedListener = new ItemListener() {
@@ -125,9 +135,9 @@ public class NativeSoundConfigPanel extends JPanel {
 		}
 	};
 	
-	private ChangeListener showSupportedOnlyChanged = new ChangeListener() {
+	private ActionListener showSupportedOnlyChanged = new ActionListener() {
 		@Override
-		public void stateChanged(ChangeEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			updateDeviceList(comboService.getSelectedIndex());
 		}
 	};
@@ -145,7 +155,8 @@ public class NativeSoundConfigPanel extends JPanel {
 	
 	public void saveConfig() {
 		sm.getSettingObject("nativesound.serviceindex").setValue(comboService.getSelectedIndex());
-		sm.getSettingObject("nativesound.deviceindex").setValue(comboDevice.getSelectedIndex());
+		int deviceIndex = currentDeviceIndexes.get(comboDevice.getSelectedIndex());
+		sm.getSettingObject("nativesound.deviceindex").setValue(deviceIndex);
 		sm.getSettingObject("nativesound.samplerate").setValue(comboSampleRate.getSelectedItem());
 		sm.getSettingObject("nativesound.bitrate").setValue(comboBitRate.getSelectedItem());
 		sm.getSettingObject("nativesound.channels").setValue(comboChannels.getSelectedItem());
@@ -158,7 +169,8 @@ public class NativeSoundConfigPanel extends JPanel {
 			XtFormat format = new XtFormat(new XtMix((int) comboSampleRate.getSelectedItem(),
 					NativeSoundFormat.bitrateToSample((int) comboBitRate.getSelectedItem())),
 					(int) comboChannels.getSelectedItem(), 0, 0, 0);
-			return nsound.isDeviceSupported(service, comboDevice.getSelectedIndex(), format);
+			int deviceIndex = currentDeviceIndexes.get(comboDevice.getSelectedIndex());
+			return nsound.isDeviceSupported(service, deviceIndex, format);
 		}
 	}
 	
@@ -167,6 +179,11 @@ public class NativeSoundConfigPanel extends JPanel {
 	 * Initialize components and add them to the panel
 	 */
 	private void initLayout() {
+		glassPane = new DisabledGlassPane();
+		if(dialog != null) {
+			SwingUtilities.getRootPane(dialog).setGlassPane(glassPane);
+		}
+		
 		JLabel lblService = new JLabel("Service");
 		lblService.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblService = new GridBagConstraints();
@@ -292,7 +309,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		add(comboDevice, gbc_comboBoxDevice);
 
 		chckbxShowSupportedOnly = new JCheckBox("Show only supported devices");
-		chckbxShowSupportedOnly.addChangeListener(showSupportedOnlyChanged);
+		chckbxShowSupportedOnly.addActionListener(showSupportedOnlyChanged);
 		chckbxShowSupportedOnly.setBackground(Style.panelBackground);
 		chckbxShowSupportedOnly.setForeground(Style.textColor);
 		GridBagConstraints gbc_chckbxShowSupportedOnly = new GridBagConstraints();
@@ -307,12 +324,13 @@ public class NativeSoundConfigPanel extends JPanel {
 		Frame window = JOptionPane.getRootFrame();
 		JDialog dialog = new JDialog(window, "Choose a sound output or input", true);
 		
-		NativeSoundConfigPanel configPanel = new NativeSoundConfigPanel();
+		NativeSoundConfigPanel configPanel = new NativeSoundConfigPanel(dialog);
 		
 		JPanel panelButtons = new JPanel();
 		panelButtons.setBackground(Style.panelBackground);
 		
 		JButton btnOk = new JButton("Ok");
+		UiUtils.configureButton(btnOk);
 		panelButtons.add(btnOk);
 		btnOk.addActionListener(new ActionListener() {
 			@Override
@@ -328,6 +346,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
+		UiUtils.configureButton(btnCancel);
 		panelButtons.add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override

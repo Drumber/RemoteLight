@@ -54,19 +54,19 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private MusicSyncManager manager;
 	private PitchEstimationAlgorithm algo = PitchEstimationAlgorithm.DYNAMIC_WAVELET;
 	private AudioDispatcher dispatcher;
-	private static Mixer mixer;
+	private Mixer mixer;
 	private SilenceDetector silenceDetector;
 	private int threshold = -100;
 	
 	private boolean useNativeSound = false;
 	private XtSample bitRate = XtSample.INT16;
-	private int xtServiceIndex;
+	private int xtServiceIndex = -1;
 	private int xtDeviceIndex;
+	private int channels = 2;
 
 	private float sampleRate = 48000;
 	private int bufferSize = 1024 * 4;
 	private int overlap = 768 * 4;
-	private int channels = 1;
 
 	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
@@ -78,19 +78,23 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 	public void start() {
 		if (dispatcher != null) {
-			dispatcher.stop();
+			this.stop();
 		}
 
-		Logger.debug("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()));
-
-		final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
-		final DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, format);
-		TargetDataLine line;
+		if(!useNativeSound)
+			Logger.debug("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()));
+		else
+			Logger.debug("Started listening with native sound " + manager.getNativeSoundDevice().getName());
+		
 		try {
 
 			if(!useNativeSound) {
 				
-				line = (TargetDataLine) mixer.getLine(dataLineInfo);
+				sampleRate = 41000;
+				final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
+				final DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, format);
+				
+				TargetDataLine line = (TargetDataLine) mixer.getLine(dataLineInfo);
 				final int numberOfSamples = bufferSize;
 				line.open(format, numberOfSamples);
 				line.start();
@@ -150,14 +154,38 @@ public class SoundProcessing implements PitchDetectionHandler {
 		return false;
 	}
 
-	public static void setMixer(Mixer mixer) {
-		SoundProcessing.mixer = mixer;
+	public void setMixer(Mixer mixer) {
+		this.mixer = mixer;
 	}
 
-	public static boolean isMixerSet() {
+	public boolean isMixerSet() {
 		return (mixer != null);
 	}
 
+	public void setNativeSoundEnabled(boolean enable) {
+		useNativeSound = enable;
+	}
+	
+	public boolean isNativeSoundEnabled() {
+		return useNativeSound;
+	}
+	
+	public void configureNativeSound(int serviceIndex, int deviceIndex, int sampleRate, XtSample bitrate, int channels) {
+		this.xtServiceIndex = serviceIndex;
+		this.xtDeviceIndex = deviceIndex;
+		this.sampleRate = sampleRate;
+		this.bitRate = bitrate;
+		this.channels = channels;
+	}
+	
+	public boolean isConfigured() {
+		if(useNativeSound) {
+			return xtServiceIndex != -1;
+		}
+		return isMixerSet();
+	}
+	
+	
 	@Override
 	public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
 		if (pitchDetectionResult.getPitch() != -1) {
@@ -234,7 +262,6 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 				d += z;
 			}
-			
 			return true;
 		}
 

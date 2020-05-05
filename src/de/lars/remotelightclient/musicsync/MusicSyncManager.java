@@ -23,24 +23,13 @@ import javax.sound.sampled.Mixer;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.EffectManager.EffectType;
-import de.lars.remotelightclient.musicsync.modes.Flame;
-import de.lars.remotelightclient.musicsync.modes.Bars;
-import de.lars.remotelightclient.musicsync.modes.Bump;
-import de.lars.remotelightclient.musicsync.modes.DancingPoints;
-import de.lars.remotelightclient.musicsync.modes.EQ;
-import de.lars.remotelightclient.musicsync.modes.Energy;
-import de.lars.remotelightclient.musicsync.modes.Fade;
-import de.lars.remotelightclient.musicsync.modes.LevelBar;
-import de.lars.remotelightclient.musicsync.modes.Pulse;
-import de.lars.remotelightclient.musicsync.modes.Rainbow;
-import de.lars.remotelightclient.musicsync.modes.RunningLight;
-import de.lars.remotelightclient.musicsync.modes.Strobe;
-import de.lars.remotelightclient.musicsync.modes.Visualizer;
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.musicsync.modes.*;
 import de.lars.remotelightclient.musicsync.sound.Shared;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundDevice;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -50,6 +39,7 @@ import de.lars.remotelightclient.utils.PixelColorUtils;
 
 public class MusicSyncManager {
 	
+	SettingsManager sm;
 	private MusicEffect activeEffect;
 	private List<MusicEffect> effects;
 	private String input;
@@ -57,6 +47,7 @@ public class MusicSyncManager {
 	private MusicSyncUtils musicUtils;
 	private SoundProcessing soundProcessor;
 	private NativeSound nativeSound;
+	private NativeSoundDevice nativeSoundDevice;
 	
 	private int delay = 20;
 	private double sensitivity = 1;
@@ -66,15 +57,18 @@ public class MusicSyncManager {
 	private double pitchTime;
 	
 	public MusicSyncManager() {
-		this.loadSettings();
+		sm = Main.getInstance().getSettingsManager();
 		
-		if(SoundProcessing.isMixerSet()) {
-			if(soundProcessor != null) {
-				soundProcessor.stop();
-			}
-			soundProcessor = new SoundProcessing(this);
-			nativeSound = new NativeSound(true);
+		if(nativeSound != null)
+			nativeSound.close();
+		nativeSound = new NativeSound(true);
+		
+		if(soundProcessor != null) {
+			soundProcessor.stop();
 		}
+		soundProcessor = new SoundProcessing(this);
+		
+		this.loadSettings();
 		
 		musicUtils = new MusicSyncUtils();
 		
@@ -83,18 +77,40 @@ public class MusicSyncManager {
 	}
 	
 	private void loadSettings() {
-		SettingsManager s = Main.getInstance().getSettingsManager();
-		s.addSetting(new SettingObject("musicsync.input", "Input", null));
+		sm.addSetting(new SettingObject("musicsync.input", "Input", null));
+		sm.addSetting(new SettingObject("nativesound.serviceindex", "Selected service index", -1));
+		sm.addSetting(new SettingObject("nativesound.deviceindex", "Selected device index", 0));
+		sm.addSetting(new SettingObject("nativesound.samplerate", "Samplerate", 48000));
+		sm.addSetting(new SettingObject("nativesound.bitrate", "Bitrate", 16));
+		sm.addSetting(new SettingObject("nativesound.channels", "Channels", 2));
 		
-		//select last used input
-		input = (String) s.getSettingObject("musicsync.input").getValue();
+		// load native sound device if configured
+		if(isNativeSoundConfigured()) {
+			nativeSoundDevice = buildNativeSoundDevice();
+			// check if device is still valid / supported
+			if(!nativeSoundDevice.checkValidity()) {
+				sm.getSettingObject("nativesound.serviceindex").setValue(-1);
+			} else {
+				configureSoundProcessorForNativeSound(nativeSoundDevice);
+			}
+		}
+		
+		// load last used input
+		input = (String) sm.getSettingObject("musicsync.input").getValue();
 		if(input != null) {
-			for(Mixer.Info info : Shared.getMixerInfo(false, true)){
-				if(input.equals(info.toString())){
-					Mixer newValue = AudioSystem.getMixer(info);
-					SoundProcessing.setMixer(newValue);
-					break;
+			if(!input.equals("_NativeSound_")) {
+				// Java sound api
+				for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
+					if(input.equals(info.toString())){
+						Mixer newValue = AudioSystem.getMixer(info);
+						soundProcessor.setMixer(newValue);
+						soundProcessor.setNativeSoundEnabled(false);
+						break;
+					}
 				}
+			} else if(isNativeSoundConfigured()) {
+				// XtAudio native lib
+				soundProcessor.setNativeSoundEnabled(true);
 			}
 		}
 	}
@@ -112,6 +128,61 @@ public class MusicSyncManager {
 	public NativeSound getNativeSound() {
 		return nativeSound;
 	}
+	
+	public boolean isNativeSoundConfigured() {
+		return (int) sm.getSettingObject("nativesound.serviceindex").getValue() != -1;
+	}
+	
+	public void setNativeSoundEnabled(boolean enable) {
+		if(isNativeSoundConfigured() && enable) {
+			// update NativeSoundDevice
+			nativeSoundDevice = buildNativeSoundDevice();
+			if(nativeSoundDevice.checkValidity()) {
+				if(soundProcessor.isActive() && soundProcessor.isNativeSoundEnabled())
+					return;
+				soundProcessor.setNativeSoundEnabled(true);
+				configureSoundProcessorForNativeSound(nativeSoundDevice);
+			} else {
+				soundProcessor.setNativeSoundEnabled(false);
+				sm.getSettingObject("nativesound.serviceindex").setValue(-1);
+			}
+		} else {
+			if(soundProcessor.isActive() && soundProcessor.isNativeSoundEnabled()) {
+				soundProcessor.stop();
+			}
+			soundProcessor.setNativeSoundEnabled(false);
+		}
+	}
+	
+	private void configureSoundProcessorForNativeSound(NativeSoundDevice nativeSoundDevice) {
+		soundProcessor.configureNativeSound(nativeSoundDevice.getServiceIndex(), nativeSoundDevice.getDeviceIndex(),
+				nativeSoundDevice.getSampleRate(), nativeSoundDevice.getBitrateXtSample(), nativeSoundDevice.getChannels());
+	}
+	
+	/**
+	 * Build NativeSoundDevice from current setting values
+	 * @return new NativeSoundDevice instance
+	 */
+	public NativeSoundDevice buildNativeSoundDevice() {
+		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").getValue();
+		int deviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").getValue();
+		int sampleRate = (int) sm.getSettingObject("nativesound.samplerate").getValue();
+		int bitrate = (int) sm.getSettingObject("nativesound.bitrate").getValue();
+		int channels = (int) sm.getSettingObject("nativesound.channels").getValue();
+		return new NativeSoundDevice(serviceIndex, deviceIndex, sampleRate, bitrate, channels);
+	}
+	
+	public NativeSoundDevice getNativeSoundDevice() {
+		return nativeSoundDevice;
+	}
+	
+	public void updateNativeSoundDevice() {
+		if(isNativeSoundConfigured()) {
+			nativeSoundDevice = buildNativeSoundDevice();
+			nativeSoundDevice.checkValidity();
+		}
+	}
+	
 	
 	public void soundToLight(float pitch, double rms, double time) {
 		this.volume = rms;
@@ -167,12 +238,16 @@ public class MusicSyncManager {
 	public void start(MusicEffect effect) {
 		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.MusicSync);
 		
-		if(!SoundProcessing.isMixerSet()) {
+		if(soundProcessor == null) {
+			soundProcessor = new SoundProcessing(this);
+		}
+		if(!soundProcessor.isMixerSet() && !soundProcessor.isNativeSoundEnabled()) {
 			Main.getInstance().getMainFrame().printNotification("Please select a input!", NotificationType.Error);
 			return;
 		}
-		if(soundProcessor == null) {
-			soundProcessor = new SoundProcessing(this);
+		if(!soundProcessor.isConfigured()) {
+			Main.getInstance().getMainFrame().printNotification("Sound input not configured!", NotificationType.Error);
+			return;
 		}
 		if(activeEffect != null) {
 			activeEffect.onDisable();

@@ -152,7 +152,8 @@ public class NativeSound {
 		}
 		try (XtDevice device = service.openDevice(deviceIndex)) {
 			if (device == null || !device.supportsFormat(format)) {
-				Logger.error(String.format("Device '%s' or format '%s' not supported!", device.getName(), format.mix.sample));
+				Logger.error(String.format("Device '%s' or format '%s Hz, %s, %s channels' not supported!",
+						device.getName(), format.mix.rate, format.mix.sample, format.inputs));
 				return;
 			}
 			

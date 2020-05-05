@@ -19,11 +19,11 @@ import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.musicsync.InputUtil;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.musicsync.sound.Shared;
-import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsUtil;
 import de.lars.remotelightclient.settings.types.SettingObject;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
@@ -68,6 +68,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	private JScrollPane scrollPaneOpt;
 	private JPanel bgrOptions;
 	private JLabel lblInput;
+	private JRadioButton rbuttonNativeSound;
 
 	/**
 	 * Create the panel.
@@ -157,14 +158,18 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue()); //$NON-NLS-1$
 		panelAdjustment.add(sliderAdjustment);
 		
-		JButton btnTest = new JButton("Open NativeSound dialog");
-		btnTest.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				NativeSoundConfigPanel.showDialog();
-			}
-		});
-		bgrOptions.add(btnTest);
+		JPanel panelNativeSoundConfig = new JPanel();
+		panelNativeSoundConfig.setAlignmentY(Component.TOP_ALIGNMENT);
+		panelNativeSoundConfig.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelNativeSoundConfig.setBackground(Style.panelDarkBackground);
+		panelNativeSoundConfig.setLayout(new BoxLayout(panelNativeSoundConfig, BoxLayout.X_AXIS));
+		panelNativeSoundConfig.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+		bgrOptions.add(panelNativeSoundConfig);
+		
+		JButton btnTest = new JButton("Configure native sound input");
+		UiUtils.configureButton(btnTest);
+		btnTest.addActionListener(buttonNativeSoundConfigClicked);
+		panelNativeSoundConfig.add(btnTest);
 		
 		panelInput = new JPanel();
 		panelInput.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -256,6 +261,24 @@ public class MusicSyncOptionsPanel extends JPanel {
 		buttonPanel.setBackground(Style.panelDarkBackground);
 		ButtonGroup group = new ButtonGroup();
 		
+		// add native sound radio button
+		rbuttonNativeSound = new JRadioButton();
+		rbuttonNativeSound.setBackground(Style.panelDarkBackground);
+		rbuttonNativeSound.setForeground(Style.textColor);
+		buttonPanel.add(rbuttonNativeSound);
+		group.add(rbuttonNativeSound);
+		rbuttonNativeSound.setActionCommand("_NativeSound_");
+		rbuttonNativeSound.addActionListener(inputSelectedListener);
+		if(!msm.isNativeSoundConfigured()) {
+			rbuttonNativeSound.setEnabled(false);
+			rbuttonNativeSound.setText("Use native sound library (not configured)");
+		} else {
+			rbuttonNativeSound.setText("Use native sound library " + msm.getNativeSoundDevice().getName());
+			if(input.equals("_NativeSound_")) {
+				rbuttonNativeSound.setSelected(true);
+			}
+		}
+		
 		for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
 			Mixer mixer = AudioSystem.getMixer(info);
 
@@ -286,16 +309,46 @@ public class MusicSyncOptionsPanel extends JPanel {
 	private ActionListener inputSelectedListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
-				if(e.getActionCommand().equals(info.toString())){
-					Mixer newMixer = AudioSystem.getMixer(info);
-					SoundProcessing.setMixer(newMixer);
-					//save last selected to data file
-					sm.getSettingObject("musicsync.input").setValue(info.toString()); //$NON-NLS-1$
-					//refresh SoundProcessor
+			if(e.getActionCommand().equals("_NativeSound_")) {
+				sm.getSettingObject("musicsync.input").setValue("_NativeSound_");
+				if(msm.getNativeSoundDevice() == null || !msm.getNativeSoundDevice().isValid()) {
+					Main.getInstance().getMainFrame().printNotification("Native sound device is not valid!", NotificationType.Error);
+					rbuttonNativeSound.setEnabled(false);
+					rbuttonNativeSound.setText("Use native sound library (not configured)");
+					return;
+				} else {
+					msm.setNativeSoundEnabled(true);
 					Main.getInstance().getMusicSyncManager().newSoundProcessor();
-					break;
 				}
+			} else {
+				msm.setNativeSoundEnabled(false);
+				for(Mixer.Info info : Shared.getMixerInfo(false, true)) {
+					if(e.getActionCommand().equals(info.toString())){
+						Mixer newMixer = AudioSystem.getMixer(info);
+						msm.getSoundProcessor().setMixer(newMixer);
+						//save last selected to data file
+						sm.getSettingObject("musicsync.input").setValue(info.toString()); //$NON-NLS-1$
+						//refresh SoundProcessor
+						Main.getInstance().getMusicSyncManager().newSoundProcessor();
+						break;
+					}
+				}
+			}
+		}
+	};
+	
+	private ActionListener buttonNativeSoundConfigClicked = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(msm.isActive() && msm.getSoundProcessor().isNativeSoundEnabled()) {
+				Main.getInstance().getMainFrame().printNotification("Please stop the active effect before configuring.", NotificationType.Error);
+				return;
+			}
+			NativeSoundConfigPanel.showDialog();
+			msm.updateNativeSoundDevice();
+			if(msm.getNativeSoundDevice().isValid()) {
+				rbuttonNativeSound.setEnabled(true);
+				rbuttonNativeSound.setText("Use native sound library " + msm.getNativeSoundDevice().getName());
 			}
 		}
 	};
