@@ -59,7 +59,7 @@ public class MusicSyncManager {
 	public MusicSyncManager() {
 		sm = Main.getInstance().getSettingsManager();
 		
-		if(nativeSound != null)
+		if(nativeSound != null && nativeSound.isInitialized())
 			nativeSound.close();
 		nativeSound = new NativeSound(true);
 		
@@ -85,7 +85,7 @@ public class MusicSyncManager {
 		sm.addSetting(new SettingObject("nativesound.channels", "Channels", 2));
 		
 		// load native sound device if configured
-		if(isNativeSoundConfigured()) {
+		if(nativeSound.isInitialized() && isNativeSoundConfigured()) {
 			nativeSoundDevice = buildNativeSoundDevice();
 			// check if device is still valid / supported
 			if(!nativeSoundDevice.checkValidity()) {
@@ -108,7 +108,7 @@ public class MusicSyncManager {
 						break;
 					}
 				}
-			} else if(isNativeSoundConfigured()) {
+			} else if(nativeSound.isInitialized() && isNativeSoundConfigured()) {
 				// XtAudio native lib
 				soundProcessor.setNativeSoundEnabled(true);
 			}
@@ -130,11 +130,11 @@ public class MusicSyncManager {
 	}
 	
 	public boolean isNativeSoundConfigured() {
-		return (int) sm.getSettingObject("nativesound.serviceindex").getValue() != -1;
+		return (int) sm.getSettingObject("nativesound.serviceindex").getValue() != -1 && nativeSound.isInitialized();
 	}
 	
 	public void setNativeSoundEnabled(boolean enable) {
-		if(isNativeSoundConfigured() && enable) {
+		if(nativeSound.isInitialized() && isNativeSoundConfigured() && enable) {
 			// update NativeSoundDevice
 			nativeSoundDevice = buildNativeSoundDevice();
 			if(nativeSoundDevice.checkValidity()) {
@@ -155,8 +155,10 @@ public class MusicSyncManager {
 	}
 	
 	private void configureSoundProcessorForNativeSound(NativeSoundDevice nativeSoundDevice) {
-		soundProcessor.configureNativeSound(nativeSoundDevice.getServiceIndex(), nativeSoundDevice.getDeviceIndex(),
-				nativeSoundDevice.getSampleRate(), nativeSoundDevice.getBitrateXtSample(), nativeSoundDevice.getChannels());
+		if(nativeSound.isInitialized()) {
+			soundProcessor.configureNativeSound(nativeSoundDevice.getServiceIndex(), nativeSoundDevice.getDeviceIndex(),
+					nativeSoundDevice.getSampleRate(), nativeSoundDevice.getBitrateXtSample(), nativeSoundDevice.getChannels());
+		}
 	}
 	
 	/**
@@ -177,7 +179,7 @@ public class MusicSyncManager {
 	}
 	
 	public void updateNativeSoundDevice() {
-		if(isNativeSoundConfigured()) {
+		if(nativeSound.isInitialized() && isNativeSoundConfigured()) {
 			nativeSoundDevice = buildNativeSoundDevice();
 			nativeSoundDevice.checkValidity();
 		}

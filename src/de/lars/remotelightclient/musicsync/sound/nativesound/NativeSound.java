@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.tinylog.Logger;
 
 import com.xtaudio.xt.*;
@@ -13,9 +12,9 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class NativeSound {
 
-	public static String LIB_CLASSPATH = "resourcen/lib";
+	public static String LIB_CLASSPATH = "/resourcen/lib/xtaudio.zip";
 	public static final int[] SAMPLERATES = {11025, 22050, 44100, 48000, 96000, 192000};
-	private static final String LIB_NAME = "xt-core";
+	public static final String LIB_NAME = "xt-core";
 	
 	private List<XtService> listServices;
 	private boolean initialized = false;
@@ -51,20 +50,19 @@ public class NativeSound {
 				try {
 					File libPath = copyLibs();
 					String path = libPath.getAbsolutePath() + File.separator;
-					if (isWin) {
-						System.load(path + "win32-x64/" + LIB_NAME + ".dll");
-						System.load(path + "win32-x86/" + LIB_NAME + ".dll");
-					} else {
-						System.load(path + "linux-x64/lib" + LIB_NAME + ".so");
-						System.load(path + "linux-x86/lib" + LIB_NAME + ".so");
-					}
+					
+					String libPathProp = path + File.pathSeparator + System.getProperty("java.library.path");
+					System.setProperty("jna.library.path", libPathProp);
+					System.out.println(System.getProperty("jna.library.path"));
+					
 					initialized = true;
 					XtAudio audio = new XtAudio(null, null, null, null);
 					Logger.info("Loaded native sound library for " + (isWin ? "Windows" : "Linux") + " from classpath.");
 					audio.close();
-				} catch (IOException e) {
+				} catch (IOException | NullPointerException | UnsatisfiedLinkError e) {
 					initialized = false;
 					Logger.error(e, "Could not load libraries folder.");
+					return;
 				}
 			}
 		}
@@ -75,13 +73,17 @@ public class NativeSound {
 		File filePath = new File(DirectoryUtil.getDataStoragePath() + "lib");
 		filePath.mkdirs();
 		filePath.deleteOnExit();
-		DirectoryUtil.copyFolderFromJar(LIB_CLASSPATH, filePath, true);
+		//DirectoryUtil.copyFolderFromJar(LIB_CLASSPATH, filePath, true);
+		DirectoryUtil.copyZipFromJar(LIB_CLASSPATH, filePath);
 		return filePath;
+	}
+	
+	public boolean isInitialized() {
+		return initialized;
 	}
 
 	public void close() {
 		closeDevice();
-		
 	}
 
 	

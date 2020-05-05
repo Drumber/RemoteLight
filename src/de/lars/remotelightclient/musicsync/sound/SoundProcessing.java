@@ -107,19 +107,24 @@ public class SoundProcessing implements PitchDetectionHandler {
 			} else {
 				
 				UniversalAudioInputStream uais = null;
+				System.out.println(1);
 				try (XtAudio audio = new XtAudio(null, null, null, null)) {
 					NativeSound nsound = manager.getNativeSound();
 					XtService service = XtAudio.getServiceByIndex(xtServiceIndex);
+					System.out.println(2);
 					
 					XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, bitRate), channels, 0, 0, 0);
 					NativeSoundFormat nformat = new NativeSoundFormat(xformat);
 					NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
+					System.out.println(3);
 					
 					nsound.openDevice(service, xtDeviceIndex, xformat, nsis);
+					System.out.println(4);
 					uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
 				}
 				
 				dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
+				System.out.println(5);
 			}
 
 			// add a processor
