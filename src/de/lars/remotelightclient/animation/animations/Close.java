@@ -26,37 +26,52 @@ import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Close extends Animation {
 	
+	private Color[] strip;
 	private int pos;
 	private Color color;
+	private boolean fadeToBlack;
 
 	public Close() {
 		super("Close");
 		color = RainbowWheel.getRandomColor();
 		this.addSetting(new SettingBoolean("animation.close.randomcolor", "Random color", SettingCategory.Intern, null, true));
-		this.addSetting(new SettingColor("animation.close.color", "Color", SettingCategory.Intern,	null, Color.RED));
+		this.addSetting(new SettingColor("animation.close.color", "Color", SettingCategory.Intern, null, Color.RED));
+		this.addSetting(new SettingBoolean("animation.close.fadeout", "Fade out", SettingCategory.Intern, null, true));
+	}
+	
+	@Override
+	public void onEnable() {
+		fadeToBlack = false;
+		pos = 0;
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		color = RainbowWheel.getRandomColor();
+		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		int half = Main.getLedNum() / 2;
-		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		int half = strip.length / 2;
 		
-		if(!((SettingBoolean) getSetting("animation.close.randomcolor")).getValue()) {
+		if(!((SettingBoolean) getSetting("animation.close.randomcolor")).getValue() && !fadeToBlack) {
 			color = ((SettingColor) getSetting("animation.close.color")).getValue();
 		}
 		
 		strip[pos] = color;
 		for(int i = 0; i < half; i++) {
-			if(i < pos) {
+			if(i <= pos) {
 				strip[i] = color;
 			}
 		}
 		
 		if(pos++ == half) {
 			pos = 0;
+			fadeToBlack = !fadeToBlack;
 			color = RainbowWheel.getRandomColor();
-			strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
-			strip[0] = color;
+			if(!((SettingBoolean) getSetting("animation.close.fadeout")).getValue()) {
+				strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
+			} else if(fadeToBlack) {
+				color = Color.BLACK;
+			}
 		}
 		
 		strip = PixelColorUtils.centered(strip, false);
