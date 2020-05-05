@@ -33,7 +33,6 @@ import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.lua.LuaManager;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
-import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
