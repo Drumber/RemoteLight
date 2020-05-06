@@ -175,6 +175,9 @@ public class SettingsManager {
 	 * @param key DataStorage Key
 	 */
 	public void save(String key) {
+		if(!DataStorage.isCreated()) {
+			Logger.error("It seems the data file was not created. Connat save settings...");
+		}
 		DataStorage.store(key, settings);
 		Logger.info("Stored " + settings.size() + " setting to data file.");
 	}

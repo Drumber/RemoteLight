@@ -128,10 +128,12 @@ public class DataStorage {
 	 * 
 	 */
 	public static boolean isCreated() {
-		if(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME).isFile())
-			return true;
-		else
-			return false;
+		if(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME).isFile()) {
+			if(storage != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
