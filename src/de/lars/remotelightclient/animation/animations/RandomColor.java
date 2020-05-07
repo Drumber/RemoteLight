@@ -20,8 +20,8 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class RandomColor extends Animation {
 	

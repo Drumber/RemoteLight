@@ -8,7 +8,7 @@ import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class SoftTwinkles extends Animation {
 	/* adapted from https://gist.github.com/kriegsman/99082f66a726bdff7776

@@ -23,8 +23,8 @@ import de.lars.remotelightclient.animation.AnimationManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.TimeUtil;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.maths.TimeUtil;
 
 public class Twinkle extends Animation {
 	

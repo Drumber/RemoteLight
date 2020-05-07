@@ -35,7 +35,7 @@ import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class MusicSyncManager {
 	

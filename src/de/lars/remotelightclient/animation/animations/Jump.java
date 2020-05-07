@@ -18,9 +18,9 @@ import java.awt.Color;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
-import de.lars.remotelightclient.utils.TimeUtil;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
+import de.lars.remotelightclient.utils.maths.TimeUtil;
 
 public class Jump extends Animation {
 	

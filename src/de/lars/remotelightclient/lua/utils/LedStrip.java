@@ -12,8 +12,8 @@ import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class LedStrip {
 	/**

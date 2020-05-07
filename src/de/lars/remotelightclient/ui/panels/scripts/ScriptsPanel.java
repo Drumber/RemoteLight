@@ -39,8 +39,8 @@ import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.DirectoryUtil;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 public class ScriptsPanel extends MenuPanel {
 

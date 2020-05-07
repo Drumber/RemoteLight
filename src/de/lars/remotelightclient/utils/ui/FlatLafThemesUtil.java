@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.utils;
+package de.lars.remotelightclient.utils.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;

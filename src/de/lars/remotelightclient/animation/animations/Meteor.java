@@ -23,7 +23,7 @@ import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class Meteor extends Animation {
 	

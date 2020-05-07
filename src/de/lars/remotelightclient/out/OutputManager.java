@@ -23,7 +23,7 @@ import de.lars.remotelightclient.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.OutputUtil;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class OutputManager {
 	

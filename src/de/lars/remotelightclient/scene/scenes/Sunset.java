@@ -20,7 +20,7 @@ import java.util.List;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.scene.Scene;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class Sunset extends Scene {
 	

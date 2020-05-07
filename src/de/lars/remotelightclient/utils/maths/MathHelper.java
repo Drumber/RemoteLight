@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.utils;
+package de.lars.remotelightclient.utils.maths;
 
 import de.lars.remotelightclient.Main;
 

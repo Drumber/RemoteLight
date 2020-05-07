@@ -22,7 +22,7 @@ import de.lars.remotelightclient.musicsync.MusicSyncManager;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class EffectManager {
 	

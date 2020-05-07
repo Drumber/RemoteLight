@@ -36,8 +36,8 @@ import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
-import de.lars.remotelightclient.utils.RainbowWheel;
 import de.lars.remotelightclient.utils.UpdateChecker;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class StartUp {
 	

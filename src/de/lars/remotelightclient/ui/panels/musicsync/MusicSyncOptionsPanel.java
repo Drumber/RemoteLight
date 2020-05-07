@@ -28,7 +28,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;

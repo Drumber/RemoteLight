@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import de.lars.remotelightclient.devices.arduino.RgbOrder;
-import de.lars.remotelightclient.utils.ColorUtil;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.ColorUtil;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class OutputPatch implements Serializable {
 	

@@ -49,7 +49,7 @@ import de.lars.remotelightclient.animation.animations.Wipe;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class AnimationManager {
 	

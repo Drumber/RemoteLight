@@ -13,8 +13,8 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.TimeUtil;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.maths.TimeUtil;
 
 public class Strobe extends MusicEffect {
 	

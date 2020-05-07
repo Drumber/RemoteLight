@@ -23,8 +23,8 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class RunningLight extends MusicEffect {
 

@@ -30,7 +30,7 @@ import de.lars.remotelightclient.scene.scenes.Ocean;
 import de.lars.remotelightclient.scene.scenes.SnowSparkle;
 import de.lars.remotelightclient.scene.scenes.Space;
 import de.lars.remotelightclient.scene.scenes.Sunset;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class SceneManager {
 	

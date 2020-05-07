@@ -11,8 +11,8 @@ import de.lars.remotelightclient.settings.types.SettingColor;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.utils.ArrayUtil;
-import de.lars.remotelightclient.utils.ColorUtil;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.ColorUtil;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class Energy extends MusicEffect {
 

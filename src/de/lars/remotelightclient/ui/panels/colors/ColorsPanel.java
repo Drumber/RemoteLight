@@ -29,7 +29,8 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+
 import java.awt.BorderLayout;
 
 public class ColorsPanel extends MenuPanel {

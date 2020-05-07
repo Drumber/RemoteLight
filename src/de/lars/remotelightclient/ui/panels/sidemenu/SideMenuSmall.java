@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 import javax.swing.JButton;
 

@@ -23,7 +23,7 @@ import java.util.Random;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.scene.Scene;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class NorthernLights extends Scene {
 	

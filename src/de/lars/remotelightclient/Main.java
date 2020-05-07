@@ -42,8 +42,8 @@ import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
 import de.lars.remotelightclient.utils.ExceptionHandler;
-import de.lars.remotelightclient.utils.FlatLafThemesUtil;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class Main {
 	private boolean shuttingDown = false;

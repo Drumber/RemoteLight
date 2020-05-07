@@ -21,7 +21,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
 import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
 public class EQ extends MusicEffect {
 

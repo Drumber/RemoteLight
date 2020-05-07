@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -19,8 +19,8 @@ import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.DisabledGlassPane;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.DisabledGlassPane;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class NativeSoundConfigPanel extends JPanel {
 	private static final long serialVersionUID = -3746048418035257056L;

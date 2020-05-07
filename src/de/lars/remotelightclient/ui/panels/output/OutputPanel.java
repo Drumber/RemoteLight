@@ -41,8 +41,8 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPane
 import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;

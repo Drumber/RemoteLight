@@ -28,9 +28,9 @@ import org.tinylog.Logger;
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.utils.ColorUtil;
-import de.lars.remotelightclient.utils.FlatLafThemesUtil;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.color.ColorUtil;
+import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class Style {
 	

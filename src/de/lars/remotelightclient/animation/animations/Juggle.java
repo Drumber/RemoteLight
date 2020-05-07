@@ -7,9 +7,9 @@ import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.utils.MathHelper;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
+import de.lars.remotelightclient.utils.maths.MathHelper;
 
 public class Juggle extends Animation {
 	

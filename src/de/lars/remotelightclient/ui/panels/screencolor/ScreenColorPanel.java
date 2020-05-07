@@ -29,8 +29,8 @@ import de.lars.remotelightclient.ui.comps.ImagePanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;

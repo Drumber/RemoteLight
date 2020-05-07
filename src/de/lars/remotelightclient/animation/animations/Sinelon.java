@@ -5,9 +5,9 @@ import java.awt.Color;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.MathHelper;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
+import de.lars.remotelightclient.utils.maths.MathHelper;
 
 public class Sinelon extends Animation {
 	/* https://gist.github.com/kriegsman/062e10f7f07ba8518af6

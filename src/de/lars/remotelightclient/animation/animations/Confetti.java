@@ -6,8 +6,8 @@ import java.util.Random;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.animation.Animation;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.utils.PixelColorUtils;
-import de.lars.remotelightclient.utils.RainbowWheel;
+import de.lars.remotelightclient.utils.color.PixelColorUtils;
+import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class Confetti extends Animation {
 	/* adapted from https://gist.github.com/kriegsman/062e10f7f07ba8518af6

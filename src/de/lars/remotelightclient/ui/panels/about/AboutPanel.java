@@ -19,8 +19,8 @@ import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

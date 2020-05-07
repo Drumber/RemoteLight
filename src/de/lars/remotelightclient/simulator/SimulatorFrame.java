@@ -35,8 +35,8 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;

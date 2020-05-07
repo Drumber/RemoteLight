@@ -29,7 +29,7 @@ import javax.swing.SwingConstants;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;

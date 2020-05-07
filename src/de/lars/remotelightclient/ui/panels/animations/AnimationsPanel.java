@@ -27,7 +27,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;

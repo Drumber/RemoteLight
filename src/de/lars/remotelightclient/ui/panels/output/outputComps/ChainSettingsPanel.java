@@ -17,8 +17,8 @@ import de.lars.remotelightclient.devices.Device;
 import de.lars.remotelightclient.devices.link.chain.Chain;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UiUtils;
-import de.lars.remotelightclient.utils.WrapLayout;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
 
 public class ChainSettingsPanel extends DeviceSettingsPanel {
 	

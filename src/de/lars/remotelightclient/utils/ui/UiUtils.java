@@ -12,7 +12,7 @@
  * 
  * This file is part of RemoteLight.
  ******************************************************************************/
-package de.lars.remotelightclient.utils;
+package de.lars.remotelightclient.utils.ui;
 
 import java.awt.Color;
 import java.awt.Component;
