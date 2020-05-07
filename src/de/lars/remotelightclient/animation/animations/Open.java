@@ -76,7 +76,7 @@ public class Open extends Animation {
 			if(((SettingBoolean) getSetting("animation.open.randomcolor")).getValue() && !fadeOut) {
 				color = RainbowWheel.getRandomColor();
 			}
-			if(((SettingBoolean) getSetting("animation.close.fadeout")).getValue()) {
+			if(((SettingBoolean) getSetting("animation.open.fadeout")).getValue()) {
 				fadeOut = !fadeOut;
 			} else {
 				fadeOut = false;
