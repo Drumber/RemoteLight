@@ -16,9 +16,11 @@ package de.lars.remotelightclient.ui.panels.settings;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.*;
@@ -40,14 +42,15 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
 import de.lars.remotelightclient.utils.UiUtils;
 
 public class SettingsPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3954953325346082615L;
+	
 	private SettingsManager sm;
 	private MainFrame mainFrame;
 	private List<SettingPanel> settingPanels;
+	
+	/** some settings that should be displayed in the right order */
+	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "%remains%"};
+	private final String[] OTHERS_SETTING_ORDER = {"%remains%"};
 
 	/**
 	 * Create the panel.
@@ -64,8 +67,8 @@ public class SettingsPanel extends MenuPanel {
 		main.setBackground(Style.panelBackground);
 		main.setAlignmentX(Component.LEFT_ALIGNMENT);
 		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-		main.add(getSettingsBgr(SettingCategory.General, i18n.getString("SettingsPanel.General"))); //$NON-NLS-1$
-		main.add(getSettingsBgr(SettingCategory.Others, i18n.getString("SettingsPanel.Others"))); //$NON-NLS-1$
+		main.add(getSettingsBgr(SettingCategory.General, i18n.getString("SettingsPanel.General"), GENERAL_SETTING_ORDER)); //$NON-NLS-1$
+		main.add(getSettingsBgr(SettingCategory.Others, i18n.getString("SettingsPanel.Others"), OTHERS_SETTING_ORDER)); //$NON-NLS-1$
 		
 		JButton btnSave = new JButton(i18n.getString("SettingsPanel.Save")); //$NON-NLS-1$
 		UiUtils.configureButton(btnSave);
@@ -74,6 +77,7 @@ public class SettingsPanel extends MenuPanel {
         btnSave.setBackground(Style.buttonBackground);
         btnSave.setForeground(Style.textColor);
         btnSave.addActionListener(btnSaveListener);
+        btnSave.setPreferredSize(new Dimension(getWidth(), 30));
 		add(btnSave, BorderLayout.SOUTH);
 		
 		JScrollPane scrollPane = new JScrollPane(main);
@@ -87,7 +91,7 @@ public class SettingsPanel extends MenuPanel {
 		this.updateUI();
 	}
 	
-	private JPanel getSettingsBgr(SettingCategory category, String title) {
+	private JPanel getSettingsBgr(SettingCategory category, String title, String[] order) {
 		JPanel bgr = new JPanel();
 		bgr.setBorder(new EmptyBorder(10, 10, 10, 0));
 		bgr.setBackground(Style.panelBackground);
@@ -100,13 +104,29 @@ public class SettingsPanel extends MenuPanel {
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgr.add(lblTitle);
 		
-		for(Setting s : sm.getSettingsFromCategory(category)) {
+		List<String> listOrder = Arrays.asList(order);
+		
+		for(String id : listOrder) {
+			if(id.equals("%remains%")) {
+				// add all settings of category except those in the list
+				for(Setting s : sm.getSettingsFromCategory(category)) {
+					if(listOrder.contains(s.getId()))
+						continue;
+					SettingPanel spanel = this.getSettingPanel(s);
+					spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+					bgr.add(spanel);
+					settingPanels.add(spanel);
+				}
+				continue;
+			}
+			// add setting panel for ordered ID
+			Setting s = sm.getSettingFromId(id);
+			if(s == null) continue;
 			SettingPanel spanel = this.getSettingPanel(s);
 			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			bgr.add(spanel);
 			settingPanels.add(spanel);
 		}
-		
 		return bgr;
 	}
 	

@@ -23,10 +23,13 @@ import javax.sound.sampled.TargetDataLine;
 
 import org.tinylog.Logger;
 
+import com.xtaudio.xt.*;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.SilenceDetector;
+import be.tarsos.dsp.io.UniversalAudioInputStream;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
@@ -35,6 +38,9 @@ import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicSyncManager;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
+import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundInputStream;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 
 /*
@@ -48,13 +54,20 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private MusicSyncManager manager;
 	private PitchEstimationAlgorithm algo = PitchEstimationAlgorithm.DYNAMIC_WAVELET;
 	private AudioDispatcher dispatcher;
-	private static Mixer mixer;
+	private Mixer mixer;
 	private SilenceDetector silenceDetector;
 	private int threshold = -100;
+	
+	private boolean useNativeSound = false;
+	private XtSample bitRate = XtSample.INT16;
+	private int xtServiceIndex = -1;
+	private int xtDeviceIndex;
+	private int channels = 2;
 
-	private float sampleRate = 44100;
-	private int bufferSize = 1024 * 4;
-	private int overlap = 768 * 4;
+	private float sampleRate = 48000;
+	private int bufferSize = 1024 * 2;
+	private int overlap = 1024;
+	//private int overlap = 768 * 2;
 
 	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
@@ -66,25 +79,49 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 	public void start() {
 		if (dispatcher != null) {
-			dispatcher.stop();
+			this.stop();
 		}
 
-		Logger.debug("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()));
-
-		final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
-		final DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, format);
-		TargetDataLine line;
+		if(!useNativeSound)
+			Logger.debug("Started listening with " + Shared.toLocalString(mixer.getMixerInfo().getName()));
+		else
+			Logger.debug("Started listening with native sound " + manager.getNativeSoundDevice().getName());
+		
 		try {
 
-			line = (TargetDataLine) mixer.getLine(dataLineInfo);
-			final int numberOfSamples = bufferSize;
-			line.open(format, numberOfSamples);
-			line.start();
-			final AudioInputStream stream = new AudioInputStream(line);
-
-			JVMAudioInputStream audioStream = new JVMAudioInputStream(stream);
-			// create a new dispatcher
-			dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
+			if(!useNativeSound) {
+				
+				sampleRate = 41000;
+				final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
+				final DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, format);
+				
+				TargetDataLine line = (TargetDataLine) mixer.getLine(dataLineInfo);
+				final int numberOfSamples = bufferSize;
+				line.open(format, numberOfSamples);
+				line.start();
+				final AudioInputStream stream = new AudioInputStream(line);
+	
+				JVMAudioInputStream audioStream = new JVMAudioInputStream(stream);
+				// create a new dispatcher
+				dispatcher = new AudioDispatcher(audioStream, bufferSize, overlap);
+				
+			} else {
+				
+				UniversalAudioInputStream uais = null;
+				try (XtAudio audio = new XtAudio(null, null, null, null)) {
+					NativeSound nsound = manager.getNativeSound();
+					XtService service = XtAudio.getServiceByIndex(xtServiceIndex);
+					
+					XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, bitRate), channels, 0, 0, 0);
+					NativeSoundFormat nformat = new NativeSoundFormat(xformat);
+					NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
+					
+					nsound.openDevice(service, xtDeviceIndex, xformat, nsis);
+					uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
+				}
+				
+				dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
+			}
 
 			// add a processor
 			dispatcher.addAudioProcessor(new PitchProcessor(algo, sampleRate, bufferSize, this));
@@ -107,6 +144,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 		if (dispatcher != null) {
 			dispatcher.stop();
 		}
+		manager.getNativeSound().closeDevice();
 		Logger.debug("Stopped SoundProcessor");
 	}
 
@@ -117,14 +155,38 @@ public class SoundProcessing implements PitchDetectionHandler {
 		return false;
 	}
 
-	public static void setMixer(Mixer mixer) {
-		SoundProcessing.mixer = mixer;
+	public void setMixer(Mixer mixer) {
+		this.mixer = mixer;
 	}
 
-	public static boolean isMixerSet() {
+	public boolean isMixerSet() {
 		return (mixer != null);
 	}
 
+	public void setNativeSoundEnabled(boolean enable) {
+		useNativeSound = enable;
+	}
+	
+	public boolean isNativeSoundEnabled() {
+		return useNativeSound;
+	}
+	
+	public void configureNativeSound(int serviceIndex, int deviceIndex, int sampleRate, XtSample bitrate, int channels) {
+		this.xtServiceIndex = serviceIndex;
+		this.xtDeviceIndex = deviceIndex;
+		this.sampleRate = sampleRate;
+		this.bitRate = bitrate;
+		this.channels = channels;
+	}
+	
+	public boolean isConfigured() {
+		if(useNativeSound) {
+			return xtServiceIndex != -1;
+		}
+		return isMixerSet();
+	}
+	
+	
 	@Override
 	public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
 		if (pitchDetectionResult.getPitch() != -1) {
@@ -165,7 +227,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 			System.arraycopy(audioFloatBuffer, 0, transformbuffer, 0, audioFloatBuffer.length);
 			fft.forwardTransform(transformbuffer);
 			fft.modulus(transformbuffer, amplitudes);
-
+			
 			// amplitude of 6 bands: ~280/~570/~850/~1120/~1400/>1400
 			low1 = 0;
 			low2 = 0;
@@ -201,7 +263,6 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 				d += z;
 			}
-			
 			return true;
 		}
 

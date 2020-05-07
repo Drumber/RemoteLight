@@ -41,6 +41,7 @@ import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.DirectoryUtil;
+import de.lars.remotelightclient.utils.ExceptionHandler;
 import de.lars.remotelightclient.utils.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.UiUtils;
 
@@ -82,6 +83,9 @@ public class Main {
 	public Main(boolean uiMode) {
 		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
+		// set default exception handler
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		
 		Logger.info("Starting RemoteLight version " + VERSION);
 		Style.loadFonts();				// Load custom fonts
 		DataStorage.start();			// Load data file
@@ -119,6 +123,9 @@ public class Main {
 			}
 		}
 		Logger.info((failed ? "[FAILED] switch to standard LaF: " : "Selected Look and Feel: ") + UIManager.getLookAndFeel().getName());
+		
+		// register error handler in MainFrame
+		ExceptionHandler.registerListener(MainFrame.onException);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

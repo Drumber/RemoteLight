@@ -26,20 +26,31 @@ import de.lars.remotelightclient.utils.RainbowWheel;
 
 public class Open extends Animation {
 	
+	private Color[] strip;
 	private int pos;
 	private Color color;
+	private boolean fadeOut;
 
 	public Open() {
 		super("Open");
 		color = RainbowWheel.getRandomColor();
 		this.addSetting(new SettingBoolean("animation.open.randomcolor", "Random color", SettingCategory.Intern, null, true));
 		this.addSetting(new SettingColor("animation.open.color", "Color", SettingCategory.Intern,	null, Color.RED));
+		this.addSetting(new SettingBoolean("animation.open.fadeout", "Fade out", SettingCategory.Intern, null, true));
+	}
+	
+	@Override
+	public void onEnable() {
+		fadeOut = false;
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		pos = strip.length / 2;
+		color = RainbowWheel.getRandomColor();
+		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		int half = Main.getLedNum() / 2;
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		int half = strip.length / 2;
 		
 		if(!((SettingBoolean) getSetting("animation.open.randomcolor")).getValue()) {
 			color = ((SettingColor) getSetting("animation.open.color")).getValue();
@@ -47,20 +58,29 @@ public class Open extends Animation {
 		
 		strip[pos] = color;
 		for(int i = 0; i < half; i++) {
-			if(i < pos) {
-				strip[i] = color;
+			if(i <= pos) {
+				if(fadeOut)
+					strip[i] = Color.BLACK;
+				else
+					strip[i] = color;
 			} else {
-				strip[i] = Color.BLACK;
+				if(fadeOut)
+					strip[i] = color;
+				else
+					strip[i] = Color.BLACK;
 			}
 		}
 		
-		if(pos-- == 0) {
+		if(--pos == 0) {
 			pos = half;
-			if(((SettingBoolean) getSetting("animation.open.randomcolor")).getValue()) {
+			if(((SettingBoolean) getSetting("animation.open.randomcolor")).getValue() && !fadeOut) {
 				color = RainbowWheel.getRandomColor();
 			}
-			strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
-			strip[0] = color;
+			if(((SettingBoolean) getSetting("animation.close.fadeout")).getValue()) {
+				fadeOut = !fadeOut;
+			} else {
+				fadeOut = false;
+			}
 		}
 		
 		strip = PixelColorUtils.centered(strip, false);

@@ -14,13 +14,11 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
@@ -36,22 +34,16 @@ import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
 import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
+import de.lars.remotelightclient.utils.ExceptionHandler;
+import de.lars.remotelightclient.utils.ExceptionHandler.ExceptionEvent;
 
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import java.awt.FlowLayout;
-import java.awt.SystemTray;
-
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.tinylog.Logger;
-import java.awt.Toolkit;
 
 public class MainFrame extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6397116310182308082L;
 	private JPanel contentPane;
 	private JPanel bgrSideMenu;
@@ -85,7 +77,6 @@ public class MainFrame extends JFrame {
 		this.setFrameContetPane();
 		this.displayPanel(new OutputPanel(this));
 		
-		Main.getInstance();
 		if(Main.startParameter.tray) {
 			SystemTrayIcon.showTrayIcon();
 			dispose();
@@ -267,5 +258,30 @@ public class MainFrame extends JFrame {
 			break;
 		}
 	}
+	
+	/** show error dialog on exception */
+	public static ExceptionEvent onException = new ExceptionEvent() {
+		@Override
+		public void onException(Throwable e) {
+			JPanel root = new JPanel();
+			root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+			
+			JLabel header = new JLabel(String.format("A %s Error occured", e.getClass().getCanonicalName()));
+			header.setHorizontalAlignment(JLabel.LEFT);
+			header.setAlignmentX(Component.LEFT_ALIGNMENT);
+			header.setFont(Style.getFontRegualar(12));
+			root.add(header);
+			
+			root.add(Box.createRigidArea(new Dimension(0, 20)));
+			
+			JTextArea text = new JTextArea(ExceptionHandler.getStackTrace(e));
+			text.setLineWrap(true);
+			text.setCaretPosition(0);
+			text.setEditable(false);
+			root.add(new JScrollPane(text));
+			
+			JOptionPane.showMessageDialog(null, root, "Exception", JOptionPane.ERROR_MESSAGE);
+		}
+	};
 
 }
