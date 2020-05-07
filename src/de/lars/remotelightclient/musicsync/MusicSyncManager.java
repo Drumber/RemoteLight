@@ -251,6 +251,9 @@ public class MusicSyncManager {
 			Main.getInstance().getMainFrame().printNotification("Sound input not configured!", NotificationType.Error);
 			return;
 		}
+		if(soundProcessor.isNativeSoundEnabled()) {
+			configureSoundProcessorForNativeSound(nativeSoundDevice);
+		}
 		if(activeEffect != null) {
 			activeEffect.onDisable();
 		}

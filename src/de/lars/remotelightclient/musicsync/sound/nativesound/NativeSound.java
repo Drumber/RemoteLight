@@ -2,6 +2,8 @@ package de.lars.remotelightclient.musicsync.sound.nativesound;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import org.tinylog.Logger;
@@ -53,7 +55,6 @@ public class NativeSound {
 					
 					String libPathProp = path + File.pathSeparator + System.getProperty("java.library.path");
 					System.setProperty("jna.library.path", libPathProp);
-					System.out.println(System.getProperty("jna.library.path"));
 					
 					initialized = true;
 					XtAudio audio = new XtAudio(null, null, null, null);
@@ -159,9 +160,17 @@ public class NativeSound {
 				return;
 			}
 			
+			StreamContext context = new StreamContext();
 			XtBuffer buffer = device.getBuffer(format);
-			stream = device.openStream(format, true, false, buffer.current, callback, null, /*optional*/device);
+			double bufferSize = XtAudio.isWin32() ? buffer.current : 10.0;
+			
+			stream = device.openStream(format, true, false, bufferSize, callback, null, context);
+			int sampleSize = XtAudio.getSampleAttributes(format.mix.sample).size;
+			context.buffer = ByteBuffer.allocate(stream.getFrames() * format.inputs * sampleSize).order(ByteOrder.LITTLE_ENDIAN);
 			stream.start();
+			
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 	
@@ -170,7 +179,7 @@ public class NativeSound {
 	 */
 	public void closeDevice() {
 		if(stream != null) {
-			try (XtAudio audio = new XtAudio(null, null, null, null)) {
+			try(XtAudio audio = new XtAudio(null, null, null, null)) {
 				stream.stop();
 				stream.close();
 				stream = null;

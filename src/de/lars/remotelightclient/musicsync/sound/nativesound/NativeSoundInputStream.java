@@ -1,16 +1,13 @@
 package de.lars.remotelightclient.musicsync.sound.nativesound;
 
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFormat;
 
-import com.xtaudio.xt.XtAudio;
-import com.xtaudio.xt.XtFormat;
-import com.xtaudio.xt.XtStream;
-import com.xtaudio.xt.XtStreamCallback;
+import org.tinylog.Logger;
+
+import com.xtaudio.xt.*;
 
 import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 
@@ -42,31 +39,49 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	@Override
 	public void callback(XtStream stream, Object input, Object output, int frames, double time, long position,
 			boolean timeValid, long error, Object user) throws Exception {
-		if(frames <= 0) {
+		if(frames == 0) {
 			return;
 		}
-		byte[] data;
+		if(error != 0) {
+			Logger.error(XtPrint.errorToString(error));
+		}
+		
+		ByteBuffer buffer = ((StreamContext) user).buffer;
+		
+		if(stream.isInterleaved()) {
+			int bufferSize = getBufferSize(stream, frames);
+			// issue on Linux: stream.frames == frames -> buffer ArrayIndexOutOfBounds
+			// this is not the best fix for it, but at least it works....
+			if(!XtAudio.isWin32())
+				bufferSize /= 2;
+			writeData(input, buffer, bufferSize);
+		}
+	}
+	
+	private void writeData(Object input, ByteBuffer buffer, int bufferSize) {
+		buffer.clear();
 		switch(formatInfo.getXtFormat().mix.sample) {
 			case UINT8:
-				data = (byte[]) input;
+				buffer.put((byte[]) input, 0, bufferSize);
 				break;
 	        case INT16:
-	        	data = shortToByte((short[]) input);
+	        	buffer.asShortBuffer().put((short[]) input, 0, bufferSize);
 	        	break;
 	        case INT24:
-	        	data = (byte[]) input;
+	        	buffer.put((byte[]) input, 0, bufferSize);
 	        	break;
 	        case INT32:
-	        	data = intToByte((int[]) input);
+	        	buffer.asIntBuffer().put((int[]) input, 0, bufferSize);
 	        	break;
 	        case FLOAT32:
-	        	data = floatToByte((float[]) input);
+	        	buffer.asFloatBuffer().put((float[]) input, 0, bufferSize);
 	        	break;
 	        default:
 	            throw new IllegalArgumentException();
 		}
+		
 		try {
-			out.write(data, 0, getBufferSize(stream, frames));
+			out.write(buffer.array(), 0, bufferSize);
 		} catch(IOException e) {
 			close();
 		}
@@ -99,58 +114,4 @@ public class NativeSoundInputStream implements XtStreamCallback {
 		return new AudioFormat(finfo.getSampleRate(), finfo.getSampleSizeInBits(), finfo.getChannels(), finfo.isSigned(), finfo.isBigEndian());
 	}
 	
-	
-	/*===============
-	 * ByteArray conversion
-	 *===============*/
-	// https://stackoverflow.com/a/12347176/12821118
-	byte[] shortToByte(short[] input) {
-		int short_index, byte_index;
-		int iterations = input.length;
-
-		byte[] buffer = new byte[input.length * 2];
-
-		short_index = byte_index = 0;
-
-		for (/* NOP */; short_index != iterations; /* NOP */) {
-			buffer[byte_index] = (byte) (input[short_index] & 0x00FF);
-			buffer[byte_index + 1] = (byte) ((input[short_index] & 0xFF00) >> 8);
-
-			++short_index;
-			byte_index += 2;
-		}
-
-		return buffer;
-	}
-	
-	byte[] intToByte(int[] input) {
-		int short_index, byte_index;
-		int iterations = input.length;
-
-		byte[] buffer = new byte[input.length * 4];
-
-		short_index = byte_index = 0;
-
-		for (/* NOP */; short_index != iterations; /* NOP */) {
-			buffer[byte_index] = (byte) (input[short_index] & 0x00FF);
-			buffer[byte_index + 1] = (byte) ((input[short_index] & 0xFF00) >> 8);
-			buffer[byte_index + 3] = (byte) ((input[short_index] & 0xFF00) >> 16);
-			buffer[byte_index + 4] = (byte) ((input[short_index] & 0xFF00) >> 24);
-
-			++short_index;
-			byte_index += 4;
-		}
-
-		return buffer;
-	}
-	
-	byte[] floatToByte(float[] input) {
-		// I know, the method used above is faster...
-		ByteBuffer buffer = ByteBuffer.allocate(4 * input.length);
-		for (float value : input) {
-			buffer.putFloat(value);
-		}
-		return buffer.array();
-	}
-
 }

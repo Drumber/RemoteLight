@@ -65,8 +65,9 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private int channels = 2;
 
 	private float sampleRate = 48000;
-	private int bufferSize = 1024 * 4;
-	private int overlap = 768 * 4;
+	private int bufferSize = 1024 * 2;
+	private int overlap = 1024;
+	//private int overlap = 768 * 2;
 
 	public SoundProcessing(MusicSyncManager manager) {
 		this.manager = manager;
