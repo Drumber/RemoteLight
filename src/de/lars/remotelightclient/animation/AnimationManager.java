@@ -21,31 +21,8 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.animation.animations.*;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.animation.animations.BouncingBalls;
-import de.lars.remotelightclient.animation.animations.Breath;
-import de.lars.remotelightclient.animation.animations.Close;
-import de.lars.remotelightclient.animation.animations.ColorWave;
-import de.lars.remotelightclient.animation.animations.Confetti;
-import de.lars.remotelightclient.animation.animations.Fade;
-import de.lars.remotelightclient.animation.animations.Jump;
-import de.lars.remotelightclient.animation.animations.Meteor;
-import de.lars.remotelightclient.animation.animations.Muddle;
-import de.lars.remotelightclient.animation.animations.Open;
-import de.lars.remotelightclient.animation.animations.Rainbow;
-import de.lars.remotelightclient.animation.animations.RandomColor;
-import de.lars.remotelightclient.animation.animations.TwoColors;
-import de.lars.remotelightclient.animation.animations.RunningLight;
-import de.lars.remotelightclient.animation.animations.Sinelon;
-import de.lars.remotelightclient.animation.animations.Scanner;
-import de.lars.remotelightclient.animation.animations.Shake;
-import de.lars.remotelightclient.animation.animations.Snake;
-import de.lars.remotelightclient.animation.animations.SoftTwinkles;
-import de.lars.remotelightclient.animation.animations.Spread;
-import de.lars.remotelightclient.animation.animations.Juggle;
-import de.lars.remotelightclient.animation.animations.TheaterChase;
-import de.lars.remotelightclient.animation.animations.Twinkle;
-import de.lars.remotelightclient.animation.animations.Wipe;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -191,6 +168,7 @@ public class AnimationManager {
 		animations.add(new Juggle());
 		animations.add(new Spread());
 		animations.add(new Muddle());
+		animations.add(new RainbowNoise());
 	}
 
 }
