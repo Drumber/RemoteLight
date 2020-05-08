@@ -14,15 +14,10 @@
  ******************************************************************************/
 package de.lars.remotelightclient;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
-
-import javax.swing.JOptionPane;
 
 import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.lang.LangUtil;
@@ -35,6 +30,7 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.comps.UpdateDialog;
 import de.lars.remotelightclient.utils.DirectoryUtil;
 import de.lars.remotelightclient.utils.UpdateChecker;
 import de.lars.remotelightclient.utils.color.RainbowWheel;
@@ -68,17 +64,10 @@ public class StartUp {
 				
 				//check for update (this block blocks the thread)
 				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
+					// show update dialog
 					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
 					if(updateChecker.isNewVersionAvailable()) {
-						int option = JOptionPane.showOptionDialog(null, "New Version of RemoteLight available!\nCurrent: " + Main.VERSION + " New: " + updateChecker.getNewTag(),
-								"Download new version", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-								new String[] {"Download", "Ignore"}, "Download");
-						if(option == 0) { // when user click Download, open Browser
-							try {
-								Desktop.getDesktop().browse(new URI(updateChecker.getNewUrl()));
-							} catch (URISyntaxException | IOException ex) {
-							}
-						}
+						UpdateDialog.showUpdateDialog(updateChecker);
 					}
 				}
 				
