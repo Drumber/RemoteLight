@@ -46,7 +46,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowHeights = new int[] { 1, 1, 0, 0 };
-		gridBagLayout.columnWidths = new int[] { 1, 1 };
+		gridBagLayout.columnWidths = new int[] { 80, 1 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 3.0 };
 		setLayout(gridBagLayout);
 		setBackground(Style.panelBackground);
@@ -187,7 +187,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		JLabel lblService = new JLabel("Service");
 		lblService.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblService = new GridBagConstraints();
-		gbc_lblService.anchor = GridBagConstraints.LINE_START;
+		gbc_lblService.anchor = GridBagConstraints.WEST;
 		gbc_lblService.insets = new Insets(0, 0, 5, 5);
 		gbc_lblService.gridx = 0;
 		gbc_lblService.gridy = 0;
@@ -206,7 +206,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		JLabel lblFormat = new JLabel("Format");
 		lblFormat.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblFormat = new GridBagConstraints();
-		gbc_lblFormat.anchor = GridBagConstraints.LINE_START;
+		gbc_lblFormat.anchor = GridBagConstraints.WEST;
 		gbc_lblFormat.weightx = 1.0;
 		gbc_lblFormat.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFormat.gridx = 0;
@@ -294,7 +294,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		JLabel lblDevice = new JLabel("Device");
 		lblDevice.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblDevice = new GridBagConstraints();
-		gbc_lblDevice.anchor = GridBagConstraints.LINE_START;
+		gbc_lblDevice.anchor = GridBagConstraints.WEST;
 		gbc_lblDevice.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDevice.gridx = 0;
 		gbc_lblDevice.gridy = 2;
