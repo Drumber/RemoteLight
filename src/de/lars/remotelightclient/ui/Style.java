@@ -58,6 +58,7 @@ public class Style {
 		// update color picker style
 		ColorPickerStyle.setBackgrounds(Style.panelBackground);
 		ColorPickerStyle.colorText = Style.textColor;
+		ColorPickerStyle.colorButtonBackground = Style.buttonBackground;
 	}
 	
 	public static void setStyle() {
