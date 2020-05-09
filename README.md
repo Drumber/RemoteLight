@@ -28,11 +28,13 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 
 ## Quick Start
 ### Arduino
+*[Youtube Tutorial available](https://youtu.be/1jguUgaUdNk)*  
+
 RemoteLight uses the Glediator protocol for Arduino. Download the [Glediator sketch](http://www.solderlab.de/index.php/downloads/file/33-ws2812-glediator-interface-v1), change the number of pixels and upload it to your Arduino.
 > Note: Solderlab.de seems to be offline. You can alternatively download the sketch [here](https://workupload.com/file/vsSx8TBP) or use the [FastLED](https://github.com/marmilicious/FastLED_examples/blob/master/Glediator_test1.ino) variant.
 
 Connect the Arduino to your computer and start RemoteLight. Click '*Add*' to add a new Arduino to the output list. Then select the correct COM port, enter the number of pixels and click '*Save*'.
-Now you can activate the output by double clicking on it or by clicking on '*Activate*'.
+Now you can activate the output by double clicking it or by clicking on '*Activate*'.
 
 ### Raspberry Pi
 *[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*  
@@ -107,6 +109,7 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 <a href="https://www.youtube.com/watch?v=u8ptqaTGteg"><img src="https://img.youtube.com/vi/u8ptqaTGteg/0.jpg" width="280"></a>  <a href="https://www.youtube.com/watch?v=-5hKRAyPDT8"><img src="https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg" width="280"></a>
 
 ## TODO
+- [ ] improve performance
 - [ ] Create wiki / documentation
 - [x] Settings for animations
 - [x] Link / chain several LED strips
@@ -115,6 +118,15 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 - [x] Lua scripts
 
 ## Releases
+#### pre0.2.0.9
+- new ColorPicker
+- added a lot of new Look And Feels ([FlatLaf](https://github.com/JFormDesigner/FlatLaf))
+- added support for system sound inputs and outputs (Windows & Linux)
+- added 2 new animations (RainbowNoise & Particles)
+- added fadeout option to Close & Open animations
+- redesigned update notification dialog
+- small bug fixes
+
 #### pre0.2.0.8
 - added 7 new animations
 - added 3 new music effects
@@ -171,3 +183,6 @@ First release of the new RemoteLight v0.2 on Github.
 - code optimization
 - improved sound input window
 - save last used sound input
+
+## License
+RemoteLight is released under the [GNU General Public License v3.0](https://github.com/Drumber/RemoteLight/blob/master/LICENSE).
