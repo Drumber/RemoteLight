@@ -20,7 +20,7 @@ public class SortAlgo extends Animation {
 	
 	private Random random;
 	
-	private SortAlgorithm[] algorithms = {new BubbleSort()};
+	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort()};
 	private SortAlgorithm currentAlgorithm;
 	
 	private Color[] strip;
@@ -29,6 +29,9 @@ public class SortAlgo extends Animation {
 	
 	private boolean shuffleStrip = false;
 	private int shuffleCount = 0;
+	
+	private boolean finishAnimation = false;
+	private int finishAnimationCount = 0;
 
 	
 	public SortAlgo() {
@@ -40,6 +43,7 @@ public class SortAlgo extends Animation {
 		}
 		this.addSetting(new SettingSelection("animation.sortalgo.algorithms", "Sort Algorithm", SettingCategory.Intern, null, algoNames, algoNames[0], SettingSelection.Model.ComboBox));
 		this.addSetting(new SettingBoolean("animation.sortalgo.circle", "Circle through algorithms", SettingCategory.Intern, null, false));
+		this.addSetting(new SettingBoolean("animation.sortalgo.marker", "Show Marker", SettingCategory.Intern, "Show marker for currently swapped/set color", true));
 	}
 	
 	@Override
@@ -61,6 +65,8 @@ public class SortAlgo extends Animation {
 	public void onDisable() {
 		shuffleCount = 0;
 		shuffleStrip = false;
+		if(currentAlgorithm != null)
+			currentAlgorithm.reset();
 		super.onDisable();
 	}
 	
@@ -84,21 +90,33 @@ public class SortAlgo extends Animation {
 	@Override
 	public void onLoop() {
 		// double speed
-		for(int t = 0; t < 2; t++) {
+		for(int t = 0; t < 4; t++) {
 		
 			if(shuffleStrip) {
-				for(int s = 0; s < SHUFFLE_PER_LOOP; s++) {
-					int ranPosA = random.nextInt(strip.length);
-					int ranPosB = random.nextInt(strip.length);
+				if(finishAnimation) {
+					markedIndexes.add(finishAnimationCount);
+					if(++finishAnimationCount >= strip.length) {
+						finishAnimationCount = 0;
+						finishAnimation = false;
+						markedIndexes.clear();
+					}
 					
-					swap(ranPosA, ranPosB, false);
-					
-					shuffleCount++;
-					shuffleStrip = shuffleCount <= MAX_SHUFFLE_COUNT;
-					
-					if(!shuffleStrip) break;
+				} else {
+					for(int s = 0; s < SHUFFLE_PER_LOOP; s++) {
+						int ranPosA = random.nextInt(strip.length);
+						int ranPosB = random.nextInt(strip.length);
+						
+						swap(ranPosA, ranPosB, false);
+						
+						shuffleCount++;
+						shuffleStrip = shuffleCount <= MAX_SHUFFLE_COUNT;
+						
+						if(!shuffleStrip) break;
+					}
 				}
 			} else {
+				// clear marked indexes
+				markedIndexes.clear();
 				// sort strip
 				doSort();
 			}
@@ -115,12 +133,14 @@ public class SortAlgo extends Animation {
 	 */
 	private void show() {
 		Color[] out = Arrays.copyOf(strip, strip.length);
-		for(int index : markedIndexes) {
-			out[index] = Color.WHITE;
+		
+		boolean showMarker = ((SettingBoolean)getSetting("animation.sortalgo.marker")).getValue();
+		if(showMarker) {
+			for(int index : markedIndexes) {
+				out[index] = Color.WHITE;
+			}
 		}
 		OutputManager.addToOutput(out);
-		// clear marked indexes
-		markedIndexes.clear();
 	}	
 	
 	
@@ -153,6 +173,11 @@ public class SortAlgo extends Animation {
 				for(int i = 0; i < algorithms.length; i++) {
 					if(algorithms[i].getName().equals(currentAlgorithm.getName())) {
 						int next = i + 1;
+						
+						// exclude BogoSort because it could take too long :D
+						if(algorithms[i].getName().equals("BogoSort"))
+							next++;
+						
 						if(next >= algorithms.length)
 							next = 0;
 						currentAlgorithm = algorithms[next];
@@ -163,6 +188,9 @@ public class SortAlgo extends Animation {
 			
 			// reset
 			reset();
+			// enable finish animation
+			finishAnimationCount = 0;
+			finishAnimation = true;
 		}
 	}
 	
@@ -182,9 +210,28 @@ public class SortAlgo extends Animation {
 		strip[indexB] = tempCol;
 		
 		if(mark) {
-			//markedIndexes.add(indexA);
-			//markedIndexes.add(indexB);
+			markedIndexes.add(indexA);
+			markedIndexes.add(indexB);
 		}
+	}
+	
+	
+	private void setSingle(int index, int value) {
+		setSingle(index, value, true);
+	}
+	
+	private void setSingle(int index, int value, boolean mark) {
+		values[index] = value;
+		strip[index] = getColorFromValue(value);
+		
+		if(mark) {
+			markedIndexes.add(index);
+		}
+	}
+	
+	private Color getColorFromValue(int value) {
+		float hue = 1.0f / strip.length * value;
+		return Color.getHSBColor(hue, 1f, 1f);
 	}
 	
 	
@@ -193,6 +240,8 @@ public class SortAlgo extends Animation {
 	 *	SORTING ALGORITHMS	*
 	 * 						*
 	 *======================*/
+	// implementation of algorithms
+	// from https://www.geeksforgeeks.org/sorting-algorithms/
 	
 	private interface SortAlgorithm {
 		String getName();
@@ -201,7 +250,8 @@ public class SortAlgo extends Animation {
 	}
 	
 	
-	private static class BubbleSort implements SortAlgorithm {
+	private class BubbleSort implements SortAlgorithm {
+		@Override
 		public String getName() {
 			return "BubbleSort";
 		}
@@ -232,6 +282,126 @@ public class SortAlgo extends Animation {
 		}
 	}
 	
+	
+	private class SelectionSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "SelectionSort";
+		}
+		
+		int i = 0;
+		int minIndex = i;
+		int j = i+1;
+
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			
+			if(arr[j] < arr[minIndex]) {
+				minIndex = j;
+			}
+			
+			if(++j >= arr.length) {
+				j = i+1;
+				
+				// swap min with first
+				instance.swap(minIndex, i);
+				
+				if(++i >= arr.length-1) {
+					//finish
+					return true;
+				}
+				minIndex = i;
+			}
+			return false;
+		}
+
+		@Override
+		public void reset() {
+			i = 0;
+			minIndex = i;
+			j = i+1;
+		}
+	}
+	
+	
+	private class InsertionSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "InsertionSort";
+		}
+		
+		int i = 1;
+		int key = -1;
+		int j = i-1;
+
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			if(key == -1)
+				key = arr[i];
+			
+			instance.setSingle(j + 1, arr[j]);
+			j = j - 1; 
+			
+			if(j < 0 || arr[j] <= key) {
+				instance.setSingle(j + 1, key);
+				if(++i >= arr.length) {
+					//finish
+					return true;
+				}
+				
+				key = arr[i];
+				j = i - 1;
+			}
+			
+			return false;
+		}
+
+		@Override
+		public void reset() {
+			i = 1;
+			key = -1;
+			j = i-1;
+		}
+	}
+	
+	
+	private class BogoSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "BogoSort";
+		}
+		
+		int i = 1;
+
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			
+			if(isSorted(arr)) {
+				//finish
+				return true;
+			}
+			
+			instance.swap(i, (int)(Math.random()*i));
+			
+			if(++i >= arr.length)
+				i = 1;
+			
+			return false;
+		}
+		
+		private boolean isSorted(int[] arr) {
+			for(int i = 1; i < arr.length; i++) {
+				if(arr[i] < arr[i-1])
+					return false;
+			}
+			return true;
+		}
+
+		@Override
+		public void reset() {
+			i = 1;
+		}
+	}
 	
 	
 }
