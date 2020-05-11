@@ -340,6 +340,7 @@ public class MusicSyncManager {
 		effects.add(new Strobe());
 		effects.add(new Flame());
 		effects.add(new Bars());
+		effects.add(new RainbowNoise());
 	}
 
 }
