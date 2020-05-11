@@ -278,7 +278,12 @@ public class MainFrame extends JFrame {
 			text.setLineWrap(true);
 			text.setCaretPosition(0);
 			text.setEditable(false);
-			root.add(new JScrollPane(text));
+			
+			JScrollPane scroll = new JScrollPane(text);
+			scroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+			scroll.setSize(new Dimension(200, 150));
+			scroll.setPreferredSize(new Dimension(200, 150));
+			root.add(scroll);
 			
 			JOptionPane.showMessageDialog(null, root, "Exception", JOptionPane.ERROR_MESSAGE);
 		}

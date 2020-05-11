@@ -49,7 +49,7 @@ public class Main {
 	private boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
-	public final static String VERSION = "pre0.2.0.9";
+	public final static String VERSION = "pre0.2.0.9.2";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -85,10 +85,12 @@ public class Main {
 		instance = this;
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		setupOSSupport();
 		
 		Logger.info("Starting RemoteLight version " + VERSION);
 		Style.loadFonts();				// Load custom fonts
 		DataStorage.start();			// Load data file
+		
 		settingsManager = new SettingsManager();
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
@@ -166,6 +168,13 @@ public class Main {
 			return false;
 		}
 		return false;
+	}
+	
+	
+	public static void setupOSSupport() {
+		// MacOS menu bar application name
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("apple.awt.application.name", "RemoteLight");
 	}
 	
 	
