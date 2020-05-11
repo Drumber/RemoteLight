@@ -170,6 +170,7 @@ public class AnimationManager {
 		animations.add(new Muddle());
 		animations.add(new RainbowNoise());
 		animations.add(new Particles());
+		animations.add(new SortAlgo());
 	}
 
 }
