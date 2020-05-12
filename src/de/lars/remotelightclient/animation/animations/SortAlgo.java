@@ -20,7 +20,7 @@ public class SortAlgo extends Animation {
 	
 	private Random random;
 	
-	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort(), new QuickSort()};
+	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort(), new QuickSort(), new MergeSort()};
 	private SortAlgorithm currentAlgorithm;
 	
 	private Color[] strip;
@@ -131,7 +131,7 @@ public class SortAlgo extends Animation {
 	/**
 	 * show the strip
 	 */
-	private void show() {
+	private void show() {		
 		Color[] out = Arrays.copyOf(strip, strip.length);
 		
 		boolean showMarker = ((SettingBoolean)getSetting("animation.sortalgo.marker")).getValue();
@@ -175,7 +175,7 @@ public class SortAlgo extends Animation {
 						int next = i + 1;
 						
 						// exclude BogoSort because it could take too long :D
-						if(algorithms[i].getName().equals("BogoSort"))
+						if(next < algorithms.length && algorithms[next].getName().equals("BogoSort"))
 							next++;
 						
 						if(next >= algorithms.length)
@@ -478,7 +478,6 @@ public class SortAlgo extends Animation {
 					return true;
 				}
 			}
-			
 			return false;
 		}
 
@@ -493,6 +492,106 @@ public class SortAlgo extends Animation {
 			top = -1;
 			pivot = -1;
 			p = -1;
+		}
+	}
+	
+	
+	private class MergeSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "MergeSort";
+		}
+		
+		int curr_size = 1;
+		int left_start = 0;
+		
+		int mergeLoop = -1; // -1 = disabled, 0 = merge, 1 = n1-loop, 2 = n2-loop
+		int i, j, k;
+		int n1;
+		int n2;
+		int[] L;
+		int[] R;
+		
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			if(mergeLoop == -1) {
+				int mid = Math.min(left_start + curr_size - 1, arr.length-1);
+				
+				int right_end = Math.min(left_start + 2*curr_size - 1, arr.length-1);
+				
+				// merge
+				mergeLoop = 0;
+				
+				n1 = mid - left_start + 1;
+				n2 = right_end - mid;
+				
+				L = new int[n1];
+				R = new int[n2];
+				
+				for(i = 0; i < n1; i++)
+					L[i] = arr[left_start + i];
+				for(j = 0; j < n2; j++)
+					R[j] = arr[mid + 1 + j];
+				
+				i = 0;
+				j = 0;
+				k = left_start;
+				
+				left_start += 2*curr_size;
+				if(left_start >= arr.length - 1) {
+					curr_size = 2*curr_size;
+					left_start = 0;
+					if(curr_size > arr.length - 1) {
+						//finish
+						return true;
+					}
+				}
+			} else {
+				// merge loop
+				if(mergeLoop == 0) {
+					if(i < n1 && j < n2) {
+						if(L[i] <= R[j]) {
+							instance.setSingle(k, L[i]);
+							i++;
+						} else {
+							instance.setSingle(k, R[j]);
+							j++;
+						}	
+						k++;
+					} else {
+						mergeLoop = 1;
+					}
+				}
+				// n1-loop
+				else if(mergeLoop == 1) {
+					if(i < n1) {
+						instance.setSingle(k, L[i]);
+						i++;
+						k++;
+					} else {
+						mergeLoop = 2;
+					}
+				}
+				// n2-loop
+				else if (mergeLoop == 2) {
+					if(j < n2) {
+						instance.setSingle(k, R[j]);
+						j++;
+						k++;
+					} else {
+						// merge loop finish
+						mergeLoop = -1;
+					}
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public void reset() {
+			curr_size = 1;
+			left_start = 0;
+			mergeLoop = -1;
 		}
 	}
 	
