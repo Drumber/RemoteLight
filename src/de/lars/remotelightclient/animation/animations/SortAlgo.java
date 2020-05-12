@@ -20,7 +20,7 @@ public class SortAlgo extends Animation {
 	
 	private Random random;
 	
-	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort()};
+	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort(), new QuickSort()};
 	private SortAlgorithm currentAlgorithm;
 	
 	private Color[] strip;
@@ -151,7 +151,7 @@ public class SortAlgo extends Animation {
 		String algo = (((SettingSelection) getSetting("animation.sortalgo.algorithms"))).getSelected();
 		boolean circle = (((SettingBoolean) getSetting("animation.sortalgo.circle"))).getValue();
 		
-		if(!circle && (currentAlgorithm == null || !currentAlgorithm.getName().equals(algo))) {
+		if(currentAlgorithm == null || (!circle && !currentAlgorithm.getName().equals(algo))) {
 			// switch algorithm
 			if(currentAlgorithm != null) currentAlgorithm.reset();
 			for(int i = 0; i < algorithms.length; i++) {
@@ -403,5 +403,97 @@ public class SortAlgo extends Animation {
 		}
 	}
 	
+	
+	private class QuickSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "QuickSort";
+		}
+		
+		int low = 0;
+		int high = -1;
+		int i = low - 1;
+		int j = low;
+		int[] stack;
+		int top = -1;
+		int pivot = -1;
+		int p = -1;
+		int loopMode = 0; // 0 = before partition; 1 == partition-loop; 2 == after partition
+
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			if(stack == null) {
+				loopMode = 0;
+				
+				high = arr.length - 1;
+				stack = new int[high - low - 1];
+				
+				top = -1;
+				
+				stack[++top] = low;
+				stack[++top] = high;
+			}
+			
+			if(loopMode == 0) {
+				high = stack[top--];
+				low = stack[top--];
+				
+				loopMode = 1;
+				pivot = arr[high];
+				i = low - 1;
+				j = low;
+			}
+			
+			//partition
+			if(loopMode == 1) {
+				if(j <= high - 1) {
+					if(arr[j] < pivot) {
+						i++;
+						
+						instance.swap(i, j);
+					}
+					j++;
+				} else {
+					instance.swap(i+1, high);
+					// return i + 1
+					p = i + 1;
+					loopMode = 2;
+				}
+			}
+			
+			if(loopMode == 2) {
+				if(p - 1 > low) {
+					stack[++top] = low;
+					stack[++top] = p - 1;
+				}
+				
+				if(p + 1 < high) {
+					stack[++top] = p + 1;
+					stack[++top] = high;
+				}
+				loopMode = 0;
+				
+				if(top < 0) {
+					//finish
+					return true;
+				}
+			}
+			
+			return false;
+		}
+
+		@Override
+		public void reset() {
+			loopMode = 0;
+			stack = null;
+			low = 0;
+			high = -1;
+			i = low - 1;
+			j = low;
+			top = -1;
+			pivot = -1;
+			p = -1;
+		}
+	}
 	
 }
