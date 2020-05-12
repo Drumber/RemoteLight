@@ -14,20 +14,16 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.Style;
-import javax.swing.JComboBox;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Enumeration;
 
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.*;
 
 public class SettingSelectionPanel extends SettingPanel {
 
@@ -108,6 +104,18 @@ public class SettingSelectionPanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
+		if(setting.getModel() == Model.ComboBox) {
+			boxValues.setSelectedItem(setting.getSelected());
+		} else if(setting.getModel() == Model.RadioButton) {
+			setting.setSelected(group.getSelection().getActionCommand());
+			Enumeration<AbstractButton> elements = group.getElements();
+			while(elements.hasMoreElements()) {
+				AbstractButton button = elements.nextElement();
+				if(button.getActionCommand().equals(setting.getSelected())) {
+					button.setSelected(true);
+				}
+			}
+		}
 	}
 
 }
