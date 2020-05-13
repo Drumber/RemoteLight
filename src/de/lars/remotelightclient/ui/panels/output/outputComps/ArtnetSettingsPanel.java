@@ -1,6 +1,5 @@
 package de.lars.remotelightclient.ui.panels.output.outputComps;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -190,7 +189,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		add(panelShift);
 		
 		JLabel lblShift = new JLabel("Shift pixels:");
-		lblShift.setForeground(Color.WHITE);
+		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
@@ -205,7 +204,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerShift);
 		
 		JLabel lblClone = new JLabel("Clone:");
-		lblClone.setForeground(Color.WHITE);
+		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
 		spinnerClone = new JSpinner();

@@ -32,7 +32,6 @@ import javax.swing.SwingConstants;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Color;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
@@ -147,7 +146,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		add(panelShift);
 		
 		JLabel lblShift = new JLabel("Shift pixels:");
-		lblShift.setForeground(Color.WHITE);
+		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
@@ -162,7 +161,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerShift);
 		
 		JLabel lblClone = new JLabel("Clone:");
-		lblClone.setForeground(Color.WHITE);
+		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
 		spinnerClone = new JSpinner();

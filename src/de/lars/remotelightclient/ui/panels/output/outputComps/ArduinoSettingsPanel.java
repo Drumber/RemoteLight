@@ -30,7 +30,6 @@ import javax.swing.JTextField;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
@@ -152,7 +151,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		add(panelShift);
 		
 		JLabel lblShift = new JLabel("Shift pixels:");
-		lblShift.setForeground(Color.WHITE);
+		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
@@ -167,7 +166,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerShift);
 		
 		JLabel lblClone = new JLabel("Clone:");
-		lblClone.setForeground(Color.WHITE);
+		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
 		spinnerClone = new JSpinner();
