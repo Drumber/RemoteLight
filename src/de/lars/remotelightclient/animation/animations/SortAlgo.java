@@ -537,15 +537,6 @@ public class SortAlgo extends Animation {
 				j = 0;
 				k = left_start;
 				
-				left_start += 2*curr_size;
-				if(left_start >= arr.length - 1) {
-					curr_size = 2*curr_size;
-					left_start = 0;
-					if(curr_size > arr.length - 1) {
-						//finish
-						return true;
-					}
-				}
 			} else {
 				// merge loop
 				if(mergeLoop == 0) {
@@ -584,6 +575,19 @@ public class SortAlgo extends Animation {
 					}
 				}
 			}
+			
+			if(mergeLoop == -1) {
+				left_start += 2*curr_size;
+				if(left_start >= arr.length - 1) {
+					curr_size = 2*curr_size;
+					left_start = 0;
+					if(curr_size > arr.length - 1) {
+						//finish
+						return true;
+					}
+				}
+			}
+			
 			return false;
 		}
 
