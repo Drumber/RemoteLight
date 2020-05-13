@@ -156,7 +156,7 @@ public class AnimationOptionsPanel extends JPanel {
 				SettingPanel spanel = SettingsUtil.getSettingPanel(s);
 				spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 				spanel.setSettingChangedListener(optionsChangeListener);
-				spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+				spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 27));
 				spanel.setBackground(Style.panelDarkBackground);
 				panelBackground.add(spanel);
 				settingPanels.add(spanel);

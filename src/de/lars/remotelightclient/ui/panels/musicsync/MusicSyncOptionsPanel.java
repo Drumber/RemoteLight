@@ -231,7 +231,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			SettingPanel spanel = SettingsUtil.getSettingPanel(s);
 			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			spanel.setSettingChangedListener(effectOptionsChangeListener);
-			spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+			spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 27));
 			spanel.setBackground(Style.panelDarkBackground);
 			bgrEffectOptions.add(spanel);
 			settingPanels.add(spanel);
