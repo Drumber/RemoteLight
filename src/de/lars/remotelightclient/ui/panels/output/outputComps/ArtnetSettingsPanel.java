@@ -16,6 +16,8 @@ import de.lars.remotelightclient.devices.arduino.RgbOrder;
 import de.lars.remotelightclient.devices.artnet.Artnet;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.event.ChangeListener;
@@ -105,9 +107,8 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelSubnet.add(lblSubnet);
 		
 		spinnerSubnet = new JSpinner();
-		spinnerSubnet.setPreferredSize(new Dimension(40, 20));
-		spinnerSubnet.setMinimumSize(new Dimension(40, 20));
 		spinnerSubnet.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		UiUtils.configureSpinner(spinnerSubnet);
 		panelSubnet.add(spinnerSubnet);
 		
 		JPanel panelUniverse = new JPanel();
@@ -124,9 +125,8 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelUniverse.add(lblStartUniverse);
 		
 		spinnerStartUniverse = new JSpinner();
-		spinnerStartUniverse.setPreferredSize(new Dimension(40, 20));
-		spinnerStartUniverse.setMinimumSize(new Dimension(40, 20));
 		spinnerStartUniverse.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		UiUtils.configureSpinner(spinnerStartUniverse);
 		spinnerStartUniverse.addChangeListener(universeUpdateListener);
 		panelUniverse.add(spinnerStartUniverse);
 		
@@ -152,8 +152,8 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
-		spinnerPixels.setPreferredSize(new Dimension(50, 20));
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		UiUtils.configureSpinner(spinnerPixels);
 		spinnerPixels.addChangeListener(universeUpdateListener);
 		panelPixels.add(spinnerPixels);
 		
@@ -194,7 +194,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerShift = new JSpinner();
 		spinnerShift.setModel(new SpinnerNumberModel(artnet.getOutputPatch().getShift(), -artnet.getPixels(), artnet.getPixels(), 1));
-		spinnerShift.setPreferredSize(new Dimension(50, 20));
+		UiUtils.configureSpinner(spinnerShift);
 		spinnerShift.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int max = (int) spinnerPixels.getValue() - 1;
@@ -209,7 +209,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerClone = new JSpinner();
 		spinnerClone.setModel(new SpinnerNumberModel(artnet.getOutputPatch().getClone(), 0, artnet.getPixels() / 2, 1));
-		spinnerClone.setPreferredSize(new Dimension(50, 20));
+		UiUtils.configureSpinner(spinnerClone);
 		spinnerClone.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				spinnerClone.setModel(new SpinnerNumberModel((Number) spinnerClone.getValue(), 0, artnet.getPixels() / 2, 1));

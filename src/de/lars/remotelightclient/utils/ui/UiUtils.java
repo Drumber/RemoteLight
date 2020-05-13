@@ -30,14 +30,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.FontUIResource;
 
@@ -137,6 +130,14 @@ public class UiUtils {
 			btn.setBackground(Style.buttonBackground);
 		}
 	};
+	
+	public static void configureSpinner(JSpinner spinner) {
+		// set width (columns)
+		JComponent editor = spinner.getEditor();
+		JFormattedTextField jftf = ((JSpinner.DefaultEditor) editor).getTextField();
+		jftf.setColumns(4);
+		spinner.setEditor(editor);
+	}
 	
 	public static void configureTabbedPane(JTabbedPane tp) {
 		if(disableTheming) return;

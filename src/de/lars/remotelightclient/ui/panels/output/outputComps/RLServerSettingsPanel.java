@@ -18,6 +18,8 @@ import de.lars.remotelightclient.devices.arduino.RgbOrder;
 import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -110,8 +112,8 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
-		spinnerPixels.setPreferredSize(new Dimension(50, 20));
 		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		UiUtils.configureSpinner(spinnerPixels);
 		panelPixels.add(spinnerPixels);
 		
 		JPanel panelOrder = new JPanel();
@@ -151,7 +153,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerShift = new JSpinner();
 		spinnerShift.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getShift(), -rlServer.getPixels(), rlServer.getPixels(), 1));
-		spinnerShift.setPreferredSize(new Dimension(50, 20));
+		UiUtils.configureSpinner(spinnerShift);
 		spinnerShift.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int max = (int) spinnerPixels.getValue() - 1;
@@ -166,7 +168,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerClone = new JSpinner();
 		spinnerClone.setModel(new SpinnerNumberModel(rlServer.getOutputPatch().getClone(), 0, rlServer.getPixels() / 2, 1));
-		spinnerClone.setPreferredSize(new Dimension(50, 20));
+		UiUtils.configureSpinner(spinnerClone);
 		spinnerClone.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				spinnerClone.setModel(new SpinnerNumberModel((Number) spinnerClone.getValue(), 0, rlServer.getPixels() / 2, 1));
