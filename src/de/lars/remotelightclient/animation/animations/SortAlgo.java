@@ -20,7 +20,7 @@ public class SortAlgo extends Animation {
 	
 	private Random random;
 	
-	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort(), new QuickSort(), new MergeSort()};
+	private SortAlgorithm[] algorithms = {new BubbleSort(), new SelectionSort(), new InsertionSort(), new BogoSort(), new QuickSort(), new MergeSort(), new RadixSort()};
 	private SortAlgorithm currentAlgorithm;
 	
 	private Color[] strip;
@@ -596,6 +596,96 @@ public class SortAlgo extends Animation {
 			curr_size = 1;
 			left_start = 0;
 			mergeLoop = -1;
+		}
+	}
+	
+	
+	private class RadixSort implements SortAlgorithm {
+		@Override
+		public String getName() {
+			return "RadixSort";
+		}
+		
+		final int radix = 2; // default would be 10, but it would be too fast
+		int largest = -1;
+		int exp = 1;
+		int i = 0;
+		int n = -1;
+		int countLoop = -1; // -1 = main, 0 = first, 1 = second, 2 third
+		int[] result;
+		int[] count;
+		
+		@Override
+		public boolean sort(int[] arr, SortAlgo instance) {
+			if(n == -1 || largest == -1) {
+				n = arr.length;
+				largest = getMax(arr, n);
+				exp = 1;
+				countLoop = -1;
+				result = new int[n];
+			}
+			
+			if(countLoop == -1) {
+				// radixsort main loop
+				if(largest/exp <= 0) {
+					// finish
+					return true;
+				}
+				i = 0;
+				count = new int[radix];
+				count = countingSort(arr, exp);
+				countLoop = 0;
+			}
+			
+			if(countLoop == 0) {
+				instance.setSingle(i, result[i] = arr[i]);
+				if(++i >= n) {
+					// end of loop 0
+					i = 1;
+					countLoop = 1;
+				}
+			}
+			else if(countLoop == 1) {
+				count[i] += count[i - 1];
+				if(++i >= radix) {
+					// end of loop 1
+					i = n - 1;
+					countLoop = 2;
+				}
+			}
+			else if(countLoop == 2) {
+				instance.setSingle(--count[ (result[i]/exp)%radix ], result[i]);
+				if(--i < 0) {
+					// end of loop 2
+					i = 0;
+					exp *= radix;
+					countLoop = -1;
+				}
+			}
+			
+			return false;
+		}
+		
+		private int getMax(int[] arr, int n) {
+			int mx = arr[0];
+			for(int i = 1; i < n; i++) {
+				if(arr[i] > mx)
+					mx = arr[i];
+			}
+			return mx;
+		}
+		
+		private int[] countingSort(int[] arr, int exp) {
+			Arrays.fill(count, 0);
+			for(int i = 0; i < arr.length; i++)
+				count[ (arr[i]/exp)%radix ]++;
+			return count;
+		}
+
+		@Override
+		public void reset() {
+			n = -1;
+			largest = -1;
 		}
 	}
 	
