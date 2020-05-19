@@ -27,33 +27,25 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightclient.settings.SettingsManager;
+import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-
 import org.tinylog.Logger;
 
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-
 public class SimulatorFrame extends JFrame {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2752076462014410311L;
+	
 	private RLServerSimulator emulator;
+	private SettingsManager sm;
 	private boolean loopActive = false;
 	private Dimension pixelPanelSize = new Dimension(20, 20);
 	private List<JPanel> pixelPanels;
@@ -66,14 +58,15 @@ public class SimulatorFrame extends JFrame {
 	 */
 	public SimulatorFrame() {
 		pixelPanels = new ArrayList<>();
+		sm = Main.getInstance().getSettingsManager();
 		emulator = new RLServerSimulator();
 		emulator.addStateChangeListener(stateListener);
 		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
 		addWindowListener(closeListener);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setMinimumSize(new Dimension(200, 100));
-		setSize((Dimension) Main.getInstance().getSettingsManager().getSettingObject("simulatorFrame.size").getValue());
+		setMinimumSize(new Dimension(300, 100));
+		setSize((Dimension) sm.getSettingObject("simulatorFrame.size").getValue());
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -105,6 +98,16 @@ public class SimulatorFrame extends JFrame {
 		panelScale.setBackground(Style.panelDarkBackground);
 		panelToolbar.add(panelScale);
 		panelScale.setLayout(new BoxLayout(panelScale, BoxLayout.X_AXIS));
+		
+		JCheckBox checkBoxAlwaysTop = new JCheckBox("always on top");
+		sm.addSetting(new SettingBoolean("simulatorFrame.alwaysontop", "always on top", SettingCategory.Intern, null, false));
+		checkBoxAlwaysTop.setSelected(sm.getSetting(SettingBoolean.class, "simulatorFrame.alwaysontop").getValue());
+		setAlwaysOnTop(checkBoxAlwaysTop.isSelected());
+		checkBoxAlwaysTop.setBackground(Style.panelDarkBackground);
+		checkBoxAlwaysTop.setForeground(Style.textColor);
+		checkBoxAlwaysTop.setFocusable(false);
+		checkBoxAlwaysTop.addActionListener(checkBoxAlwaysTopListener);
+		panelScale.add(checkBoxAlwaysTop);
 		
 		JButton btnMinus = new JButton("-"); //$NON-NLS-1$
 		btnMinus.setName("minus"); //$NON-NLS-1$
@@ -141,7 +144,7 @@ public class SimulatorFrame extends JFrame {
 		public void windowClosing(WindowEvent windowEvent) {
 			if(getExtendedState() == NORMAL) {
 				// save window size
-				Main.getInstance().getSettingsManager().getSettingObject("simulatorFrame.size").setValue(getSize());
+				sm.getSettingObject("simulatorFrame.size").setValue(getSize());
 			}
 			emulator.stop();
 			dispose();
@@ -169,6 +172,16 @@ public class SimulatorFrame extends JFrame {
 				changePanelSize(2);
 				break;
 			}
+		}
+	};
+	
+	
+	private ActionListener checkBoxAlwaysTopListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JCheckBox cb = (JCheckBox) e.getSource();
+			sm.getSetting(SettingBoolean.class, "simulatorFrame.alwaysontop").setValue(cb.isSelected());
+			setAlwaysOnTop(cb.isSelected());
 		}
 	};
 	

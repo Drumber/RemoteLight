@@ -41,11 +41,6 @@
 			<artifactId>flatlaf-intellij-themes</artifactId>
 			<version>0.34</version>
 		</dependency>
-		<dependency>
-			<groupId>com.formdev</groupId>
-			<artifactId>flatlaf-extras</artifactId>
-			<version>0.34</version>
-		</dependency>
 	</dependencies>
 
 	<!-- External non standard repositories -->
