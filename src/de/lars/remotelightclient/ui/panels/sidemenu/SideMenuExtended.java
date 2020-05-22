@@ -29,7 +29,9 @@ import javax.swing.SwingConstants;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import jiconfont.swing.IconFontSwing;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -55,54 +57,54 @@ public class SideMenuExtended extends JPanel {
 		
 		JButton btnExtend = new JButton(""); //$NON-NLS-1$
 		btnExtend.setName("extend"); //$NON-NLS-1$
-		btnExtend.setIcon(Style.getMenuIcon("menu.png")); //$NON-NLS-1$
+		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU)); //$NON-NLS-1$
 		this.configureButton(btnExtend);
 		add(btnExtend);
 		
 		JButton btnOutput = new JButton(i18n.getString("Basic.Output")); //$NON-NLS-1$
 		btnOutput.setName("output"); //$NON-NLS-1$
-		btnOutput.setIcon(Style.getMenuIcon("connection.png")); //$NON-NLS-1$
+		btnOutput.setIcon(Style.getFontIcon(MenuIcon.OUTPUTS)); //$NON-NLS-1$
 		this.configureButton(btnOutput);
 		add(btnOutput);
 		
 		JButton btnColors = new JButton(i18n.getString("Basic.Colors")); //$NON-NLS-1$
 		btnColors.setName("colors"); //$NON-NLS-1$
-		btnColors.setIcon(Style.getMenuIcon("colors.png")); //$NON-NLS-1$
+		btnColors.setIcon(Style.getFontIcon(MenuIcon.COLOR_PALETTE)); //$NON-NLS-1$
 		this.configureButton(btnColors);
 		add(btnColors);
 		
 		JButton btnAnimations = new JButton(i18n.getString("Basic.Animations")); //$NON-NLS-1$
 		btnAnimations.setName("animations"); //$NON-NLS-1$
-		btnAnimations.setIcon(Style.getMenuIcon("animations.png")); //$NON-NLS-1$
+		btnAnimations.setIcon(Style.getFontIcon(MenuIcon.ANOMATION)); //$NON-NLS-1$
 		this.configureButton(btnAnimations);
 		add(btnAnimations);
 		
 		JButton btnScenes = new JButton(i18n.getString("Basic.Scenes")); //$NON-NLS-1$
 		btnScenes.setName("scenes"); //$NON-NLS-1$
-		btnScenes.setIcon(Style.getMenuIcon("scenes.png")); //$NON-NLS-1$
+		btnScenes.setIcon(Style.getFontIcon(MenuIcon.SCENE)); //$NON-NLS-1$
 		this.configureButton(btnScenes);
 		add(btnScenes);
 		
 		JButton btnMusicSync = new JButton(i18n.getString("Basic.MusicSync")); //$NON-NLS-1$
 		btnMusicSync.setName("musicsync"); //$NON-NLS-1$
-		btnMusicSync.setIcon(Style.getMenuIcon("musicsync.png")); //$NON-NLS-1$
+		btnMusicSync.setIcon(Style.getFontIcon(MenuIcon.MUSICSYNC)); //$NON-NLS-1$
 		this.configureButton(btnMusicSync);
 		add(btnMusicSync);
 		
 		JButton btnScreenColor = new JButton(i18n.getString("Basic.ScreenColor")); //$NON-NLS-1$
 		btnScreenColor.setName("screencolor"); //$NON-NLS-1$
-		btnScreenColor.setIcon(Style.getMenuIcon("screencolor.png")); //$NON-NLS-1$
+		btnScreenColor.setIcon(Style.getFontIcon(MenuIcon.SCREENCOLOR)); //$NON-NLS-1$
 		this.configureButton(btnScreenColor);
 		add(btnScreenColor);
 		
 		JButton btnScripts = new JButton(i18n.getString("Basic.Scripts")); //$NON-NLS-1$
 		btnScripts.setName("scripts");
-		btnScripts.setIcon(Style.getMenuIcon("scripts.png")); //$NON-NLS-1$
+		btnScripts.setIcon(Style.getFontIcon(MenuIcon.SCRIPT)); //$NON-NLS-1$
 		this.configureButton(btnScripts);
 		add(btnScripts);
 		
 		JButton btnSettings = new JButton(i18n.getString("Basic.Settings")); //$NON-NLS-1$
-		btnSettings.setIcon(Style.getMenuIcon("settings.png")); //$NON-NLS-1$
+		btnSettings.setIcon(Style.getFontIcon(MenuIcon.SETTINGS)); //$NON-NLS-1$
 		btnSettings.setName("settings"); //$NON-NLS-1$
 		this.configureButton(btnSettings);
 		add(btnSettings);
@@ -111,7 +113,7 @@ public class SideMenuExtended extends JPanel {
 		add(glue);
 		
 		JButton btnAbout = new JButton(i18n.getString("Basic.About")); //$NON-NLS-1$
-		btnAbout.setIcon(Style.getMenuIcon("info.png")); //$NON-NLS-1$
+		btnAbout.setIcon(Style.getFontIcon(MenuIcon.ABOUT)); //$NON-NLS-1$
 		btnAbout.setName("about"); //$NON-NLS-1$
 		this.configureButton(btnAbout);
 		add(btnAbout);

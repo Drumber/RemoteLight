@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
@@ -31,12 +32,16 @@ import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.utils.color.ColorUtil;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import jiconfont.IconCode;
+import jiconfont.swing.IconFontSwing;
 
 public class Style {
 	
 	public static final String[] STYLES = {"Light", "LightBlue", "Dark", "DarkRed", "GrayGreen", "LookAndFeel"};
 	private static String style = "Dark";
 	private static boolean blackIcon = false;
+	
+	private static int fontIconSize = 30;
 	
 	public static void setStyle(String style) {
 		if(style.equalsIgnoreCase("Light")) {
@@ -215,6 +220,29 @@ public class Style {
 		}
 	}
 	
+	/**
+	 * Get font icon with default text color
+	 * @param iconCode IconCode
+	 * @return new icon from IconCode
+	 */
+	public static Icon getFontIcon(IconCode iconCode) {
+		return getFontIcon(iconCode, Style.textColor);
+	}
+	
+	/**
+	 * Get font icon with specified color
+	 * @param iconCode IconCode
+	 * @param color custom color
+	 * @return new icon from IconCode with specified color
+	 */
+	public static Icon getFontIcon(IconCode iconCode, Color color) {
+		return IconFontSwing.buildIcon(iconCode, fontIconSize, Style.textColor);
+	}
+	
+	public static Icon getFontIcon(IconCode iconCode, int fontSize) {
+		return IconFontSwing.buildIcon(iconCode, fontSize, Style.textColor);
+	}
+	
 	/*
 	 * FONT
 	 */
@@ -223,6 +251,9 @@ public class Style {
 	private static Font light;
 	
 	public static void loadFonts() {
+		// register icon font
+		UiUtils.registerIconFont("/resourcen/fonts/icons/menuicons.ttf");
+		// load fonts
 		regular = UiUtils.loadFont("muli/Muli-Regular.ttf", Font.PLAIN);
 		bold = UiUtils.loadFont("muli/Muli-ExtraBold.ttf", Font.BOLD);
 		light = UiUtils.loadFont("muli/Muli-Light.ttf", Font.ITALIC);

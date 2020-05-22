@@ -37,6 +37,7 @@ import javax.swing.plaf.FontUIResource;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
+import jiconfont.swing.IconFontSwing;
 
 public class UiUtils {
 	
@@ -70,6 +71,11 @@ public class UiUtils {
 			}
 		}
 	}
+	
+	public static void registerIconFont(String path) {
+		IconFontSwing.register(new MenuIconFont(path));
+	}
+	
 	
 	public static Component getComponentByName(JPanel panel, Object type, String name) {
 		Component[] comp = panel.getComponents();

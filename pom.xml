@@ -41,6 +41,12 @@
 			<artifactId>flatlaf-intellij-themes</artifactId>
 			<version>0.34</version>
 		</dependency>
+		<!-- jIconFont -->
+		<dependency>
+			<groupId>com.github.jiconfont</groupId>
+			<artifactId>jiconfont-swing</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<!-- External non standard repositories -->

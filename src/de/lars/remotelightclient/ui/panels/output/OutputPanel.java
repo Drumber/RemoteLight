@@ -41,8 +41,10 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPane
 import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import jiconfont.IconCode;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -122,26 +124,27 @@ public class OutputPanel extends MenuPanel {
 		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent)); //$NON-NLS-1$
 		panelDevices.add(popupMenu);
 		
-		BigImageButton add =  new BigImageButton(Style.getUiIcon("add.png"), i18n.getString("Basic.Add")); //$NON-NLS-1$ //$NON-NLS-2$
+		BigImageButton add =  new BigImageButton(Style.getFontIcon(MenuIcon.ADD, 23), i18n.getString("Basic.Add")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.addPopupListener(add, popupMenu);
 		panelDevices.add(add);
 		
 		JMenuItem itemArduino = new JMenuItem("Arduino"); //$NON-NLS-1$
-		itemArduino.setIcon(Style.getUiIcon("arduino.png")); //$NON-NLS-1$
+		itemArduino.setIcon(Style.getFontIcon(MenuIcon.ARDUINO)); //$NON-NLS-1$
 		this.configureAddPopup(itemArduino, "arduino"); //$NON-NLS-1$
 		popupMenu.add(itemArduino);
 		
 		JMenuItem itemRLServer = new JMenuItem("RLServer (Raspberry)"); //$NON-NLS-1$
-		itemRLServer.setIcon(Style.getUiIcon("raspberry.png")); //$NON-NLS-1$
+		itemRLServer.setIcon(Style.getFontIcon(MenuIcon.RASPBERRYPI)); //$NON-NLS-1$
 		this.configureAddPopup(itemRLServer, "rlserver"); //$NON-NLS-1$
 		popupMenu.add(itemRLServer);
 		
 		JMenuItem itemArtnet = new JMenuItem("Artnet");
-		itemArtnet.setIcon(Style.getUiIcon("artnet.png")); //$NON-NLS-1$
+		itemArtnet.setIcon(Style.getFontIcon(MenuIcon.ARTNET)); //$NON-NLS-1$
 		this.configureAddPopup(itemArtnet, "artnet");
 		popupMenu.add(itemArtnet);
 		
 		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
+		mnLink.setIcon(Style.getFontIcon(MenuIcon.LINK_STRIPS)); //$NON-NLS-1$
 		this.configureAddPopup(mnLink, "menulink"); //$NON-NLS-1$
 		popupMenu.add(mnLink);
 		
@@ -150,6 +153,7 @@ public class OutputPanel extends MenuPanel {
 		//mnLink.add(itemMultiOutput); TODO
 		
 		JMenuItem itemChain = new JMenuItem(i18n.getString("OutputPanel.Chain")); //$NON-NLS-1$
+		itemChain.setIcon(Style.getFontIcon(MenuIcon.CHAIN)); //$NON-NLS-1$
 		this.configureAddPopup(itemChain, "chain"); //$NON-NLS-1$
 		mnLink.add(itemChain);
 		
@@ -259,15 +263,20 @@ public class OutputPanel extends MenuPanel {
 	
 	public void addDeviceButtons(JPanel panel) {
 		for(Device d : dm.getDevices()) {
-			String icon = "error.png"; //$NON-NLS-1$
+			IconCode icon = null; //$NON-NLS-1$
 			if(d instanceof Arduino) {
-				icon = "arduino.png"; //$NON-NLS-1$
+				icon = MenuIcon.ARDUINO; //$NON-NLS-1$
 			} else if(d instanceof RemoteLightServer) {
-				icon = "raspberry.png"; //$NON-NLS-1$
+				icon = MenuIcon.RASPBERRYPI; //$NON-NLS-1$
 			} else if(d instanceof Artnet) {
-				icon = "artnet.png"; //$NON-NLS-1$
+				icon = MenuIcon.ARTNET; //$NON-NLS-1$
+			} else if(d instanceof Chain) {
+				icon = MenuIcon.CHAIN;
+			} else {
+				// TODO replace with error icon
+				icon = MenuIcon.ABOUT;
 			}
-			BigImageButton btn =  new BigImageButton(Style.getUiIcon(icon), d.getId());
+			BigImageButton btn =  new BigImageButton(Style.getFontIcon(icon, 35), d.getId());
 			btn.setName(d.getId());
 			btn.addMouseListener(deviceClicked);
 			if(om.getActiveOutput() != null && om.getActiveOutput() == d && d.getConnectionState() == ConnectionState.CONNECTED) {

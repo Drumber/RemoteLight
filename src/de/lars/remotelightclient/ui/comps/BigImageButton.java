@@ -14,10 +14,6 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.comps;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
 import de.lars.remotelightclient.ui.Style;
 
 import java.awt.BorderLayout;
@@ -26,7 +22,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 public class BigImageButton extends JPanel {
 
@@ -44,7 +40,7 @@ public class BigImageButton extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public BigImageButton(ImageIcon image, String text) {
+	public BigImageButton(Icon image, String text) {
 		setLayout(new BorderLayout(0, 0));
 		setPreferredSize(new Dimension(100, 100));
 		
