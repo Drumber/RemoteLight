@@ -195,10 +195,6 @@ public class Style {
 		return laFs;
 	}
 	
-	public static ImageIcon getMenuIcon(String filename) {
-		return getIcon("menu", filename);
-	}
-	
 	public static ImageIcon getSettingsIcon(String filename) {
 		return getIcon("settings", filename);
 	}
