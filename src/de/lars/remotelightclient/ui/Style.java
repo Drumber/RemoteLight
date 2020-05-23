@@ -41,7 +41,7 @@ public class Style {
 	private static String style = "Dark";
 	private static boolean blackIcon = false;
 	
-	private static int fontIconSize = 30;
+	private static int fontIconSize = 27;
 	
 	public static void setStyle(String style) {
 		if(style.equalsIgnoreCase("Light")) {

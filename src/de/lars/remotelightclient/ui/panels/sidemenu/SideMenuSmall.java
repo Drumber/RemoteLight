@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 
 import javax.swing.JButton;
@@ -54,54 +55,54 @@ public class SideMenuSmall extends JPanel {
 		
 		JButton btnExtend = new JButton("");
 		btnExtend.setName("extend");
-		btnExtend.setIcon(Style.getMenuIcon("menu.png"));
+		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU));
 		this.configureButton(btnExtend);
 		add(btnExtend);
 		
 		JButton btnOutput = new JButton("");
 		btnOutput.setName("output");
-		btnOutput.setIcon(Style.getMenuIcon("connection.png"));
+		btnOutput.setIcon(Style.getFontIcon(MenuIcon.OUTPUTS));
 		this.configureButton(btnOutput);
 		add(btnOutput);
 		
 		JButton btnColors = new JButton("");
 		btnColors.setName("colors");
-		btnColors.setIcon(Style.getMenuIcon("colors.png"));
+		btnColors.setIcon(Style.getFontIcon(MenuIcon.COLOR_PALETTE));
 		this.configureButton(btnColors);
 		add(btnColors);
 		
 		JButton btnAnimations = new JButton("");
 		btnAnimations.setName("animations");
-		btnAnimations.setIcon(Style.getMenuIcon("animations.png"));
+		btnAnimations.setIcon(Style.getFontIcon(MenuIcon.ANOMATION));
 		this.configureButton(btnAnimations);
 		add(btnAnimations);
 		
 		JButton btnScenes = new JButton("");
 		btnScenes.setName("scenes");
-		btnScenes.setIcon(Style.getMenuIcon("scenes.png"));
+		btnScenes.setIcon(Style.getFontIcon(MenuIcon.SCENE));
 		this.configureButton(btnScenes);
 		add(btnScenes);
 		
 		JButton btnMusicSync = new JButton("");
 		btnMusicSync.setName("musicsync");
-		btnMusicSync.setIcon(Style.getMenuIcon("musicsync.png"));
+		btnMusicSync.setIcon(Style.getFontIcon(MenuIcon.MUSICSYNC));
 		this.configureButton(btnMusicSync);
 		add(btnMusicSync);
 		
 		JButton btnScreenColor = new JButton("");
 		btnScreenColor.setName("screencolor");
-		btnScreenColor.setIcon(Style.getMenuIcon("screencolor.png"));
+		btnScreenColor.setIcon(Style.getFontIcon(MenuIcon.SCREENCOLOR));
 		this.configureButton(btnScreenColor);
 		add(btnScreenColor);
 		
 		JButton btnScripts = new JButton("");
 		btnScripts.setName("scripts");
-		btnScripts.setIcon(Style.getMenuIcon("scripts.png"));
+		btnScripts.setIcon(Style.getFontIcon(MenuIcon.SCRIPT));
 		this.configureButton(btnScripts);
 		add(btnScripts);
 		
 		JButton btnSettings = new JButton("");
-		btnSettings.setIcon(Style.getMenuIcon("settings.png"));
+		btnSettings.setIcon(Style.getFontIcon(MenuIcon.SETTINGS));
 		btnSettings.setName("settings");
 		this.configureButton(btnSettings);
 		add(btnSettings);
@@ -110,7 +111,7 @@ public class SideMenuSmall extends JPanel {
 		add(glue);
 		
 		JButton btnAbout = new JButton("");
-		btnAbout.setIcon(Style.getMenuIcon("info.png"));
+		btnAbout.setIcon(Style.getFontIcon(MenuIcon.ABOUT));
 		btnAbout.setName("about");
 		this.configureButton(btnAbout);
 		add(btnAbout);

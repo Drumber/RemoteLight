@@ -273,8 +273,7 @@ public class OutputPanel extends MenuPanel {
 			} else if(d instanceof Chain) {
 				icon = MenuIcon.CHAIN;
 			} else {
-				// TODO replace with error icon
-				icon = MenuIcon.ABOUT;
+				icon = MenuIcon.ERROR;
 			}
 			BigImageButton btn =  new BigImageButton(Style.getFontIcon(icon, 35), d.getId());
 			btn.setName(d.getId());
