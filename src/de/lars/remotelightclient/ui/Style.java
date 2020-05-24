@@ -31,6 +31,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.utils.color.ColorUtil;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import jiconfont.IconCode;
 import jiconfont.swing.IconFontSwing;
@@ -42,6 +43,7 @@ public class Style {
 	private static boolean blackIcon = false;
 	
 	private static int fontIconSize = 27;
+	private static int fontHelpIconSize = 16;
 	
 	public static void setStyle(String style) {
 		if(style.equalsIgnoreCase("Light")) {
@@ -195,10 +197,6 @@ public class Style {
 		return laFs;
 	}
 	
-	public static ImageIcon getSettingsIcon(String filename) {
-		return getIcon("settings", filename);
-	}
-	
 	public static ImageIcon getUiIcon(String filename) {
 		return getIcon("ui", filename);
 	}
@@ -235,8 +233,22 @@ public class Style {
 		return IconFontSwing.buildIcon(iconCode, fontIconSize, Style.textColor);
 	}
 	
+	/**
+	 * Get font icon with specified size
+	 * @param iconCode IconCode
+	 * @param fontSize custom font size
+	 * @return new icon from IconCode with specified size
+	 */
 	public static Icon getFontIcon(IconCode iconCode, int fontSize) {
 		return IconFontSwing.buildIcon(iconCode, fontSize, Style.textColor);
+	}
+	
+	/**
+	 * Get Help icon
+	 * @return new help icon
+	 */
+	public static Icon getHelpIcon() {
+		return getFontIcon(MenuIcon.HELP, fontHelpIconSize);
 	}
 	
 	/*
@@ -248,7 +260,7 @@ public class Style {
 	
 	public static void loadFonts() {
 		// register icon font
-		UiUtils.registerIconFont("/resourcen/fonts/icons/menuicons.ttf");
+		UiUtils.registerIconFont("icons/menuicons.ttf");
 		// load fonts
 		regular = UiUtils.loadFont("muli/Muli-Regular.ttf", Font.PLAIN);
 		bold = UiUtils.loadFont("muli/Muli-ExtraBold.ttf", Font.BOLD);

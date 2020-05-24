@@ -65,7 +65,7 @@ public class SettingColorPanel extends SettingPanel {
 		
 		if(setting.getDescription() != null && !setting.getDescription().isEmpty()) {
 			JLabel lblHelp = new JLabel("");
-			lblHelp.setIcon(Style.getSettingsIcon("help.png"));
+			lblHelp.setIcon(Style.getHelpIcon());
 			lblHelp.setToolTipText(setting.getDescription());
 			add(lblHelp);
 		}

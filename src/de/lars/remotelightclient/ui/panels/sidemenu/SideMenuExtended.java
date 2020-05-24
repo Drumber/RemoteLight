@@ -31,8 +31,6 @@ import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-import jiconfont.swing.IconFontSwing;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 

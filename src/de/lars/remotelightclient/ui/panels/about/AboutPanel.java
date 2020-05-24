@@ -131,7 +131,6 @@ public class AboutPanel extends MenuPanel {
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		panelContent.add(verticalStrut_1);
 		
-		addLabel(i18n.getString("AboutPanel.Icons8"), "https://icons8.com");
 		addLabel("jSerialComm", "https://fazecast.github.io/jSerialComm/");
 		addLabel("SimpleFileStorage", "https://github.com/DeBukkIt/SimpleFileStorage");
 		addLabel("TarosDSP", "https://github.com/JorenSix/TarsosDSP");

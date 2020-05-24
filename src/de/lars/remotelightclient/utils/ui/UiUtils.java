@@ -37,6 +37,7 @@ import javax.swing.plaf.FontUIResource;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.DirectoryUtil;
 import jiconfont.swing.IconFontSwing;
 
 public class UiUtils {
@@ -48,7 +49,7 @@ public class UiUtils {
 	}
 	
 	public static Font loadFont(String name, int style) {
-		String fName = "/resourcen/fonts/" + name;
+		String fName = DirectoryUtil.RESOURCES_CLASSPATH + "fonts/" + name;
 		InputStream is = UiUtils.class.getResourceAsStream(fName);
 		Font out = null;
 		try {
@@ -73,7 +74,7 @@ public class UiUtils {
 	}
 	
 	public static void registerIconFont(String path) {
-		IconFontSwing.register(new MenuIconFont(path));
+		IconFontSwing.register(new MenuIconFont(DirectoryUtil.RESOURCES_CLASSPATH + "fonts/" + path));
 	}
 	
 	
