@@ -240,7 +240,18 @@ public class Style {
 	 * @return new icon from IconCode with specified size
 	 */
 	public static Icon getFontIcon(IconCode iconCode, int fontSize) {
-		return IconFontSwing.buildIcon(iconCode, fontSize, Style.textColor);
+		return getFontIcon(iconCode, fontSize, Style.textColor);
+	}
+	
+	/**
+	 * Get font icon with specified size and color
+	 * @param iconCode IconCode
+	 * @param fontSize custom font size
+	 * @param color icon color
+	 * @return new icon from IconCode with specified size and color
+	 */
+	public static Icon getFontIcon(IconCode iconCode, int fontSize, Color color) {
+		return IconFontSwing.buildIcon(iconCode, fontSize, color);
 	}
 	
 	/**

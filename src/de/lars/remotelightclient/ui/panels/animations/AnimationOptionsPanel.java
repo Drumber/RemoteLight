@@ -30,6 +30,7 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -78,8 +79,8 @@ public class AnimationOptionsPanel extends JPanel {
 		FlowLayout flowLayout = (FlowLayout) panelTitel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelTitel.setBackground(Style.panelAccentBackground);
-		panelTitel.setPreferredSize(new Dimension(200, 20));
-		panelTitel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+		panelTitel.setPreferredSize(new Dimension(200, 25));
+		panelTitel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
 		panelMain.add(panelTitel);
 		
 		panelBackground = new JPanel();
@@ -113,9 +114,10 @@ public class AnimationOptionsPanel extends JPanel {
 		
 		JLabel lblExpand = new JLabel(i18n.getString("AnimationOptionsPanel.AnimationOptions")); //$NON-NLS-1$
 		lblExpand.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblExpand.setFont(Style.getFontBold(10));
+		lblExpand.setFont(Style.getFontBold(11));
 		lblExpand.setForeground(Style.accent);
 		lblExpand.addMouseListener(expandListener);
+		lblExpand.setIcon(Style.getFontIcon(MenuIcon.SETTINGS, 11, Style.textColorDarker));
 		panelTitel.add(lblExpand);
 		
 		parentPanel.setMaximumSize(hiddenSize);
@@ -131,7 +133,7 @@ public class AnimationOptionsPanel extends JPanel {
 		
 		JLabel lblHide = new JLabel(i18n.getString("AnimationOptionsPanel.Hide")); //$NON-NLS-1$
 		lblHide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblHide.setFont(Style.getFontBold(9));
+		lblHide.setFont(Style.getFontBold(10));
 		lblHide.setForeground(Style.textColorDarker);
 		lblHide.addMouseListener(expandListener);
 		panelTitel.add(lblHide);
