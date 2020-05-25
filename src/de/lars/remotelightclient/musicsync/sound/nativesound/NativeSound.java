@@ -14,7 +14,7 @@ import de.lars.remotelightclient.utils.DirectoryUtil;
 
 public class NativeSound {
 
-	public static String LIB_CLASSPATH = "/resourcen/lib/xtaudio.zip";
+	public static String LIB_CLASSPATH = "/resources/lib/xtaudio.zip";
 	public static final int[] SAMPLERATES = {11025, 22050, 44100, 48000, 96000, 192000};
 	public static final String LIB_NAME = "xt-core";
 	

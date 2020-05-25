@@ -81,7 +81,7 @@ public class StartUp {
 		File luaDir = new File(DirectoryUtil.getLuaPath());
 		// copy Lua example files
 		try {
-			DirectoryUtil.copyFolderFromJar("resourcen/lua_examples", luaDir, false);
+			DirectoryUtil.copyFolderFromJar("resources/lua_examples", luaDir, false);
 		} catch (IOException e) {
 		}
 	}

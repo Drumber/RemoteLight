@@ -204,9 +204,9 @@ public class Style {
 	public static ImageIcon getIcon(String parent, String filename) {
 		try {
 			if(!blackIcon) {
-				return new ImageIcon(Style.class.getResource("/resourcen/" + parent + "/white/" + filename));
+				return new ImageIcon(Style.class.getResource("/resources/" + parent + "/white/" + filename));
 			}
-			return new ImageIcon(Style.class.getResource("/resourcen/" + parent + "/black/" + filename));
+			return new ImageIcon(Style.class.getResource("/resources/" + parent + "/black/" + filename));
 			
 		} catch(NullPointerException e) {
 			Logger.error("Image '" + filename + "' not found!");

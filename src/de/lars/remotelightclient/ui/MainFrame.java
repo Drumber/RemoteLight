@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/resourcen/Icon-128x128.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/resources/Icon-128x128.png")));
 		sm = Main.getInstance().getSettingsManager();
 		setTitle("RemoteLight");
 		setMinimumSize(new Dimension(400, 350));

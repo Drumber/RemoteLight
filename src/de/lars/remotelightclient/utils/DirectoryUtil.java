@@ -32,8 +32,8 @@ public class DirectoryUtil {
 	public final static String DATA_FILE_NAME = "data.dat";
 	public final static String LOG_DIR_NAME = "logs";
 	public final static String LUA_DIR_NAME = "lua_scripts";
-	/** default: <code>/resourcen/</code> */
-	public static String RESOURCES_CLASSPATH = "/resourcen/";
+	/** default: <code>/resources/</code> */
+	public static String RESOURCES_CLASSPATH = "/resources/";
 	
 	/**
 	 * Sets the root directory path of all stored files <br/>

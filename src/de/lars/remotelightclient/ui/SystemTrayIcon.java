@@ -43,7 +43,7 @@ public class SystemTrayIcon {
 	public static void showTrayIcon() {
 		if (SystemTray.isSupported()) {
 		    tray = SystemTray.getSystemTray();
-		    Image image = new ImageIcon(StartUp.class.getResource("/resourcen/Icon-16x16.png")).getImage();
+		    Image image = new ImageIcon(StartUp.class.getResource("/resources/Icon-16x16.png")).getImage();
 
 		    PopupMenu popup = new PopupMenu();
 		    MenuItem show = new MenuItem("Show UI");
