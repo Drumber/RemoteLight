@@ -48,7 +48,7 @@ public class NativeSoundInputStream implements XtStreamCallback {
 		
 		ByteBuffer buffer = ((StreamContext) user).buffer;
 		
-		if(stream.isInterleaved()) {
+		if(!stream.isInterleaved()) {
 			int bufferSize = getBufferSize(stream, frames);
 			// issue on Linux: stream.frames == frames -> buffer ArrayIndexOutOfBounds
 			// this is not the best fix for it, but at least it works....
@@ -62,19 +62,19 @@ public class NativeSoundInputStream implements XtStreamCallback {
 		buffer.clear();
 		switch(formatInfo.getXtFormat().mix.sample) {
 			case UINT8:
-				buffer.put((byte[]) input, 0, bufferSize);
+				buffer.put(((byte[][]) input)[0], 0, bufferSize);
 				break;
 	        case INT16:
-	        	buffer.asShortBuffer().put((short[]) input, 0, bufferSize);
+	        	buffer.asShortBuffer().put(((short[][]) input)[0], 0, bufferSize);
 	        	break;
 	        case INT24:
-	        	buffer.put((byte[]) input, 0, bufferSize);
+	        	buffer.put(((byte[][]) input)[0], 0, bufferSize);
 	        	break;
 	        case INT32:
-	        	buffer.asIntBuffer().put((int[]) input, 0, bufferSize);
+	        	buffer.asIntBuffer().put(((int[][]) input)[0], 0, bufferSize);
 	        	break;
 	        case FLOAT32:
-	        	buffer.asFloatBuffer().put((float[]) input, 0, bufferSize);
+	        	buffer.asFloatBuffer().put(((float[][]) input)[0], 0, bufferSize);
 	        	break;
 	        default:
 	            throw new IllegalArgumentException();
@@ -90,7 +90,7 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	private int getBufferSize(XtStream stream, int frames) {
 		XtFormat format = stream.getFormat();
 		int sampleSize = XtAudio.getSampleAttributes(format.mix.sample).size;
-		return frames * format.inputs * sampleSize;
+		return frames * 1 * sampleSize;
 	}
 	
 	

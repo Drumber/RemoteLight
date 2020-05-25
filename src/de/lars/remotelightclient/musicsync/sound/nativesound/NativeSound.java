@@ -164,7 +164,7 @@ public class NativeSound {
 			XtBuffer buffer = device.getBuffer(format);
 			double bufferSize = XtAudio.isWin32() ? buffer.current : 10.0;
 			
-			stream = device.openStream(format, true, false, bufferSize, callback, null, context);
+			stream = device.openStream(format, false, false, bufferSize, callback, null, context);
 			int sampleSize = XtAudio.getSampleAttributes(format.mix.sample).size;
 			context.buffer = ByteBuffer.allocate(stream.getFrames() * format.inputs * sampleSize).order(ByteOrder.LITTLE_ENDIAN);
 			stream.start();
