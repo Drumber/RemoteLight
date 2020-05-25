@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="Settings.svg"
+   width="240"
+   height="240"
+   viewBox="0 0 0.0024 0.0024"
+   version="1.1"
+   id="svg8">
+  <sodipodi:namedview
+     inkscape:current-layer="svg8"
+     inkscape:window-maximized="1"
+     inkscape:window-y="0"
+     inkscape:window-x="-8"
+     inkscape:cy="117.77787"
+     inkscape:cx="79.884635"
+     inkscape:zoom="2.5043365"
+     showgrid="false"
+     id="namedview26"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <title
+     id="title1075">Setting Icon</title>
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Setting Icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     d="m 0.00119793,2.0000274e-4 a 0.00100001,0.00100001 0 0 0 -1.3375e-4,9.27788e-6 L 9.6629186e-4,4.845578e-4 a 7.526372e-4,7.526372e-4 0 0 0 -1.0688e-4,4.431e-5 l -2.6394e-4,-1.2546608e-4 A 0.00100001,0.00100001 0 0 0 4.0339657e-4,5.954678e-4 l 1.2542529e-4,2.6393e-4 a 7.526372e-4,7.526372e-4 0 0 0 -4.423389e-5,1.0689e-4 L 2.0927547e-4,0.0010642 a 0.00100001,0.00100001 0 0 0 -9.27734e-6,1.358e-4 0.00100001,0.00100001 0 0 0 9.27734e-6,1.3582e-4 l 2.7527344e-4,9.789e-5 a 7.526372e-4,7.526372e-4 0 0 0 4.431295e-5,1.0688e-4 l -1.2546529e-4,2.6394e-4 a 0.00100001,0.00100001 0 0 0 1.9210529e-4,1.9205e-4 l 2.6389e-4,-1.2541e-4 a 7.526372e-4,7.526372e-4 0 0 0 1.069e-4,4.424e-5 L 0.00106418,0.0021907 A 0.00100001,0.00100001 0 0 0 0.0012,0.0022 a 0.00100001,0.00100001 0 0 0 1.3582e-4,-9.28e-6 l 9.789e-5,-2.7527e-4 a 7.526372e-4,7.526372e-4 0 0 0 1.0688e-4,-4.432e-5 l 2.639e-4,1.2545e-4 a 0.00100001,0.00100001 0 0 0 1.9209e-4,-1.9209e-4 l -1.2541e-4,-2.6388e-4 a 7.526372e-4,7.526372e-4 0 0 0 4.424e-5,-1.069e-4 l 2.7529e-4,-9.789e-5 A 0.00100001,0.00100001 0 0 0 0.0022,0.0012 a 0.00100001,0.00100001 0 0 0 -9.28e-6,-1.3581e-4 l -2.7527e-4,-9.79022e-5 a 7.526372e-4,7.526372e-4 0 0 0 -4.432e-5,-1.0687e-4 l 1.2547e-4,-2.6395e-4 A 0.00100001,0.00100001 0 0 0 0.00180449,4.0342125e-4 L 0.00154061,5.288278e-4 a 7.526372e-4,7.526372e-4 0 0 0 -1.069e-4,-4.423e-5 L 0.0013358,2.0928062e-4 a 0.00100001,0.00100001 0 0 0 -1.358e-4,-9.27788e-6 0.00100001,0.00100001 0 0 0 -2.07e-6,0 z m -4.9e-7,6.5000506e-4 a 3.4999999e-4,3.4999999e-4 0 0 1 2.56e-6,0 A 3.4999999e-4,3.4999999e-4 0 0 1 0.00155,0.0012 3.4999999e-4,3.4999999e-4 0 0 1 0.0012,0.00155 3.4999999e-4,3.4999999e-4 0 0 1 8.5000186e-4,0.0012 3.4999999e-4,3.4999999e-4 0 0 1 0.00119744,8.500078e-4 Z"
+     style="fill:#000000;fill-opacity:0.996377;stroke-width:0.995753"
+     id="path853" />
+</svg>
