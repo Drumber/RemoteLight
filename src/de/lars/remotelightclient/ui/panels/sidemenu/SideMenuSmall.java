@@ -19,6 +19,7 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
@@ -164,6 +165,7 @@ public class SideMenuSmall extends JPanel {
 			if(btn.getName().equals("extend")) {
 				sideMenu.removeAll();
 				sideMenu.add(new SideMenuExtended(mainFrame), BorderLayout.CENTER);
+				Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(true);
 				sideMenu.updateUI();
 			} else {
 				mainFrame.menuSelected(btn.getName());

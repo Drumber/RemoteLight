@@ -22,6 +22,7 @@ import java.awt.event.WindowListener;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
+import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
@@ -33,6 +34,7 @@ import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
 import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
 import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
+import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import de.lars.remotelightclient.utils.ExceptionHandler;
 import de.lars.remotelightclient.utils.ExceptionHandler.ExceptionEvent;
@@ -96,7 +98,12 @@ public class MainFrame extends JFrame {
 		bgrSideMenu.setLayout(new BorderLayout(0, 0));
 		contentPane.add(bgrSideMenu, BorderLayout.WEST);
 		
-		JPanel sideMenu = new SideMenuSmall(this);
+		sm.addSetting(new SettingObject("ui.sidemenu.extended", "Extended side menu", false));
+		JPanel sideMenu;
+		if((boolean) sm.getSettingObject("ui.sidemenu.extended").getValue())
+			sideMenu = new SideMenuExtended(this);
+		else
+			sideMenu = new SideMenuSmall(this);
 		bgrSideMenu.add(sideMenu, BorderLayout.CENTER);
 		
 		bgrContentPanel = new JPanel();
