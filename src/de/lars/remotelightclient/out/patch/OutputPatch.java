@@ -62,18 +62,14 @@ public class OutputPatch implements Serializable {
 	public int getPatchedPixelNumber() {
 		return (int) Math.round(pixel * 1.0D / (clone + 1));
 	}
-
-
-	public Color[] patchOutput(Color[] input) {
-		input = shift(input);
-		input = clone(input);
-		return input;
-	}
 	
 	public Color[] patchOutput(Color[] input, RgbOrder rgbOrder) {
 		input = rgbOrder(input, rgbOrder);
 		input = shift(input);
 		input = clone(input);
+		// mirror function if mirror is enabled but clone is 0
+		if(clone <= 0 && cloneMirrored)
+			input = mirror(input);
 		return input;
 	}
 	
@@ -144,6 +140,23 @@ public class OutputPatch implements Serializable {
 						break;
 					}
 				}
+			}
+			return tmp;
+		}
+		return input;
+	}
+	
+	/**
+	 * Mirror strip
+	 * <p>use only if clone is not enabled
+	 * @param input Color array
+	 * @return mirrored color array
+	 */
+	private Color[] mirror(Color[] input) {
+		if(input != null && input.length > 1) {
+			Color[] tmp = PixelColorUtils.colorAllPixels(Color.BLACK, input.length);
+			for(int i = input.length - 1; i >= 0; i--) {
+				tmp[i] = input[input.length - 1 - i];
 			}
 			return tmp;
 		}
