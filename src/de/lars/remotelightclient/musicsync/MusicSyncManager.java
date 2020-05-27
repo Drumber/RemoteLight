@@ -341,6 +341,7 @@ public class MusicSyncManager {
 		effects.add(new Flame());
 		effects.add(new Bars());
 		effects.add(new RainbowNoise());
+		effects.add(new Lines());
 	}
 
 }
