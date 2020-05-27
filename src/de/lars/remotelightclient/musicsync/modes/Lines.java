@@ -11,6 +11,7 @@ import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingColor;
+import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.utils.color.ColorUtil;
@@ -41,6 +42,8 @@ public class Lines extends MusicEffect {
 		this.addOption("musicsync.lines.colormode");
 		s.addSetting(new SettingColor("musicsync.lines.color", "Color", SettingCategory.MusicEffect, "Static color", Color.RED));
 		this.addOption("musicsync.lines.color");
+		s.addSetting(new SettingInt("musicsync.lines.lines", "Lines", SettingCategory.MusicEffect, "Number of lines", 10, 2, 300, 1));
+		this.addOption("musicsync.lines.lines");
 	}
 	
 	@Override
@@ -57,6 +60,10 @@ public class Lines extends MusicEffect {
 	@Override
 	public void onLoop() {
 		rotate = s.getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
+		linesNum = s.getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
+		if(linesNum > strip.length / 2)
+			linesNum = strip.length / 2;
+		maxLineLength = strip.length / linesNum;
 		
 		// for color mode Rainbow #1
 		if(++rainbowAllHue >= RainbowWheel.getRainbow().length)
@@ -70,7 +77,7 @@ public class Lines extends MusicEffect {
 			int vol = data.get(i);
 			int leds = (int) MathHelper.map(vol, 0, 255, 0, maxLineLength);
 						
-			int ledIndex = i * 10; // first led index
+			int ledIndex = i * maxLineLength; // first led index
 			for(int l = ledIndex; l < (ledIndex + maxLineLength); l++) {
 				if(l < strip.length) { // some safety check
 					
