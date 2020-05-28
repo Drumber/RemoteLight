@@ -20,19 +20,14 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.EffectManager;
+import de.lars.remotelightclient.EffectManagerHelper.EffectType;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.scene.scenes.Fire;
-import de.lars.remotelightclient.scene.scenes.Jungle;
-import de.lars.remotelightclient.scene.scenes.NorthernLights;
-import de.lars.remotelightclient.scene.scenes.Ocean;
-import de.lars.remotelightclient.scene.scenes.SnowSparkle;
-import de.lars.remotelightclient.scene.scenes.Space;
-import de.lars.remotelightclient.scene.scenes.Sunset;
+import de.lars.remotelightclient.scene.scenes.*;
 import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
-public class SceneManager {
+public class SceneManager extends EffectManager {
 	
 	private Scene activeScene;
 	private List<Scene> scenes;
@@ -43,6 +38,12 @@ public class SceneManager {
 		this.registerScenes();
 	}
 	
+	@Override
+	public String getName() {
+		return "SceneManager";
+	}
+	
+	@Override
 	public boolean isActive() {
 		return (activeScene != null);
 	}
@@ -56,7 +57,7 @@ public class SceneManager {
 	}
 	
 	public void start(Scene scene) {
-		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Scene);
+		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Scene);
 		if(activeScene != null) {
 			activeScene.onDisable();
 		}
@@ -67,6 +68,7 @@ public class SceneManager {
 		this.loop();
 	}
 	
+	@Override
 	public void stop() {
 		if(activeScene != null) {
 			activeScene.onDisable();

@@ -8,27 +8,19 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaThread;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
+import org.luaj.vm2.*;
 import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.Bit32Lib;
-import org.luaj.vm2.lib.MathLib;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.StringLib;
-import org.luaj.vm2.lib.TableLib;
+import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.EffectManager;
+import de.lars.remotelightclient.EffectManagerHelper.EffectType;
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lua.utils.LedStrip;
 import de.lars.remotelightclient.lua.utils.LuaColor;
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
@@ -36,7 +28,7 @@ import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.utils.color.PixelColorUtils;
 import de.lars.remotelightclient.utils.maths.TimeUtil;
 
-public class LuaManager {
+public class LuaManager extends EffectManager {
 
 	private int MAX_INSTRUCTIONS;	// instruction per ms
 	
@@ -85,6 +77,11 @@ public class LuaManager {
 		timer = new Timer(1, timerUpdate);
 	}
 	
+	@Override
+	public String getName() {
+		return "LuaManager";
+	}
+	
 	/**
 	 * Run a lua script file
 	 * @param luaFilePath Path to the lua file
@@ -93,7 +90,7 @@ public class LuaManager {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Lua);
+				Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Lua);
 				// stop active scripts
 				if(activeScriptPath != null) {
 					stopLuaScript();
@@ -147,10 +144,16 @@ public class LuaManager {
 		PixelColorUtils.setAllPixelsBlack();
 	}
 	
+	@Override
+	public void stop() {
+		stopLuaScript();
+	}
+	
 	/**
 	 * 
 	 * @return True if no lua script is active
 	 */
+	@Override
 	public boolean isActive() {
 		return activeScriptPath != null;
 	}

@@ -23,7 +23,8 @@ import javax.sound.sampled.Mixer;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.EffectManager.EffectType;
+import de.lars.remotelightclient.EffectManager;
+import de.lars.remotelightclient.EffectManagerHelper.EffectType;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.modes.*;
 import de.lars.remotelightclient.musicsync.sound.Shared;
@@ -37,7 +38,7 @@ import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
-public class MusicSyncManager {
+public class MusicSyncManager extends EffectManager {
 	
 	SettingsManager sm;
 	private MusicEffect activeEffect;
@@ -74,6 +75,11 @@ public class MusicSyncManager {
 		
 		effects = new ArrayList<MusicEffect>();
 		this.registerMusicEffects();
+	}
+	
+	@Override
+	public String getName() {
+		return "MusicSyncManager";
 	}
 	
 	private void loadSettings() {
@@ -216,6 +222,7 @@ public class MusicSyncManager {
 		return adjustment;
 	}
 	
+	@Override
 	public boolean isActive() {
 		return active;
 	}
@@ -238,7 +245,7 @@ public class MusicSyncManager {
 	}
 	
 	public void start(MusicEffect effect) {
-		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.MusicSync);
+		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);
 		
 		if(soundProcessor == null) {
 			soundProcessor = new SoundProcessing(this);
@@ -270,6 +277,7 @@ public class MusicSyncManager {
 		this.loop();
 	}
 	
+	@Override
 	public void stop() {
 		if(activeEffect != null) {
 			activeEffect.onDisable();

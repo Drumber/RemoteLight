@@ -20,15 +20,16 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.EffectManager.EffectType;
-import de.lars.remotelightclient.animation.animations.*;
+import de.lars.remotelightclient.EffectManagerHelper.EffectType;
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.EffectManager;
+import de.lars.remotelightclient.animation.animations.*;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.Setting;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
-public class AnimationManager {
+public class AnimationManager extends EffectManager {
 	
 	private Animation activeAnimation;
 	private List<Animation> animations;
@@ -40,6 +41,12 @@ public class AnimationManager {
 		this.registerAnimations();
 	}
 	
+	@Override
+	public String getName() {
+		return "AnimationManager";
+	}
+	
+	@Override
 	public boolean isActive() {
 		return (activeAnimation != null);
 	}
@@ -73,7 +80,7 @@ public class AnimationManager {
 	}
 	
 	public void start(Animation animation) {
-		Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.Animation);
+		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Animation);
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();
 		}
@@ -85,6 +92,7 @@ public class AnimationManager {
 		this.loop();
 	}
 	
+	@Override
 	public void stop() {
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();

@@ -20,8 +20,9 @@ import java.awt.GraphicsEnvironment;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.EffectManager;
+import de.lars.remotelightclient.EffectManagerHelper.EffectType;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.EffectManager.EffectType;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -30,7 +31,7 @@ import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.utils.color.PixelColorUtils;
 
-public class ScreenColorManager {
+public class ScreenColorManager extends EffectManager {
 	
 	private boolean active;
 	private SettingsManager sm;
@@ -54,13 +55,18 @@ public class ScreenColorManager {
 		}
 	}
 	
+	@Override
+	public String getName() {
+		return "ScreenColorManager";
+	}
+	
 	public void start(int yPos, int yHeight, int delay, boolean invert, GraphicsDevice monitor) {
 		if(!active) {
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
-					Main.getInstance().getEffectManager().stopAllExceptFor(EffectType.ScreenColor);
+					Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.ScreenColor);
 					active = true;
 					inverted = invert;
 					ScreenColorManager.this.delay = delay;
@@ -105,10 +111,12 @@ public class ScreenColorManager {
 		}
 	}
 	
+	@Override
 	public boolean isActive() {
 		return active;
 	}
 	
+	@Override
 	public void stop() {
 		if(active) {
 			active = false;

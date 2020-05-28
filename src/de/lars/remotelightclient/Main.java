@@ -63,7 +63,7 @@ public class Main {
 	private DeviceManager deviceManager;
 	private OutputManager outputManager;
 	private SettingsManager settingsManager;
-	private EffectManager effectManager;
+	private EffectManagerHelper effectManagerHelper;
 	private LuaManager luaManager;
 	private MainFrame mainFrame;
 
@@ -104,7 +104,7 @@ public class Main {
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
 		screenColorManager = new ScreenColorManager();
-		effectManager = new EffectManager();
+		effectManagerHelper = new EffectManagerHelper();
 		// Start UI
 		if(uiMode) {
 			startMainFrame();
@@ -206,8 +206,8 @@ public class Main {
 		return screenColorManager;
 	}
 	
-	public EffectManager getEffectManager() {
-		return effectManager;
+	public EffectManagerHelper getEffectManagerHelper() {
+		return effectManagerHelper;
 	}
 	
 	public DeviceManager getDeviceManager() {
@@ -262,7 +262,7 @@ public class Main {
 	public void close(boolean autoexit) {
 		shuttingDown = true;
 		try {
-			this.getEffectManager().stopAll();		// Stop all active effects
+			this.getEffectManagerHelper().stopAll();		// Stop all active effects
 			this.getOutputManager().close();		// Close active output
 			
 			this.getDeviceManager().saveDevices();	// Save device list
