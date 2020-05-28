@@ -16,11 +16,9 @@ package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
-import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -31,6 +29,7 @@ import de.lars.remotelightclient.utils.color.PixelColorUtils;
 public class LevelBar extends MusicEffect {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private Color[] strip;
 	private Color background = Color.BLACK;
 	private Color color1;
 	private Color color2;
@@ -38,10 +37,10 @@ public class LevelBar extends MusicEffect {
 	private boolean autoChange;
 	private boolean smooth;
 	private ArrayList<Color[]> pattern = new ArrayList<>();
-	private int count;
-	private int lastLeds = 0;
-	private int pix;
-	private int half;
+	private int count; // pattern counter
+	private int lastLeds = 0; // last amount of leds glowing
+	private int pix; // number of leds
+	private int half; // half the number of leds
 
 	public LevelBar() {
 		super("LevelBar");
@@ -65,6 +64,7 @@ public class LevelBar extends MusicEffect {
 		
 		pix = Main.getLedNum();
 		half = pix / 2;
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
 		
 		super.onEnable();
 	}
@@ -72,12 +72,9 @@ public class LevelBar extends MusicEffect {
 	@Override
 	public void onLoop() {
 		this.initOptions();
-		boolean bump = this.isBump();
-		SoundProcessing soundProcessor = this.getSoundProcessor();
-		half = pix / 2;
+		
 		double mul = 0.1 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
-		HashMap<Integer, Color> pixelHash = new HashMap<>();
-		int[] amp = soundProcessor.getSimpleAmplitudes(); //6 bands
+		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
 		int ampAv; //average of all amp bands
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {
@@ -99,7 +96,7 @@ public class LevelBar extends MusicEffect {
 				
 		}
 		
-		if(bump) {
+		if(isBump()) {
 			if(count < pattern.size() - 1)
 				count++;
 			else
@@ -130,7 +127,7 @@ public class LevelBar extends MusicEffect {
 						c = pattern.get(count)[1];
 				}
 			}
-			pixelHash.put(i, c);
+			strip[i] = c;
 		}
 		
 		//half 2
@@ -155,12 +152,10 @@ public class LevelBar extends MusicEffect {
 							c = pattern.get(count)[1];
 					}
 			}
-			pixelHash.put(i + half, c);
-			
+			strip[i + half] = c;
 		}
 		
-		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
-		
+		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
 	

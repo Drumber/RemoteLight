@@ -15,11 +15,9 @@
 package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
-import java.util.HashMap;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
-import de.lars.remotelightclient.musicsync.sound.SoundProcessing;
 import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
@@ -31,10 +29,11 @@ import de.lars.remotelightclient.utils.color.RainbowWheel;
 public class Rainbow extends MusicEffect {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private Color[] strip;
 	private int pix;
 	private int half;
 	private int lastLeds = 0;
-	private Color[] strip;
+	private Color[] rainbow;
 	private int step = 0;
 	
 	public boolean smoothRise = true;
@@ -64,7 +63,8 @@ public class Rainbow extends MusicEffect {
 		
 		pix = Main.getLedNum();
 		half = pix / 2;
-		strip = new Color[pix];
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
+		rainbow = new Color[pix];
 		
 		for(int i = 0; i < half; i++) {
 			step += 5;
@@ -73,9 +73,9 @@ public class Rainbow extends MusicEffect {
 			
 			Color c = RainbowWheel.getRainbow()[step];
 			//half1
-			strip[(half - 1 - i)] = c;
+			rainbow[(half - 1 - i)] = c;
 			//half2
-			strip[(half + i)] = c;
+			rainbow[(half + i)] = c;
 		}
 		super.onEnable();
 	}
@@ -83,12 +83,9 @@ public class Rainbow extends MusicEffect {
 	@Override
 	public void onLoop() {
 		this.initOptions();
-		boolean bump = this.isBump();
-		SoundProcessing soundProcessor = this.getSoundProcessor();
-		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		
 		double mul = 0.1 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
-		int[] amp = soundProcessor.getSimpleAmplitudes(); //6 bands
+		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
 		
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {
@@ -131,10 +128,10 @@ public class Rainbow extends MusicEffect {
 		
 		//Rainbow
 		for(int i = 0; i < pix; i++) {
-			pixelHash.put(i, strip[i]);
+			strip[i] = rainbow[i];
 		}
 		
-		if(bump)
+		if(isBump())
 			step += steps + (steps / 2) + 20;
 		else
 			step += steps;
@@ -147,23 +144,22 @@ public class Rainbow extends MusicEffect {
 			Color c = RainbowWheel.getRainbow()[step];
 			
 			if(i == (half - 1)) {
-				strip[i] = c;	//half1
-				strip[half] = c;//half2
+				rainbow[i] = c;	//half1
+				rainbow[half] = c;//half2
 				
 			} else {
-				strip[i] = strip[i + 1];
-				strip[pix - 1 - i] = strip[pix - 2 - i];
+				rainbow[i] = rainbow[i + 1];
+				rainbow[pix - 1 - i] = rainbow[pix - 2 - i];
 			}
 		}
 		
 		//effect
 		for(int i = 0; i < (half - leds); i++) {
-			pixelHash.put(i, Color.BLACK);
-			pixelHash.put(pix - 1 - i, Color.BLACK);
+			strip[i] = Color.BLACK;
+			strip[pix - 1 - i] = Color.BLACK;
 		}
 		
-		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
-		
+		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
 
