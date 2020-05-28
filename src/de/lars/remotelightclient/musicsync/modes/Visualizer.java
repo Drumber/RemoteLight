@@ -15,23 +15,21 @@
 package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
-import java.util.Arrays;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
+import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.settings.SettingsManager;
 import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.utils.ArrayUtil;
 import de.lars.remotelightclient.utils.color.ColorUtil;
-import de.lars.remotelightclient.utils.color.PixelColorUtils;
 import de.lars.remotelightclient.utils.color.RainbowWheel;
 
 public class Visualizer extends MusicEffect {
 	
 	private SettingsManager s = Main.getInstance().getSettingsManager();
-	private Color color = Color.RED;
+	private Color[] strip;
 	private boolean rainbow = false;
 
 	public Visualizer() {
@@ -44,49 +42,36 @@ public class Visualizer extends MusicEffect {
 	}
 	
 	@Override
+	public void onEnable() {
+		strip = new Color[Main.getLedNum()];
+		super.onEnable();
+	}
+	
+	@Override
 	public void onLoop() {
-		this.initOptions();
+		rainbow = ((SettingBoolean) s.getSettingFromId("musicsync.visualizer.rainbow")).getValue();
 		
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
-		int bin12khz = getSoundProcessor().hzToBin(6000); //get binIndex of 12kHz
-		int bin50hz = getSoundProcessor().hzToBin(50); //get binIndex of 50Hz
-		if(ampl.length > bin12khz) {
-			ampl = Arrays.copyOfRange(ampl, bin50hz, bin12khz); //we only want to show frequencies from 50Hz up to 12khz
-		}
-		
-		int frequncLed = ampl.length / Main.getLedNum(); //how many frequencies does a led show (frequency range per led)
+		int[] fftData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
 		
 		for(int i = 0; i < Main.getLedNum(); i++) {
-			double ledAmpl = ArrayUtil.maxOfArray(Arrays.copyOfRange(ampl, frequncLed*i, frequncLed*(i + 1)));	// max amplitude of the LEDs range
-			int brightness = amplitudeToBrightness(ledAmpl);
+			int brightness = fftData[i];
 			
-			Color c = ColorUtil.dimColor(getColor(ledAmpl, i), brightness);
-			
-			PixelColorUtils.setPixel(i, c);
+			Color c = ColorUtil.dimColor(getColor(i), brightness);
+			strip[i] = c;
 		}
 		
+		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
 	
-	private int amplitudeToBrightness(double ampl) {
-		if(ampl < 1.0) {
-			return 0;
-		}
-		return (int) (ampl * getAdjustment());
-	}
-	
-	private Color getColor(double ampl, int led) {
+	private Color getColor(int led) {
 		if(rainbow) {
 			int mltiplr = RainbowWheel.getRainbow().length / Main.getLedNum();
 			return RainbowWheel.getRainbow()[led * mltiplr];
 		} else {
-			return color;
+			return ((SettingColor) s.getSettingFromId("musicsync.visualizer.color")).getValue();
 		}
-	}
-	
-	private void initOptions() {
-		color = ((SettingColor) s.getSettingFromId("musicsync.visualizer.color")).getValue();
-		rainbow = ((SettingBoolean) s.getSettingFromId("musicsync.visualizer.rainbow")).getValue();
 	}
 
 }
