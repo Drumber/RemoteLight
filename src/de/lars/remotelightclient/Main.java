@@ -28,7 +28,10 @@ import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
 import com.formdev.flatlaf.FlatLaf;
+
 import de.lars.remotelightclient.animation.AnimationManager;
+import de.lars.remotelightclient.cmd.CommandParser;
+import de.lars.remotelightclient.cmd.ConsoleReader;
 import de.lars.remotelightclient.cmd.StartParameterHandler;
 import de.lars.remotelightclient.devices.DeviceManager;
 import de.lars.remotelightclient.lua.LuaManager;
@@ -66,6 +69,7 @@ public class Main {
 	private EffectManagerHelper effectManagerHelper;
 	private LuaManager luaManager;
 	private MainFrame mainFrame;
+	private CommandParser commandParser;
 
 	public static void main(String[] args) {
 		startParameter = new StartParameterHandler(args);
@@ -86,6 +90,11 @@ public class Main {
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 		setupOSSupport();
+		
+		// console cmd reader
+		commandParser = new CommandParser(instance);
+		commandParser.setOutputEnabled(true);
+		new ConsoleReader(commandParser);
 		
 		Logger.info("Starting RemoteLight version " + VERSION);
 		Style.loadFonts();				// Load custom fonts
@@ -230,6 +239,10 @@ public class Main {
 		return mainFrame;
 	}
 	
+	public CommandParser getCommandParser() {
+		return commandParser;
+	}
+
 	/**
 	 * Returns the number of LEDs of the active output
 	 * @return
