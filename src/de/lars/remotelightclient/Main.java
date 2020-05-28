@@ -85,6 +85,7 @@ public class Main {
 	}
 	
 	public Main(boolean uiMode) {
+		headless = !uiMode;
 		this.configureLogger();			// Configure Logger (set log path etc.)
 		instance = this;
 		// set default exception handler
@@ -193,7 +194,7 @@ public class Main {
 	
 	/**
 	 * 
-	 * @return True if UI mode, false if headless
+	 * @return true if UI mode, false if headless
 	 */
 	public static boolean isHeadless() {
 		return headless;
@@ -275,16 +276,27 @@ public class Main {
 	public void close(boolean autoexit) {
 		shuttingDown = true;
 		try {
-			this.getEffectManagerHelper().stopAll();		// Stop all active effects
+			// save active effect as command
+			String[] activeEffect = effectManagerHelper.getActiveManagerAndEffect();
+			String activeCommand = null;
+			if(activeEffect[0] != null && activeEffect[1] != null) {
+				activeCommand = "start " + String.join(" ", activeEffect);
+				Logger.info("Saving last used effect command: " + activeCommand);
+			}
+			settingsManager.getSettingObject("manager.lastactive.command").setValue(activeCommand);
+			
+			this.getEffectManagerHelper().stopAll();// Stop all active effects
 			this.getOutputManager().close();		// Close active output
 			
 			this.getDeviceManager().saveDevices();	// Save device list
-			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY);	// Save all settings
+			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY); // Save all settings
 			
-			DataStorage.save();						// Save data file
+			DataStorage.save();	// Save data file
 			
 			//copy log file and rename
-			DirectoryUtil.copyAndRenameLog(new File(DirectoryUtil.getLogsPath() + "log.txt"), new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");
+			DirectoryUtil.copyAndRenameLog(
+					new File(DirectoryUtil.getLogsPath() + "log.txt"),
+					new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");
 			
 			try {
 				ProviderRegistry.getLoggingProvider().shutdown();

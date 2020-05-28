@@ -19,7 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.tinylog.Logger;
+
+import de.lars.remotelightclient.cmd.CommandParser;
 import de.lars.remotelightclient.cmd.StartParameterHandler;
+import de.lars.remotelightclient.cmd.exceptions.CommandException;
 import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.out.Output;
 import de.lars.remotelightclient.settings.SettingsManager;
@@ -62,11 +66,27 @@ public class StartUp {
 					}
 				}
 				
+				//auto enable last effect
+				if(s.getSetting(SettingBoolean.class, "manager.lastactive.enabled").getValue()) {
+					String cmd = (String) s.getSettingObject("manager.lastactive.command").getValue();
+					if(cmd != null) {
+						try {
+							CommandParser commandParser = Main.getInstance().getCommandParser();
+							commandParser.setOutputEnabled(false);
+							commandParser.parse(cmd.split(" "));
+							commandParser.setOutputEnabled(true);
+						} catch (CommandException e) {
+							Logger.error(e, "Could not enable last effect. Command: " + cmd);
+						}
+					}
+				}
+				
 				//check for update (this block blocks the thread)
 				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
 					// show update dialog
 					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
-					if(updateChecker.isNewVersionAvailable()) {
+					Main.getInstance();
+					if(updateChecker.isNewVersionAvailable() && !Main.isHeadless()) {
 						UpdateDialog.showUpdateDialog(updateChecker);
 					}
 				}
@@ -95,6 +115,7 @@ public class StartUp {
 		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
 		s.addSetting(new SettingInt("out.delay", "Output delay", SettingCategory.General, "Delay (ms) between sending output packets.", 50, 5, 500, 5));
 		s.addSetting(new SettingBoolean("out.autoconnect", "Auto connect", SettingCategory.General, "Automaticly connect/open last used output.", false));
+		s.addSetting(new SettingBoolean("manager.lastactive.enabled", "Auto enable last effect", SettingCategory.General, "Automaticly enable last used effect/animation.", false));
 		
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
@@ -105,6 +126,7 @@ public class StartUp {
 		s.addSetting(new SettingObject("out.brightness", null, 100));
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
 		s.addSetting(new SettingObject("simulatorFrame.size", "Simulator Window size", new Dimension(650, 150)));
+		s.addSetting(new SettingObject("manager.lastactive.command", "Last active effect start command", null));
 		
 	}
 	

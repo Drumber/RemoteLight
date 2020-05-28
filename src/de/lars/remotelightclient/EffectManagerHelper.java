@@ -175,5 +175,37 @@ public class EffectManagerHelper {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Get active manager + effect as string
+	 * @return string array of length 2; first arg is manager, second is effect or null
+	 */
+	public String[] getActiveManagerAndEffect() {
+		EffectManager manager = getActiveManager();
+		String[] out = new String[2];
+		if(manager == null)
+			return out;
+		out[0] = manager.getName();
+		
+		if(manager instanceof AnimationManager) {
+			AnimationManager m = (AnimationManager) manager;
+			if(m.getActiveAnimation() != null)
+				out[1] = m.getActiveAnimation().getName();
+		} else if(manager instanceof MusicSyncManager) {
+			MusicSyncManager m = (MusicSyncManager) manager;
+			if(m.getActiveEffect() != null)
+				out[1] = m.getActiveEffect().getName();
+		} else if(manager instanceof SceneManager) {
+			SceneManager m = (SceneManager) manager;
+			if(m.getActiveScene() != null)
+				out[1] = m.getActiveScene().getName();
+		} else if(manager instanceof LuaManager) {
+			LuaManager m = (LuaManager) manager;
+			if(m.getActiveLuaScriptPath() != null)
+				out[1] = m.getActiveLuaScriptPath();
+		}
+		
+		return out;
+	}
+	
 }
