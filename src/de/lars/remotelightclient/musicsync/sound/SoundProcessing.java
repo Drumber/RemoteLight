@@ -14,12 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightclient.musicsync.sound;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.*;
 
 import org.tinylog.Logger;
 
@@ -42,6 +37,7 @@ import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
 import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundInputStream;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
+import de.lars.remotelightclient.utils.maths.MathHelper;
 
 /*
  * 
@@ -282,6 +278,48 @@ public class SoundProcessing implements PitchDetectionHandler {
 	
 	public double binToHz(final int binIndex) {
 		return binIndex * sampleRate / bufferSize;
+	}
+	
+	/**
+	 * Compute FFT data array
+	 * @param fft array of amplitudes
+	 * @param length amount of bands
+	 * @param boost boost values, if not wanted set it to 0
+	 * @return new array of specified length with int values between 0 and 255
+	 */
+	public int[] computeFFT(float[] fft, int length, double boost) {
+		// adapted from a bass_wasapi sample
+		int x, y;
+		int b0 = 0;
+		
+		int[] data = new int[length];
+		
+		for(x = 0; x < length; x++) {
+			float peak = 0;
+			int b1 = (int) Math.pow(2, x*10.0 / (length - 1));
+			if(b1 > 1023) b1 = 1023;
+			if(b1 <= b0) b1 = b0 + 1; // make sure it uses at least 1 FFT bin
+			
+			for(; b0 < b1; b0++) {
+				if(peak < fft[1 + b0]) peak = fft[1 + b0];
+			}
+			
+			y = (int) (Math.sqrt(peak) * 3 * 2 - 4); // scale it
+			
+			// normalize values
+			int max = 50;
+			if(y > max) y = max;
+			if(y < 0) y = 0;
+			
+			y = (int) MathHelper.map(y, 0, max, 0, 255);
+			
+			// boost values
+			y =  (int) (y * (boost * 0.4));
+			if(y > 255) y = 255;
+			
+			data[x] = y;
+		}
+		return data;
 	}
 
 }

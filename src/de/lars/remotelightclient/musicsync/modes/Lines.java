@@ -1,8 +1,6 @@
 package de.lars.remotelightclient.musicsync.modes;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.musicsync.MusicEffect;
@@ -70,11 +68,11 @@ public class Lines extends MusicEffect {
 			rainbowAllHue = 0;
 				
 		float[] fft = getSoundProcessor().getAmplitudes();
-		List<Integer> data = computeFFT(fft, linesNum);
+		int[] data = getSoundProcessor().computeFFT(fft, linesNum, getAdjustment());
 		
 		for(int i = 0; i < linesNum; i++) {
 			// calculate how many led should glows
-			int vol = data.get(i);
+			int vol = data[i];
 			int leds = (int) MathHelper.map(vol, 0, 255, 0, maxLineLength);
 						
 			int ledIndex = i * maxLineLength; // first led index
@@ -130,41 +128,6 @@ public class Lines extends MusicEffect {
 		}
 		// static color
 		return s.getSetting(SettingColor.class, "musicsync.lines.color").getValue();
-	}
-	
-	
-	private List<Integer> computeFFT(float[] fft, int length) {
-		int x, y;
-		int b0 = 0;
-		
-		List<Integer> data = new ArrayList<>();
-		
-		for(x = 0; x < length; x++) {
-			float peak = 0;
-			int b1 = (int) Math.pow(2, x*10.0 / (length - 1));
-			if(b1 > 1023) b1 = 1023;
-			if(b1 <= b0) b1 = b0 + 1; // make sure it uses at least 1 FFT bin
-			
-			for(; b0 < b1; b0++) {
-				if(peak < fft[1 + b0]) peak = fft[1 + b0];
-			}
-			
-			y = (int) (Math.sqrt(peak) * 3 * 2 - 4); // scale it
-			
-			// normalize values
-			int max = 50;
-			if(y > max) y = max;
-			if(y < 0) y = 0;
-			
-			y = (int) MathHelper.map(y, 0, max, 0, 255);
-			
-			// boost values
-			y =  (int) (y * (getAdjustment() * 0.4));
-			if(y > 255) y = 255;
-			
-			data.add(y);
-		}
-		return data;
 	}
 
 }
