@@ -47,7 +47,7 @@ public class Energy extends MusicEffect {
 		float[] ampl = getSoundProcessor().getAmplitudes();
 		double mul = 0.01 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
 		
-		/* function: -a(x - ledNum/2)² + 255 */
+		/* function: -a(x - ledNum/2)^ + 255 */
 		
 		if(mode.equals("RGB") || mode.equals("Mix")) {
 			// amplitude to b of each rgb channel
