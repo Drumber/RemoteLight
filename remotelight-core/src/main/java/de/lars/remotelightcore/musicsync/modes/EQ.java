@@ -17,7 +17,7 @@ package de.lars.remotelightcore.musicsync.modes;
 import java.awt.Color;
 import java.util.HashMap;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
 import de.lars.remotelightcore.out.OutputManager;
@@ -32,7 +32,7 @@ public class EQ extends MusicEffect {
 	@Override
 	public void onLoop() {
 		SoundProcessing soundProcessor = this.getSoundProcessor();
-		int pix = Main.getLedNum();
+		int pix = RemoteLightCore.getLedNum();
 		int half = pix / 2;
 		int pixBand = half / 6; // pixels per frequency at each side(left/right) (6 bands)
 		double mul = 0.318 * this.getAdjustment(); // multiplier for brightness

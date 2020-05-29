@@ -2,7 +2,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -20,7 +20,7 @@ import de.lars.remotelightcore.utils.maths.TimeUtil;
 
 public class Lines extends MusicEffect {
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private String[] colorModes = {"Static", "Rainbow #1", "Rainbow #2", "Spectrum"};
 	private int rainbowAllHue = 0;
 	
@@ -46,7 +46,7 @@ public class Lines extends MusicEffect {
 	
 	@Override
 	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		rotateIndex = 0;
 		rotateTimer = new TimeUtil(150);
 		
@@ -116,7 +116,7 @@ public class Lines extends MusicEffect {
 		if(mode.equalsIgnoreCase("Rainbow #1")) {
 			return RainbowWheel.getRainbow()[rainbowAllHue];
 		} else if(mode.equalsIgnoreCase("Rainbow #2")) {
-			int mltiplr = RainbowWheel.getRainbow().length / Main.getLedNum();
+			int mltiplr = RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
 			return RainbowWheel.getRainbow()[index * mltiplr];
 		} else if(mode.equalsIgnoreCase("Spectrum")) {
 			int fadeLEDs= maxLineLength - (maxLineLength / 5); // amount of leds which are faded to red

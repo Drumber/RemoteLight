@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
@@ -36,7 +36,7 @@ public class Sunset extends Scene {
 		count = 0;
 		initSun();
 		
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			PixelColorUtils.shiftRight(1);
 			count++;
 			if(count >= sun.length)

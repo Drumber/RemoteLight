@@ -17,7 +17,7 @@ package de.lars.remotelightcore.animation.animations;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -49,7 +49,7 @@ public class Scanner extends Animation {
 	public void onEnable() {
 		colors = new Color[] {Color.RED, Color.ORANGE, Color.YELLOW, Color.PINK, Color.MAGENTA,
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		pos = 0;
 		color = getRandomColor();
 		color2 = getRandomColor();
@@ -61,7 +61,7 @@ public class Scanner extends Animation {
 		String mode = ((SettingSelection) this.getSetting("animation.scanner.mode")).getSelected();
 		if(!mode.equals(lastMode)) {
 			PixelColorUtils.setAllPixelsBlack();
-			strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+			strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 			lastMode = mode;
 			pos = 0;
 		}
@@ -77,7 +77,7 @@ public class Scanner extends Animation {
 	
 	private void single() {
 		if(!reverse) {
-			if(++pos >= Main.getLedNum() - 1) {
+			if(++pos >= RemoteLightCore.getLedNum() - 1) {
 				reverse = true;
 			}
 		} else {
@@ -98,7 +98,7 @@ public class Scanner extends Animation {
 	
 	private void dual() {
 		if(!reverse) {
-			if(++pos >= Main.getLedNum() - 1) {
+			if(++pos >= RemoteLightCore.getLedNum() - 1) {
 				reverse = true;
 			}
 		} else {
@@ -124,7 +124,7 @@ public class Scanner extends Animation {
 	private void knightRider() {
 		Color c = new Color(255, 10, 0);
 		if(!reverse) {
-			if(++pos >= Main.getLedNum() - 1) {
+			if(++pos >= RemoteLightCore.getLedNum() - 1) {
 				reverse = true;
 			}
 		} else {

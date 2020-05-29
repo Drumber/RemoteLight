@@ -17,7 +17,7 @@ package de.lars.remotelightcore.animation;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.settings.Setting;
 
 public class Animation {
@@ -74,12 +74,12 @@ public class Animation {
 	}
 	
 	public void addSetting(Setting setting) {
-		Main.getInstance().getSettingsManager().addSetting(setting);
+		RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
 		options.add(setting.getId());
 	}
 	
 	public Setting getSetting(String id) {
-		return Main.getInstance().getSettingsManager().getSettingFromId(id);
+		return RemoteLightCore.getInstance().getSettingsManager().getSettingFromId(id);
 	}
 	
 	/**

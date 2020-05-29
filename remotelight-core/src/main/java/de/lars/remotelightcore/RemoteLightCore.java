@@ -1,27 +1,8 @@
-/*******************************************************************************
- * ______                     _       _     _       _     _   
- * | ___ \                   | |     | |   (_)     | |   | |  
- * | |_/ /___ _ __ ___   ___ | |_ ___| |    _  __ _| |__ | |_ 
- * |    // _ \ '_ ` _ \ / _ \| __/ _ \ |   | |/ _` | '_ \| __|
- * | |\ \  __/ | | | | | (_) | ||  __/ |___| | (_| | | | | |_ 
- * \_| \_\___|_| |_| |_|\___/ \__\___\_____/_|\__, |_| |_|\__|
- *                                             __/ |          
- *                                            |___/           
- * 
- * Copyright (C) 2019 Lars O.
- * 
- * This file is part of RemoteLight.
- ******************************************************************************/
 package de.lars.remotelightcore;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
@@ -38,11 +19,11 @@ import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
-import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 
-public class Main {
+public class RemoteLightCore {
+	
 	private boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
@@ -50,7 +31,7 @@ public class Main {
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
-	private static Main instance;
+	private static RemoteLightCore instance;
 	private static boolean headless;
 	public static StartParameterHandler startParameter;
 	private AnimationManager aniManager;
@@ -62,13 +43,47 @@ public class Main {
 	private SettingsManager settingsManager;
 	private EffectManagerHelper effectManagerHelper;
 	private LuaManager luaManager;
-	//private MainFrame mainFrame; TODO
 	private CommandParser commandParser;
-
-	public static void main(String[] args) {
+	
+	public RemoteLightCore(String[] args, boolean headless) {
+		instance = RemoteLightCore.this;
 		startParameter = new StartParameterHandler(args);
-		new Main(true);
-
+		RemoteLightCore.headless = headless;
+		
+		this.configureLogger();	// configure logger (set log path etc.)
+		instance = this;
+		Logger.info("Starting RemoteLight version " + VERSION);
+		
+		// set default exception handler
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		
+		// console cmd reader
+		commandParser = new CommandParser(instance);
+		commandParser.setOutputEnabled(true);
+		new ConsoleReader(commandParser);
+		DataStorage.start(); // load data file
+		
+		settingsManager = new SettingsManager();
+		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
+		deviceManager = new DeviceManager();
+		outputManager = new OutputManager();
+		luaManager = new LuaManager();
+		
+		new SetupHelper(instance); // includes some things that need to be executed at startup
+		
+		// instantiate the managers of the different modes
+		aniManager = new AnimationManager();
+		sceneManager = new SceneManager();
+		musicManager = new MusicSyncManager();
+		screenColorManager = new ScreenColorManager();
+		effectManagerHelper = new EffectManagerHelper();
+	}
+	
+	public static RemoteLightCore getInstance() {
+		return instance;
+	}
+	
+	public void registerShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				if(!getInstance().shuttingDown) { //prevent calling close method twice
@@ -78,117 +93,9 @@ public class Main {
 		});
 	}
 	
-	public Main(boolean uiMode) {
-		headless = !uiMode;
-		this.configureLogger();			// Configure Logger (set log path etc.)
-		instance = this;
-		// set default exception handler
-		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-		setupOSSupport();
-		
-		// console cmd reader
-		commandParser = new CommandParser(instance);
-		commandParser.setOutputEnabled(true);
-		new ConsoleReader(commandParser);
-		
-		Logger.info("Starting RemoteLight version " + VERSION);
-		//Style.loadFonts();				// Load custom fonts TODO
-		DataStorage.start();			// Load data file
-		
-		settingsManager = new SettingsManager();
-		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
-		deviceManager = new DeviceManager();
-		outputManager = new OutputManager();
-		luaManager = new LuaManager();
-		
-		new StartUp(startParameter);	// Includes some things that need to be executed at startup
-		
-		// Instantiate the managers of the different modes
-		aniManager = new AnimationManager();
-		sceneManager = new SceneManager();
-		musicManager = new MusicSyncManager();
-		screenColorManager = new ScreenColorManager();
-		effectManagerHelper = new EffectManagerHelper();
-		// Start UI
-		if(uiMode) {
-			startMainFrame();
-		}
-	}
-	
 	/**
-	 * Starts the UI
-	 */
-	public void startMainFrame() {
-		// set look and feel
-		boolean failed = !setLookAndFeel();
-		if(failed) {
-			try {
-				UIManager.setLookAndFeel(new MetalLookAndFeel());
-			} catch (UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			}
-		}
-		Logger.info((failed ? "[FAILED] switch to standard LaF: " : "Selected Look and Feel: ") + UIManager.getLookAndFeel().getName());
-		
-		// register error handler in MainFrame
-		ExceptionHandler.registerListener(MainFrame.onException);
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					mainFrame = new MainFrame();
-					mainFrame.setVisible(!startParameter.tray);
-				} catch (Exception e) {
-					Logger.error(e);
-				}
-			}
-		});
-	}
-	
-	public boolean setLookAndFeel() {
-		SettingSelection sLaF = (SettingSelection) getSettingsManager().getSettingFromId("ui.laf");
-		UiUtils.setThemingEnabled(true);
-		try {
-			if(sLaF == null || sLaF.getSelected().equalsIgnoreCase("System default")) {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				return true;
-			}
-			String lafName = sLaF.getSelected();
-			
-			if(lafName.equalsIgnoreCase("Java default")) {
-				UIManager.setLookAndFeel(new MetalLookAndFeel());
-				return true;
-			}
-			
-			for(FlatLaf laf : FlatLafThemesUtil.getAllThemes()) {
-				if(laf.getName().equalsIgnoreCase(lafName)) {
-					FlatLaf.install(laf);
-					UiUtils.setThemingEnabled(false);
-					return true;
-				}
-			}
-		} catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return false;
-	}
-	
-	
-	public static void setupOSSupport() {
-		// MacOS menu bar application name
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("apple.awt.application.name", "RemoteLight");
-	}
-	
-	
-	public static Main getInstance() {
-		return instance;
-	}
-	
-	/**
-	 * 
-	 * @return true if UI mode, false if headless
+	 * Check if RemoteLight is used headless
+	 * @return true if headless, false if UI mode
 	 */
 	public static boolean isHeadless() {
 		return headless;
@@ -228,10 +135,6 @@ public class Main {
 	
 	public LuaManager getLuaManager() {
 		return luaManager;
-	}
-	
-	public MainFrame getMainFrame() {
-		return mainFrame;
 	}
 	
 	public CommandParser getCommandParser() {

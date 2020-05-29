@@ -3,7 +3,7 @@ package de.lars.remotelightcore.animation.animations;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.ColorUtil;
@@ -23,7 +23,7 @@ public class Spread extends Animation {
 	@Override
 	public void onEnable() {
 		random = new Random();
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		hueStep = 0;
 		super.onEnable();
 	}

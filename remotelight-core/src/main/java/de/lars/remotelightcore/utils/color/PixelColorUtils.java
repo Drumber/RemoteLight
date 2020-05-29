@@ -17,7 +17,7 @@ package de.lars.remotelightcore.utils.color;
 import java.awt.Color;
 import java.util.HashMap;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 
 public class PixelColorUtils {
@@ -40,14 +40,14 @@ public class PixelColorUtils {
 	 * Set all pixels to black
 	 */
 	public static void setAllPixelsBlack() {
-		OutputManager.addToOutput(colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	/**
 	 * @param amount Number of places you want to move the LEDs
 	 */
 	public static void shiftRight(int amount) {
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = 1; i <= strip.length; i++) {
@@ -65,7 +65,7 @@ public class PixelColorUtils {
 	 * @param amount Number of places you want to move the LEDs
 	 */
 	public static void shiftLeft(int amount) {
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = 0; i < strip.length; i++) {
@@ -84,7 +84,7 @@ public class PixelColorUtils {
 	 * @param amount Number of places you want to move the LEDs
 	 */
 	public static void shiftCenter(int amount) {
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = (strip.length - 1); i > (strip.length/2); i--) {	//shift to the right
@@ -102,12 +102,12 @@ public class PixelColorUtils {
 	 *
 	 */
 	public static void setPixel(int pixel, Color color) {
-		Color[] strip = Main.getInstance().getOutputManager().getLastColors();
+		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		if(strip.length < 1) {
-			strip = colorAllPixels(Color.BLACK, Main.getLedNum());
+			strip = colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		}
 		Color[] leds = strip;
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			if(i == pixel) {
 				leds[i] = color;
 				
@@ -119,8 +119,8 @@ public class PixelColorUtils {
 	}
 	
 	public static Color[] pixelHashToColorArray(HashMap<Integer, Color> pixelHash) {
-		Color[] leds = new Color[Main.getLedNum()];
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		Color[] leds = new Color[RemoteLightCore.getLedNum()];
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			if(pixelHash.get(i) == null) {
 				leds[i] = Color.BLACK;
 			} else {

@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingSelection;
@@ -54,13 +54,13 @@ public class RandomColor extends Animation {
 	
 	private void mode1() {
 		PixelColorUtils.setPixel(pos, RainbowWheel.getRandomColor());
-		if(++pos >= Main.getLedNum()) {
+		if(++pos >= RemoteLightCore.getLedNum()) {
 			pos = 0;
 		}
 	}
 	
 	private void mode2() {
-		int rnd = new Random().nextInt(Main.getLedNum());
+		int rnd = new Random().nextInt(RemoteLightCore.getLedNum());
 		
 		PixelColorUtils.setPixel(rnd, RainbowWheel.getRandomColor());
 	}

@@ -16,7 +16,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -31,7 +31,7 @@ public class Bump extends MusicEffect {
 	private int colorIndex = 0;
 	private Color color = Color.black;
 	private int pDelay; //previous delay
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 
 	public Bump() {
 		super("Bump");
@@ -46,19 +46,19 @@ public class Bump extends MusicEffect {
 	
 	@Override
 	public void onEnable() {
-		pDelay = Main.getInstance().getMusicSyncManager().getDelay();
+		pDelay = RemoteLightCore.getInstance().getMusicSyncManager().getDelay();
 		super.onEnable();
 	}
 	
 	@Override
 	public void onDisable() {
-		Main.getInstance().getMusicSyncManager().setDelay(pDelay);
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(pDelay);
 		super.onDisable();
 	}
 	
 	@Override
 	public void onLoop() {
-		Main.getInstance().getMusicSyncManager().setDelay(((SettingInt) s .getSettingFromId("musicsync.bump.speed")).getValue());
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(((SettingInt) s .getSettingFromId("musicsync.bump.speed")).getValue());
 		boolean background = ((SettingBoolean) s.getSettingFromId("musicsync.bump.background")).getValue();
 		boolean center = ((SettingBoolean) s.getSettingFromId("musicsync.bump.center")).getValue();
 		
@@ -82,7 +82,7 @@ public class Bump extends MusicEffect {
 			}
 		} else {
 			PixelColorUtils.shiftCenter(1);
-			int ledNum = Main.getLedNum();
+			int ledNum = RemoteLightCore.getLedNum();
 			PixelColorUtils.setPixel(ledNum/2, color);
 			PixelColorUtils.setPixel(ledNum/2 - 1, color);
 		}

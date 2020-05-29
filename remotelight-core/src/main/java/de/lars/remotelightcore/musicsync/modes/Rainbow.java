@@ -16,7 +16,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -28,7 +28,7 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int pix;
 	private int half;
@@ -61,7 +61,7 @@ public class Rainbow extends MusicEffect {
 	public void onEnable() {
 		this.initOptions();
 		
-		pix = Main.getLedNum();
+		pix = RemoteLightCore.getLedNum();
 		half = pix / 2;
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
 		rainbow = new Color[pix];
@@ -84,7 +84,7 @@ public class Rainbow extends MusicEffect {
 	public void onLoop() {
 		this.initOptions();
 		
-		double mul = 0.1 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
+		double mul = 0.1 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
 		
 		int x = 0;

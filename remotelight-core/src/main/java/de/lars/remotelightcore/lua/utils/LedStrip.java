@@ -11,7 +11,7 @@ import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -28,7 +28,7 @@ public class LedStrip {
 	public static ZeroArgFunction ledNumber = new ZeroArgFunction() {
 		@Override
 		public LuaValue call() {
-			return LuaValue.valueOf(Main.getLedNum());
+			return LuaValue.valueOf(RemoteLightCore.getLedNum());
 		}
 	};
 	
@@ -41,10 +41,10 @@ public class LedStrip {
 		public Varargs invoke(Varargs args) {
 			LuaTable strip = args.checktable(1);
 			
-			if(strip.length() == Main.getLedNum()) {
-				Color[] outPixels = new Color[Main.getLedNum()];
+			if(strip.length() == RemoteLightCore.getLedNum()) {
+				Color[] outPixels = new Color[RemoteLightCore.getLedNum()];
 				
-				for(int i = 1; i <= Main.getLedNum(); i++) {
+				for(int i = 1; i <= RemoteLightCore.getLedNum(); i++) {
 					LuaTable rgb = strip.get(i).checktable();
 					int r = rgb.get(1).checkint();
 					int g = rgb.get(2).checkint();
@@ -53,7 +53,7 @@ public class LedStrip {
 				}
 				OutputManager.addToOutput(outPixels);
 			} else {
-				throw new LuaError("Expected a table length of " + Main.getLedNum() + ", got " + strip.length());
+				throw new LuaError("Expected a table length of " + RemoteLightCore.getLedNum() + ", got " + strip.length());
 			}
 			return NIL;
 		}
@@ -65,7 +65,7 @@ public class LedStrip {
 	public static ZeroArgFunction delayReached = new ZeroArgFunction() {
 		@Override
 		public LuaValue call() {
-			return LuaValue.valueOf(Main.getInstance().getLuaManager().getTimer().hasReached());
+			return LuaValue.valueOf(RemoteLightCore.getInstance().getLuaManager().getTimer().hasReached());
 		}
 	};
 	
@@ -80,7 +80,7 @@ public class LedStrip {
 				int r = rgb.get(1).checkint();
 				int g = rgb.get(2).checkint();
 				int b = rgb.get(3).checkint();
-				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(new Color(r, g, b), Main.getLedNum()));
+				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(new Color(r, g, b), RemoteLightCore.getLedNum()));
 			} else {
 				throw new LuaError("Expected a table length of 3, got " + rgb.length());
 			}
@@ -100,10 +100,10 @@ public class LedStrip {
 				int r = rgb.get(1).checkint();
 				int g = rgb.get(2).checkint();
 				int b = rgb.get(3).checkint();
-				if(pixel > 0 && pixel <= Main.getLedNum()) {
+				if(pixel > 0 && pixel <= RemoteLightCore.getLedNum()) {
 					PixelColorUtils.setPixel(pixel - 1, new Color(r, g, b));
 				} else {
-					throw new LuaError("Inavlid LED number '" + pixel + "'. Should be > 0 and <= " + Main.getLedNum());
+					throw new LuaError("Inavlid LED number '" + pixel + "'. Should be > 0 and <= " + RemoteLightCore.getLedNum());
 				}
 			} else {
 				throw new LuaError("Expected a table length of 3, got " + rgb.length());

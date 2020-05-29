@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -39,7 +39,7 @@ public class Jungle extends Scene {
 	@Override
 	public void onEnable() {
 		r = new Random();
-		pix = Main.getLedNum();
+		pix = RemoteLightCore.getLedNum();
 		backgrnd = new HashMap<>();
 		Color[] greens = {new Color(0, 255, 0), new Color(150, 200, 0), new Color(110, 190, 5), new Color(0, 100, 5)};
 		Color[] colors = {new Color(203, 255, 0), new Color(254, 102, 0), new Color(0, 50, 0), new Color(255, 255, 0)};

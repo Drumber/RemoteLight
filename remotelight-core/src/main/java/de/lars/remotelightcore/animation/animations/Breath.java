@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -61,7 +61,7 @@ public class Breath extends Animation {
 			}
 		}
 		tmp = ColorUtil.dimColor(tmp, brghtns);
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(tmp, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(tmp, RemoteLightCore.getLedNum()));
 		super.onLoop();
 	}
 

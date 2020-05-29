@@ -3,7 +3,7 @@ package de.lars.remotelightcore.animation.animations;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -24,7 +24,7 @@ public class Confetti extends Animation {
 	
 	@Override
 	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		hue = 0;
 		super.onEnable();
 	}
@@ -35,7 +35,7 @@ public class Confetti extends Animation {
 		dim();
 		Color c = RainbowWheel.getRainbow()[hue + new Random().nextInt(40)];
 		
-		int loopsAmount = Main.getLedNum() / 60;
+		int loopsAmount = RemoteLightCore.getLedNum() / 60;
 		for(int i = 0; i < loopsAmount; i++) {
 			int pos = new Random().nextInt(strip.length);
 			strip[pos] = c;

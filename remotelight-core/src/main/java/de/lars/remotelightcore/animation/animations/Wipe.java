@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -50,7 +50,7 @@ public class Wipe extends Animation {
 	public void onLoop() {
 		PixelColorUtils.setPixel(pos, color);
 		
-		if(++pos == Main.getLedNum()) {
+		if(++pos == RemoteLightCore.getLedNum()) {
 			pos = 0;
 			
 			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {

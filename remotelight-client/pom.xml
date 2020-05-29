@@ -16,6 +16,13 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!-- RemoteLightCore -->
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- ColorPicker -->
 		<dependency>
 			<groupId>de.lars.colorpicker</groupId>
 			<artifactId>colorpicker</artifactId>

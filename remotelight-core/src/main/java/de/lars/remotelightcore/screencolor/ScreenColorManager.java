@@ -21,7 +21,7 @@ import java.awt.GraphicsEnvironment;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -42,7 +42,7 @@ public class ScreenColorManager extends EffectManager {
 	
 	public ScreenColorManager() {
 		active = false;
-		sm = Main.getInstance().getSettingsManager();
+		sm = RemoteLightCore.getInstance().getSettingsManager();
 		sm.addSetting(new SettingObject("screencolor.monitor", "", ""));
 		sm.addSetting(new SettingInt("screencolor.delay", "Delay", SettingCategory.Intern, "Delay (ms) between scanning the screen", 150, 25, 2000, 5));
 		sm.addSetting(new SettingInt("screencolor.ypos", "Scan Y-position", SettingCategory.Intern, "Y-position at which the pixels are scanned (0 is at the top)", 500, 0, 2160, 5));
@@ -66,7 +66,7 @@ public class ScreenColorManager extends EffectManager {
 				
 				@Override
 				public void run() {
-					Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.ScreenColor);
+					RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.ScreenColor);
 					active = true;
 					inverted = invert;
 					ScreenColorManager.this.delay = delay;
@@ -75,7 +75,7 @@ public class ScreenColorManager extends EffectManager {
 					sm.getSettingObject("screencolor.monitor").setValue(monitor.getIDstring());
 					Logger.info("Started ScreenColor thread.");
 					
-					int pixels = Main.getLedNum();
+					int pixels = RemoteLightCore.getLedNum();
 					detector = new ScreenColorDetector(pixels, monitor, yPos, yHeight);
 					
 					while(active) {
@@ -105,7 +105,7 @@ public class ScreenColorManager extends EffectManager {
 					}
 					
 					Logger.info("Stopped ScreenColor thread.");
-					OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+					OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 				}
 			}).start();
 		}

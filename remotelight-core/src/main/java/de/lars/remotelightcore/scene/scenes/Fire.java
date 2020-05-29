@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -33,7 +33,7 @@ public class Fire extends Scene {
 	
 	@Override
 	public void onEnable() {
-		pixels = Main.getLedNum();
+		pixels = RemoteLightCore.getLedNum();
 		super.onEnable();
 	}
 	

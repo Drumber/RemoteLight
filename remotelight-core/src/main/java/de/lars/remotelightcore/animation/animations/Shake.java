@@ -17,7 +17,7 @@ package de.lars.remotelightcore.animation.animations;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -42,17 +42,17 @@ public class Shake extends Animation {
 	
 	@Override
 	public void onEnable() {
-		space = Main.getLedNum() / 10;
+		space = RemoteLightCore.getLedNum() / 10;
 		timeMode = new TimeUtil(TIME_PER_MODE);
-		strip = Main.getInstance().getOutputManager().getLastColors();
+		strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		
 		Color c = singleColors[new Random().nextInt(singleColors.length)];
 		int counter = 0;
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			if(counter == space && strip[0] == Color.BLACK) {
 				strip[i] = c;
 				
-				if(i < Main.getLedNum() - 1) {
+				if(i < RemoteLightCore.getLedNum() - 1) {
 					strip[++i] = c;
 				}
 			} else {

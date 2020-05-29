@@ -21,7 +21,7 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.scenes.*;
@@ -57,7 +57,7 @@ public class SceneManager extends EffectManager {
 	}
 	
 	public void start(Scene scene) {
-		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Scene);
+		RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Scene);
 		if(activeScene != null) {
 			activeScene.onDisable();
 		}
@@ -74,7 +74,7 @@ public class SceneManager extends EffectManager {
 			activeScene.onDisable();
 		}
 		activeScene = null;
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	private void loop() {

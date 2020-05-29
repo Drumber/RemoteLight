@@ -5,7 +5,7 @@ import java.awt.Color;
 import org.tinylog.Logger;
 
 import ch.bildspur.artnet.ArtNetClient;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -64,8 +64,8 @@ public class Artnet extends Device {
 		artnet.start();
 		
 		// Output is laggy if output delay > 45
-		if(((SettingInt) Main.getInstance().getSettingsManager().getSettingFromId("out.delay")).getValue() > 45) {
-			((SettingInt) Main.getInstance().getSettingsManager().getSettingFromId("out.delay")).setValue(45);
+		if(((SettingInt) RemoteLightCore.getInstance().getSettingsManager().getSettingFromId("out.delay")).getValue() > 45) {
+			((SettingInt) RemoteLightCore.getInstance().getSettingsManager().getSettingFromId("out.delay")).setValue(45);
 			Logger.info("Set output delay to 45 ms for Artnet to work fine.");
 		}
 		

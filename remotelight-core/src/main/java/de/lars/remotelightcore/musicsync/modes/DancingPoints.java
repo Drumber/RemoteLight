@@ -17,7 +17,7 @@ package de.lars.remotelightcore.musicsync.modes;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -29,7 +29,7 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class DancingPoints extends MusicEffect {
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private int numLEDs;
 	private int numPoints;	// Number of points displayed
 	private int[] pos;		// Position of points
@@ -54,7 +54,7 @@ public class DancingPoints extends MusicEffect {
 	
 	@Override
 	public void onEnable() {
-		this.numLEDs = Main.getLedNum();
+		this.numLEDs = RemoteLightCore.getLedNum();
 		this.numPoints = numLEDs / 6;
 		this.pos = new int[numPoints];
 		this.targetPos = new int[numPoints];

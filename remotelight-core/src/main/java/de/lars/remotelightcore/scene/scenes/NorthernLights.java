@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -44,7 +44,7 @@ public class NorthernLights extends Scene {
 		Color[] colors = {new Color(0, 207, 82), new Color(3, 46, 62), new Color(25, 100, 106), new Color(0, 198, 144),
 				new Color(0, 223, 150), new Color(142, 0, 251)};
 		this.colors = colors;
-		pix = Main.getLedNum();
+		pix = RemoteLightCore.getLedNum();
 		count = 0;
 		
 		strip = new Color[pix];

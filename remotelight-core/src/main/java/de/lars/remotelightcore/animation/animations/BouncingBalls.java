@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -50,7 +50,7 @@ public class BouncingBalls extends Animation {
 	
 	@Override
 	public void onEnable() {
-		this.numLEDs = Main.getLedNum();
+		this.numLEDs = RemoteLightCore.getLedNum();
 		this.numBalls = ((SettingInt) getSetting("animation.bouncingballs.numballs")).getValue();
 		this.h = new float[numBalls];
 		this.vImpact0 = (float) Math.sqrt(-2 * GRAVITY * h0);
@@ -59,7 +59,7 @@ public class BouncingBalls extends Animation {
 		this.pos = new int[numBalls];
 		this.tLast = new long[numBalls];
 		this.COR = new float[numBalls];
-		this.strip = Main.getInstance().getOutputManager().getLastColors();
+		this.strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		
 		// SETUP
 		for(int i = 0; i < numBalls; i++) {

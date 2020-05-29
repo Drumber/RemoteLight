@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
@@ -34,7 +34,7 @@ public class Ocean extends Scene {
 	
 	@Override
 	public void onEnable() {
-		count = 0; loops = 0; pixels = Main.getLedNum();
+		count = 0; loops = 0; pixels = RemoteLightCore.getLedNum();
 		right = true;
 		initOcean();
 		

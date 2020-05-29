@@ -16,7 +16,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -28,7 +28,7 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Visualizer extends MusicEffect {
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private boolean rainbow = false;
 
@@ -43,7 +43,7 @@ public class Visualizer extends MusicEffect {
 	
 	@Override
 	public void onEnable() {
-		strip = new Color[Main.getLedNum()];
+		strip = new Color[RemoteLightCore.getLedNum()];
 		super.onEnable();
 	}
 	
@@ -54,7 +54,7 @@ public class Visualizer extends MusicEffect {
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
 		int[] fftData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
 		
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			int brightness = fftData[i];
 			
 			Color c = ColorUtil.dimColor(getColor(i), brightness);
@@ -67,7 +67,7 @@ public class Visualizer extends MusicEffect {
 	
 	private Color getColor(int led) {
 		if(rainbow) {
-			int mltiplr = RainbowWheel.getRainbow().length / Main.getLedNum();
+			int mltiplr = RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
 			return RainbowWheel.getRainbow()[led * mltiplr];
 		} else {
 			return ((SettingColor) s.getSettingFromId("musicsync.visualizer.color")).getValue();

@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -40,7 +40,7 @@ public class RunningLight extends Animation {
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
 	    pass = 0; counter = 0;
 	    
-	    for(int i = 0; i < Main.getLedNum(); i++) {
+	    for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 	    	onLoop();
 	    }
 		super.onEnable();

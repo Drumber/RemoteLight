@@ -31,7 +31,7 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import be.tarsos.dsp.util.fft.FFT;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
@@ -127,7 +127,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 			new Thread(dispatcher, "Audio dispatching").start();
 
 		} catch (IllegalArgumentException | LineUnavailableException e) {
-			if(!Main.isHeadless()) {
+			if(!RemoteLightCore.isHeadless()) {
 				//Main.getInstance().getMainFrame().printNotification(
 				//		"Input not supported! Please select a Mic or Line-In Input.", NotificationType.Error);
 				// TODO notification

@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -18,7 +18,7 @@ import de.lars.remotelightcore.utils.maths.TimeUtil;
 
 public class Strobe extends MusicEffect {
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Timer timer;
 	private TimeUtil timeUtil;
 	private boolean triggered;
@@ -67,7 +67,7 @@ public class Strobe extends MusicEffect {
 		if(triggered && timeUtil.hasReached()) {
 			triggered = false;
 			timer.stop();
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		}
 		
 		if(this.isBump() && !triggered) {
@@ -84,9 +84,9 @@ public class Strobe extends MusicEffect {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(flashSwitch)
-				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(color, Main.getLedNum()));
+				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(color, RemoteLightCore.getLedNum()));
 			else
-				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+				OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			flashSwitch = !flashSwitch;
 		}
 	};

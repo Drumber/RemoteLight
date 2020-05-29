@@ -16,7 +16,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncUtils;
 import de.lars.remotelightcore.out.OutputManager;
@@ -41,7 +41,7 @@ public class Fade extends MusicEffect {
 			else color = 0;
 			fadeLastColor = colors[color];
 		}
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(fadeLastColor, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(fadeLastColor, RemoteLightCore.getLedNum()));
 		
 		if((fadeLastColor.getRed() != 0) || (fadeLastColor.getGreen() != 0) || (fadeLastColor.getBlue() != 0)) fadeLastColor = MusicSyncUtils.dimColor(fadeLastColor, 2);
 		else {

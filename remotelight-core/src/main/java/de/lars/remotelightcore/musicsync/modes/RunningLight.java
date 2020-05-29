@@ -16,7 +16,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -29,7 +29,7 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 public class RunningLight extends MusicEffect {
 
 	private int pDelay; //previous delay
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private boolean centered;
 	private Color[] strip;
 	private double lastTime = 0;
@@ -47,15 +47,15 @@ public class RunningLight extends MusicEffect {
 
 	@Override
 	public void onEnable() {
-		strip = Main.getInstance().getOutputManager().getLastColors();
-		pDelay = Main.getInstance().getMusicSyncManager().getDelay();
-		Main.getInstance().getMusicSyncManager().setDelay(60);
+		strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		pDelay = RemoteLightCore.getInstance().getMusicSyncManager().getDelay();
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(60);
 		super.onEnable();
 	}
 	
 	@Override
 	public void onDisable() {
-		Main.getInstance().getMusicSyncManager().setDelay(pDelay);
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(pDelay);
 		super.onDisable();
 	}
 
@@ -64,7 +64,7 @@ public class RunningLight extends MusicEffect {
 		centered = ((SettingBoolean) s.getSettingFromId("musicsync.runninglight.centered")).getValue();
 		groupSize = ((SettingInt) s .getSettingFromId("musicsync.runninglight.groupsize")).getValue();
 		
-		int half = Main.getLedNum() / 2;
+		int half = RemoteLightCore.getLedNum() / 2;
 		double pitch = this.getPitch();
 		double time = this.getPitchTime();
 
@@ -121,12 +121,12 @@ public class RunningLight extends MusicEffect {
 	
 	
 	private void center() {
-		int half = Main.getLedNum() / 2;
+		int half = RemoteLightCore.getLedNum() / 2;
 		
 		for(int a = 0; a < groupSize; a++) {
 			for(int i = 0; i < half - 1; i++) {
 				strip[i] = strip[i + 1];
-				strip[Main.getLedNum() - 1 - i] = strip[Main.getLedNum() - 2 - i];
+				strip[RemoteLightCore.getLedNum() - 1 - i] = strip[RemoteLightCore.getLedNum() - 2 - i];
 			}
 		}
 	}

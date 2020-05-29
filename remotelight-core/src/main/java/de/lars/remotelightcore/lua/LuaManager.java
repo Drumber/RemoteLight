@@ -17,7 +17,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.lua.utils.LedStrip;
 import de.lars.remotelightcore.lua.utils.LuaColor;
@@ -46,7 +46,7 @@ public class LuaManager extends EffectManager {
 	public LuaManager() {
 		LuaThread.thread_orphan_check_interval = 5;
 		// settings
-		SettingsManager sm = Main.getInstance().getSettingsManager();
+		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		sm.addSetting(new SettingBoolean("lua.advanced", "Lua Advanced", SettingCategory.Others, "Allow Lua scripts access to insecure libraries, such as OS and IO lib.", false));
 		sm.addSetting(new SettingInt("lua.instructions", "Lua instruction per ms", SettingCategory.Others, "Number of instructions a Lua script can execute per millisecond.", 40, 1, 500, 1));
 		MAX_INSTRUCTIONS = ((SettingInt) sm.getSettingFromId("lua.instructions")).getValue();
@@ -90,7 +90,7 @@ public class LuaManager extends EffectManager {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Lua);
+				RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Lua);
 				// stop active scripts
 				if(activeScriptPath != null) {
 					stopLuaScript();

@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -43,7 +43,7 @@ public class Open extends Animation {
 	@Override
 	public void onEnable() {
 		fadeOut = false;
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		pos = strip.length / 2;
 		color = RainbowWheel.getRandomColor();
 		super.onEnable();

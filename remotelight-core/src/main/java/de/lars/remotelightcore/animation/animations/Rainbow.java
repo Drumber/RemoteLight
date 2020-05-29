@@ -14,7 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -35,7 +35,7 @@ public class Rainbow extends Animation {
 	public void onEnable() {
 		step = 0;
 		if(((SettingBoolean) getSetting("animation.rainbow.cycle")).getValue()) {
-			for(int i = 0; i < Main.getLedNum(); i++) {
+			for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 				PixelColorUtils.shiftRight(1);
 				step += 3;
 				if(step >= RainbowWheel.getRainbow().length) {
@@ -58,7 +58,7 @@ public class Rainbow extends Animation {
 			PixelColorUtils.setPixel(0, RainbowWheel.getRainbow()[step]);
 			step += 3;
 		} else {
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(RainbowWheel.getRainbow()[step], Main.getLedNum()));
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(RainbowWheel.getRainbow()[step], RemoteLightCore.getLedNum()));
 			step++;
 		}
 		super.onLoop();

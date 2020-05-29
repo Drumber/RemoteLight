@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -50,7 +50,7 @@ public class SortAlgo extends Animation {
 	public void onEnable() {
 		random = new Random();
 		
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		values = new int[strip.length];
 		markedIndexes = new ArrayList<>();
 		

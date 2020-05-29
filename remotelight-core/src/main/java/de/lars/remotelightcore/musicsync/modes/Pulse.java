@@ -17,7 +17,7 @@ package de.lars.remotelightcore.musicsync.modes;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncUtils;
 import de.lars.remotelightcore.out.OutputManager;
@@ -76,7 +76,7 @@ public class Pulse extends MusicEffect {
 		pulseLastHz = hz;
 		Color c = MusicSyncUtils.changeBrightness(pulseColor, pulseBrightness);
 		
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, RemoteLightCore.getLedNum()));
 		
 		super.onLoop();
 	}

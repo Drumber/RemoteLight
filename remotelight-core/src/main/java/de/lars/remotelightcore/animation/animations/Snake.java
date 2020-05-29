@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -51,11 +51,11 @@ public class Snake extends Animation {
 			colorFruit = Color.RED;
 		}
 		
-		int startPoint = new Random().nextInt(Main.getLedNum());
+		int startPoint = new Random().nextInt(RemoteLightCore.getLedNum());
 		snakePos.add(startPoint);
 		snakeColor.add(colorHead);
 		
-		fruitPos = new Random().nextInt(Main.getLedNum());
+		fruitPos = new Random().nextInt(RemoteLightCore.getLedNum());
 		if(fruitPos > startPoint) {
 			direction = 1;
 		} else {
@@ -91,7 +91,7 @@ public class Snake extends Animation {
 		if(snakePos.get(0) == fruitPos) {
 			
 			// set new fruit position
-			fruitPos = new Random().nextInt(Main.getLedNum());
+			fruitPos = new Random().nextInt(RemoteLightCore.getLedNum());
 			if(fruitPos > snakePos.get(0)) {
 				direction = 1;
 			} else {
@@ -113,7 +113,7 @@ public class Snake extends Animation {
 	
 	
 	private void paintSnake() {
-		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		
 		// paint fruit
 		strip[fruitPos] = colorFruit;
@@ -130,11 +130,11 @@ public class Snake extends Animation {
 		for(int i = 0; i < snakePos.size(); i++) {
 			int newPos = snakePos.get(i) + snakeDirection.get(i);
 			
-			if(newPos >= Main.getLedNum()) {
+			if(newPos >= RemoteLightCore.getLedNum()) {
 				newPos = 0;
 			}
 			if(newPos < 0) {
-				newPos = Main.getLedNum() - 1;
+				newPos = RemoteLightCore.getLedNum() - 1;
 			}
 			
 			snakePos.set(i, newPos);
@@ -155,11 +155,11 @@ public class Snake extends Animation {
 		byte lastDir = snakeDirection.get(snakeDirection.size() - 1);
 		int pos = lastPos - lastDir;
 		
-		if(pos >= Main.getLedNum()) {
+		if(pos >= RemoteLightCore.getLedNum()) {
 			pos = 0;
 		}
 		if(pos < 0) {
-			pos = Main.getLedNum() - 1;
+			pos = RemoteLightCore.getLedNum() - 1;
 		}
 		
 		snakePos.add(pos);

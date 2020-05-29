@@ -44,12 +44,12 @@ public class EffectManagerHelper {
 	}
 	
 	public EffectManagerHelper() {
-		Main main = Main.getInstance();
-		am = main.getAnimationManager();
-		msm = main.getMusicSyncManager();
-		sm = main.getSceneManager();
-		scm = main.getScreenColorManager();
-		lua = main.getLuaManager();
+		RemoteLightCore remoteLightCore = RemoteLightCore.getInstance();
+		am = remoteLightCore.getAnimationManager();
+		msm = remoteLightCore.getMusicSyncManager();
+		sm = remoteLightCore.getSceneManager();
+		scm = remoteLightCore.getScreenColorManager();
+		lua = remoteLightCore.getLuaManager();
 		allManager = new EffectManager[] {am, msm, sm, scm, lua};
 	}
 	
@@ -68,7 +68,7 @@ public class EffectManagerHelper {
 			scm.stop();
 		if(lua.isActive())
 			lua.stopLuaScript();
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	public void stopAllExceptFor(EffectType type) {

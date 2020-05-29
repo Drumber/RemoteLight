@@ -17,7 +17,7 @@ package de.lars.remotelightcore.out;
 import java.awt.Color;
 import org.tinylog.Logger;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -37,7 +37,7 @@ public class OutputManager {
 	private boolean active;
 	
 	public OutputManager() {
-		sm = Main.getInstance().getSettingsManager();
+		sm = RemoteLightCore.getInstance().getSettingsManager();
 		active = false;
 	}
 	
@@ -152,11 +152,11 @@ public class OutputManager {
 	public void close() {
 		setEnabled(false);
 		if(activeOutput != null) {
-			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {}
-			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			deactivate(activeOutput);
 		}
 		//save last output before closing
@@ -170,7 +170,7 @@ public class OutputManager {
 	 * @param pixels Color array which length must be equal the number of LEDs
 	 */
 	public static void addToOutput(Color[] pixels) {
-		Main.getInstance().getOutputManager().setOutputPixels(pixels);
+		RemoteLightCore.getInstance().getOutputManager().setOutputPixels(pixels);
 	}
 	
 	private void setOutputPixels(Color[] pixels) {

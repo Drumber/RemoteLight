@@ -16,7 +16,7 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -35,7 +35,7 @@ public class TwoColors extends Animation {
 	
 	@Override
 	public void onEnable() {
-		for(int i = 0; i < Main.getLedNum(); i++) {
+		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			onLoop();
 		}
 		super.onEnable();

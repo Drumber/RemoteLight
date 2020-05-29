@@ -2,7 +2,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.ColorUtil;
@@ -32,7 +32,7 @@ public class RainbowNoise extends MusicEffect {
 	@Override
 	public void onEnable() {
 		noise = new OpenSimplexNoise();
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		zoff = 0.0f;
 		brightnessTime = 1f;
 		super.onEnable();

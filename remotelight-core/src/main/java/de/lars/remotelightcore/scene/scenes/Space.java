@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -35,7 +35,7 @@ public class Space extends Scene {
 	
 	@Override
 	public void onEnable() {
-		pix = Main.getLedNum();
+		pix = RemoteLightCore.getLedNum();
 		stars = new HashMap<>();
 		r = new Random();
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, pix));

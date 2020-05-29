@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
 
 public class CommandParser {
 	
-	private Main main;
+	private RemoteLightCore remoteLightCore;
 	private boolean outputEnabled;	// enable output messages
 	
-	public CommandParser(Main mainInstance) {
-		this.main = mainInstance;
+	public CommandParser(RemoteLightCore mainInstance) {
+		this.remoteLightCore = mainInstance;
 	}
 	
 	public void parse(String[] args) throws CommandException {
@@ -30,13 +30,13 @@ public class CommandParser {
 				if(em == null)
 					throw new CommandException("Invalid effect manager '" + args[1] + "'.");
 				
-				boolean success = main.getEffectManagerHelper().startEffect(em, args[2]);
+				boolean success = remoteLightCore.getEffectManagerHelper().startEffect(em, args[2]);
 				print((success ? "Successfully enabled " : "Could not enable or find ") + args[2]);
 			}
 		} else if(args[0].equalsIgnoreCase(STOP.toString())) {
 			if(checkArgsLength(args, 2)) {
 				if(args[1].equalsIgnoreCase("all")) {
-					main.getEffectManagerHelper().stopAll();
+					remoteLightCore.getEffectManagerHelper().stopAll();
 					print("Successfully stopped all active managers.");
 				} else {
 					EffectManager em = getEffectManager(args[1]);
@@ -55,7 +55,7 @@ public class CommandParser {
 			if(args.length == 1) {
 				// list all managers
 				List<String> names = new ArrayList<>();
-				for(EffectManager em : main.getEffectManagerHelper().getAllManagers())
+				for(EffectManager em : remoteLightCore.getEffectManagerHelper().getAllManagers())
 					names.add(em.getName());
 				print("All effect managers: " + String.join(", ", names));
 			} else if(args.length == 2) {
@@ -64,13 +64,13 @@ public class CommandParser {
 				if(em == null)
 					throw new CommandException("Invalid effect manager '" + args[1] + "'.");
 				
-				List<String> names = main.getEffectManagerHelper().getAllEffects(em);
+				List<String> names = remoteLightCore.getEffectManagerHelper().getAllEffects(em);
 				if(names == null)
 					throw new CommandException("The given effect manager has no effects or is not supported.");
 				print("All effects of " + args[1] + ": " + String.join(", ", names));
 			}
 		} else if(args[0].equalsIgnoreCase(CLOSE.toString())) {
-			main.close(true);
+			remoteLightCore.close(true);
 		} else {
 			// invalid command
 			List<String> cmds = new ArrayList<>();
@@ -116,7 +116,7 @@ public class CommandParser {
 	 * @return effect manager or null if invalid name
 	 */
 	private EffectManager getEffectManager(String text) {
-		for(EffectManager em : main.getEffectManagerHelper().getAllManagers()) {
+		for(EffectManager em : remoteLightCore.getEffectManagerHelper().getAllManagers()) {
 			if(em.getName().equalsIgnoreCase(text))
 				return em;
 		}

@@ -25,7 +25,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.modes.*;
 import de.lars.remotelightcore.musicsync.sound.Shared;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
@@ -57,7 +57,7 @@ public class MusicSyncManager extends EffectManager {
 	private double pitchTime;
 	
 	public MusicSyncManager() {
-		sm = Main.getInstance().getSettingsManager();
+		sm = RemoteLightCore.getInstance().getSettingsManager();
 		
 		if(nativeSound != null && nativeSound.isInitialized())
 			nativeSound.close();
@@ -235,7 +235,7 @@ public class MusicSyncManager extends EffectManager {
 	}
 	
 	public List<Setting> getCurrentMusicEffectOptions() {
-		SettingsManager sm = Main.getInstance().getSettingsManager();
+		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		List<Setting> tmp = new ArrayList<>();
 		for(String s : getActiveEffect().getOptions()) {
 			tmp.add(sm.getSettingFromId(s));
@@ -244,7 +244,7 @@ public class MusicSyncManager extends EffectManager {
 	}
 	
 	public void start(MusicEffect effect) {
-		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);
+		RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);
 		
 		if(soundProcessor == null) {
 			soundProcessor = new SoundProcessing(this);
@@ -285,7 +285,7 @@ public class MusicSyncManager extends EffectManager {
 		}
 		activeEffect = null;
 		soundProcessor.stop();
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	private void loop() {

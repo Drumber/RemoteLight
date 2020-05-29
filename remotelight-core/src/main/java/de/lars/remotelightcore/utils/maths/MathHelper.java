@@ -1,6 +1,6 @@
 package de.lars.remotelightcore.utils.maths;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 
 public class MathHelper {
 	
@@ -8,7 +8,7 @@ public class MathHelper {
 	 * https://github.com/aykevl/micropython/blob/modpixel/extmod/modpixels.c
 	 */
 	public static int beat88(int beatsPerMinute88, int timebase) {
-		long result = (((long) Main.getMillis() * beatsPerMinute88) >>> 16);
+		long result = (((long) RemoteLightCore.getMillis() * beatsPerMinute88) >>> 16);
 		return (int) result;
 	}
 	

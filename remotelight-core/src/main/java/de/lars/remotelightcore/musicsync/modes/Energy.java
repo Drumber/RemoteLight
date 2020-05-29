@@ -2,7 +2,7 @@ package de.lars.remotelightcore.musicsync.modes;
 
 import java.awt.Color;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -16,7 +16,7 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Energy extends MusicEffect {
 
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int binMin;
 	private int binLowMax;
@@ -45,7 +45,7 @@ public class Energy extends MusicEffect {
 	public void onLoop() {
 		String mode = ((SettingSelection) s.getSettingFromId("musicsync.energy.mode")).getSelected();
 		float[] ampl = getSoundProcessor().getAmplitudes();
-		double mul = 0.01 * this.getAdjustment() * Main.getLedNum() / 60; // multiplier for amount of pixels
+		double mul = 0.01 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		
 		/* function: -a(x - ledNum/2)^ + 255 */
 		
@@ -107,7 +107,7 @@ public class Energy extends MusicEffect {
 		if(aArray.length != colors.length)
 			return;
 		
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		int half = strip.length / 2;
 		
 		for(int aIndex = 0; aIndex < aArray.length; aIndex++) {
@@ -126,7 +126,7 @@ public class Energy extends MusicEffect {
 	}
 	
 	private void showMix(double aR, double aG, double aB) {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		int half = strip.length / 2;
 		
 		for(int i = 0; i < strip.length; i++) {

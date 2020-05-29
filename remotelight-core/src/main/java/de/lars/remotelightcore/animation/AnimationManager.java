@@ -21,7 +21,7 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.animation.animations.*;
 import de.lars.remotelightcore.out.OutputManager;
@@ -68,7 +68,7 @@ public class AnimationManager extends EffectManager {
 	}
 	
 	public List<Setting> getCurrentAnimationOptions() {
-		SettingsManager sm = Main.getInstance().getSettingsManager();
+		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		List<Setting> tmp = new ArrayList<>();
 		if(getActiveAnimation() == null) {
 			return tmp;
@@ -80,11 +80,11 @@ public class AnimationManager extends EffectManager {
 	}
 	
 	public void start(Animation animation) {
-		Main.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Animation);
+		RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.Animation);
 		if(activeAnimation != null) {
 			activeAnimation.onDisable();
 		}
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		if(animation != null) {
 			animation.onEnable();
 		}
@@ -98,7 +98,7 @@ public class AnimationManager extends EffectManager {
 			activeAnimation.onDisable();
 			activeAnimation = null;
 		}
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	public void setDelay(int delay) {

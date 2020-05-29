@@ -3,7 +3,7 @@ package de.lars.remotelightcore.musicsync.modes;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -20,7 +20,7 @@ public class Flame extends MusicEffect {
 	 * https://github.com/atuline/FastLED-SoundReactive/blob/master/notasound/besin.h
 	 */
 	
-	private SettingsManager s = Main.getInstance().getSettingsManager();
+	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int hue;
 
@@ -34,7 +34,7 @@ public class Flame extends MusicEffect {
 	
 	@Override
 	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 		hue = 0;
 		super.onEnable();
 	}
@@ -43,7 +43,7 @@ public class Flame extends MusicEffect {
 	public void onLoop() {
 		Color color = ((SettingColor) s.getSettingFromId("musicsync.flame.color")).getValue();
 		boolean rainbow = ((SettingBoolean) s.getSettingFromId("musicsync.flame.rainbow")).getValue();
-		int ledNum = Main.getLedNum();
+		int ledNum = RemoteLightCore.getLedNum();
 		
 		if(rainbow) {
 			if(isBump()) {

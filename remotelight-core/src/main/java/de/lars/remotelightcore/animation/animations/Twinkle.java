@@ -17,7 +17,7 @@ package de.lars.remotelightcore.animation.animations;
 import java.awt.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.Main;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.out.OutputManager;
@@ -40,8 +40,8 @@ public class Twinkle extends Animation {
 	
 	@Override
 	public void onEnable() {
-		am = Main.getInstance().getAnimationManager();
-		max = Main.getLedNum() / 10;
+		am = RemoteLightCore.getInstance().getAnimationManager();
+		max = RemoteLightCore.getLedNum() / 10;
 		time = new TimeUtil(am.getDelay());
 		super.onEnable();
 	}
@@ -49,12 +49,12 @@ public class Twinkle extends Animation {
 	@Override
 	public void onLoop() {
 		if(time.hasReached()) {
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, Main.getLedNum()));
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			color = ((SettingColor) getSetting("animation.twinkle.color")).getValue();
 			
 			for(int i = 0; i <= max; i++) {
 				if(new Random().nextInt(3) == 0) {
-					PixelColorUtils.setPixel(new Random().nextInt(Main.getLedNum()), color);
+					PixelColorUtils.setPixel(new Random().nextInt(RemoteLightCore.getLedNum()), color);
 				}
 			}
 			
