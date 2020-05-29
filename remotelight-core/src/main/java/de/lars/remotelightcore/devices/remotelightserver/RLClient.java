@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -63,7 +64,10 @@ public class RLClient implements Serializable {
 				return state;
 				
 			} catch (Exception e) {
-				Logger.error(e, "Error while connecting to " + hostname);
+				if(e instanceof ConnectException) 
+					Logger.info("Could not connect to " + hostname);
+				else
+					Logger.error(e, "Error while connecting to " + hostname);
 				connected = false;
 				this.disconnect();;
 			}
