@@ -14,12 +14,14 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.ui.Style;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 
 public class SettingBooleanPanel extends SettingPanel {
 

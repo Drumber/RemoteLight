@@ -17,17 +17,16 @@ package de.lars.remotelightclient.ui.panels.controlbars.comps;
 import java.awt.Color;
 import java.awt.GridLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.out.Output;
-import de.lars.remotelightclient.out.OutputManager;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.OutputUtil;
-
-import javax.swing.JLabel;
-import javax.swing.border.EmptyBorder;
+import de.lars.remotelightcore.out.Output;
+import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.OutputUtil;
 
 public class OutputInfo extends JPanel {
 

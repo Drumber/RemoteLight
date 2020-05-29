@@ -19,20 +19,17 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
+
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.scene.Scene;
-import de.lars.remotelightclient.scene.SceneManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.scene.SceneManager;
 
 public class ScenesPanel extends MenuPanel {
 

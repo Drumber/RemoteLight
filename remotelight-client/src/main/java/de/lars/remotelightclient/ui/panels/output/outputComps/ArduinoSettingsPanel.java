@@ -14,34 +14,24 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.output.outputComps;
 
-import de.lars.remotelightclient.devices.arduino.Arduino;
-import de.lars.remotelightclient.devices.arduino.ComPort;
-import de.lars.remotelightclient.devices.arduino.RgbOrder;
-import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.ui.UiUtils;
-
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.devices.arduino.Arduino;
+import de.lars.remotelightcore.devices.arduino.ComPort;
+import de.lars.remotelightcore.devices.arduino.RgbOrder;
 
 public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 

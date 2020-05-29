@@ -1,26 +1,14 @@
 package de.lars.remotelightclient.ui.panels.scripts;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
+
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -28,19 +16,19 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.lua.LuaManager;
-import de.lars.remotelightclient.lua.LuaManager.LuaExceptionListener;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
-import de.lars.remotelightclient.utils.DirectoryUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.lua.LuaManager;
+import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.DirectoryUtil;
 
 public class ScriptsPanel extends MenuPanel {
 

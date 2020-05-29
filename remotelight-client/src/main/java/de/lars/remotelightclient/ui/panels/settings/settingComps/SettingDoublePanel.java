@@ -15,13 +15,13 @@
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
 import javax.swing.JLabel;
-
-import de.lars.remotelightclient.settings.types.SettingDouble;
-import de.lars.remotelightclient.ui.Style;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.settings.types.SettingDouble;
 
 public class SettingDoublePanel extends SettingPanel {
 

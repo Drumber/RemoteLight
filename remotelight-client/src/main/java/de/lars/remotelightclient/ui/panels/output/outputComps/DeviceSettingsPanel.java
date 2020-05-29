@@ -16,7 +16,7 @@ package de.lars.remotelightclient.ui.panels.output.outputComps;
 
 import javax.swing.JPanel;
 
-import de.lars.remotelightclient.devices.Device;
+import de.lars.remotelightcore.devices.Device;
 
 public abstract class DeviceSettingsPanel extends JPanel {
 

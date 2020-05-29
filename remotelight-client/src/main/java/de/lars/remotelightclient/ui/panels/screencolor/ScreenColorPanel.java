@@ -14,38 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.screencolor;
 
-import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.screencolor.ScreenColorManager;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsUtil;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
-import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.comps.ImagePanel;
-import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
-import de.lars.remotelightclient.utils.ui.UiUtils;
-import de.lars.remotelightclient.utils.ui.WrapLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -54,11 +23,29 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import org.tinylog.Logger;
-import javax.swing.border.TitledBorder;
-import javax.swing.ScrollPaneConstants;
+
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
+import de.lars.remotelightclient.ui.MenuPanel;
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.comps.ImagePanel;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
+import de.lars.remotelightclient.utils.SettingsUtil;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingInt;
 
 public class ScreenColorPanel extends MenuPanel {
 

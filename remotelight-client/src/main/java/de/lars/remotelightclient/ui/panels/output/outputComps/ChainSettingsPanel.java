@@ -5,20 +5,15 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.devices.Device;
-import de.lars.remotelightclient.devices.link.chain.Chain;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.devices.link.chain.Chain;
 
 public class ChainSettingsPanel extends DeviceSettingsPanel {
 	

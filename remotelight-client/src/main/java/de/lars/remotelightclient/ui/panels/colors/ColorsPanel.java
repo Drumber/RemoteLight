@@ -14,6 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.colors;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,15 +24,13 @@ import java.util.List;
 import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.utils.color.PixelColorUtils;
-
-import java.awt.BorderLayout;
+import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class ColorsPanel extends MenuPanel {
 

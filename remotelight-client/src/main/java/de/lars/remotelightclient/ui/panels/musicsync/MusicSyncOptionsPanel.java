@@ -14,38 +14,37 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.musicsync;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Mixer;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.musicsync.InputUtil;
-import de.lars.remotelightclient.musicsync.MusicSyncManager;
-import de.lars.remotelightclient.musicsync.sound.Shared;
-import de.lars.remotelightclient.settings.Setting;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsUtil;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
+import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.GridLayout;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import de.lars.remotelightcore.musicsync.InputUtil;
+import de.lars.remotelightcore.musicsync.MusicSyncManager;
+import de.lars.remotelightcore.musicsync.sound.Shared;
+import de.lars.remotelightcore.settings.Setting;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class MusicSyncOptionsPanel extends JPanel {
 

@@ -14,32 +14,24 @@
  ******************************************************************************/
 package de.lars.remotelightclient.simulator;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
 
+import org.tinylog.Logger;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
 import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
-
-import org.tinylog.Logger;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 
 public class SimulatorFrame extends JFrame {
 	private static final long serialVersionUID = 2752076462014410311L;

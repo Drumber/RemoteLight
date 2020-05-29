@@ -14,60 +14,39 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.output;
 
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-
-import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.devices.ConnectionState;
-import de.lars.remotelightclient.devices.Device;
-import de.lars.remotelightclient.devices.DeviceManager;
-import de.lars.remotelightclient.devices.arduino.Arduino;
-import de.lars.remotelightclient.devices.artnet.Artnet;
-import de.lars.remotelightclient.devices.link.chain.Chain;
-import de.lars.remotelightclient.devices.remotelightserver.RemoteLightServer;
-import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.out.Output;
-import de.lars.remotelightclient.out.OutputActionListener;
-import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.simulator.SimulatorFrame;
-import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
-import de.lars.remotelightclient.ui.comps.BigImageButton;
-import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
-import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
-import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
-import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
-import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
-import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
-import de.lars.remotelightclient.utils.ui.UiUtils;
-import de.lars.remotelightclient.utils.ui.WrapLayout;
-import jiconfont.IconCode;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JMenu;
-import javax.swing.Box;
-import java.awt.Cursor;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightclient.simulator.SimulatorFrame;
+import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MainFrame.NotificationType;
+import de.lars.remotelightclient.ui.MenuPanel;
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.comps.BigImageButton;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.ui.panels.output.outputComps.*;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.devices.ConnectionState;
+import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.devices.arduino.Arduino;
+import de.lars.remotelightcore.devices.artnet.Artnet;
+import de.lars.remotelightcore.devices.link.chain.Chain;
+import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.out.Output;
+import de.lars.remotelightcore.out.OutputActionListener;
+import de.lars.remotelightcore.out.OutputManager;
+import jiconfont.IconCode;
 
 public class OutputPanel extends MenuPanel {
 

@@ -14,14 +14,14 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import de.lars.remotelightclient.settings.types.SettingString;
-import de.lars.remotelightclient.ui.Style;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.settings.types.SettingString;
 
 public class SettingStringPanel extends SettingPanel {
 

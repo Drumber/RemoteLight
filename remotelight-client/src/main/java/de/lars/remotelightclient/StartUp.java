@@ -21,23 +21,23 @@ import java.util.Locale;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightclient.cmd.CommandParser;
-import de.lars.remotelightclient.cmd.StartParameterHandler;
-import de.lars.remotelightclient.cmd.exceptions.CommandException;
 import de.lars.remotelightclient.lang.LangUtil;
-import de.lars.remotelightclient.out.Output;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.settings.types.SettingObject;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingSelection.Model;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.UpdateDialog;
-import de.lars.remotelightclient.utils.DirectoryUtil;
-import de.lars.remotelightclient.utils.UpdateChecker;
-import de.lars.remotelightclient.utils.color.RainbowWheel;
+import de.lars.remotelightcore.cmd.CommandParser;
+import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.cmd.exceptions.CommandException;
+import de.lars.remotelightcore.out.Output;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.DirectoryUtil;
+import de.lars.remotelightcore.utils.UpdateChecker;
+import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class StartUp {
 	

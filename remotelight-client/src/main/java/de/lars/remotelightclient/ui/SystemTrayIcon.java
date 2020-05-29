@@ -14,18 +14,9 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 import javax.swing.ImageIcon;
 

@@ -19,11 +19,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import org.tinylog.Logger;
+
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingObject;
-import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
@@ -36,13 +37,12 @@ import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
-import de.lars.remotelightclient.utils.ExceptionHandler;
-import de.lars.remotelightclient.utils.ExceptionHandler.ExceptionEvent;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import org.tinylog.Logger;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.ExceptionHandler;
+import de.lars.remotelightcore.utils.ExceptionHandler.ExceptionEvent;
 
 public class MainFrame extends JFrame {
 

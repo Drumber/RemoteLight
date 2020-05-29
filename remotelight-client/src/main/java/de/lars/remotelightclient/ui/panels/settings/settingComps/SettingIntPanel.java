@@ -20,8 +20,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.lars.remotelightclient.settings.types.SettingInt;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.settings.types.SettingInt;
 
 public class SettingIntPanel extends SettingPanel {
 

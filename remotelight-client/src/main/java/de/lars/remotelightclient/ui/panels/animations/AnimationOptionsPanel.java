@@ -14,36 +14,24 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.animations;
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.settings.Setting;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsUtil;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
+import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import java.awt.FlowLayout;
-import java.awt.Cursor;
+import de.lars.remotelightcore.settings.Setting;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class AnimationOptionsPanel extends JPanel {
 

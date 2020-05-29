@@ -14,29 +14,25 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.musicsync;
 
-import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.MusicEffect;
-import de.lars.remotelightclient.musicsync.MusicSyncManager;
-import de.lars.remotelightclient.settings.Setting;
-import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.comps.BigTextButton;
-import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.utils.ui.WrapLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
+import javax.swing.*;
+
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MenuPanel;
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.comps.BigTextButton;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.musicsync.MusicEffect;
+import de.lars.remotelightcore.musicsync.MusicSyncManager;
+import de.lars.remotelightcore.settings.Setting;
 
 public class MusicSyncPanel extends MenuPanel {
 

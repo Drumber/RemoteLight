@@ -14,7 +14,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.UpdateChecker;
+import de.lars.remotelightcore.utils.UpdateChecker;
 
 public class UpdateDialog {
 	

@@ -28,11 +28,11 @@ import org.tinylog.Logger;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.utils.color.ColorUtil;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.color.ColorUtil;
 import jiconfont.IconCode;
 import jiconfont.swing.IconFontSwing;
 

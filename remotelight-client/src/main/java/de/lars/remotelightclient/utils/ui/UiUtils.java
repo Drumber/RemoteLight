@@ -14,12 +14,7 @@
  ******************************************************************************/
 package de.lars.remotelightclient.utils.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.FontFormatException;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -37,7 +32,7 @@ import javax.swing.plaf.FontUIResource;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.DirectoryUtil;
+import de.lars.remotelightcore.utils.DirectoryUtil;
 import jiconfont.swing.IconFontSwing;
 
 public class UiUtils {

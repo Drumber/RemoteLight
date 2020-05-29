@@ -12,21 +12,11 @@
  * 
  * This file is part of RemoteLight.
  ******************************************************************************/
-package de.lars.remotelightclient.settings;
+package de.lars.remotelightclient.utils;
 
-import de.lars.remotelightclient.settings.types.SettingBoolean;
-import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.settings.types.SettingDouble;
-import de.lars.remotelightclient.settings.types.SettingInt;
-import de.lars.remotelightclient.settings.types.SettingSelection;
-import de.lars.remotelightclient.settings.types.SettingString;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
+import de.lars.remotelightcore.settings.Setting;
+import de.lars.remotelightcore.settings.types.*;
 
 public class SettingsUtil {
 	

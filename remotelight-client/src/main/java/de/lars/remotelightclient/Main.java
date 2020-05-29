@@ -29,24 +29,25 @@ import org.tinylog.provider.ProviderRegistry;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.lars.remotelightclient.animation.AnimationManager;
-import de.lars.remotelightclient.cmd.CommandParser;
-import de.lars.remotelightclient.cmd.ConsoleReader;
-import de.lars.remotelightclient.cmd.StartParameterHandler;
-import de.lars.remotelightclient.devices.DeviceManager;
-import de.lars.remotelightclient.lua.LuaManager;
-import de.lars.remotelightclient.musicsync.MusicSyncManager;
-import de.lars.remotelightclient.out.OutputManager;
-import de.lars.remotelightclient.scene.SceneManager;
-import de.lars.remotelightclient.screencolor.ScreenColorManager;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingSelection;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.DirectoryUtil;
-import de.lars.remotelightclient.utils.ExceptionHandler;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.DataStorage;
+import de.lars.remotelightcore.EffectManagerHelper;
+import de.lars.remotelightcore.animation.AnimationManager;
+import de.lars.remotelightcore.cmd.CommandParser;
+import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.lua.LuaManager;
+import de.lars.remotelightcore.musicsync.MusicSyncManager;
+import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.scene.SceneManager;
+import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.DirectoryUtil;
+import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class Main {
 	private boolean shuttingDown = false;
@@ -93,9 +94,9 @@ public class Main {
 		setupOSSupport();
 		
 		// console cmd reader
-		commandParser = new CommandParser(instance);
-		commandParser.setOutputEnabled(true);
-		new ConsoleReader(commandParser);
+		//commandParser = new CommandParser(instance);
+		//commandParser.setOutputEnabled(true);
+		//new ConsoleReader(commandParser);
 		
 		Logger.info("Starting RemoteLight version " + VERSION);
 		Style.loadFonts();				// Load custom fonts
@@ -107,7 +108,7 @@ public class Main {
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
 		
-		new StartUp(startParameter);	// Includes some things that need to be executed at startup
+		//new StartUp(startParameter);	// Includes some things that need to be executed at startup
 		
 		// Instantiate the managers of the different modes
 		aniManager = new AnimationManager();

@@ -30,16 +30,16 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.settings.Setting;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightclient.settings.types.*;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.settings.Setting;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.settings.types.*;
 
 public class SettingsPanel extends MenuPanel {
 	private static final long serialVersionUID = 3954953325346082615L;

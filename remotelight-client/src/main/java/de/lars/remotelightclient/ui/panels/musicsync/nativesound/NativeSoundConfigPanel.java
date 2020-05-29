@@ -8,19 +8,21 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import com.xtaudio.xt.*;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSound;
-import de.lars.remotelightclient.musicsync.sound.nativesound.NativeSoundFormat;
-import de.lars.remotelightclient.settings.SettingsManager;
-import de.lars.remotelightclient.settings.types.SettingObject;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.DisabledGlassPane;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
+import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class NativeSoundConfigPanel extends JPanel {
 	private static final long serialVersionUID = -3746048418035257056L;

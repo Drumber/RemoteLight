@@ -16,9 +16,10 @@ package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
 import javax.swing.JPanel;
 
-import de.lars.remotelightclient.settings.Setting;
+import de.lars.remotelightcore.settings.Setting;
 
 public abstract class SettingPanel extends JPanel {
 

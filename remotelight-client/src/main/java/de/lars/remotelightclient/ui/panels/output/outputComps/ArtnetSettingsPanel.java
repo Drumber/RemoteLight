@@ -3,25 +3,16 @@ package de.lars.remotelightclient.ui.panels.output.outputComps;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 
-import de.lars.remotelightclient.devices.arduino.RgbOrder;
-import de.lars.remotelightclient.devices.artnet.Artnet;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
+import de.lars.remotelightcore.devices.arduino.RgbOrder;
+import de.lars.remotelightcore.devices.artnet.Artnet;
 
 public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 

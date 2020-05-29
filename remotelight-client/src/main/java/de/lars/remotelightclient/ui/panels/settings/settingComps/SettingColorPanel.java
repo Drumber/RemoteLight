@@ -14,17 +14,17 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
-import javax.swing.JLabel;
-
-import de.lars.colorpicker.ColorPicker;
-import de.lars.remotelightclient.settings.types.SettingColor;
-import de.lars.remotelightclient.ui.Style;
-import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import de.lars.colorpicker.ColorPicker;
+import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.settings.types.SettingColor;
 
 public class SettingColorPanel extends SettingPanel {
 
