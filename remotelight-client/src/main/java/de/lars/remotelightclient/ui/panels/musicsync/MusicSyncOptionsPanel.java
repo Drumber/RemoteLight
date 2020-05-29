@@ -39,6 +39,7 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.InputUtil;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.musicsync.sound.Shared;
@@ -54,7 +55,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	private static final long serialVersionUID = -100112066309451958L;
 	private List<SettingPanel> settingPanels;
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
-	private MusicSyncManager msm = Main.getInstance().getMusicSyncManager();
+	private MusicSyncManager msm = RemoteLightCore.getInstance().getMusicSyncManager();
 	private JPanel bgrEffectOptions;
 	private JPanel bgrEffectOptionsScroll;
 	private JPanel panelSensitivity;
@@ -317,7 +318,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 					return;
 				} else {
 					msm.setNativeSoundEnabled(true);
-					Main.getInstance().getMusicSyncManager().newSoundProcessor();
+					RemoteLightCore.getInstance().getMusicSyncManager().newSoundProcessor();
 				}
 			} else {
 				msm.setNativeSoundEnabled(false);
@@ -328,7 +329,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 						//save last selected to data file
 						sm.getSettingObject("musicsync.input").setValue(info.toString()); //$NON-NLS-1$
 						//refresh SoundProcessor
-						Main.getInstance().getMusicSyncManager().newSoundProcessor();
+						RemoteLightCore.getInstance().getMusicSyncManager().newSoundProcessor();
 						break;
 					}
 				}

@@ -23,7 +23,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.simulator.SimulatorFrame;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -36,6 +35,7 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.*;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.DeviceManager;
@@ -56,8 +56,8 @@ public class OutputPanel extends MenuPanel {
 	private static final long serialVersionUID = 8004937110428129961L;
 	private MainFrame mainFrame;
 	private SimulatorFrame emulator;
-	private OutputManager om = Main.getInstance().getOutputManager();
-	private DeviceManager dm = Main.getInstance().getDeviceManager();
+	private OutputManager om = RemoteLightCore.getInstance().getOutputManager();
+	private DeviceManager dm = RemoteLightCore.getInstance().getDeviceManager();
 	private JPanel bgrMenu;
 	private DeviceSettingsPanel currentSettingsPanel;
 	private JPopupMenu popupMenu;

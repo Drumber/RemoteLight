@@ -24,6 +24,7 @@ import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -44,7 +45,7 @@ public class ScriptsPanel extends MenuPanel {
 	
 	public ScriptsPanel() {
 		sm = Main.getInstance().getSettingsManager();
-		luaManager = Main.getInstance().getLuaManager();
+		luaManager = RemoteLightCore.getInstance().getLuaManager();
 		luaManager.setLuaExceptionListener(exceptionListener);
 		mainFrame = Main.getInstance().getMainFrame();
 		

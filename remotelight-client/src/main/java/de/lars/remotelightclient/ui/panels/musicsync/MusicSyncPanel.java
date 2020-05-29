@@ -30,6 +30,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.settings.Setting;
@@ -47,7 +48,7 @@ public class MusicSyncPanel extends MenuPanel {
 	
 	public MusicSyncPanel() {
 		mainFrame = Main.getInstance().getMainFrame();
-		msm = Main.getInstance().getMusicSyncManager();
+		msm = RemoteLightCore.getInstance().getMusicSyncManager();
 		mainFrame.showControlBar(true);
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		

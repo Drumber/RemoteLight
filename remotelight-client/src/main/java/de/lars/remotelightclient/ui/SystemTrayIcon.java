@@ -24,6 +24,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.StartUp;
+import de.lars.remotelightcore.RemoteLightCore;
 
 public class SystemTrayIcon {
 
@@ -73,7 +74,7 @@ public class SystemTrayIcon {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			tray.remove(trayIcon);
-			Main.getInstance().close(true);
+			RemoteLightCore.getInstance().close(true);
 		}
     };
     

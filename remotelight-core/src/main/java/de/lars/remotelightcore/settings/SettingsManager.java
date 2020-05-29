@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightcore.DataStorage;
+import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 

@@ -14,23 +14,23 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.controlbars.comps;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.BoxLayout;
-import javax.swing.border.EmptyBorder;
+import de.lars.remotelightcore.RemoteLightCore;
 
 public class BrightnessSlider extends JPanel {
 
@@ -67,10 +67,10 @@ public class BrightnessSlider extends JPanel {
 		bgrSlider.add(slider);
 		slider.setAlignmentX(Component.LEFT_ALIGNMENT);
 		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue()); //$NON-NLS-1$
-		Main.getInstance().getOutputManager().setBrightness(slider.getValue());
+		RemoteLightCore.getInstance().getOutputManager().setBrightness(slider.getValue());
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				Main.getInstance().getOutputManager().setBrightness(slider.getValue());
+				RemoteLightCore.getInstance().getOutputManager().setBrightness(slider.getValue());
 				Main.getInstance().getSettingsManager().getSettingObject("out.brightness").setValue(slider.getValue()); //$NON-NLS-1$
 				lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 			}

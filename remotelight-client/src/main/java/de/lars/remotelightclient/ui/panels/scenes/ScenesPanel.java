@@ -28,6 +28,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
 
@@ -38,7 +39,7 @@ public class ScenesPanel extends MenuPanel {
 	 */
 	private static final long serialVersionUID = 4955214837008536168L;
 	private MainFrame mainFrame;
-	private SceneManager scm = Main.getInstance().getSceneManager();
+	private SceneManager scm = RemoteLightCore.getInstance().getSceneManager();
 	private JPanel bgrScenes;
 	private JPanel bgrSettings;
 

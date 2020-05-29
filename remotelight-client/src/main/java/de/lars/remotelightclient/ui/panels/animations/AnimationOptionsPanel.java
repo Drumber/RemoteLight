@@ -29,6 +29,7 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -138,7 +139,7 @@ public class AnimationOptionsPanel extends JPanel {
 		lblTitel.setForeground(Style.textColor);
 		panelBackground.add(lblTitel);
 		
-		List<Setting> settings = Main.getInstance().getAnimationManager().getCurrentAnimationOptions();
+		List<Setting> settings = RemoteLightCore.getInstance().getAnimationManager().getCurrentAnimationOptions();
 		if(settings == null || settings.size() <= 0) {
 			lblTitel.setText(i18n.getString("AnimationOptionsPanel.CurrentAnimationNoOption")); //$NON-NLS-1$
 		} else {

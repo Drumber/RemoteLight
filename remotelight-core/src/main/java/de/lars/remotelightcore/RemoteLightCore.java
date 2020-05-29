@@ -1,6 +1,9 @@
 package de.lars.remotelightcore;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,6 +15,8 @@ import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.data.DataFileUpdater;
+import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
@@ -46,13 +51,17 @@ public class RemoteLightCore {
 	private CommandParser commandParser;
 	
 	public RemoteLightCore(String[] args, boolean headless) {
+		if(instance != null) {
+			throw new IllegalStateException("RemoteLightCore is already initialized!");
+		}
+		
 		instance = RemoteLightCore.this;
 		startParameter = new StartParameterHandler(args);
 		RemoteLightCore.headless = headless;
 		
 		this.configureLogger();	// configure logger (set log path etc.)
 		instance = this;
-		Logger.info("Starting RemoteLight version " + VERSION);
+		Logger.info("Starting RemoteLightCore version " + VERSION);
 		
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
@@ -61,6 +70,8 @@ public class RemoteLightCore {
 		commandParser = new CommandParser(instance);
 		commandParser.setOutputEnabled(true);
 		new ConsoleReader(commandParser);
+		
+		updateDataFile(); // backwards compatibility to versions < 0.2.1
 		DataStorage.start(); // load data file
 		
 		settingsManager = new SettingsManager();
@@ -80,6 +91,8 @@ public class RemoteLightCore {
 	}
 	
 	public static RemoteLightCore getInstance() {
+		if(instance == null)
+			throw new IllegalStateException("RemoteLightCore is not initialized!");
 		return instance;
 	}
 	
@@ -165,8 +178,44 @@ public class RemoteLightCore {
 			m = 0;
 			startMillis = System.currentTimeMillis();
 		}
-		//System.out.println(m);
 		return (int) m;
+	}
+	
+	
+	protected void updateDataFile() {
+		File file = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME);
+		
+		// backup old data file
+		File backupOldFile = new File(file.getAbsolutePath() + ".old_" + VERSION);
+		if(!backupOldFile.exists()) {
+			try {
+				Files.copy(file.toPath(), backupOldFile.toPath());
+			} catch (IOException e) {
+				Logger.error(e, "Could not backup old data file.");
+			}
+		}
+		
+		boolean updated = false;
+		try {
+			
+			DataFileUpdater dataFileUpdater = new DataFileUpdater(file);
+			dataFileUpdater.updateData();
+			dataFileUpdater.close();
+			updated = true;
+			
+		} catch (IOException | ClassNotFoundException e) {
+			Logger.error(e, "Could not update data file. Backup and rename old data file and create new one...");
+			updated = false;
+		}
+		
+		if(!updated) {
+			File backupFile = new File(file.getAbsolutePath() + ".backup_" + VERSION);
+			try {
+				Files.move(file.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				Logger.error(e, "Could not backup old data file (" + file.getAbsolutePath() + "). Please remove manually.");
+			}
+		}
 	}
 	
 	

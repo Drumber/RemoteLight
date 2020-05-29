@@ -12,7 +12,7 @@
  * 
  * This file is part of RemoteLight.
  ******************************************************************************/
-package de.lars.remotelightcore;
+package de.lars.remotelightcore.data;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,8 @@ public class DataStorage {
 	public static void start() {
 		try {
 			new File(DirectoryUtil.getDataStoragePath()).mkdirs();
-			storage = new FileStorage(new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME), true);
+			File file = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME);
+			storage = new FileStorage(file, true);
 		} catch (IllegalArgumentException | IOException e) {
 			Logger.error(e);
 		}

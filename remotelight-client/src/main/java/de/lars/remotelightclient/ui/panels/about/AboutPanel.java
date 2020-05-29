@@ -14,6 +14,13 @@
  ******************************************************************************/
 package de.lars.remotelightclient.ui.panels.about;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+
+import javax.swing.*;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -21,19 +28,7 @@ import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import java.awt.Component;
-import javax.swing.BoxLayout;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import de.lars.remotelightcore.RemoteLightCore;
 
 public class AboutPanel extends MenuPanel {
 	private static final long serialVersionUID = -1227084275389857291L;
@@ -89,7 +84,7 @@ public class AboutPanel extends MenuPanel {
 		
 		JLabel lblWebsite = new JLabel(i18n.getString("AboutPanel.Website")); //$NON-NLS-1$
 		lblWebsite.setForeground(Style.accent);
-		UiUtils.addWebsiteHyperlink(lblWebsite, Main.WEBSITE);
+		UiUtils.addWebsiteHyperlink(lblWebsite, RemoteLightCore.WEBSITE);
 		lblWebsite.setFont(Style.getFontRegualar(14));
 		horizontalBox_1.add(lblWebsite);
 		
@@ -98,7 +93,7 @@ public class AboutPanel extends MenuPanel {
 		
 		JLabel lblGithub = new JLabel("GitHub"); //$NON-NLS-1$
 		lblGithub.setForeground(Style.accent);
-		UiUtils.addWebsiteHyperlink(lblGithub, Main.GITHUB);
+		UiUtils.addWebsiteHyperlink(lblGithub, RemoteLightCore.GITHUB);
 		lblGithub.setFont(Style.getFontRegualar(14));
 		horizontalBox_1.add(lblGithub);
 		

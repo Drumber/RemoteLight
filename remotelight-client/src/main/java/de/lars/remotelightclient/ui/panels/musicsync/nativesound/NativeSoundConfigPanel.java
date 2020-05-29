@@ -19,6 +19,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.DisabledGlassPane;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -53,7 +54,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		setLayout(gridBagLayout);
 		setBackground(Style.panelBackground);
 		sm = Main.getInstance().getSettingsManager();
-		nsound = Main.getInstance().getMusicSyncManager().getNativeSound();
+		nsound = RemoteLightCore.getInstance().getMusicSyncManager().getNativeSound();
 		
 		sm.addSetting(new SettingObject("nativesound.panel.showonlysupported", "Show only supported devices", false));
 

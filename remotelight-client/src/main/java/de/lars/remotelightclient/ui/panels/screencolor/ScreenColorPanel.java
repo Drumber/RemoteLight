@@ -42,6 +42,7 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.Se
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -64,7 +65,7 @@ public class ScreenColorPanel extends MenuPanel {
 	private JButton btnEnable;
 	
 	public ScreenColorPanel() {
-		scm = Main.getInstance().getScreenColorManager();
+		scm = RemoteLightCore.getInstance().getScreenColorManager();
 		sm = Main.getInstance().getSettingsManager();
 		monitorPanels = new ArrayList<ImagePanel>();
 		settingPanels = new ArrayList<SettingPanel>();

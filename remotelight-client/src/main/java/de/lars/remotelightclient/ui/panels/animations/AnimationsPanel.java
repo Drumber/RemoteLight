@@ -31,6 +31,7 @@ import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -43,7 +44,7 @@ public class AnimationsPanel extends MenuPanel {
 	 */
 	private static final long serialVersionUID = 5490750381498859042L;
 	private MainFrame mainFrame;
-	private AnimationManager am = Main.getInstance().getAnimationManager();
+	private AnimationManager am = RemoteLightCore.getInstance().getAnimationManager();
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
 	private AnimationOptionsPanel optionsPanel;
 	private JPanel bgrAnimations;

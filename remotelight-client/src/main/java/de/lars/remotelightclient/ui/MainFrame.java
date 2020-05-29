@@ -37,6 +37,7 @@ import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -79,7 +80,7 @@ public class MainFrame extends JFrame {
 		this.setFrameContetPane();
 		this.displayPanel(new OutputPanel(this));
 		
-		if(Main.startParameter.tray) {
+		if(RemoteLightCore.startParameter.tray) {
 			SystemTrayIcon.showTrayIcon();
 			dispose();
 		}
@@ -150,7 +151,7 @@ public class MainFrame extends JFrame {
 				} catch(Exception e) {
 					Logger.error(e, "Error while closing frame");
 				}
-				Main.getInstance().close(true);
+				RemoteLightCore.getInstance().close(true);
 			}
 		}
 	};

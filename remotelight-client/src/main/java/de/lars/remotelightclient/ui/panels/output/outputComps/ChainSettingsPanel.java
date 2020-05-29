@@ -7,11 +7,11 @@ import java.awt.FlowLayout;
 
 import javax.swing.*;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 
@@ -94,7 +94,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 	
 	private void addControlsToPanel() {
 		JComboBox<String> boxOutputs = new JComboBox<>();
-		for(Device d : Main.getInstance().getDeviceManager().getDevices()) {
+		for(Device d : RemoteLightCore.getInstance().getDeviceManager().getDevices()) {
 			if(!(d instanceof Chain) && !chain.getDevices().contains(d)) {
 				boxOutputs.addItem(d.getId());
 			}
@@ -107,7 +107,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 			if(boxOutputs.getSelectedItem() != null) {
 				
 				String selOutput = (String) boxOutputs.getSelectedItem();
-				Device device = Main.getInstance().getDeviceManager().getDevice(selOutput);
+				Device device = RemoteLightCore.getInstance().getDeviceManager().getDevice(selOutput);
 				if(device != null) {
 					chain.addDevices(device);
 					boxOutputs.removeItem(selOutput);

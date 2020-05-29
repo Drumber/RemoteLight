@@ -22,8 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.OutputUtil;
@@ -42,7 +42,7 @@ public class OutputInfo extends JPanel {
 	 * @param c Background color
 	 */
 	public OutputInfo(Color c) {
-		om = Main.getInstance().getOutputManager();
+		om = RemoteLightCore.getInstance().getOutputManager();
 		//om.addOutputActionListener(outputListener);
 		
 		setBorder(new EmptyBorder(8, 0, 10, 0));
