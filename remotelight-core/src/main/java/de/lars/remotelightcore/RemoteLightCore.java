@@ -20,6 +20,7 @@ import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
+import de.lars.remotelightcore.notification.NotificationManager;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
@@ -49,6 +50,7 @@ public class RemoteLightCore {
 	private EffectManagerHelper effectManagerHelper;
 	private LuaManager luaManager;
 	private CommandParser commandParser;
+	private NotificationManager notificationManager;
 	
 	public RemoteLightCore(String[] args, boolean headless) {
 		if(instance != null) {
@@ -82,6 +84,7 @@ public class RemoteLightCore {
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
+		notificationManager = new NotificationManager();
 		
 		new SetupHelper(instance); // includes some things that need to be executed at startup
 		
@@ -155,6 +158,10 @@ public class RemoteLightCore {
 	
 	public CommandParser getCommandParser() {
 		return commandParser;
+	}
+	
+	public NotificationManager getNotificationManager() {
+		return notificationManager;
 	}
 
 	/**
