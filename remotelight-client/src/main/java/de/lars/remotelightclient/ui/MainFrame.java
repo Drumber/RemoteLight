@@ -21,12 +21,11 @@ import java.awt.event.WindowListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.ui.comps.NotificationPane;
+import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
 import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
@@ -139,18 +138,6 @@ public class MainFrame extends JFrame {
 		bgrControlBar.setBackground(Style.accent);
 		bgrControlBar.setLayout(new BorderLayout(0, 0));
 		this.setControlBarPanel(new DefaultControlBar());
-		
-		// testing...
-//		JLayeredPane lPane = getRootPane().getLayeredPane();
-//		JLabel label = new JLabel("Test message");
-//		label.setOpaque(true);
-//		label.setHorizontalAlignment(SwingConstants.CENTER);
-//		label.setBackground(new Color(50, 210, 250, 200));
-//		label.setSize(200, 50);
-//		label.setLocation(100, 100);
-//		label.setBorder(new LineBorder(Color.gray));
-//		label.setVisible(true);
-//		lPane.add(label, JLayeredPane.POPUP_LAYER);
 	}
 	
 	
@@ -199,6 +186,10 @@ public class MainFrame extends JFrame {
 	
 	public JPanel getDisplayedPanel() {
 		return this.displayedPanel;
+	}
+	
+	public NotificationDisplayHandler getNotificationDisplayHandler() {
+		return notificationDisplayHandler;
 	}
 	
 	public void showControlBar(boolean enabled) {
@@ -253,9 +244,11 @@ public class MainFrame extends JFrame {
 			break;
 		case "about":
 			this.displayPanel(new AboutPanel());
-			// TODO test
-			Notification notification = new Notification(de.lars.remotelightcore.notification.NotificationType.ERROR, "Test", "Test message");
+			// TODO remove this test notifications
+			String[] options = {"Hide", "Download"};
+			Notification notification = new Notification(de.lars.remotelightcore.notification.NotificationType.ERROR, "Test LOOOOONG", "Test message, LOOO000OOOO OOONG Messsage", options);
 			Main.getInstance().getCore().getNotificationManager().addNotification(notification);
+			Main.getInstance().getCore().getNotificationManager().addNotification(new Notification(de.lars.remotelightcore.notification.NotificationType.DEBUG, "Test No. 2"));
 			break;
 			
 		default:
@@ -288,25 +281,6 @@ public class MainFrame extends JFrame {
 			break;
 		}
 	}
-	
-	
-	private void showNotification(Notification noti) {
-		NotificationPane pane = new NotificationPane(noti);
-		int offset = 5;
-		int x = getWidth() - offset - pane.DEFAULT_WIDTH;
-		int y = getHeight() - offset - pane.DEFAULT_HEIGHT;
-		pane.setOpaque(true);
-		//pane.setBackground(new Color(50, 210, 250, 200));
-		pane.setSize(pane.DEFAULT_WIDTH, pane.DEFAULT_HEIGHT);
-		pane.setLocation(x, y);
-		pane.setBorder(new LineBorder(Color.gray));
-		pane.setVisible(true);
-		
-		JLayeredPane lPane = getRootPane().getLayeredPane();
-		lPane.add(pane, JLayeredPane.POPUP_LAYER);
-		System.out.println(noti.getMessage());
-	}
-	
 	
 	/** show error dialog on exception */
 	public static ExceptionEvent onException = new ExceptionEvent() {
