@@ -15,6 +15,7 @@
 package de.lars.remotelightcore.out;
 
 import java.awt.Color;
+
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.RemoteLightCore;
@@ -91,6 +92,9 @@ public class OutputManager {
 		if(output.getState() == ConnectionState.CONNECTED) {
 			output.onDeactivate();
 		}
+		if(activeOutput != null && (output == activeOutput || output.getId().equals(activeOutput.getId()))) {
+			activeOutput = null;
+		}
 		fireOutputAction(activeOutput, OutputActionType.DEACTIVATED);
 	}
 	
@@ -139,6 +143,10 @@ public class OutputManager {
 	 */
 	public void setEnabled(boolean enabled) {
 		active = enabled;
+		if(!active && activeOutput != null) {
+			deactivate(activeOutput);
+		}
+			
 	}
 	
 	/**
@@ -158,9 +166,10 @@ public class OutputManager {
 			} catch (InterruptedException e) {}
 			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			deactivate(activeOutput);
+			
+			//save last output before closing
+			sm.getSettingObject("out.lastoutput").setValue(activeOutput);
 		}
-		//save last output before closing
-		sm.getSettingObject("out.lastoutput").setValue(activeOutput);
 		//save brightness
 		sm.getSettingObject("out.brightness").setValue(getBrightness());
 	}
@@ -203,7 +212,7 @@ public class OutputManager {
 							} catch (InterruptedException e) {
 								Logger.error(e);
 							}
-						} else if(activeOutput.getState() != ConnectionState.CONNECTED) {
+						} else if(activeOutput != null && activeOutput.getState() != ConnectionState.CONNECTED) {
 							Logger.info("Output not connected, deactivate Output!");
 							setEnabled(false);
 							fireOutputAction(activeOutput, OutputActionType.DISCONNECTED);

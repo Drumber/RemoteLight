@@ -55,6 +55,9 @@ public class RemoteLightCore {
 			throw new IllegalStateException("RemoteLightCore is already initialized!");
 		}
 		
+		if(args == null)
+			args = new String[0];
+		
 		instance = RemoteLightCore.this;
 		startParameter = new StartParameterHandler(args);
 		RemoteLightCore.headless = headless;
