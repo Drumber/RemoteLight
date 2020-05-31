@@ -35,7 +35,7 @@ public class RemoteLightCore {
 	private boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
-	public final static String VERSION = "pre0.2.0.9.2";
+	public final static String VERSION = "pre0.2.1";
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -73,11 +73,6 @@ public class RemoteLightCore {
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 		
-		// console cmd reader
-		commandParser = new CommandParser(instance);
-		commandParser.setOutputEnabled(true);
-		new ConsoleReader(commandParser);
-		
 		updateDataFile(); // backwards compatibility to versions < 0.2.1
 		DataStorage.start(); // load data file
 		
@@ -88,14 +83,19 @@ public class RemoteLightCore {
 		luaManager = new LuaManager();
 		notificationManager = new NotificationManager();
 		
-		new SetupHelper(instance); // includes some things that need to be executed at startup
-		
 		// instantiate the managers of the different modes
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
 		screenColorManager = new ScreenColorManager();
 		effectManagerHelper = new EffectManagerHelper();
+		
+		// console cmd reader
+		commandParser = new CommandParser(instance);
+		commandParser.setOutputEnabled(true);
+		new ConsoleReader(commandParser);
+		
+		new SetupHelper(instance); // includes some things that need to be executed at startup
 	}
 	
 	public static RemoteLightCore getInstance() {
