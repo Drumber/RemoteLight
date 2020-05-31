@@ -32,7 +32,6 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
@@ -43,6 +42,7 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.InputUtil;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.musicsync.sound.Shared;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -312,7 +312,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			if(e.getActionCommand().equals("_NativeSound_")) {
 				sm.getSettingObject("musicsync.input").setValue("_NativeSound_");
 				if(msm.getNativeSoundDevice() == null || !msm.getNativeSoundDevice().isValid()) {
-					Main.getInstance().getMainFrame().printNotification("Native sound device is not valid!", NotificationType.Error);
+					Main.getInstance().showNotification(NotificationType.ERROR, "Native sound device is not valid!");
 					rbuttonNativeSound.setEnabled(false);
 					rbuttonNativeSound.setText("Use native sound library (not configured)");
 					return;
@@ -341,7 +341,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(msm.isActive() && msm.getSoundProcessor().isNativeSoundEnabled()) {
-				Main.getInstance().getMainFrame().printNotification("Please stop the active effect before configuring.", NotificationType.Error);
+				Main.getInstance().showNotification(NotificationType.ERROR, "Please stop the active effect before configuring.");
 				return;
 			}
 			NativeSoundConfigPanel.showDialog();

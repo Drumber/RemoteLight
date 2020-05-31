@@ -45,6 +45,7 @@ import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -261,7 +262,6 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void menuSelected(String menu) {
-		printNotification("", NotificationType.Unimportant);
 		switch(menu.toLowerCase())
 		{
 		case "settings":
@@ -297,32 +297,6 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
-	public enum NotificationType {
-		Error, Info, Unimportant, Success
-	}
-	public void printNotification(String text, NotificationType type) {
-		if(text == null || text.equals("")) {
-			panelNotification.setVisible(false);
-			return;
-		}
-		panelNotification.setVisible(true);
-		lblNotification.setText(text);
-		switch (type) {
-		case Error:
-			lblNotification.setForeground(Color.RED);
-			break;
-		case Info:
-			lblNotification.setForeground(Style.accent);
-			break;
-		case Unimportant:
-			lblNotification.setForeground(Style.textColor);
-			break;
-		case Success:
-			lblNotification.setForeground(Color.GREEN);
-			break;
-		}
-	}
-	
 	/** show error dialog on exception */
 	public static ExceptionEvent onException = new ExceptionEvent() {
 		@Override
@@ -337,7 +311,7 @@ public class MainFrame extends JFrame {
 	};
 	
 	public void showErrorNotification(Throwable e) {
-		Notification notification = new Notification(de.lars.remotelightcore.notification.NotificationType.ERROR,
+		Notification notification = new Notification(NotificationType.ERROR,
 				"An error has occurred", e.getClass().getCanonicalName() + ": " + e.getMessage());
 		notification.setDisplayTime(Notification.LONG);
 		notification.setOptions(new String[] {"Details"});

@@ -29,6 +29,8 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -154,6 +156,43 @@ public class Main {
 	 */
 	public static int getLedNum() {
 		return RemoteLightCore.getLedNum();
+	}
+	
+	/**
+	 * Notification show wrapper method
+	 * @param notificationType 	Notification type
+	 * @param text				displayed message
+	 */
+	public void showNotification(NotificationType notificationType, String text) {
+		remoteLightCore.showNotification(notificationType, text, Notification.NORMAL);
+	}
+	
+	/**
+	 * Notification show wrapper method
+	 * @param notificationType 	Notification type
+	 * @param text				displayed message
+	 * @param displayTime		display time length
+	 */
+	public void showNotification(NotificationType notificationType, String text, int displayTime) {
+		remoteLightCore.showNotification(notificationType, text, displayTime);
+	}
+	
+	/**
+	 * Notification show wrapper method
+	 * @param notificationType 	Notification type
+	 * @param title				notification title
+	 * @param text				displayed message
+	 */
+	public void showNotification(NotificationType notificationType, String title, String text) {
+		remoteLightCore.showNotification(new Notification(notificationType, title, text));
+	}
+	
+	/**
+	 * Notification wrapper method
+	 * @param notification new notification
+	 */
+	public void showNotification(Notification notification) {
+		remoteLightCore.showNotification(notification);
 	}
 
 }

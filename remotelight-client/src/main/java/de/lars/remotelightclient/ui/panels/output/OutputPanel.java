@@ -23,10 +23,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.simulator.SimulatorFrame;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
@@ -43,6 +43,8 @@ import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.out.OutputActionListener;
 import de.lars.remotelightcore.out.OutputManager;
@@ -376,6 +378,8 @@ public class OutputPanel extends MenuPanel {
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
 			String name = btn.getName();
+			Main main = Main.getInstance();
+			String notiTitle = "Outputs"; // notification title
 			
 			//SAVE clicked
 			if(name.equals("save") && currentSettingsPanel != null) { //$NON-NLS-1$
@@ -389,19 +393,19 @@ public class OutputPanel extends MenuPanel {
 						if(currentSettingsPanel.isSetup()) {
 							if(dm.addDevice(device)) {
 								mainFrame.displayPanel(new OutputPanel(mainFrame));
-								mainFrame.printNotification(i18n.getString("OutputPanel.AddedDevice"), NotificationType.Success); //$NON-NLS-1$
+								main.showNotification(NotificationType.SUCCESS, notiTitle, i18n.getString("OutputPanel.AddedDevice"));
 							} else {
-								mainFrame.printNotification(i18n.getString("OutputPanel.NameAlreadyUsed"), NotificationType.Error); //$NON-NLS-1$
+								main.showNotification(NotificationType.ERROR, i18n.getString("OutputPanel.NameAlreadyUsed"));
 							}
 						} else {
 							mainFrame.displayPanel(new OutputPanel(mainFrame));
-							mainFrame.printNotification(i18n.getString("OutputPanel.SavedChanges"), NotificationType.Unimportant); //$NON-NLS-1$
+							main.showNotification(new Notification(NotificationType.INFO, notiTitle, i18n.getString("OutputPanel.SavedChanges"), Notification.SHORT));
 						}
 					} else {
-						mainFrame.printNotification(i18n.getString("OutputPanel.NameAlreadyUsed"), NotificationType.Error); //$NON-NLS-1$
+						main.showNotification(NotificationType.ERROR, i18n.getString("OutputPanel.NameAlreadyUsed"));
 					}
 				} else {
-					mainFrame.printNotification(i18n.getString("OutputPanel.NameCouldNotEmpty"), NotificationType.Error); //$NON-NLS-1$
+					main.showNotification(NotificationType.ERROR, i18n.getString("OutputPanel.NameCouldNotEmpty"));
 				}
 			//REMOVE clicked
 			} else if(name.equals("remove") && currentSettingsPanel != null) { //$NON-NLS-1$
@@ -409,9 +413,9 @@ public class OutputPanel extends MenuPanel {
 				if(!currentSettingsPanel.isSetup() && dm.isIdUsed(device.getId())) {
 					dm.removeDevice(device);
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
-					mainFrame.printNotification(i18n.getString("OutputPanel.RemovedDevice"), NotificationType.Info); //$NON-NLS-1$
+					main.showNotification(NotificationType.INFO, notiTitle, i18n.getString("OutputPanel.RemovedDevice"));
 				} else {
-					mainFrame.printNotification(i18n.getString("OutputPanel.CouldNotRemoveDevice"), NotificationType.Error); //$NON-NLS-1$
+					main.showNotification(NotificationType.ERROR, i18n.getString("OutputPanel.CouldNotRemoveDevice"));
 				}
 			//ACTIVATE clicked
 			} else if(name.equals("activate") && currentSettingsPanel != null) { //$NON-NLS-1$
@@ -425,15 +429,12 @@ public class OutputPanel extends MenuPanel {
 					}
 					mainFrame.displayPanel(new OutputPanel(mainFrame));
 					if(device.getConnectionState() == ConnectionState.FAILED) {
-						mainFrame.printNotification(i18n.getString("OutputPanel.CouldNotConnect"), NotificationType.Error); //$NON-NLS-1$
-					} else {
-						mainFrame.printNotification(null, null);
+						main.showNotification(NotificationType.ERROR, i18n.getString("OutputPanel.CouldNotConnect"));
 					}
 				}
 			//CANCEL clicked
 			} else if(name.equals("cancel")) { //$NON-NLS-1$
 				hideSettingsPanel();
-				mainFrame.printNotification(null, null);
 			}
 		}
 	};

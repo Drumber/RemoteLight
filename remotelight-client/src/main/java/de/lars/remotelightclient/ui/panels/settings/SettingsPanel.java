@@ -31,11 +31,12 @@ import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -168,7 +169,8 @@ public class SettingsPanel extends MenuPanel {
 			mainFrame.updateFrame();
 			//display settings
 			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
-			mainFrame.printNotification(i18n.getString("SettingsPanel.SavedSettings"), NotificationType.Info); //$NON-NLS-1$
+			Main.getInstance().showNotification(
+					new Notification(NotificationType.SUCCESS, "Settings", i18n.getString("SettingsPanel.SavedSettings"), Notification.SHORT));
 		}
 	};
 	

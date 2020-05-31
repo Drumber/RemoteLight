@@ -32,7 +32,6 @@ import org.tinylog.Logger;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MainFrame.NotificationType;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.ImagePanel;
@@ -43,6 +42,7 @@ import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -255,7 +255,6 @@ public class ScreenColorPanel extends MenuPanel {
 	private void enableScreenColor(boolean enable) {
 		if(enable) {
 			if(selectedMonitorPanel != null) {
-				Main.getInstance().getMainFrame().printNotification(null, null);
 				btnEnable.setText(i18n.getString("ScreenColorPanel.Disable")); //$NON-NLS-1$
 				
 				scm.start(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(),	//YPos //$NON-NLS-1$
@@ -265,7 +264,7 @@ public class ScreenColorPanel extends MenuPanel {
 						ScreenColorManager.getMonitorByID(selectedMonitorPanel.getName()));		//Monitor
 				
 			} else {
-				Main.getInstance().getMainFrame().printNotification(i18n.getString("ScreenColorPanel.NeedSelectMonitor"), NotificationType.Error); //$NON-NLS-1$
+				Main.getInstance().showNotification(NotificationType.ERROR, i18n.getString("ScreenColorPanel.NeedSelectMonitor"));
 			}
 		} else {
 			btnEnable.setText(i18n.getString("ScreenColorPanel.Enable")); //$NON-NLS-1$
