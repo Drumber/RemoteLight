@@ -51,7 +51,7 @@ public class NotificationPane extends JPanel {
 	protected void initLayout() {
 		// absolute layout
 		setLayout(null);
-		setBorder(new LineBorder(Color.gray));
+		setBorder(new LineBorder(Style.getNotificationColor(noti.getNotificationType())));
 		addMouseListener(mouseListener);
 		
 		lblTitle = new JLabel(noti.getTitle());
@@ -150,7 +150,7 @@ public class NotificationPane extends JPanel {
 		
 		@Override
 		public void mouseExited(MouseEvent e) {
-			setBorder(new LineBorder(Color.gray));
+			setBorder(new LineBorder(Style.getNotificationColor(noti.getNotificationType())));
 			lblClose.setVisible(false);
 			isFocussed = false;
 		};

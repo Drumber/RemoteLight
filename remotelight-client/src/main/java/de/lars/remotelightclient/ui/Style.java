@@ -31,6 +31,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import jiconfont.IconCode;
@@ -86,6 +87,13 @@ public class Style {
 	public static Color textColor = new Color(255, 255, 255);
 	public static Color textColorDarker = new Color(200, 200, 200);
 	public static Color accent = new Color(255, 160, 60);
+	// notification colors
+	public static Color error = new Color(242, 34, 34);
+	public static Color warn = new Color(242, 183, 34);
+	public static Color info = Color.GRAY;
+	public static Color success = new Color(48, 237, 38);
+	public static Color debug = new Color(173, 154, 38);
+	public static Color notification = info;
 	
 	
 	/*
@@ -196,6 +204,31 @@ public class Style {
 		laFs.addAll(FlatLafThemesUtil.getAllThemeNames());
 		return laFs;
 	}
+	
+	public static Color getNotificationColor(NotificationType type) {
+		switch (type) {
+		case ERROR:
+			return error;
+		case WARN:
+			return warn;
+		case INFO:
+			return info;
+		case DEBUG:
+			return debug;
+		case NOTIFICATION:
+			return notification;
+		case SUCCESS:
+			return success;
+		case NONE:
+			return info;
+		default:
+			return info;
+		}
+	}
+	
+	/*
+	 * Icons
+	 */
 	
 	public static ImageIcon getUiIcon(String filename) {
 		return getIcon("ui", filename);
