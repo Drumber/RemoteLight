@@ -22,6 +22,9 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.UpdateDialog;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
+import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -49,9 +52,26 @@ public class StartUp {
 				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
 					// show update dialog
 					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
-					Main.getInstance();
 					if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless()) {
-						UpdateDialog.showUpdateDialog(updateChecker);
+						// show update notification
+						String[] options = {"Details", "Download"};
+						Notification notification = new Notification(NotificationType.IMPORTANT,
+								"Update available", "RemoteLight " + updateChecker.getNewTag() + " is available.",
+								options, Notification.LONG, new NotificationOptionListener() {
+									@Override
+									public void onOptionClicked(String option, int index) {
+										if(index == 0) {
+											// show detail dialog
+											UpdateDialog.showUpdateDialog(updateChecker);
+										} else if(index == 1) {
+											// open download site
+											UpdateDialog.openDownloadSite(updateChecker.getNewUrl());
+										}
+											
+									}
+								});
+						notification.setHideOnOptionClick(false);
+						Main.getInstance().showNotification(notification);
 					}
 				}
 				

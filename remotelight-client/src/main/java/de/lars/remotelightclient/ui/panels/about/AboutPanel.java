@@ -128,7 +128,7 @@ public class AboutPanel extends MenuPanel {
 		
 		addLabel("jSerialComm", "https://fazecast.github.io/jSerialComm/");
 		addLabel("SimpleFileStorage", "https://github.com/DeBukkIt/SimpleFileStorage");
-		addLabel("TarosDSP", "https://github.com/JorenSix/TarsosDSP");
+		addLabel("TarsosDSP", "https://github.com/JorenSix/TarsosDSP");
 		addLabel("tinylog", "https://tinylog.org");
 		addLabel("Gson", "https://github.com/google/gson");
 		addLabel("artnet4j", "https://github.com/cansik/artnet4j");

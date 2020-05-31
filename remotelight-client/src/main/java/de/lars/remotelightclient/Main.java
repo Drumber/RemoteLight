@@ -37,7 +37,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class Main {
 	
-	public final static String VERSION = "pre0.2.0.9.2";
+	public final static String VERSION = "pre0.2.1";
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
@@ -49,7 +49,7 @@ public class Main {
 	
 	public Main(String[] args, boolean uiMode) {
 		instance = this;
-		remoteLightCore = new RemoteLightCore(args, uiMode);
+		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook
 		remoteLightCore.registerShutdownHook();
 		

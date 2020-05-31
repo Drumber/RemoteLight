@@ -94,6 +94,7 @@ public class Style {
 	public static Color success = new Color(48, 237, 38);
 	public static Color debug = new Color(173, 154, 38);
 	public static Color notification = info;
+	public static Color important = new Color(255, 200, 0);
 	
 	
 	/*
@@ -221,6 +222,8 @@ public class Style {
 			return success;
 		case NONE:
 			return info;
+		case IMPORTANT:
+			return important;
 		default:
 			return info;
 		}

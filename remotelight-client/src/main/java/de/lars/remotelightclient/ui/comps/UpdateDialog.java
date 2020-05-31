@@ -14,6 +14,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.UpdateChecker;
 
 public class UpdateDialog {
@@ -40,13 +41,18 @@ public class UpdateDialog {
 				new String[] {"Download", "Close"}, "Download");
 		
 		if(option == 0) { // when user clicks Download, open Browser
-			try {
-				Desktop.getDesktop().browse(new URI(checker.getNewUrl()));
-			} catch (URISyntaxException | IOException ex) {
-				Logger.warn(ex, "Could not open download page: " + checker.getNewUrl());
-			}
+			openDownloadSite(checker.getNewUrl());
 		}
 		return option;
+	}
+	
+	public static void openDownloadSite(String url) {
+		try {
+			Desktop.getDesktop().browse(new URI(url));
+		} catch (URISyntaxException | IOException ex) {
+			Logger.warn(ex, "Could not open download page: " + url);
+			Main.getInstance().showNotification(NotificationType.ERROR, "Could not open " + url);
+		}
 	}
 
 }

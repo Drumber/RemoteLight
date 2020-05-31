@@ -13,7 +13,8 @@ public enum NotificationType {
 	DEBUG("Debug"),
 	NOTIFICATION("Notification"),
 	SUCCESS("Success"),
-	NONE("");
+	NONE(""),
+	IMPORTANT("Important");
 	
 	private final String text;
 	
