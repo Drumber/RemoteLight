@@ -1,5 +1,10 @@
 package de.lars.remotelightcore.notification;
 
+/**
+ * Notification types:
+ * <p>
+ * <code>ERROR, WARN, INFO, DEBUG, NOTIFICATION, SUCCESS, NONE</code>
+ */
 public enum NotificationType {
 	
 	ERROR("Error"),

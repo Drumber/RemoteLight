@@ -20,7 +20,9 @@ import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
+import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationManager;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
@@ -189,6 +191,22 @@ public class RemoteLightCore {
 			startMillis = System.currentTimeMillis();
 		}
 		return (int) m;
+	}
+	
+	public void showNotification(Notification notification) {
+		NotificationManager manager = getNotificationManager();
+		manager.addNotification(notification);
+	}
+	
+	public void showNotification(NotificationType type, String message, int displayTime) {
+		Notification notification = new Notification(type, message);
+		notification.setDisplayTime(displayTime);
+		showNotification(notification);
+	}
+	
+	public void showErrorNotification(Exception e) {
+		Notification notification = new Notification(NotificationType.ERROR, "An error has occurred: " + e.getClass().getCanonicalName());
+		notification.setDisplayTime(Notification.LONG);
 	}
 	
 	

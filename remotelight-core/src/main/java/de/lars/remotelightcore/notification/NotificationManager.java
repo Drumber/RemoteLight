@@ -3,6 +3,8 @@ package de.lars.remotelightcore.notification;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lars.remotelightcore.notification.listeners.NotificationListener;
+
 public class NotificationManager {
 	
 	private List<Notification> notificationsQueue;

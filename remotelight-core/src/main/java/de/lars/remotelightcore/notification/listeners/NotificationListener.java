@@ -1,4 +1,6 @@
-package de.lars.remotelightcore.notification;
+package de.lars.remotelightcore.notification.listeners;
+
+import de.lars.remotelightcore.notification.NotificationManager;
 
 public interface NotificationListener {
 	

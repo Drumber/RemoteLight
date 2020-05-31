@@ -11,6 +11,7 @@ import javax.swing.border.LineBorder;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
 
 public class NotificationPane extends JPanel {
 	private static final long serialVersionUID = 7418038730375486184L;
@@ -74,8 +75,11 @@ public class NotificationPane extends JPanel {
 			lblOptions = new JLabel[noti.getOptions().length];
 			for(int i = 0; i < options.length; i++) {
 				JLabel lbl = new JLabel(options[i]);
+				lbl.setName(options[i]);
 				lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				lbl.setForeground(colorHyperlink);
+				lbl.addMouseListener(optionClickListener);
+				lbl.addMouseListener(mouseListener);
 				lblOptions[i] = lbl;
 			}
 		}
@@ -159,6 +163,30 @@ public class NotificationPane extends JPanel {
 			setVisible(false);
 			if(handler != null)
 				handler.hideNotification();
+		};
+	};
+	
+	
+	protected MouseAdapter optionClickListener = new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			JComponent s = (JComponent) e.getSource();
+			String name = s.getName();
+			String[] options = noti.getOptions();
+			for(int i = 0; i < options.length; i++) {
+				if(options[i].equals(name)) {
+					// fire option click event
+					NotificationOptionListener listener = noti.getOptionListener();
+					if(listener != null)
+						listener.onOptionClicked(name, i);
+					
+					// hide notification on option click
+					if(noti.isHideOnOptionClick()) {
+						if(handler != null)
+							handler.hideNotification();
+					}
+				}
+			}
 		};
 	};
 	

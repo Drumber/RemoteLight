@@ -5,20 +5,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
+import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.MenuPanel;
+import de.lars.remotelightclient.ui.listeners.MenuChangeListener;
+import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightcore.notification.Notification;
-import de.lars.remotelightcore.notification.NotificationListener;
 import de.lars.remotelightcore.notification.NotificationManager;
+import de.lars.remotelightcore.notification.listeners.NotificationListener;
 
 public class NotificationDisplayHandler {
 	
-	/** notification display time */
-	private int notificationDisplayTime = 1000 * 6;
-	
-	private JFrame root;
+	private MainFrame root;
 	private NotificationManager manager;
 	private JLayeredPane layeredPane;
 	
@@ -26,15 +26,16 @@ public class NotificationDisplayHandler {
 	private NotificationPane currentPane;
 	private int posX, posY;
 	
-	public NotificationDisplayHandler(JFrame root, NotificationManager manager) {
+	public NotificationDisplayHandler(MainFrame root, NotificationManager manager) {
 		this.root = root;
 		this.manager = manager;
 		this.layeredPane = root.getLayeredPane();
 		
 		root.addComponentListener(onResize);
+		root.addMenuChangeListener(onMenuChange);
 		manager.addNotificationListener(notificationListener);
 		
-		timer = new Timer(notificationDisplayTime, timerListener);
+		timer = new Timer(Notification.NORMAL, timerListener);
 		timer.stop();
 		timer.setInitialDelay(0);
 	}
@@ -53,6 +54,8 @@ public class NotificationDisplayHandler {
 			updateLocation();
 			// add it to layered pane
 			layeredPane.add(pane, JLayeredPane.POPUP_LAYER);
+			timer.setInitialDelay(noti.getDisplayTime());
+			timer.restart();
 		}
 	}
 	
@@ -65,13 +68,6 @@ public class NotificationDisplayHandler {
 			layeredPane.remove(currentPane);
 			currentPane = null;
 		}
-		if(!manager.hasNext()) {
-			// no more notifications, stop timer
-			timer.stop();
-			return;
-		}
-		// manager has pending notification, show it
-		showNotification();
 	}
 	
 	
@@ -83,9 +79,14 @@ public class NotificationDisplayHandler {
 				if(currentPane.isFocussed())
 					return; // mouse entered notification -> leave notification displayed
 				hideNotification();
-			} else {
-				showNotification();
 			}
+			if(!manager.hasNext()) {
+				// no more notifications, stop timer
+				timer.stop();
+				return;
+			}
+			// manager has pending notification, show it
+			showNotification();
 		}
 	};
 	
@@ -94,6 +95,7 @@ public class NotificationDisplayHandler {
 		@Override
 		public void onNotification(NotificationManager manager) {
 			if(!timer.isRunning()) {
+				timer.setInitialDelay(0);
 				timer.start();
 			}
 		}
@@ -108,6 +110,14 @@ public class NotificationDisplayHandler {
 		};
 	};
 	
+	/** Triggered when a menu is changed */
+	private MenuChangeListener onMenuChange = new MenuChangeListener() {
+		@Override
+		public void onMenuChange(MenuPanel menuPanel) {
+			updateLocation();
+		}
+	};
+	
 	private void updateLocation() {
 		int w = root.getContentPane().getSize().width;
 		int h = root.getContentPane().getSize().height;		
@@ -115,7 +125,16 @@ public class NotificationDisplayHandler {
 		
 		posX = w - NotificationPane.DEFAULT_WIDTH  - space;
 		posY = h - NotificationPane.DEFAULT_HEIGHT - space;
-				
+		
+		if(root.isControlBarShown()) {
+			// add control bar offset
+			posY -= root.getDisplayedControlBar().getPreferredSize().height;
+		}
+		// add settings panel save button offset
+		if(root.getDisplayedPanel() instanceof SettingsPanel) {
+			posY -= 25;
+		}
+						
 		if(currentPane != null) {
 			currentPane.setLocation(posX, posY);
 		}
