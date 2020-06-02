@@ -20,6 +20,7 @@ import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigTextButton;
+import de.lars.remotelightclient.ui.comps.dialogs.ErrorDialog;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -27,6 +28,9 @@ import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
+import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.DirectoryUtil;
@@ -237,7 +241,24 @@ public class ScriptsPanel extends MenuPanel {
 			textNotification.setText(text);
 			bgrNotification.setVisible(true);
 			updateUI();
+			// show notification
+			showErrorNotification(e);
 		}
 	};
+	
+	private void showErrorNotification(Exception e) {
+		Notification notification = new Notification(NotificationType.ERROR,
+				"Lua Error", "An error occurred while executing the Lua script.",
+				new String[] {"Details"}, Notification.LONG,
+				new NotificationOptionListener() {
+					@Override
+					public void onOptionClicked(String option, int index) {
+						// show details error dialog
+						ErrorDialog.showErrorDialog(e, "Lua Error", false);
+					}
+				});
+		// show notification
+		Main.getInstance().showNotification(notification);
+	}
 	
 }

@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.comps.UpdateDialog;
+import de.lars.remotelightclient.ui.comps.dialogs.UpdateDialog;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.notification.Notification;

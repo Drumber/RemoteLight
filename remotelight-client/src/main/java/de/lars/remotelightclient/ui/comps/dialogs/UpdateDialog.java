@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.ui.comps;
+package de.lars.remotelightclient.ui.comps.dialogs;
 
 import java.awt.Desktop;
 import java.io.IOException;

@@ -21,12 +21,15 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.ui.comps.dialogs.ErrorDialog;
 import de.lars.remotelightclient.ui.listeners.ControlBarListener;
 import de.lars.remotelightclient.ui.listeners.MenuChangeListener;
 import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
@@ -51,7 +54,6 @@ import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
-import de.lars.remotelightcore.utils.ExceptionHandler;
 import de.lars.remotelightcore.utils.ExceptionHandler.ExceptionEvent;
 
 public class MainFrame extends JFrame {
@@ -305,7 +307,7 @@ public class MainFrame extends JFrame {
 			if(frame != null) {
 				frame.showErrorNotification(e);
 			} else {
-				showErrorDialog(e);
+				ErrorDialog.showErrorDialog(e);
 			}
 		}
 	};
@@ -318,37 +320,11 @@ public class MainFrame extends JFrame {
 		notification.setOptionListener(new NotificationOptionListener() {
 			@Override
 			public void onOptionClicked(String option, int index) {
-				showErrorDialog(e);
+				ErrorDialog.showErrorDialog(e);
 			}
 		});
 		// show notification
 		Main.getInstance().getCore().showNotification(notification);
-	}
-	
-	public static void showErrorDialog(Throwable e) {
-		JPanel root = new JPanel();
-		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
-		
-		JLabel header = new JLabel(String.format("A %s Error occured", e.getClass().getCanonicalName()));
-		header.setHorizontalAlignment(JLabel.LEFT);
-		header.setAlignmentX(Component.LEFT_ALIGNMENT);
-		header.setFont(Style.getFontRegualar(12));
-		root.add(header);
-		
-		root.add(Box.createRigidArea(new Dimension(0, 20)));
-		
-		JTextArea text = new JTextArea(ExceptionHandler.getStackTrace(e));
-		text.setLineWrap(true);
-		text.setCaretPosition(0);
-		text.setEditable(false);
-		
-		JScrollPane scroll = new JScrollPane(text);
-		scroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
-		scroll.setSize(new Dimension(200, 150));
-		scroll.setPreferredSize(new Dimension(200, 150));
-		root.add(scroll);
-		
-		JOptionPane.showMessageDialog(null, root, "Exception", JOptionPane.ERROR_MESSAGE);
 	}
 
 }
