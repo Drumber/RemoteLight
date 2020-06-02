@@ -212,6 +212,8 @@ public class RemoteLightCore {
 	
 	protected void updateDataFile() {
 		File file = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME);
+		if(!file.exists())
+			return;
 		
 		// backup old data file
 		File backupOldFile = new File(file.getAbsolutePath() + ".old_" + VERSION);
