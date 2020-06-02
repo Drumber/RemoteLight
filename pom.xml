@@ -16,6 +16,13 @@
 		<module>remotelight-core</module>
 		<module>remotelight-client</module>
 	</modules>
+	
+	<licenses>
+		<license>
+			<name>GNU GPL v3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+		</license>
+	</licenses>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -91,5 +98,31 @@
 			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<licenseName>gpl_v3</licenseName>
+					<inceptionYear>2019</inceptionYear>
+					<organizationName>Lars O.</organizationName>
+					<projectName>RemoteLight</projectName>
+					<processStartTag>&gt;===license-start</processStartTag>
+					<processEndTag>&lt;===license-end</processEndTag>
+					<sectionDelimiter>===</sectionDelimiter>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<trimHeaderLine>true</trimHeaderLine>
+					<emptyLineAfterHeader>true</emptyLineAfterHeader>
+					<includes>**/*.java</includes>
+					<roots>
+						<root>src/main/java</root>
+					</roots>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
