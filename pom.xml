@@ -116,6 +116,7 @@
 					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 					<trimHeaderLine>true</trimHeaderLine>
 					<emptyLineAfterHeader>true</emptyLineAfterHeader>
+					<canUpdateCopyright>true</canUpdateCopyright>
 					<includes>**/*.java</includes>
 					<roots>
 						<root>src/main/java</root>
