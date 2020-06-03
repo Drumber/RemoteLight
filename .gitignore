@@ -7,3 +7,5 @@
 /.settings/
 .classpath
 /target/
+remotelight-core/.settings/
+remotelight-client/.settings/
