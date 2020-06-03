@@ -55,6 +55,7 @@ public class Style {
 	private static int fontHelpIconSize = 16;
 	
 	public static void setStyle(String style) {
+		resetColors();
 		if(style.equalsIgnoreCase("Light")) {
 			setLightColors();
 		} else if(style.equalsIgnoreCase("Dark")) {
@@ -99,11 +100,33 @@ public class Style {
 	public static Color error = new Color(242, 34, 34);
 	public static Color warn = new Color(242, 183, 34);
 	public static Color info = Color.GRAY;
-	public static Color success = new Color(48, 237, 38);
+	public static Color success = new Color(40, 167, 69);
 	public static Color debug = new Color(173, 154, 38);
 	public static Color notification = info;
 	public static Color important = new Color(255, 200, 0);
 	
+	
+	/*
+	 * Default colors
+	 */
+	private static void resetColors() {
+		panelBackground = new Color(40, 40, 40);
+		panelAccentBackground = new Color(60, 60, 60);
+		panelDarkBackground = new Color(35, 35, 35);
+		hoverBackground = new Color(100, 100, 100);
+		buttonBackground = new Color(70, 70, 70);
+		textColor = new Color(255, 255, 255);
+		textColorDarker = new Color(200, 200, 200);
+		accent = new Color(255, 160, 60);
+		// notification colors
+		error = new Color(242, 34, 34);
+		warn = new Color(242, 183, 34);
+		info = Color.GRAY;
+		success = new Color(40, 167, 69);
+		debug = new Color(173, 154, 38);
+		notification = info;
+		important = new Color(255, 200, 0);
+	}
 	
 	/*
 	 * Light style
@@ -194,6 +217,10 @@ public class Style {
 		textColorDarker = UIManager.getColor("Label.disabledForeground");
 		accent = UIManager.getColor("Component.focusedBorderColor");
 		blackIcon = ColorUtil.getAvgRgbValue(panelBackground) > 180;
+		if(UIManager.getColor("Component.error.focusedBorderColor") != null)
+			error = UIManager.getColor("Component.error.focusedBorderColor");
+		if(UIManager.getColor("Component.warning.focusedBorderColor") != null)
+			warn = UIManager.getColor("Component.warning.focusedBorderColor");
 		fixButtonBackgroud();
 	}
 	
