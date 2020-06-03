@@ -23,8 +23,8 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 
 ## Software
 - [Java](https://java.com)
-- [RemoteLight](https://github.com/Drumber/RemoteLightClient/releases/latest)
-- [RemoteLightServer](https://github.com/Drumber/RemoteLightServer/releases/latest) (is required when using a Raspberry Pi)
+- [RemoteLight](https://github.com/Drumber/RemoteLight/releases)
+- [RemoteLightServer](https://github.com/Drumber/RemoteLightServer/releases) (is required when using a Raspberry Pi)
 
 ## Quick Start
 ### Arduino
@@ -34,15 +34,15 @@ RemoteLight uses the Glediator protocol for Arduino. Download the [Glediator ske
 > Note: Solderlab.de seems to be offline. You can alternatively download the sketch [here](https://workupload.com/file/vsSx8TBP) or use the [FastLED](https://github.com/marmilicious/FastLED_examples/blob/master/Glediator_test1.ino) variant.
 
 Connect the Arduino to your computer and start RemoteLight. Click '*Add*' to add a new Arduino to the output list. Then select the correct COM port, enter the number of pixels and click '*Save*'.
-Now you can activate the output by double clicking it or by clicking on '*Activate*'.
+Now you can activate the output by double clicking on it or by clicking on '*Activate*'.
 
 ### Raspberry Pi
 *[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*  
 [RemoteLightServer repository](https://github.com/Drumber/RemoteLightServer)
 
 First of all your Raspberry Pi must be prepared to control WS2811/WS2812 LEDs. There is a well described tutorial on tutorials-raspberrypi.com. [**> Tutorial <**](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  
-After everything works out, you can move on.  
-Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer/releases/latest) onto your Raspberry Pi and start it:
+After everything works, you can move on.  
+Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer/releases) onto your Raspberry Pi and start it:
 1. Connect to your Raspberry Pi via SSH.
 2. Install Java: `sudo apt-get install oracle-java8-jdk`
 3. Navigate to the directory where the RemoteLight-Server.jar is located, e.g.: `cd /home/pi/`
@@ -50,7 +50,7 @@ Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer
 5. To stop the server: Type `end` or press `Ctrl + c`
 
 Now start RemoteLight on your computer and click on '*Add*' > '*RLServer (Raspberry)*'. Enter the IP address of the Raspberry Pi in the '*Hostname / IP*' field (the Raspberry Pi must be on the same network).
-Enter the number of pixels and click Save. If the server is running, you can click on '*Activate*'.
+Enter the number of pixels and click 'Save'. If the server is running, you can click on '*Activate*'.
 > Note: You can also use the Raspberry Pi without an additional computer. For this you need an OS with a graphical desktop installed on the Raspberry Pi. Start the server (as described above) + the RemoteLight control software, add a new 'RLServer (Raspberry)' output and enter 'localhost' or '127.0.0.1' in the 'Hostname / IP' field.
 
 #### Start server automatically on startup
@@ -100,6 +100,15 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 -tray | -t               start minimized in the system tray
 -autoconnect | -ac       automatically connect to last used output
 -updatechecker | -uc     check for updates
+```
+
+## Commands
+Since RemoteLight v0.2.1 you can control animations/effects from the console.
+```
+start <AnimationManager/MusicSyncManager/SceneManager/LuaManager> <animation/effect/script path>
+stop <all/AnimationManager/MusicSyncManager/SceneManager/LuaManager>
+list [<AnimationManager/MusicSyncManager/SceneManager>]
+close
 ```
 
 ## Images
