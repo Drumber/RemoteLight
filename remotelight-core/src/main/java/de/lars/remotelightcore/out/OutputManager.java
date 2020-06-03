@@ -60,11 +60,11 @@ public class OutputManager {
 		}
 	}
 
-	public Output getActiveOutput() {
+	public synchronized Output getActiveOutput() {
 		return activeOutput;
 	}
 
-	public void setActiveOutput(Output activeOutput) {
+	public synchronized void setActiveOutput(Output activeOutput) {
 		this.setEnabled(false);
 		if(this.activeOutput != null && !(this.activeOutput.getId().equals(activeOutput.getId()))) {
 			
@@ -84,7 +84,7 @@ public class OutputManager {
 	/**
 	 * Connects the device if not connected
 	 */
-	public void activate(Output output) {
+	public synchronized void activate(Output output) {
 		Logger.info("Activate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() != ConnectionState.CONNECTED) {
 			output.onActivate();
@@ -95,7 +95,7 @@ public class OutputManager {
 	/**
 	 * Disconnects the device if connected
 	 */
-	public void deactivate(Output output) {
+	public synchronized void deactivate(Output output) {
 		Logger.info("Deactivate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() == ConnectionState.CONNECTED) {
 			output.onDeactivate();
@@ -166,18 +166,13 @@ public class OutputManager {
 	}
 	
 	public void close() {
-		setEnabled(false);
 		if(activeOutput != null) {
 			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {}
-			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
-			deactivate(activeOutput);
 			
 			//save last output before closing
 			sm.getSettingObject("out.lastoutput").setValue(activeOutput);
 		}
+		setEnabled(false);
 		//save brightness
 		sm.getSettingObject("out.brightness").setValue(getBrightness());
 	}
