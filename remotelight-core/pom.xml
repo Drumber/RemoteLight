@@ -14,8 +14,19 @@
 	<name>RemoteLight Core</name>
 	<description>LED Control Software Core</description>
 	<packaging>jar</packaging>
-	
+
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<!-- TEST -->
 			<plugin>
@@ -35,5 +46,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

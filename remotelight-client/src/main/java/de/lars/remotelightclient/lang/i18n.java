@@ -25,7 +25,7 @@ package de.lars.remotelightclient.lang;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class i18n {
+public class i18n { // TODO remove this class as it already exists in remotelight-core
 	private static final String BUNDLE_NAME = "de.lars.remotelightclient.lang.bundles.bundle"; //$NON-NLS-1$
 	private static final String SETTING_BUNDLE_NAME = "de.lars.remotelightclient.lang.setting_bundles.bundle"; //$NON-NLS-1$
 

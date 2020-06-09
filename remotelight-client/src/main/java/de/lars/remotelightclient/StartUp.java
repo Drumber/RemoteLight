@@ -103,14 +103,5 @@ public class StartUp {
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
 		s.addSetting(new SettingObject("simulatorFrame.size", "Simulator Window size", new Dimension(650, 150)));
 	}
-	
-	/**
-	 * Enables backward compatibility
-	 * <p>
-	 * Updates old package names to new package names
-	 */
-	public void updateDataFileContent() {
-		
-	}
 
 }

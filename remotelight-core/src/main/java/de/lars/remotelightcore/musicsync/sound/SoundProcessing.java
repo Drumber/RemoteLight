@@ -44,6 +44,8 @@ import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundInputStream;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.maths.MathHelper;
 
 /*
@@ -136,9 +138,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 
 		} catch (IllegalArgumentException | LineUnavailableException e) {
 			if(!RemoteLightCore.isHeadless()) {
-				//Main.getInstance().getMainFrame().printNotification(
-				//		"Input not supported! Please select a Mic or Line-In Input.", NotificationType.Error);
-				// TODO notification
+				RemoteLightCore.getInstance().showNotification(NotificationType.ERROR, "Input not supported! Please select a Mic or Line-In Input.", Notification.LONG);
 			}
 			Logger.error(e, "Error while setting up input line!");
 		}

@@ -26,8 +26,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class i18n {
-	private static final String BUNDLE_NAME = "de.lars.remotelightclient.lang.bundles.bundle"; //$NON-NLS-1$
-	private static final String SETTING_BUNDLE_NAME = "de.lars.remotelightclient.lang.setting_bundles.bundle"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "de.lars.remotelightcore.lang.bundles.bundle"; //$NON-NLS-1$
+	private static final String SETTING_BUNDLE_NAME = "de.lars.remotelightcore.lang.setting_bundles.bundle"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 	private static final ResourceBundle SETTING_RESOURCE_BUNDLE = ResourceBundle.getBundle(SETTING_BUNDLE_NAME);
