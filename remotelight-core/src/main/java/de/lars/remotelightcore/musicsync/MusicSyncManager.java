@@ -47,7 +47,10 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class MusicSyncManager extends EffectManager {
 	
-	SettingsManager sm;
+	/** should the native sound library be loaded */
+	public static boolean initNativeSound = true;
+	
+	private SettingsManager sm;
 	private MusicEffect activeEffect;
 	private List<MusicEffect> effects;
 	private String input;
@@ -69,7 +72,7 @@ public class MusicSyncManager extends EffectManager {
 		
 		if(nativeSound != null && nativeSound.isInitialized())
 			nativeSound.close();
-		nativeSound = new NativeSound(true);
+		nativeSound = new NativeSound(initNativeSound);
 		
 		if(soundProcessor != null) {
 			soundProcessor.stop();
