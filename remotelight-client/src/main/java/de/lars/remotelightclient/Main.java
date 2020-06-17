@@ -45,7 +45,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class Main {
 	
-	public final static String VERSION = "v0.2.1";
+	public final static String VERSION = "dev0.2.2";
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
@@ -57,12 +57,12 @@ public class Main {
 	
 	public Main(String[] args, boolean uiMode) {
 		instance = this;
+		setupOSSupport();
 		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook
 		remoteLightCore.registerShutdownHook();
 		
 		Logger.info("Starting RemoteLightClient version " + VERSION);
-		setupOSSupport();
 		Style.loadFonts();				// Load custom fonts
 		
 		new StartUp(RemoteLightCore.startParameter);
