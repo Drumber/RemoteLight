@@ -40,6 +40,7 @@ import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.notification.Notification;
@@ -54,7 +55,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class RemoteLightCore {
 	
-	private boolean shuttingDown = false;
+	private static boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
 	public final static String VERSION = "dev0.2.2";
@@ -64,6 +65,7 @@ public class RemoteLightCore {
 	private static RemoteLightCore instance;
 	private static boolean headless;
 	public static StartParameterHandler startParameter;
+	private FileStorage fileStorage;
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
@@ -95,10 +97,18 @@ public class RemoteLightCore {
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 		
+		File dataFile = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.FILE_STORAGE_NAME);
+		fileStorage = new FileStorage(dataFile);
+		try {
+			fileStorage.load();
+		} catch (IOException e) {
+			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
+		}
+		
 		updateDataFile(); // backwards compatibility to versions < 0.2.1
 		DataStorage.start(); // load data file
 		
-		settingsManager = new SettingsManager();
+		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
 		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
@@ -129,7 +139,7 @@ public class RemoteLightCore {
 	public void registerShutdownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				if(!getInstance().shuttingDown) { //prevent calling close method twice
+				if(!shuttingDown) { //prevent calling close method twice
 					instance.close(false);
 				}
 			}
@@ -288,6 +298,12 @@ public class RemoteLightCore {
 			
 			this.getDeviceManager().saveDevices();	// Save device list
 			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY); // Save all settings
+			
+			try {
+				fileStorage.save();
+			} catch (IOException ioe) {
+				Logger.error(ioe, "Could not save data file: " + fileStorage.getFile());
+			}
 			
 			DataStorage.save();	// Save data file
 			

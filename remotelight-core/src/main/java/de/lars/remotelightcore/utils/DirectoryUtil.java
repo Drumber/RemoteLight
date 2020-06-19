@@ -38,6 +38,7 @@ public class DirectoryUtil {
 	private static String rootPath = System.getProperty("user.home");
 	public static String DATA_DIR_NAME = ".RemoteLight";
 	public final static String DATA_FILE_NAME = "data.dat";
+	public final static String FILE_STORAGE_NAME = "data.json";
 	public final static String LOG_DIR_NAME = "logs";
 	public final static String LUA_DIR_NAME = "lua_scripts";
 	/** default: <code>/resources/</code> */
