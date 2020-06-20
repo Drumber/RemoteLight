@@ -127,8 +127,8 @@ public class SettingsManager {
 	 */
 	public void addSetting(Setting setting, boolean update) {
 		if(getSettingFromId(setting.getId()) != null) {
-			if(update && setting instanceof SettingSelection)
-				updateSelectionValues((SettingSelection) getSettingFromId(setting.getId()), (SettingSelection) setting);
+			if(update)
+				updateSetting(getSettingFromId(setting.getId()), setting);
 			return;
 		}
 		Logger.info("Registered Setting '" + setting.getId() + "'.");
@@ -155,6 +155,33 @@ public class SettingsManager {
 	 */
 	public void deleteSettings() {
 		settings = new ArrayList<Setting>();
+	}
+	
+	public void updateSetting(Setting oldSetting, Setting newSetting) {
+		// check if setting type has changed
+		if(newSetting.getClass() != oldSetting.getClass()) {
+			// update setting type
+			int oldIndex = settings.indexOf(oldSetting);
+			if(oldIndex != -1) {
+				settings.set(oldIndex, newSetting);
+				Logger.info("Updated setting " + oldSetting.getId() +
+						". Old type: " + oldSetting.getClass().getSimpleName() +
+						" New type: " + newSetting.getClass().getSimpleName());
+			}
+		// check if some data (name, description etc.; but not value) has changed
+		} else if(oldSetting.getCategory() != newSetting.getCategory() ||
+				!oldSetting.getDescription().equals(newSetting.getDescription()) ||
+				!oldSetting.getName().equals(newSetting.getName())) {
+			// update data
+			oldSetting.setCategory(newSetting.getCategory());
+			oldSetting.setDescription(newSetting.getDescription());
+			oldSetting.setName(newSetting.getName());
+			Logger.info("Updated setting " + oldSetting.getId());
+		}
+		// update selection values if both are from type SettingSelection
+		if(oldSetting instanceof SettingSelection && newSetting instanceof SettingSelection) {
+			updateSelectionValues((SettingSelection) oldSetting, (SettingSelection) newSetting);
+		}
 	}
 	
 	/**

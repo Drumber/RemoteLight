@@ -170,7 +170,7 @@ public class OutputManager {
 			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 			
 			//save last output before closing
-			sm.getSettingObject("out.lastoutput").setValue(activeOutput);
+			sm.getSettingObject("out.lastoutput").setValue(activeOutput.getId());
 		}
 		setEnabled(false);
 		//save brightness

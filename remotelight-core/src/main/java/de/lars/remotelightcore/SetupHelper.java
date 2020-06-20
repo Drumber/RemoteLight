@@ -29,7 +29,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
-import de.lars.remotelightcore.out.Output;
+import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -99,9 +99,10 @@ public class SetupHelper {
 				if (s.getSetting(SettingBoolean.class, "out.autoconnect").getValue()
 						|| RemoteLightCore.startParameter.autoConnect) {
 					
-					Output output = (Output) s.getSettingObject("out.lastoutput").getValue();
-					if (output != null) {
-						core.getOutputManager().setActiveOutput(output);
+					String outputID = (String) s.getSettingObject("out.lastoutput").getValue();
+					if (outputID != null && core.getDeviceManager().isIdUsed(outputID)) {
+						Device device = core.getDeviceManager().getDevice(outputID);
+						core.getOutputManager().setActiveOutput(device);
 					}
 				}
 
