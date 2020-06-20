@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
@@ -186,12 +185,7 @@ public class SettingsManager {
 	 * @param key DataStorage Key
 	 */
 	public void save(String key) {
-		if(!DataStorage.isCreated()) {
-			Logger.error("It seems the data file was not created. Connat save settings...");
-		}
-		//DataStorage.store(key, settings);
 		fileStorage.store(key, settings);
-		
 		Logger.info("Stored " + settings.size() + " setting to data file.");
 	}
 	
@@ -201,15 +195,11 @@ public class SettingsManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public void load(String key) {
-//		if(DataStorage.getData(key) != null && DataStorage.getData(key) instanceof List<?>) {
-//			settings = (List<Setting>) DataStorage.getData(key);
-//			Logger.info("Loaded " + settings.size() + " settings from data file.");
-//		}
 		if(fileStorage.get(key) != null && fileStorage.get(key) instanceof List<?>) {
 			settings = (List<Setting>) fileStorage.get(key);
 			Logger.info("Loaded " + settings.size() + " settings from data file.");
 		} else {
-			Logger.warn("Invalid or empty data! Can not load settings from data file.");
+			Logger.warn("Invalid or empty data! Could not load settings from data file.");
 		}
 	}
 

@@ -109,8 +109,8 @@ public class RemoteLightCore {
 		DataStorage.start(); // load data file
 		
 		settingsManager = new SettingsManager(fileStorage);
-		settingsManager.load(DataStorage.SETTINGSMANAGER_KEY);
-		deviceManager = new DeviceManager();
+		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
+		deviceManager = new DeviceManager(fileStorage, fileStorage.KEY_DEVICES_LIST);
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
 		notificationManager = new NotificationManager();
@@ -296,8 +296,8 @@ public class RemoteLightCore {
 			this.getEffectManagerHelper().stopAll();// Stop all active effects
 			this.getOutputManager().close();		// Close active output
 			
-			this.getDeviceManager().saveDevices();	// Save device list
-			this.getSettingsManager().save(DataStorage.SETTINGSMANAGER_KEY); // Save all settings
+			this.getDeviceManager().saveDevices(fileStorage, fileStorage.KEY_DEVICES_LIST);	// Save device list
+			this.getSettingsManager().save(fileStorage.KEY_SETTINGS_LIST); // Save all settings
 			
 			try {
 				fileStorage.save();

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +13,13 @@ import java.util.Map;
 import org.tinylog.Logger;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.io.jsonserializer.SettingDeserializer;
+import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.io.jsondeserializer.DeviceDeserializer;
+import de.lars.remotelightcore.io.jsondeserializer.SettingDeserializer;
+import de.lars.remotelightcore.io.jsonserializer.DeviceSerializer;
 import de.lars.remotelightcore.io.jsonserializer.SettingSerializer;
 import de.lars.remotelightcore.settings.Setting;
 
@@ -30,14 +34,21 @@ public class FileStorage {
 	
 	public final String KEY_DATA = "data";
 	public final String KEY_VERSION = "version";
-	public final String KEY_SETTINGS_LIST = "settingsmanager_key";
+	public final String KEY_SETTINGS_LIST = "settings";
+	public final String KEY_DEVICES_LIST = "devices";
+	
+	public final Type TYPE_SETTINGS_LIST;
+	public final Type TYPE_DEVICES_LIST;
 	
 	public FileStorage(File file) {
 		this.file = file;
-		List<Setting> settingListTemplate = new ArrayList<>();
+		TYPE_SETTINGS_LIST = new TypeToken<List<Setting>>() {}.getType();
+		TYPE_DEVICES_LIST = new TypeToken<List<Device>>() {}.getType();
 		this.gson = new GsonBuilder()
-				.registerTypeAdapter(settingListTemplate.getClass(), new SettingSerializer())
-				.registerTypeAdapter(settingListTemplate.getClass(), new SettingDeserializer())
+				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingSerializer())
+				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingDeserializer())
+				.registerTypeAdapter(TYPE_DEVICES_LIST, new DeviceSerializer())
+				.registerTypeAdapter(TYPE_DEVICES_LIST, new DeviceDeserializer())
 				.serializeNulls()
 				.setPrettyPrinting()
 				.create();
@@ -78,8 +89,20 @@ public class FileStorage {
 		
 		// loop through all data and build json object
 		for(Map.Entry<String, Object> entry : storageMap.entrySet()) {
+			JsonElement sElement;
+			
 			// serialize data object to json
-			JsonElement sElement = gson.toJsonTree(entry.getValue());
+			if(entry.getKey().equals(KEY_SETTINGS_LIST)) {
+				// serialize setting list
+				sElement = gson.toJsonTree(entry.getValue(), TYPE_SETTINGS_LIST);
+			} else if(entry.getKey().equals(KEY_DEVICES_LIST)) {
+				// serialize device list
+				sElement = gson.toJsonTree(entry.getValue(), TYPE_DEVICES_LIST);
+			} else {
+				// serialize other data
+				sElement = gson.toJsonTree(entry.getValue());
+			}
+			
 			// create json object and add json data
 			JsonObject jsonEntry = new JsonObject();
 			jsonEntry.add(entry.getKey(), sElement);
@@ -117,14 +140,19 @@ public class FileStorage {
 				JsonObject jsonEntry = element.getAsJsonObject();
 				for(Map.Entry<String, JsonElement> entry : jsonEntry.entrySet()) {
 					Object data;
+					
+					// deserialize json data
 					if(entry.getKey().equals(KEY_SETTINGS_LIST)) {
-						List<Setting> settingListTemplate = new ArrayList<>();
-						data = gson.fromJson(entry.getValue(), settingListTemplate.getClass());
+						// deserialize settings list
+						data = gson.fromJson(entry.getValue(), TYPE_SETTINGS_LIST);
+					} else if (entry.getKey().equals(KEY_DEVICES_LIST)) {
+						// deserialize devices list
+						data = gson.fromJson(entry.getValue(), TYPE_DEVICES_LIST);
 					} else {
+						// deserialize other data
 						data = gson.fromJson(entry.getValue(), Object.class);
 					}
-					//List<?> list = (List<?>) data;
-					//System.out.println(list.get(0).getClass());
+					
 					storageMap.put(entry.getKey(), data);
 				}
 			}

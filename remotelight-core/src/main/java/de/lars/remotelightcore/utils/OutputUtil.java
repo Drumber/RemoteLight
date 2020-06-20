@@ -48,6 +48,21 @@ public class OutputUtil {
 		return "Unknown output";
 	}
 	
+	public static Class<? extends Device> getDeviceClass(String deviceType) {
+		switch (deviceType) {
+		case "Arduino":
+			return Arduino.class;
+		case "RemoteLightServer":
+			return RemoteLightServer.class;
+		case "Artnet":
+			return Artnet.class;
+		case "Chain":
+			return Chain.class;
+		default:
+			return null;
+		}
+	}
+	
 	public static String getDeviceConnectionInfo(Device d) {
 		if(d instanceof Arduino) {
 			return ((Arduino) d).getSerialPort();

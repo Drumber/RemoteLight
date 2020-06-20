@@ -23,28 +23,26 @@
 package de.lars.remotelightcore.devices;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.io.FileStorage;
 
 public class DeviceManager {
 	
 	private List<Device> devices;
 	
 	public DeviceManager() {
-		Device[] storedDevices = (Device[]) DataStorage.getData(DataStorage.DEVICES_LIST);
-		if(storedDevices != null) {
-			devices = new ArrayList<Device>(Arrays.asList(storedDevices));
-			Logger.info("Loaded " + devices.size() + " devices.");
-			for(Device d : devices) d.onLoad();
-		} else {
-			devices = new ArrayList<Device>();
-		}
+		this(null, null);
+	}
+	
+	public DeviceManager(FileStorage storage, String key) {
+		devices = new ArrayList<Device>();
+		if(storage != null && key != null)
+			loadDevices(storage, key);
 	}
 	
 	/**
@@ -137,15 +135,26 @@ public class DeviceManager {
 		devices.clear();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void loadDevices(FileStorage storage, String key) {
+		if(storage.get(key) != null && storage.get(key) instanceof List<?>) {
+			devices = (List<Device>) storage.get(key);
+			Logger.info("Loaded " + devices.size() + " devices.");
+			devices.forEach(Device::onLoad);
+		} else {
+			Logger.warn("Invalid or empty data! Could not load devices from data file.");
+		}
+	}
+	
 	/**
 	 * 
 	 * Stores devices in data file
 	 */
-	public void saveDevices() {
-		Device[] storedDevices = new Device[devices.size()];
-		storedDevices = devices.toArray(storedDevices);
-		DataStorage.store(DataStorage.DEVICES_LIST, storedDevices);
-		Logger.info("Saved " + storedDevices.length + " devices.");
+	public void saveDevices(FileStorage storage, String key) {
+		if(devices != null) {
+			storage.store(key, devices);
+			Logger.info("Saved " + devices.size() + " devices.");
+		}
 	}
 
 }

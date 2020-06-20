@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.io.jsonserializer;
+package de.lars.remotelightcore.io.jsondeserializer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import org.tinylog.Logger;
 
 import com.google.gson.*;
 
+import de.lars.remotelightcore.io.jsonserializer.SettingSerializer;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.SettingTypeUtil;
@@ -26,10 +27,17 @@ public class SettingDeserializer implements JsonDeserializer<List<Setting>> {
 				// json root object
 				JsonObject jsonRoot = element.getAsJsonObject();
 				
+				if(!jsonRoot.has(SettingSerializer.SETTING_TYPE))
+					throw new JsonParseException("JsonObject does not contain '" + SettingSerializer.SETTING_TYPE + "' member.");
+				
 				// get class name/setting type from json
 				String className = jsonRoot.get(SettingSerializer.SETTING_TYPE).getAsString();
 				// get setting class from string
 				Class<? extends Setting> clazz = SettingTypeUtil.getSettingClass(className);
+				if(clazz == null) {
+					Logger.error("Could not find class for setting type '" + className + "'. Skipping this setting.");
+					continue;
+				}
 				
 				if(!jsonRoot.has(SettingSerializer.VALUES))
 					throw new JsonParseException("JsonObject does not contain '" + SettingSerializer.VALUES + "' member.");
@@ -63,7 +71,7 @@ public class SettingDeserializer implements JsonDeserializer<List<Setting>> {
 		if(json.has(SettingSerializer.OBJECT_TYPE) && content.has(valueKey)) {
 			// get class name from json object
 			String classname = json.get(SettingSerializer.OBJECT_TYPE).getAsString();
-			Class<?> clazz = null;
+			Class<?> clazz = Object.class;
 			try {
 				// try to get class
 				clazz = Class.forName(classname);

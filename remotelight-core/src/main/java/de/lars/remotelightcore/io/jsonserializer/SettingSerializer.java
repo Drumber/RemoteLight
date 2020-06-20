@@ -12,7 +12,7 @@ public class SettingSerializer implements JsonSerializer<List<Setting>> {
 	
 	public final static String SETTING_TYPE = "SETTING_TYPE";
 	public final static String VALUES = "VALUES";
-	public final static String OBJECT_TYPE = "object_type";
+	public final static String OBJECT_TYPE = "OBJECT_TYPE";
 
 	@Override
 	public JsonElement serialize(List<Setting> src, Type typeOfSrc, JsonSerializationContext context) {
