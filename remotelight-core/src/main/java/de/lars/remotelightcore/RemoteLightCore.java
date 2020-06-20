@@ -38,7 +38,6 @@ import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.data.DataFileUpdater;
-import de.lars.remotelightcore.data.DataStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.lua.LuaManager;
@@ -97,16 +96,18 @@ public class RemoteLightCore {
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 		
+		// create data file
 		File dataFile = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.FILE_STORAGE_NAME);
+		// instantiate file storage
 		fileStorage = new FileStorage(dataFile);
 		try {
+			// try to load data file
 			fileStorage.load();
 		} catch (IOException e) {
 			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
 		}
 		
 		updateDataFile(); // backwards compatibility to versions < 0.2.1
-		DataStorage.start(); // load data file
 		
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
@@ -300,14 +301,13 @@ public class RemoteLightCore {
 			this.getSettingsManager().save(fileStorage.KEY_SETTINGS_LIST); // Save all settings
 			
 			try {
+				// save data file
 				fileStorage.save();
 			} catch (IOException ioe) {
 				Logger.error(ioe, "Could not save data file: " + fileStorage.getFile());
 			}
 			
-			DataStorage.save();	// Save data file
-			
-			//copy log file and rename
+			// copy log file and rename
 			DirectoryUtil.copyAndRenameLog(
 					new File(DirectoryUtil.getLogsPath() + "log.txt"),
 					new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");

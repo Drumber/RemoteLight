@@ -119,9 +119,11 @@ public class FileStorage {
 	}
 	
 	public void load() throws IOException {
-		if(!file.exists() || !file.isFile())
+		if(!file.exists() || !file.isFile()) {
+			Logger.info("Data file does not exists: " + file.getAbsolutePath());
 			return;
-		
+		}
+			
 		try (Reader reader = Files.newBufferedReader(file.toPath())) {
 			// read json object from file
 			JsonObject jsonRoot = gson.fromJson(reader, JsonObject.class);
