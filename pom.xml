@@ -74,6 +74,11 @@
 			<artifactId>tinylog-impl</artifactId>
 			<version>2.1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.DeBukkIt</groupId>
+			<artifactId>SimpleFileStorage</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 		<!-- Local installed jar file -->
 		<dependency>
 			<groupId>jorensix</groupId>
