@@ -25,7 +25,6 @@ package de.lars.remotelightcore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -107,7 +106,7 @@ public class RemoteLightCore {
 			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
 		}
 		
-		updateDataFile(); // backwards compatibility to versions < 0.2.1
+		updateDataFile(); // backwards compatibility to versions < v0.2.2
 		
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
@@ -247,6 +246,7 @@ public class RemoteLightCore {
 		File file = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.DATA_FILE_NAME);
 		if(!file.exists())
 			return;
+		Logger.debug("Found old data file ('" + file.getAbsolutePath() + "'). Trying to update to new Json file storage...");
 		
 		// backup old data file
 		File backupOldFile = new File(file.getAbsolutePath() + ".old_" + VERSION);
@@ -258,26 +258,12 @@ public class RemoteLightCore {
 			}
 		}
 		
-		boolean updated = false;
-		try {
-			
-			DataFileUpdater dataFileUpdater = new DataFileUpdater(file);
-			dataFileUpdater.updateData();
-			dataFileUpdater.close();
-			updated = true;
-			
-		} catch (IOException | ClassNotFoundException e) {
-			Logger.error(e, "Could not update data file. Backup and rename old data file and create new one...");
-			updated = false;
-		}
+		// update to new file format (json)
+		new DataFileUpdater(fileStorage);
 		
-		if(!updated) {
-			File backupFile = new File(file.getAbsolutePath() + ".backup_" + VERSION);
-			try {
-				Files.move(file.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				Logger.error(e, "Could not backup old data file (" + file.getAbsolutePath() + "). Please remove manually.");
-			}
+		// delete old data file
+		if(!file.delete()) {
+			Logger.warn("Could not delete old data file ('" + file.getAbsolutePath() + "'). Please remove manually.");
 		}
 	}
 	

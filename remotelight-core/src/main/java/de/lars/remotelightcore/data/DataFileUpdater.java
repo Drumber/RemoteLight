@@ -22,71 +22,57 @@
 
 package de.lars.remotelightcore.data;
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.tinylog.Logger;
 
-public class DataFileUpdater extends ObjectInputStream {
-	
-	private String oldPackagePrefix = "de.lars.remotelightclient";
-	private String newPackagePrefix = "de.lars.remotelightcore";
-	
-	private File file;
+import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.io.FileStorage;
+import de.lars.remotelightcore.settings.Setting;
 
-	/**
-	 * Enables backward compatibility
-	 * <p>
-	 * Updates old package names to new package names
-	 */
-	public DataFileUpdater(File file) throws IOException {
-		super(new BufferedInputStream(new FileInputStream(file)));
-		this.file = file;
-	}
+public class DataFileUpdater {
 	
-	public void setOldPackagePrefix(String oldPackagePrefix) {
-		this.oldPackagePrefix = oldPackagePrefix;
-	}
-
-	public void setNewPackagePrefix(String newPackagePrefix) {
-		this.newPackagePrefix = newPackagePrefix;
-	}
-
-	
-	@SuppressWarnings("unchecked")
-	public void updateData() throws ClassNotFoundException, IOException {
-		// try to read data map
-		HashMap<String, Object> storageMap = (HashMap<String, Object>) this.readObject();
-		this.close();
+	public DataFileUpdater(FileStorage fileStorage) {
+		if(DataStorage.getstorage() != null)
+			DataStorage.save();
 		
-		// and save it to file
-		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-		oos.writeObject(storageMap);
-		oos.flush();
-		oos.close();
+		DataStorage.start();
+		if(DataStorage.getstorage() == null) {
+			Logger.error("Error: Failed to initialize old DataStorage. Can not update data to new format!");
+			return;
+		}
 		
-		Logger.info("Successfully updated data file.");
-	}
-	
-	@Override
-	protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException {
-		// adopted from https://stackoverflow.com/a/5305751/12821118
-		ObjectStreamClass desc = super.readClassDescriptor();
+		Object deviceArray = DataStorage.getData(DataStorage.DEVICES_LIST);
+		// should be Device array
+		if(deviceArray instanceof Device[]) {
+			// update to new format
+			List<Device> devices = Arrays.asList((Device[]) deviceArray);
+			fileStorage.store(fileStorage.KEY_DEVICES_LIST, devices);
+			Logger.debug("Updated device array to new file storage.");
+		} else {
+			Logger.warn("Could not update device list. Expected Device array, got " + deviceArray.getClass().getName());
+		}
 		
-	    if (desc.getName().contains(oldPackagePrefix)) {
-	    	String newClassName = desc.getName().replace(oldPackagePrefix, newPackagePrefix);
-	    	Logger.debug("Try updating " + desc.getName() + " to " + newClassName);
-	    	try {
-	    		
-	    		Class<?> cls = Class.forName(newClassName);
-		        return ObjectStreamClass.lookup(cls);
-		        
-	    	} catch (LinkageError | ClassNotFoundException e) {
-	    		// class not found
-	    		Logger.error(e, "Could not update class.");
-			}
-	    }
-	    return desc;
+		Object settingsList = DataStorage.getData(DataStorage.SETTINGSMANAGER_KEY);
+		// should be List
+		if(settingsList instanceof List<?>) {
+			@SuppressWarnings("unchecked")
+			List<Setting> settings = (List<Setting>) settingsList;
+			fileStorage.store(fileStorage.KEY_SETTINGS_LIST, settings);
+			Logger.debug("Updated settings list to new file storage.");
+		} else {
+			Logger.warn("Could not update settings list. Expected List<?>, got " + settingsList.getClass().getName());
+		}
+		
+		Logger.debug("Trying to save new file storage.");
+		try {
+			fileStorage.save();
+			Logger.debug("...saved");
+		} catch (IOException e) {
+			Logger.error(e, "Attemp to save new file storage failed.");
+		}
 	}
 
 }
