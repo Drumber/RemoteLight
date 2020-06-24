@@ -31,13 +31,13 @@ import java.util.List;
 import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;

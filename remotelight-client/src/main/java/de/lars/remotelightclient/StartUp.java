@@ -23,13 +23,13 @@
 package de.lars.remotelightclient;
 
 import java.awt.Dimension;
-import java.util.Locale;
 
-import de.lars.remotelightclient.lang.LangUtil;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.dialogs.UpdateDialog;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.lang.LangUtil;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
@@ -49,8 +49,9 @@ public class StartUp {
 		//register default settings
 		registerSettings();
 		
-		//set language
-		Locale.setDefault(new Locale(LangUtil.langNameToCode(((SettingSelection) s.getSettingFromId("ui.language")).getSelected())));
+		// set default language
+		String langCode = ((SettingSelection) s.getSettingFromId("ui.language")).getSelected();
+		i18n.setLocale(langCode);
 		
 		new Thread(new Runnable() {
 			@Override

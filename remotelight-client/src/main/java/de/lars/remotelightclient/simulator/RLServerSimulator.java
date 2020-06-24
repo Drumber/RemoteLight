@@ -35,7 +35,7 @@ import org.tinylog.Logger;
 
 import com.google.gson.Gson;
 
-import de.lars.remotelightclient.lang.i18n;
+import de.lars.remotelightcore.lang.i18n;
 
 public class RLServerSimulator {
 	

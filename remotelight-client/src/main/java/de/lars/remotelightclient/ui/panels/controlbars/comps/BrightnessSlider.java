@@ -35,10 +35,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 
 public class BrightnessSlider extends JPanel {
 

@@ -39,7 +39,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
@@ -47,6 +46,7 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.Se
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.musicsync.InputUtil;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.musicsync.sound.Shared;

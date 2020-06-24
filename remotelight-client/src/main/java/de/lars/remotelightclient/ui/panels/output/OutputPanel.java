@@ -32,7 +32,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.simulator.SimulatorFrame;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
@@ -51,6 +50,7 @@ import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.Output;

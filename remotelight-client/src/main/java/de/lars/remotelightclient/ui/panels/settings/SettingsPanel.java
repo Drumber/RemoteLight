@@ -37,12 +37,12 @@ import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
@@ -168,15 +168,22 @@ public class SettingsPanel extends MenuPanel {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
 			}
+			
+			// set default locale
+			String langCode = ((SettingSelection) sm.getSettingFromId("ui.language")).getSelected();
+			i18n.setLocale(langCode);
+			
 			// set Look And Feel
 			Main.getInstance().setLookAndFeel();
 			// set style
 			Style.setStyle();
 			FlatLaf.updateUILater();
+			
 			//repaint ui
 			mainFrame.updateFrame();
 			//display settings
 			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
+			
 			Main.getInstance().showNotification(
 					new Notification(NotificationType.SUCCESS, "Settings", i18n.getString("SettingsPanel.SavedSettings"), Notification.SHORT));
 		}

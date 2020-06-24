@@ -29,13 +29,13 @@ import java.awt.FlowLayout;
 
 import javax.swing.*;
 
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.link.chain.Chain;
+import de.lars.remotelightcore.lang.i18n;
 
 public class ChainSettingsPanel extends DeviceSettingsPanel {
 	

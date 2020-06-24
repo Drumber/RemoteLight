@@ -38,7 +38,6 @@ import javax.swing.border.TitledBorder;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
@@ -50,6 +49,7 @@ import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;

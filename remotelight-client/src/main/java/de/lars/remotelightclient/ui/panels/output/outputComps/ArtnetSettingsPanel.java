@@ -30,11 +30,11 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.devices.artnet.Artnet;
+import de.lars.remotelightcore.lang.i18n;
 
 public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 

@@ -30,13 +30,13 @@ import java.awt.FlowLayout;
 import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 
 public class AboutPanel extends MenuPanel {
 	private static final long serialVersionUID = -1227084275389857291L;

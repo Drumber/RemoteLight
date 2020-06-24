@@ -30,18 +30,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import de.lars.remotelightcore.lang.i18n;
 
 public class SideMenuExtended extends JPanel {
 

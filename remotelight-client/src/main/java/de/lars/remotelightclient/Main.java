@@ -63,6 +63,7 @@ public class Main {
 		remoteLightCore.registerShutdownHook();
 		
 		Logger.info("Starting RemoteLightClient version " + VERSION);
+		
 		Style.loadFonts();				// Load custom fonts
 		
 		new StartUp(RemoteLightCore.startParameter);

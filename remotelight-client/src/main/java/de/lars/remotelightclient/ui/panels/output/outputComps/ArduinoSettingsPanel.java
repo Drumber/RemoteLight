@@ -34,12 +34,12 @@ import javax.swing.event.ChangeListener;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-import de.lars.remotelightclient.lang.i18n;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.arduino.ComPort;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
+import de.lars.remotelightcore.lang.i18n;
 
 public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 
