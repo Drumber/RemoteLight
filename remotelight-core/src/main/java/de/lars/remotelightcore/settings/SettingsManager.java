@@ -28,11 +28,12 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightcore.io.AutoSave.AutoSaveEvent;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 
-public class SettingsManager {
+public class SettingsManager implements AutoSaveEvent {
 	
 	/**
 	 * Intern + MusicEffect: Not displayed in settings UI
@@ -216,6 +217,12 @@ public class SettingsManager {
 		Logger.info("Stored " + settings.size() + " setting to data file.");
 	}
 	
+	@Override
+	public void onAutoSave(FileStorage storage) {
+		storage.store(storage.KEY_SETTINGS_LIST, settings);
+	}
+
+	
 	/**
 	 * Loads settings from data file
 	 * @param key DataStorage Key
@@ -229,5 +236,5 @@ public class SettingsManager {
 			Logger.warn("Invalid or empty data! Could not load settings from data file.");
 		}
 	}
-
+	
 }

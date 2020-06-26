@@ -38,6 +38,7 @@ import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.io.AutoSave;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
@@ -62,19 +63,23 @@ public class RemoteLightCore {
 	
 	private static RemoteLightCore instance;
 	private static boolean headless;
-	public static StartParameterHandler startParameter;
-	private FileStorage fileStorage;
+	public  static StartParameterHandler startParameter;
+	
+	private DeviceManager deviceManager;
+	private OutputManager outputManager;
+	private SettingsManager settingsManager;
+	private NotificationManager notificationManager;
+	
+	private EffectManagerHelper effectManagerHelper;
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
 	private ScreenColorManager screenColorManager;
-	private DeviceManager deviceManager;
-	private OutputManager outputManager;
-	private SettingsManager settingsManager;
-	private EffectManagerHelper effectManagerHelper;
 	private LuaManager luaManager;
+	
+	private FileStorage fileStorage;
+	private AutoSave fileAutoSaver;
 	private CommandParser commandParser;
-	private NotificationManager notificationManager;
 	
 	public RemoteLightCore(String[] args, boolean headless) {
 		if(instance != null) {
@@ -105,6 +110,9 @@ public class RemoteLightCore {
 		} catch (IOException e) {
 			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
 		}
+		
+		// initialize AutoSaver
+		fileAutoSaver = new AutoSave(fileStorage);
 		
 		updateDataFile(); // backwards compatibility to versions < v0.2.2
 		
@@ -190,6 +198,14 @@ public class RemoteLightCore {
 		return luaManager;
 	}
 	
+	public FileStorage getFileStorage() {
+		return fileStorage;
+	}
+	
+	public AutoSave getAutoSaver() {
+		return fileAutoSaver;
+	}
+	
 	public CommandParser getCommandParser() {
 		return commandParser;
 	}
@@ -239,6 +255,13 @@ public class RemoteLightCore {
 	public void showErrorNotification(Exception e) {
 		Notification notification = new Notification(NotificationType.ERROR, "An error has occurred: " + e.getClass().getCanonicalName());
 		notification.setDisplayTime(Notification.LONG);
+		showNotification(notification);
+	}
+	
+	public void showErrorNotification(Exception e, String title) {
+		Notification notification = new Notification(NotificationType.ERROR, title, "An error has occurred: " + e.getClass().getCanonicalName());
+		notification.setDisplayTime(Notification.LONG);
+		showNotification(notification);
 	}
 	
 	

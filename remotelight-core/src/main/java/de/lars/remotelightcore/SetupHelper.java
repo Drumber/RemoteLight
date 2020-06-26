@@ -30,6 +30,7 @@ import org.tinylog.Logger;
 import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
 import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.io.AutoSave;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -78,6 +79,10 @@ public class SetupHelper {
 				"Automaticly connect/open last used output.", false));
 		s.addSetting(new SettingBoolean("manager.lastactive.enabled", "Auto enable last effect",
 				SettingCategory.General, "Automaticly enable last used effect/animation.", false));
+		s.addSetting(new SettingBoolean("data.autosave", "Auto save", SettingCategory.General,
+				"Save the data file periodically", true));
+		s.addSetting(new SettingInt("data.autosave.interval", "Auto save interval (minutes)", SettingCategory.General,
+				"Time interval between automatic saving", 5, 1, 60, 2));
 		s.addSetting(new SettingInt("logs.deletedays", "Delete log files older than x days", SettingCategory.Others,
 				null, 2, 1, 30, 1));
 
@@ -91,6 +96,20 @@ public class SetupHelper {
 	}
 
 	private void automation() {
+		// setup auto save
+		SettingBoolean sbAutoSave = s.getSetting(SettingBoolean.class, "data.autosave");
+		AutoSave autoSave = core.getAutoSaver();
+		if(sbAutoSave.getValue()) {
+			// set delay
+			autoSave.setDelay(s.getSetting(SettingInt.class, "data.autosave.interval").getValue());
+			// start auto saver
+			autoSave.start();
+		}
+		// add setting listeners
+		sbAutoSave.setValueListener(s -> autoSave.setEnabled(((SettingBoolean) s).getValue()));
+		s.getSetting(SettingInt.class, "data.autosave.interval").setValueListener(s -> autoSave.setDelay(((SettingInt) s).getValue()));
+		
+		// perform update checking and auto connect in separate thread
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -98,7 +117,7 @@ public class SetupHelper {
 				// auto connect feature)
 				if (s.getSetting(SettingBoolean.class, "out.autoconnect").getValue()
 						|| RemoteLightCore.startParameter.autoConnect) {
-					
+
 					String outputID = (String) s.getSettingObject("out.lastoutput").getValue();
 					if (outputID != null && core.getDeviceManager().isIdUsed(outputID)) {
 						Device device = core.getDeviceManager().getDevice(outputID);
