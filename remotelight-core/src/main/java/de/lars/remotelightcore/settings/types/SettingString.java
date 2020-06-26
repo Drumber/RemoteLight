@@ -43,8 +43,10 @@ public class SettingString extends Setting {
 	}
 
 	public void setValue(String value) {
+		boolean change = !value.equals(this.value);
 		this.value = value;
-		fireChangeEvent();
+		if(change)
+			fireChangeEvent();
 	}
 
 }

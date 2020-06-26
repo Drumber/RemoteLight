@@ -45,8 +45,10 @@ public class SettingColor extends Setting {
 	}
 
 	public void setValue(Color value) {
+		boolean change = value.getRGB() != this.value.getRGB();
 		this.value = value;
-		fireChangeEvent();
+		if(change)
+			fireChangeEvent();
 	}
 
 }

@@ -43,8 +43,10 @@ public class SettingBoolean extends Setting {
 	}
 	
 	public void setValue(boolean value) {
+		boolean change = value != this.value;
 		this.value = value;
-		fireChangeEvent();
+		if(change)
+			fireChangeEvent();
 	}
 
 }

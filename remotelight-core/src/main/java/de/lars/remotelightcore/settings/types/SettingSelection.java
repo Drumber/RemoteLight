@@ -58,8 +58,10 @@ public class SettingSelection extends Setting {
 	}
 
 	public void setSelected(String selected) {
+		boolean change = !selected.equals(this.selected);
 		this.selected = selected;
-		fireChangeEvent();
+		if(change)
+			fireChangeEvent();
 	}
 
 	public Model getModel() {

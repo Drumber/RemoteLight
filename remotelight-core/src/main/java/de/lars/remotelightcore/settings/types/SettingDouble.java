@@ -47,8 +47,10 @@ public class SettingDouble extends Setting {
 	}
 
 	public void setValue(double value) {
+		boolean change = value != this.value;
 		this.value = value;
-		fireChangeEvent();
+		if(change)
+			fireChangeEvent();
 	}
 
 	public double getMin() {
