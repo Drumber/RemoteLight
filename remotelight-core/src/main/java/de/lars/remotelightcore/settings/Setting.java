@@ -28,15 +28,13 @@ import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 
 public class Setting implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7324328394259004155L;
+	
 	private String name;
 	private String id;
 	private String description;
 	private SettingCategory category;
+	private transient SettingValueListener listener;
 	
 	public Setting(String id, String name, String description, SettingCategory category) {
 		this.id = id;
@@ -81,6 +79,15 @@ public class Setting implements Serializable {
 
 	public void setCategory(SettingCategory category) {
 		this.category = category;
+	}
+	
+	public void setValueListener(SettingValueListener listener) {
+		this.listener = listener;
+	}
+	
+	protected void fireChangeEvent() {
+		if(listener != null)
+			listener.onSettingValueChanged(this);
 	}
 
 }

@@ -48,6 +48,7 @@ public class SettingInt extends Setting {
 
 	public void setValue(int value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 	public int getMin() {

@@ -59,6 +59,7 @@ public class SettingSelection extends Setting {
 
 	public void setSelected(String selected) {
 		this.selected = selected;
+		fireChangeEvent();
 	}
 
 	public Model getModel() {

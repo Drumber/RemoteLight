@@ -48,6 +48,7 @@ public class SettingDouble extends Setting {
 
 	public void setValue(double value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 	public double getMin() {

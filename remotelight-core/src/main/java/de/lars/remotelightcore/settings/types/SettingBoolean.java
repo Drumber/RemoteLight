@@ -44,6 +44,7 @@ public class SettingBoolean extends Setting {
 	
 	public void setValue(boolean value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 }

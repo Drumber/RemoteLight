@@ -44,6 +44,7 @@ public class SettingString extends Setting {
 
 	public void setValue(String value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 }

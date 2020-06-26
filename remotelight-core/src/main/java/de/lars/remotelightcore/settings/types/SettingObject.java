@@ -47,6 +47,7 @@ public class SettingObject extends Setting {
 
 	public void setValue(Object value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 }

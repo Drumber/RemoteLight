@@ -46,6 +46,7 @@ public class SettingColor extends Setting {
 
 	public void setValue(Color value) {
 		this.value = value;
+		fireChangeEvent();
 	}
 
 }
