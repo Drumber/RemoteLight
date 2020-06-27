@@ -22,9 +22,6 @@
 
 package de.lars.remotelightcore;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.cmd.CommandParser;
@@ -57,13 +54,6 @@ public class SetupHelper {
 	private void init() {
 		// Rainbow array
 		RainbowWheel.init();
-		// Lua
-		File luaDir = new File(DirectoryUtil.getLuaPath());
-		// copy Lua example files
-		try {
-			DirectoryUtil.copyFolderFromJar(DirectoryUtil.RESOURCES_CLASSPATH + "lua_examples", luaDir, false);
-		} catch (IOException e) {
-		}
 	}
 
 	private void clean() {

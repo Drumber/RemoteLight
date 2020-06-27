@@ -23,6 +23,10 @@
 package de.lars.remotelightclient;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+
+import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.dialogs.UpdateDialog;
@@ -39,6 +43,7 @@ import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.UpdateChecker;
 
 public class StartUp {
@@ -52,6 +57,8 @@ public class StartUp {
 		// set default language
 		String langCode = ((SettingSelection) s.getSettingFromId("ui.language")).getSelected();
 		i18n.setLocale(langCode);
+		
+		copyLuaExamples();
 		
 		new Thread(new Runnable() {
 			@Override
@@ -86,6 +93,16 @@ public class StartUp {
 				
 			}
 		}, "UpdateChecker Thread").start();
+	}
+	
+	public void copyLuaExamples() {
+		File luaDir = new File(DirectoryUtil.getLuaPath());
+		// copy Lua example files
+		try {
+			DirectoryUtil.copyFolderFromJar(DirectoryUtil.RESOURCES_CLASSPATH + "lua_examples", luaDir, false);
+		} catch (IOException e) {
+			Logger.error("Could not copy lua example files: " + e.getMessage());
+		}
 	}
 	
 	public void registerSettings() {

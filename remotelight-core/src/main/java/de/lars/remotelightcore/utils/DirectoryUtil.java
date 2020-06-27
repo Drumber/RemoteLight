@@ -130,6 +130,9 @@ public class DirectoryUtil {
         if (!destFolder.exists()) {
             destFolder.mkdirs();
         }
+        if(folderName.length() > 0 && folderName.charAt(0) == '/') {
+        	folderName = folderName.substring(1); // remove '/' at start
+        }
 		String path = DirectoryUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File fullPath = null;
 		try {
