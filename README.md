@@ -26,6 +26,11 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 - [RemoteLight](https://github.com/Drumber/RemoteLight/releases)
 - [RemoteLightServer](https://github.com/Drumber/RemoteLightServer/releases) (is required when using a Raspberry Pi)
 
+## Downloads
+- :diamond_shape_with_a_dot_inside: [RemoteLight](https://github.com/Drumber/RemoteLight/releases)  
+- :large_orange_diamond: [RemoteLightServer](https://github.com/Drumber/RemoteLightServer/releases)  
+- :large_blue_diamond: [RemoteLightWeb](https://github.com/Drumber/RemoteLightWeb/releases)  
+
 ## Quick Start
 ### Arduino
 *[Youtube Tutorial available](https://youtu.be/1jguUgaUdNk)*  
@@ -116,15 +121,6 @@ close
 
 ## Video Demo
 <a href="https://www.youtube.com/watch?v=u8ptqaTGteg"><img src="https://img.youtube.com/vi/u8ptqaTGteg/0.jpg" width="280"></a>  <a href="https://www.youtube.com/watch?v=-5hKRAyPDT8"><img src="https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg" width="280"></a>
-
-## TODO
-- [ ] improve performance
-- [ ] Create wiki / documentation
-- [x] Settings for animations
-- [x] Link / chain several LED strips
-- [ ] Improve RemoteLightServer protocol
-- [x] Translate settings
-- [x] Lua scripts
 
 ## Changelog
 [Changelog of all versions since v0.1.1](./CHANGELOG.md)
