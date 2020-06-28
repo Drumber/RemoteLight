@@ -52,7 +52,7 @@ public class DataFileUpdater {
 			fileStorage.store(fileStorage.KEY_DEVICES_LIST, devices);
 			Logger.debug("Updated device array to new file storage.");
 		} else {
-			Logger.warn("Could not update device list. Expected Device array, got " + deviceArray.getClass().getName());
+			Logger.warn("Could not update device list. Expected Device array, got " + deviceArray);
 		}
 		
 		Object settingsList = DataStorage.getData(DataStorage.SETTINGSMANAGER_KEY);
@@ -63,7 +63,7 @@ public class DataFileUpdater {
 			fileStorage.store(fileStorage.KEY_SETTINGS_LIST, settings);
 			Logger.debug("Updated settings list to new file storage.");
 		} else {
-			Logger.warn("Could not update settings list. Expected List<?>, got " + settingsList.getClass().getName());
+			Logger.warn("Could not update settings list. Expected List<?>, got " + settingsList);
 		}
 		
 		Logger.debug("Trying to save new file storage.");

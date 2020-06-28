@@ -74,7 +74,7 @@ public class ErrorDialog {
 		
 		//JOptionPane.showMessageDialog(null, root, (title != null ? title : "Exception"), JOptionPane.ERROR_MESSAGE);
 		int selOption = JOptionPane.showOptionDialog(null, root, (title != null ? title : "Exception"),
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE,
+				JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
 				null, options, options[0]);
 		
 		if(selOption == 1) {
