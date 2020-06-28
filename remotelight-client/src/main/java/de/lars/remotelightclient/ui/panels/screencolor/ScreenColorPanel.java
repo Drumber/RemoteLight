@@ -57,11 +57,8 @@ import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
 
 public class ScreenColorPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1195460185717058923L;
+	
 	private final int MONITOR_SCALE = 10;
 	private ScreenColorManager scm;
 	private SettingsManager sm;
@@ -121,7 +118,12 @@ public class ScreenColorPanel extends MenuPanel {
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
 		
 		this.addOptions();
-		this.addMonitorsPanel();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				addMonitorsPanel();
+			}
+		});
 	}
 	
 	private void addMonitorsPanel() {
@@ -147,6 +149,7 @@ public class ScreenColorPanel extends MenuPanel {
 			
 		} catch (AWTException e) {
 			Logger.error(e, i18n.getString("ScreenColorPanel.CouldNotAddMonitor")); //$NON-NLS-1$
+			Main.getInstance().showNotification(NotificationType.ERROR, i18n.getString("ScreenColorPanel.CouldNotAddMonitor"));
 		}
 	}
 	

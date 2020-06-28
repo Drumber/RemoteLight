@@ -44,11 +44,8 @@ import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.settings.Setting;
 
 public class MusicSyncPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5524656198416878733L;
+	
 	private MainFrame mainFrame;
 	private MusicSyncManager msm;
 	private MusicSyncOptionsPanel muiscEffectOptions;

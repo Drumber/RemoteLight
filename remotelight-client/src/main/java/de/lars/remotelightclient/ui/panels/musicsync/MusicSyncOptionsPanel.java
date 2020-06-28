@@ -56,14 +56,11 @@ import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class MusicSyncOptionsPanel extends JPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -100112066309451958L;
+	
 	private List<SettingPanel> settingPanels;
-	private SettingsManager sm = Main.getInstance().getSettingsManager();
-	private MusicSyncManager msm = RemoteLightCore.getInstance().getMusicSyncManager();
+	private SettingsManager sm;
+	private MusicSyncManager msm;
 	private JPanel bgrEffectOptions;
 	private JPanel bgrEffectOptionsScroll;
 	private JPanel panelSensitivity;
@@ -82,13 +79,13 @@ public class MusicSyncOptionsPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public MusicSyncOptionsPanel() {
+		sm = Main.getInstance().getSettingsManager();
+		msm = RemoteLightCore.getInstance().getMusicSyncManager();
 		settingPanels = new ArrayList<SettingPanel>();
 		sm.addSetting(new SettingObject("musicsync.sensitivity", null, 20)); //$NON-NLS-1$
 		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200)); //$NON-NLS-1$
 		
 		Dimension size = new Dimension(Integer.MAX_VALUE, 150);
-		//setPreferredSize(size);
-		//setMaximumSize(size);
 		setBackground(Style.panelDarkBackground);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		
@@ -204,7 +201,12 @@ public class MusicSyncOptionsPanel extends JPanel {
 		scrollPane.setViewportView(bgrEffectOptions);
 		bgrEffectOptions.setLayout(new BoxLayout(bgrEffectOptions, BoxLayout.Y_AXIS));
 		
-		this.initInputPanel();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				initInputPanel();
+			}
+		});
 	}
 	
 	
