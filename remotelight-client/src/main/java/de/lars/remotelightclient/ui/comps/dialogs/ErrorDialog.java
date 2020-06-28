@@ -23,7 +23,12 @@
 package de.lars.remotelightclient.ui.comps.dialogs;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.*;
 
@@ -37,7 +42,7 @@ public class ErrorDialog {
 	}
 	
 	public static void showErrorDialog(Throwable e, String title) {
-		showErrorDialog(e, title, true);
+		showErrorDialog(e, title, false);
 	}
 	
 	public static void showErrorDialog(Throwable e, String title, boolean lineWrap) {
@@ -52,7 +57,9 @@ public class ErrorDialog {
 		
 		root.add(Box.createRigidArea(new Dimension(0, 20)));
 		
-		JTextArea text = new JTextArea(ExceptionHandler.getStackTrace(e));
+		String exceptionString = ExceptionHandler.getStackTrace(e);
+		
+		JTextArea text = new JTextArea(exceptionString);
 		text.setLineWrap(lineWrap);
 		text.setCaretPosition(0);
 		text.setEditable(false);
@@ -63,7 +70,25 @@ public class ErrorDialog {
 		scroll.setPreferredSize(new Dimension(200, 150));
 		root.add(scroll);
 		
-		JOptionPane.showMessageDialog(null, root, (title != null ? title : "Exception"), JOptionPane.ERROR_MESSAGE);
+		String[] options = {"Close", "Report"};
+		
+		//JOptionPane.showMessageDialog(null, root, (title != null ? title : "Exception"), JOptionPane.ERROR_MESSAGE);
+		int selOption = JOptionPane.showOptionDialog(null, root, (title != null ? title : "Exception"),
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE,
+				null, options, options[0]);
+		
+		if(selOption == 1) {
+			try {
+				
+				String issueUrl = ExceptionHandler.getGitHubIssueURL(e);
+				Desktop.getDesktop().browse(new URI(issueUrl));
+				
+			} catch (UnsupportedEncodingException e2) {
+				System.err.println("Could not build query string: " + e2.getMessage());
+			} catch (IOException | URISyntaxException e1) {
+				System.err.println("Could not open issue url: " + e1.getMessage());
+			}
+		}
 	}
 
 }

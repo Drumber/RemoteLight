@@ -58,6 +58,10 @@ public class Main {
 	public Main(String[] args, boolean uiMode) {
 		instance = this;
 		setupOSSupport();
+		
+		// register error handler in MainFrame
+		ExceptionHandler.registerListener(MainFrame.onException);
+		
 		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook
 		remoteLightCore.registerShutdownHook();
@@ -86,9 +90,6 @@ public class Main {
 			}
 		}
 		Logger.info((failed ? "[FAILED] switch to standard LaF: " : "Selected Look and Feel: ") + UIManager.getLookAndFeel().getName());
-		
-		// register error handler in MainFrame
-		ExceptionHandler.registerListener(MainFrame.onException);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

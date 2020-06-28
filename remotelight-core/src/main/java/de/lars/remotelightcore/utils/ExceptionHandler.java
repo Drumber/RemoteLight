@@ -24,10 +24,17 @@ package de.lars.remotelightcore.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.tinylog.Logger;
+
+import de.lars.remotelightcore.RemoteLightCore;
 
 /**
  * Used for fatal errors or other exceptions that should be handled
@@ -99,6 +106,26 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
 		return sw.toString();
+	}
+	
+	public static String getGitHubIssueURL(Throwable e) throws UnsupportedEncodingException {
+		String issueText = String.format(""
+				+ "This issue was automatically created by the RemoteLight ExceptionHandler.\n"
+				+ "RemoteLightCore version: %s\n"
+				+ "OS: %s\n"
+				+ "StackTrace:\n```\n%s\n```"
+				+ "\n*%s*",
+				RemoteLightCore.VERSION,
+				System.getProperty("os.name"),
+				getStackTrace(e),
+				DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.US).format(new Date()));
+		
+		String exceptionTitle = URLEncoder.encode(e.getClass().getCanonicalName(), "UTF-8");
+		String exceptionBody = URLEncoder.encode(issueText, "UTF-8");
+		
+		return RemoteLightCore.GITHUB
+				+ "/issues/new?labels=bug&assignees=Drumber&title=" + exceptionTitle
+				+ "&body=" + exceptionBody;
 	}
 
 }

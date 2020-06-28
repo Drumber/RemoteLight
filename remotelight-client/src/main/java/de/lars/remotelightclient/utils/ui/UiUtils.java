@@ -39,7 +39,9 @@ import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import jiconfont.swing.IconFontSwing;
 
@@ -220,6 +222,7 @@ public class UiUtils {
 				try {
 					Desktop.getDesktop().browse(new URI(url));
 				} catch (URISyntaxException | IOException ex) {
+					Main.getInstance().showNotification(NotificationType.ERROR, "Could not open " + url);
 				}
 			}
 		});
