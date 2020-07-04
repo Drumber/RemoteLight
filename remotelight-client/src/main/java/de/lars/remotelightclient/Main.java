@@ -45,7 +45,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class Main {
 	
-	public final static String VERSION = "dev0.2.2";
+	public final static String VERSION = "v0.2.2";
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
