@@ -24,8 +24,7 @@ package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
@@ -40,6 +39,7 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 
@@ -106,7 +106,10 @@ public class Main {
 	public boolean setLookAndFeel() {
 		SettingSelection sLaF = (SettingSelection) remoteLightCore.getSettingsManager().getSettingFromId("ui.laf");
 		UiUtils.setThemingEnabled(true);
+		
 		try {
+			setCustomWindowDecorations(false);
+			
 			if(sLaF == null || sLaF.getSelected().equalsIgnoreCase("System default")) {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				return true;
@@ -122,6 +125,9 @@ public class Main {
 				if(laf.getName().equalsIgnoreCase(lafName)) {
 					FlatLaf.install(laf);
 					UiUtils.setThemingEnabled(false);
+					if(getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").getValue())
+						// enable FlatLaf custom window decorations
+						setCustomWindowDecorations(true);
 					return true;
 				}
 			}
@@ -130,6 +136,17 @@ public class Main {
 			return false;
 		}
 		return false;
+	}
+	
+	public void setCustomWindowDecorations(boolean enabled) {
+		JFrame.setDefaultLookAndFeelDecorated(enabled);
+		JDialog.setDefaultLookAndFeelDecorated(enabled);
+		if(mainFrame != null && mainFrame.isUndecorated() != enabled) {
+			mainFrame.dispose();
+			mainFrame.setUndecorated(enabled);
+			mainFrame.getRootPane().setWindowDecorationStyle(enabled ? JRootPane.FRAME : JRootPane.NONE);
+			mainFrame.setVisible(true);
+		}
 	}
 	
 	

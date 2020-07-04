@@ -110,6 +110,7 @@ public class StartUp {
 		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", LangUtil.langCodeToName(LangUtil.LANGUAGES), "English", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", Style.STYLES, "Dark", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.laf", "LookAndFeel", SettingCategory.General, "UI Components Look and Feel", Style.getLookAndFeels().toArray(new String[0]),  "System default", Model.ComboBox));
+		s.addSetting(new SettingBoolean("ui.windowdecorations", "Custom window decorations", SettingCategory.General, "Only available on Windows 10 and in combination with FlatLaf Look and Feels", false));
 		// update style setting if already set
 		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
 		
