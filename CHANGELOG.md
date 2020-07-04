@@ -1,4 +1,12 @@
 ## Changelog
+#### v0.2.2
+- reworked data storage (data is now stored as JSON)
+- added auto save
+- added missing translations
+- updated to [FlatLaf 0.37](https://github.com/JFormDesigner/FlatLaf/releases/tag/0.37)
+  - added custom window decorations support
+- small bug fixes and improvements
+
 #### v0.2.1
 - added 2 new music visualizer (RainbowNoise & Lines)
 - improved FFT computation for Visualizer effect
