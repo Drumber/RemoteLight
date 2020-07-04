@@ -123,7 +123,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		}
 		panelAdd.add(boxOutputs);
 		
-		JButton btnAdd = new JButton("Add");
+		JButton btnAdd = new JButton(i18n.getString("Basic.Add"));
 		UiUtils.configureButton(btnAdd);
 		btnAdd.addActionListener(e -> {
 			if(boxOutputs.getSelectedItem() != null) {

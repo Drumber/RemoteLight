@@ -171,7 +171,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelNativeSoundConfig.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
 		bgrOptions.add(panelNativeSoundConfig);
 		
-		JButton btnTest = new JButton("Configure native sound input");
+		JButton btnTest = new JButton(i18n.getString("MusicSync.ConfigureNativeSound"));
 		UiUtils.configureButton(btnTest);
 		btnTest.addActionListener(buttonNativeSoundConfigClicked);
 		panelNativeSoundConfig.add(btnTest);

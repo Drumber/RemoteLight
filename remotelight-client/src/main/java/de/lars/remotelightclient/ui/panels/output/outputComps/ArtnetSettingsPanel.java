@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -179,7 +180,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelOrder);
 		
-		JLabel lblRgbOrder = new JLabel("RGB order:"); //$NON-NLS-1$
+		JLabel lblRgbOrder = new JLabel(i18n.getString("OutputPanel.RgbOrder"));
 		lblRgbOrder.setForeground(Style.textColor);
 		panelOrder.add(lblRgbOrder);
 		
@@ -187,9 +188,10 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		comboOrder.setModel(new DefaultComboBoxModel<>(RgbOrder.values()));
 		panelOrder.add(comboOrder);
 		
-		JLabel lblOutputPatch = new JLabel("Output patch", SwingConstants.LEFT);
-		lblOutputPatch.setFont(Style.getFontRegualar(11));
+		JLabel lblOutputPatch = new JLabel(i18n.getString("OutputPanel.OutputPatch"), SwingConstants.LEFT);
+		lblOutputPatch.setFont(Style.getFontBold(11));
 		lblOutputPatch.setForeground(Style.textColor);
+		lblOutputPatch.setBorder(new EmptyBorder(5, 5, 0, 0));
 		add(lblOutputPatch);
 		
 		JPanel panelShift = new JPanel();
@@ -201,7 +203,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelShift.setAlignmentX(0.0f);
 		add(panelShift);
 		
-		JLabel lblShift = new JLabel("Shift pixels:");
+		JLabel lblShift = new JLabel(i18n.getString("OutputPanel.ShiftPixels"));
 		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
@@ -216,7 +218,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		});
 		panelShift.add(spinnerShift);
 		
-		JLabel lblClone = new JLabel("Clone:");
+		JLabel lblClone = new JLabel(i18n.getString("OutputPanel.Clone"));
 		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
@@ -230,7 +232,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		});
 		panelShift.add(spinnerClone);
 		
-		checkboxCloneMirrored = new JCheckBox("Mirror");
+		checkboxCloneMirrored = new JCheckBox(i18n.getString("OutputPanel.Mirror"));
 		checkboxCloneMirrored.setBackground(Style.panelBackground);
 		checkboxCloneMirrored.setForeground(Style.textColor);
 		checkboxCloneMirrored.setSelected(artnet.getOutputPatch().isCloneMirrored());

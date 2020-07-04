@@ -58,7 +58,7 @@ public class SettingsPanel extends MenuPanel {
 	private List<SettingPanel> settingPanels;
 	
 	/** some settings that should be displayed in the right order */
-	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "%remains%"};
+	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "ui.windowdecorations", "%remains%"};
 	private final String[] OTHERS_SETTING_ORDER = {"%remains%"};
 
 	/**
@@ -185,7 +185,7 @@ public class SettingsPanel extends MenuPanel {
 			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
 			
 			Main.getInstance().showNotification(
-					new Notification(NotificationType.SUCCESS, "Settings", i18n.getString("SettingsPanel.SavedSettings"), Notification.SHORT));
+					new Notification(NotificationType.SUCCESS, i18n.getString("Basic.Settings"), i18n.getString("SettingsPanel.SavedSettings"), Notification.SHORT));
 		}
 	};
 	
