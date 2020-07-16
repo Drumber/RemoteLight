@@ -116,12 +116,12 @@ public class RemoteLightCore {
 		
 		updateDataFile(); // backwards compatibility to versions < v0.2.2
 		
+		notificationManager = new NotificationManager();
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
 		deviceManager = new DeviceManager(fileStorage, fileStorage.KEY_DEVICES_LIST);
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
-		notificationManager = new NotificationManager();
 		
 		// instantiate the managers of the different modes
 		aniManager = new AnimationManager();

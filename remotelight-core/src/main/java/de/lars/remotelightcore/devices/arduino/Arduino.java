@@ -24,8 +24,13 @@ package de.lars.remotelightcore.devices.arduino;
 
 import java.awt.Color;
 
+import org.tinylog.Logger;
+
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 
 public class Arduino extends Device {
 	
@@ -39,8 +44,21 @@ public class Arduino extends Device {
 	public Arduino(String id, String port) {
 		super(id, 0);
 		this.serialPort = port;
-		out = new ComPort(ComPort.getComPortByName(port));
+		initComPort();
 		super.setRgbOrder(RgbOrder.GRB);
+	}
+	
+	private void initComPort() {
+		if(ComPort.exists(serialPort)) {
+			out = new ComPort(ComPort.getComPortByName(serialPort));
+		} else {
+			out = new ComPort();
+			Logger.error("Could not find ComPort: " + serialPort);
+			Notification noti = new Notification(NotificationType.ERROR,
+					"Arduino '" + getId() + "' initialization",
+					"Coult not find ComPort with name: " + serialPort);
+			RemoteLightCore.getInstance().showNotification(noti);
+		}
 	}
 
 	public String getSerialPort() {
@@ -82,7 +100,7 @@ public class Arduino extends Device {
 	@Override
 	public void onLoad() {
 		if(out == null) {
-			out = new ComPort(ComPort.getComPortByName(serialPort));
+			initComPort();
 		}
 	}
 

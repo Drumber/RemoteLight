@@ -74,12 +74,22 @@ public class ComPort implements Serializable {
 		return null;
 	}
 	
+	public static boolean exists(String serialPort) {
+		return serialPort != null && ComPort.getComPortByName(serialPort) != null;
+	}
+	
 	public ConnectionState openPort(SerialPort comPort) {
 		if(port != null && port.isOpen()) {
 			closePort();
 		}
 		
 		this.port = comPort;
+		
+		if(port == null) {
+			Logger.warn("Coult not open ComPort as it does not exists (null).");
+			state = ConnectionState.FAILED;
+			return state;
+		}
 		
 		if(port.openPort()) {
 			open = true;
