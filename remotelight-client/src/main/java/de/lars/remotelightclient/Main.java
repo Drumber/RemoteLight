@@ -24,7 +24,11 @@ package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JRootPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
@@ -45,7 +49,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class Main {
 	
-	public final static String VERSION = "v0.2.2";
+	public final static String VERSION = "v0.2.3";
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;

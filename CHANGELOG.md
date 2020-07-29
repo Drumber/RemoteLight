@@ -1,4 +1,10 @@
 ## Changelog
+#### v0.2.3
+- small bug fixes
+- added `color` command
+- added saving for last shown color
+- updated dependencies (added local maven repository)
+
 #### v0.2.2
 - reworked data storage (data is now stored as JSON)
 - added auto save

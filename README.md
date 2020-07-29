@@ -112,6 +112,7 @@ Since RemoteLight v0.2.1 you can control animations/effects from the console.
 ```
 start <AnimationManager/MusicSyncManager/SceneManager/LuaManager> <animation/effect/script path>
 stop <all/AnimationManager/MusicSyncManager/SceneManager/LuaManager>
+color <HEX> or color <r> <g> <b>
 list [<AnimationManager/MusicSyncManager/SceneManager>]
 close
 ```
