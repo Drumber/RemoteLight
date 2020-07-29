@@ -36,6 +36,7 @@ import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.colors.ColorManager;
 import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.io.AutoSave;
@@ -76,6 +77,7 @@ public class RemoteLightCore {
 	private MusicSyncManager musicManager;
 	private ScreenColorManager screenColorManager;
 	private LuaManager luaManager;
+	private ColorManager colorManager;
 	
 	private FileStorage fileStorage;
 	private AutoSave fileAutoSaver;
@@ -122,6 +124,7 @@ public class RemoteLightCore {
 		deviceManager = new DeviceManager(fileStorage, fileStorage.KEY_DEVICES_LIST);
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
+		colorManager = new ColorManager();
 		
 		// instantiate the managers of the different modes
 		aniManager = new AnimationManager();
@@ -196,6 +199,10 @@ public class RemoteLightCore {
 	
 	public LuaManager getLuaManager() {
 		return luaManager;
+	}
+	
+	public ColorManager getColorManager() {
+		return colorManager;
 	}
 	
 	public FileStorage getFileStorage() {
@@ -300,6 +307,9 @@ public class RemoteLightCore {
 			if(activeEffect[0] != null && activeEffect[1] != null) {
 				activeCommand = "start " + String.join(" ", activeEffect);
 				Logger.info("Saving last used effect command: " + activeCommand);
+			} else if(colorManager.isActive()) {
+				activeCommand = "color " + colorManager.getLastColorHex();
+				Logger.info("Saving last used color as command: " + activeCommand);
 			}
 			settingsManager.getSettingObject("manager.lastactive.command").setValue(activeCommand);
 			

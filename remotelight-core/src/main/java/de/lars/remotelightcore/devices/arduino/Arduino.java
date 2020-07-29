@@ -53,11 +53,13 @@ public class Arduino extends Device {
 			out = new ComPort(ComPort.getComPortByName(serialPort));
 		} else {
 			out = new ComPort();
-			Logger.error("Could not find ComPort: " + serialPort);
-			Notification noti = new Notification(NotificationType.ERROR,
-					"Arduino '" + getId() + "' initialization",
-					"Coult not find ComPort with name: " + serialPort);
-			RemoteLightCore.getInstance().showNotification(noti);
+			if(serialPort != null) {
+				Logger.error("Could not find ComPort: " + serialPort);
+				Notification noti = new Notification(NotificationType.ERROR,
+						"Arduino '" + getId() + "' initialization",
+						"Coult not find ComPort with name: " + serialPort);
+				RemoteLightCore.getInstance().showNotification(noti);
+			}
 		}
 	}
 

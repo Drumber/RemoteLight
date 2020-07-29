@@ -26,6 +26,7 @@ public enum CMD {
 	
 	START("start"),
 	STOP("stop"),
+	COLOR("color"),
 	LIST("list"),
 	CLOSE("close");
 	

@@ -105,6 +105,13 @@ public class ColorUtil {
 		return distance < 50000;
 	}
 	
+	public static boolean isBlack(Color c) {
+		return c.getAlpha() == 0 || (
+				c.getRed() == 0 &&
+				c.getBlue() == 0 &&
+				c.getGreen() == 0);
+	}
+	
 	
 	/**
 	 * Fade from one to another color

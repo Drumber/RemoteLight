@@ -23,16 +23,19 @@
 package de.lars.remotelightcore.cmd;
 
 import static de.lars.remotelightcore.cmd.CMD.CLOSE;
+import static de.lars.remotelightcore.cmd.CMD.COLOR;
 import static de.lars.remotelightcore.cmd.CMD.LIST;
 import static de.lars.remotelightcore.cmd.CMD.START;
 import static de.lars.remotelightcore.cmd.CMD.STOP;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
+import de.lars.remotelightcore.colors.ColorManager;
 
 public class CommandParser {
 	
@@ -72,6 +75,30 @@ public class CommandParser {
 					}
 					print((success ? "Successfully stopped " : "The effect manager was not active: ") + args[1]);
 				}
+			}
+		} else if(args[0].equalsIgnoreCase(COLOR.toString())) {
+			ColorManager cmanager = remoteLightCore.getColorManager();
+			if(args.length == 2) {
+				// HEX color
+				try {
+					Color color = Color.decode(args[1]);
+					cmanager.showColor(color);
+				} catch(NumberFormatException e) {
+					throw new CommandException("Invalid HEX color value.", e);
+				}
+			} else if(args.length == 4) {
+				// RGB color
+				try {
+					int r = Integer.parseInt(args[1]);
+					int g = Integer.parseInt(args[2]);
+					int b = Integer.parseInt(args[3]);
+					Color color = new Color(r, g, b);
+					cmanager.showColor(color);
+				} catch(IllegalArgumentException e) {
+					throw new CommandException("Invalid RGB color value.", e);
+				}
+			} else {
+				print("color <HEX> or color <r> <g> <b>");
 			}
 		} else if(args[0].equalsIgnoreCase(LIST.toString())) {
 			if(args.length == 1) {
