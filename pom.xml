@@ -16,14 +16,14 @@
 		<module>remotelight-core</module>
 		<module>remotelight-client</module>
 	</modules>
-	
+
 	<licenses>
 		<license>
 			<name>GNU GPL v3</name>
 			<url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
 		</license>
 	</licenses>
-	
+
 	<organization>
 		<name>Drumber</name>
 		<url>https://drumber.github.io</url>
@@ -101,6 +101,11 @@
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
+		</repository>
+		<!-- local in-project repository -->
+		<repository>
+			<id>project-repository</id>
+			<url>file://${project.basedir}/repository</url>
 		</repository>
 	</repositories>
 
