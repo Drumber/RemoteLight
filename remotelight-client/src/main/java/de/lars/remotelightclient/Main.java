@@ -112,16 +112,17 @@ public class Main {
 		UiUtils.setThemingEnabled(true);
 		
 		try {
-			setCustomWindowDecorations(false);
 			
 			if(sLaF == null || sLaF.getSelected().equalsIgnoreCase("System default")) {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				setCustomWindowDecorations(false);
 				return true;
 			}
 			String lafName = sLaF.getSelected();
 			
 			if(lafName.equalsIgnoreCase("Java default")) {
 				UIManager.setLookAndFeel(new MetalLookAndFeel());
+				setCustomWindowDecorations(false);
 				return true;
 			}
 			
@@ -129,15 +130,14 @@ public class Main {
 				if(laf.getName().equalsIgnoreCase(lafName)) {
 					FlatLaf.install(laf);
 					UiUtils.setThemingEnabled(false);
-					if(getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").getValue())
-						// enable FlatLaf custom window decorations
-						setCustomWindowDecorations(true);
+					boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").getValue();
+					// enable FlatLaf custom window decorations
+					setCustomWindowDecorations(customWindow);
 					return true;
 				}
 			}
 		} catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
 			e.printStackTrace();
-			return false;
 		}
 		return false;
 	}
