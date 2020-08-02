@@ -61,7 +61,7 @@ public class PluginManager {
 		// enabling every loaded plugin
 		for(Plugin plugin : loadedPlugins) {
 			if(plugin.isLoaded()) {
-				plugin.onEnable();
+				plugin.setEnabled(true);
 			} else {
 				Logger.warn("Plugin " + plugin.getName() + " failed to load!");
 				plugin.setEnabled(false);
@@ -77,7 +77,7 @@ public class PluginManager {
 	public void disablePlugins() {
 		for(Plugin plugin : loadedPlugins) {
 			if(plugin.isEnabled())
-				plugin.onDisable();
+				plugin.setEnabled(false);
 		}
 	}
 	
