@@ -54,7 +54,9 @@ public class Rainbow extends Animation {
 	public void onEnable() {
 		step = new Random().nextFloat(); // random start point
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		executeSelectedMode(); // fill strip
+		// fill strip
+		for(int i = 0; i < strip.length; i++)
+			executeSelectedMode(); 
 		super.onEnable();
 	}
 	
