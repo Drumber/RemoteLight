@@ -10,24 +10,21 @@
 		<version>0.2.3</version>
 	</parent>
 
-	<artifactId>remotelight-core</artifactId>
-	<name>RemoteLight Core</name>
-	<description>LED Control Software Core</description>
+	<artifactId>remotelight-plugincore</artifactId>
+	<name>RemoteLight Plugin Core</name>
+	<description>Plugin system for RemoteLight</description>
 	<packaging>jar</packaging>
-	<url>https://github.com/Drumber/RemoteLight</url>
+	
+	<dependencies>
+		<!-- RemoteLightCore -->
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
 		<plugins>
 			<!-- TEST -->
 			<plugin>

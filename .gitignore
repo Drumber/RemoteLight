@@ -1,11 +1,11 @@
-/bin/
+**/bin/
 /libs/
 /docs/
 *.class
 .project
 /.vscode/
-/.settings/
+**/.settings/
 .classpath
-/target/
+**/target/
 remotelight-core/.settings/
 remotelight-client/.settings/
