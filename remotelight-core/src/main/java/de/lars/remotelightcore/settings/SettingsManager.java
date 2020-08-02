@@ -117,8 +117,8 @@ public class SettingsManager implements AutoSaveEvent {
 	 * Register setting if not already registered
 	 * @param setting new setting
 	 */
-	public void addSetting(Setting setting) {
-		addSetting(setting, true);
+	public <T extends Setting> T addSetting(T setting) {
+		return addSetting(setting, true);
 	}
 	
 	/**
@@ -126,14 +126,17 @@ public class SettingsManager implements AutoSaveEvent {
 	 * @param setting new setting
 	 * @param update add or remove options if available ({@link SettingSelection} only)
 	 */
-	public void addSetting(Setting setting, boolean update) {
-		if(getSettingFromId(setting.getId()) != null) {
+	@SuppressWarnings("unchecked")
+	public <T extends Setting> T addSetting(T setting, boolean update) {
+		Setting existing = getSettingFromId(setting.getId());
+		if(existing != null && setting.getClass().isInstance(existing)) {
 			if(update)
-				updateSetting(getSettingFromId(setting.getId()), setting);
-			return;
+				updateSetting(existing, setting);
+			return (T) existing;
 		}
 		Logger.info("Registered Setting '" + setting.getId() + "'.");
 		settings.add(setting);
+		return setting;
 	}
 	
 	/**

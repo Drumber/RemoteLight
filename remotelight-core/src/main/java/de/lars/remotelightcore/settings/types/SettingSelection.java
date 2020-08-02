@@ -22,6 +22,8 @@
 
 package de.lars.remotelightcore.settings.types;
 
+import java.util.Arrays;
+
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 
@@ -55,6 +57,10 @@ public class SettingSelection extends Setting {
 
 	public String getSelected() {
 		return selected;
+	}
+	
+	public int getSelectedIndex() {
+		return Arrays.asList(values).indexOf(selected);
 	}
 
 	public void setSelected(String selected) {

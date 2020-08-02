@@ -81,9 +81,9 @@ public class Animation {
 		return this.delay;
 	}
 	
-	public void addSetting(Setting setting) {
-		RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
+	public <T extends Setting> T addSetting(T setting) {
 		options.add(setting.getId());
+		return RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
 	}
 	
 	public Setting getSetting(String id) {
