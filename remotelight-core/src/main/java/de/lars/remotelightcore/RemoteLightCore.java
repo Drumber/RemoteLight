@@ -311,7 +311,11 @@ public class RemoteLightCore {
 	
 	public void close(boolean autoexit) {
 		shuttingDown = true;
-		eventHandler.call(new ShutdownEvent(STATE.PRE));
+		ShutdownEvent event = eventHandler.call(new ShutdownEvent(STATE.PRE));
+		if(event.isCancelled()) {
+			Logger.warn("The shutdown routine was cancelled by an event.");
+			return;
+		}
 		
 		try {
 			// save active effect as command

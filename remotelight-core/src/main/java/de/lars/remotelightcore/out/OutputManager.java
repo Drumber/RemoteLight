@@ -28,6 +28,8 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
+import de.lars.remotelightcore.event.events.types.ConnectionEvent;
+import de.lars.remotelightcore.event.events.types.ConnectionEvent.Action;
 import de.lars.remotelightcore.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -36,6 +38,7 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class OutputManager {
 	
+	private RemoteLightCore core;
 	private SettingsManager sm;
 	private volatile Output activeOutput;
 	private OutputActionListener actionListener;
@@ -46,7 +49,8 @@ public class OutputManager {
 	private boolean active;
 	
 	public OutputManager() {
-		sm = RemoteLightCore.getInstance().getSettingsManager();
+		core = RemoteLightCore.getInstance();
+		sm = core.getSettingsManager();
 		active = false;
 	}
 	
@@ -88,6 +92,7 @@ public class OutputManager {
 		Logger.info("Activate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() != ConnectionState.CONNECTED) {
 			output.onActivate();
+			core.getEventHandler().call(new ConnectionEvent(output, Action.ACTIVATE));
 		}
 		fireOutputAction(activeOutput, OutputActionType.ACTIVATED);
 	}
@@ -99,6 +104,7 @@ public class OutputManager {
 		Logger.info("Deactivate output: " + output.getId() + String.format(" (%s)", OutputUtil.getOutputTypeAsString(output)));
 		if(output.getState() == ConnectionState.CONNECTED) {
 			output.onDeactivate();
+			core.getEventHandler().call(new ConnectionEvent(output, Action.DEACTIVATE));
 		}
 		if(activeOutput != null && (output == activeOutput || output.getId().equals(activeOutput.getId()))) {
 			activeOutput = null;

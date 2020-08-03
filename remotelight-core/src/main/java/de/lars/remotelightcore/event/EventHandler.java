@@ -73,18 +73,21 @@ public class EventHandler {
 	/**
 	 * Calls an event and triggers all registered listeners of this event type.
 	 * 
-	 * @param event the event you want to call
+	 * @param <T>	event type
+	 * @param event	the event you want to call
+	 * @return		Returns the passed event
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Event> void call(T event) {
+	public <T extends Event> T call(final T event) {
 		if(registerdEvents.containsKey(event.getClass())) {
 			List<Listener<? extends Event>> listeners = registerdEvents.get(event.getClass());
-			for(Listener<? extends Event> listener : listeners) {
+			for(final Listener<? extends Event> listener : listeners) {
 				if(listener != null) {
 					((Listener<T>) listener).onEvent(event);
 				}
 			}
 		}
+		return event;
 	}
 	
 	
