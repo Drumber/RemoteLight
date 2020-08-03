@@ -12,6 +12,9 @@ import java.util.Properties;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.Stated.STATE;
+import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightplugins.exceptions.PluginLoadException;
 import de.lars.remotelightplugins.utils.JarFileFilter;
 import de.lars.remotelightplugins.utils.PluginPropertiesParser;
@@ -29,6 +32,13 @@ public class PluginManager {
 		loadedPlugins = new ArrayList<Plugin>();
 		this.pluginDir = pluginDir;
 		this.core = core;
+		
+		// register shutdown listener
+		Listener<ShutdownEvent> shutdownEvent = event -> {
+			if(event.getState() == STATE.PRE)
+				disablePlugins();
+		};
+		core.getEventHandler().register(ShutdownEvent.class, shutdownEvent);
 	}
 	
 	/**

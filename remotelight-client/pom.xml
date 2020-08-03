@@ -26,6 +26,11 @@
 			<artifactId>remotelight-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-plugincore</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- ColorPicker -->
 		<dependency>
 			<groupId>de.lars.colorpicker</groupId>

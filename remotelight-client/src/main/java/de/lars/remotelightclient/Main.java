@@ -23,6 +23,7 @@
 package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
+import java.io.File;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -45,7 +46,9 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
+import de.lars.remotelightplugins.PluginManager;
 
 public class Main {
 	
@@ -54,6 +57,7 @@ public class Main {
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
 	private MainFrame mainFrame;
+	private PluginManager pluginManager;
 
 	public static void main(String[] args) {
 		new Main(args, true);
@@ -78,7 +82,19 @@ public class Main {
 		
 		if(uiMode)
 			startMainFrame();
+		
+		initPluginManager();
 	}
+	
+	
+	private void initPluginManager() {
+		File pluginDir = new File(DirectoryUtil.getDataStoragePath() + "plugins");
+		pluginDir.mkdirs();
+		
+		pluginManager = new PluginManager(pluginDir, remoteLightCore);
+		pluginManager.loadPlugins();
+	}
+	
 	
 	/**
 	 * Starts the UI

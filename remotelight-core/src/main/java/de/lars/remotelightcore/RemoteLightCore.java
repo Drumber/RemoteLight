@@ -39,6 +39,9 @@ import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.colors.ColorManager;
 import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.event.EventHandler;
+import de.lars.remotelightcore.event.events.Stated.STATE;
+import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightcore.io.AutoSave;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.lua.LuaManager;
@@ -70,6 +73,7 @@ public class RemoteLightCore {
 	private OutputManager outputManager;
 	private SettingsManager settingsManager;
 	private NotificationManager notificationManager;
+	private EventHandler eventHandler;
 	
 	private EffectManagerHelper effectManagerHelper;
 	private AnimationManager aniManager;
@@ -101,6 +105,9 @@ public class RemoteLightCore {
 		
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		
+		// init event handler
+		eventHandler = new EventHandler();
 		
 		// create data file
 		File dataFile = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.FILE_STORAGE_NAME);
@@ -220,6 +227,10 @@ public class RemoteLightCore {
 	public NotificationManager getNotificationManager() {
 		return notificationManager;
 	}
+	
+	public EventHandler getEventHandler() {
+		return eventHandler;
+	}
 
 	/**
 	 * Returns the number of LEDs of the active output
@@ -300,6 +311,8 @@ public class RemoteLightCore {
 	
 	public void close(boolean autoexit) {
 		shuttingDown = true;
+		eventHandler.call(new ShutdownEvent(STATE.PRE));
+		
 		try {
 			// save active effect as command
 			String[] activeEffect = effectManagerHelper.getActiveManagerAndEffect();
@@ -336,7 +349,10 @@ public class RemoteLightCore {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			eventHandler.call(new ShutdownEvent(STATE.POST));
 			instance = null;
+			
 			if(autoexit) {
 				Thread.sleep(450);
 				System.exit(0);
