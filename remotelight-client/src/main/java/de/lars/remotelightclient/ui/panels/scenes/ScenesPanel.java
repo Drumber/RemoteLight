@@ -27,7 +27,11 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -37,15 +41,13 @@ import de.lars.remotelightclient.ui.comps.BigTextButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
 
 public class ScenesPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4955214837008536168L;
+	
 	private MainFrame mainFrame;
 	private SceneManager scm = RemoteLightCore.getInstance().getSceneManager();
 	private JPanel bgrScenes;
@@ -123,6 +125,11 @@ public class ScenesPanel extends MenuPanel {
 	private void addControlBar() {
 		DefaultControlBar controlBar = new DefaultControlBar();
 		mainFrame.setControlBarPanel(controlBar);
+	}
+	
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Scenes");
 	}
 
 }

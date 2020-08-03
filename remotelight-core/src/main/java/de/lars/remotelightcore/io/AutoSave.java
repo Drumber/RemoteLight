@@ -23,8 +23,6 @@
 package de.lars.remotelightcore.io;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -32,14 +30,12 @@ import java.util.concurrent.TimeUnit;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.Stated.State;
+import de.lars.remotelightcore.event.events.types.AutoSaveEvent;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 
 public class AutoSave implements Runnable {
-	
-	public interface AutoSaveEvent {
-		void onAutoSave(FileStorage storage);
-	}
 	
 	private ScheduledThreadPoolExecutor service;
 	private ScheduledFuture<?> future;
@@ -47,7 +43,6 @@ public class AutoSave implements Runnable {
 	private int delay = 5;
 	
 	private FileStorage fileStorage;
-	private List<AutoSaveEvent> saveListeners;
 	
 	/**
 	 * Create a new AutoSaver instance.
@@ -58,7 +53,6 @@ public class AutoSave implements Runnable {
 	 */
 	public AutoSave(FileStorage fileStorage) {
 		this.fileStorage = fileStorage;
-		saveListeners = new ArrayList<>();
 		service = new ScheduledThreadPoolExecutor(1);
 		service.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 		service.setRemoveOnCancelPolicy(true);
@@ -85,14 +79,6 @@ public class AutoSave implements Runnable {
 	public boolean isActive() {
 		return service.getQueue().size() > 0 || (future != null && !future.isDone());
 	}
-	
-	public void addSaveListener(AutoSaveEvent listener) {
-		saveListeners.add(listener);
-	}
-	
-	public void removeSaveListener(AutoSaveEvent listener) {
-		saveListeners.remove(listener);
-	}
 
 	public int getDelay() {
 		return delay;
@@ -110,31 +96,25 @@ public class AutoSave implements Runnable {
 
 	@Override
 	public void run() {
+		RemoteLightCore core = RemoteLightCore.getInstance();
 		if(fileStorage == null) {
 			Logger.error("Could not perform auto save. FileStorage instance is null!");
-			RemoteLightCore.getInstance().showNotification(
+			core.showNotification(
 					new Notification(NotificationType.ERROR, "AutoSave", "Automatic saving failed. No FileStorage instance was created."));
 			return;
 		}
 		
+		core.getEventHandler().call(new AutoSaveEvent(fileStorage, State.PRE));
 		Logger.debug("[AutoSave] Saving data...");
-		
-		for(AutoSaveEvent listener : saveListeners) {
-			if(listener == null) {
-				saveListeners.remove(listener);
-				continue;
-			}
-			// trigger all valid listeners
-			listener.onAutoSave(fileStorage);
-		}
 		
 		// saving to data file
 		try {
 			fileStorage.save();
 		} catch (IOException e) {
 			Logger.error(e, "Error while auto saving data.");
-			RemoteLightCore.getInstance().showErrorNotification(e, "AutoSave");
+			core.showErrorNotification(e, "AutoSave");
 		}
+		core.getEventHandler().call(new AutoSaveEvent(fileStorage, State.POST));
 	}
 
 }

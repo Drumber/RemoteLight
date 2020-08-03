@@ -29,10 +29,9 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
-import de.lars.remotelightcore.io.AutoSave.AutoSaveEvent;
 import de.lars.remotelightcore.io.FileStorage;
 
-public class DeviceManager implements AutoSaveEvent {
+public class DeviceManager {
 	
 	private List<Device> devices;
 	
@@ -155,13 +154,6 @@ public class DeviceManager implements AutoSaveEvent {
 		if(devices != null) {
 			storage.store(key, devices);
 			Logger.info("Saved " + devices.size() + " devices.");
-		}
-	}
-	
-	@Override
-	public void onAutoSave(FileStorage storage) {
-		if(devices != null) {
-			storage.store(storage.KEY_DEVICES_LIST, devices);
 		}
 	}
 

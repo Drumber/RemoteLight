@@ -30,10 +30,11 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
+import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.events.MenuEvent;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
-import de.lars.remotelightclient.ui.listeners.MenuChangeListener;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
+import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationManager;
 import de.lars.remotelightcore.notification.listeners.NotificationListener;
@@ -54,7 +55,7 @@ public class NotificationDisplayHandler {
 		this.layeredPane = root.getLayeredPane();
 		
 		root.addComponentListener(onResize);
-		root.addMenuChangeListener(onMenuChange);
+		Main.getInstance().getCore().getEventHandler().register(onMenuChange);
 		manager.addNotificationListener(notificationListener);
 		
 		timer = new Timer(Notification.NORMAL, timerListener);
@@ -133,9 +134,9 @@ public class NotificationDisplayHandler {
 	};
 	
 	/** Triggered when a menu is changed */
-	private MenuChangeListener onMenuChange = new MenuChangeListener() {
+	private Listener<MenuEvent> onMenuChange = new Listener<MenuEvent>() {
 		@Override
-		public void onMenuChange(MenuPanel menuPanel) {
+		public void onEvent(MenuEvent event) {
 			updateLocation();
 		}
 	};

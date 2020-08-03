@@ -31,7 +31,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -40,7 +47,13 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.panels.settings.settingComps.*;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.Notification;
@@ -48,7 +61,12 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightcore.settings.types.*;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingDouble;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingString;
 
 public class SettingsPanel extends MenuPanel {
 	private static final long serialVersionUID = 3954953325346082615L;
@@ -196,6 +214,11 @@ public class SettingsPanel extends MenuPanel {
 			sp.setValue();
 		}
 		super.onEnd(newPanel);
+	}
+
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Settings");
 	}
 
 }

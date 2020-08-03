@@ -106,7 +106,6 @@ public class EventHandler {
 		for(Type type : genericParams) {
 			// the event class
 			Class<?> clazz = null;
-			System.out.println(type.getTypeName());
 			// check whether it is a parameterized type or a class
 			if(type instanceof ParameterizedType) {
 				ParameterizedType ptype = (ParameterizedType) type;

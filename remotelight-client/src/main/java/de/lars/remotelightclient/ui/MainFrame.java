@@ -22,12 +22,14 @@
 
 package de.lars.remotelightclient.ui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,9 +39,9 @@ import javax.swing.border.EmptyBorder;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.events.ControlBarEvent;
+import de.lars.remotelightclient.events.MenuEvent;
 import de.lars.remotelightclient.ui.comps.dialogs.ErrorDialog;
-import de.lars.remotelightclient.ui.listeners.ControlBarListener;
-import de.lars.remotelightclient.ui.listeners.MenuChangeListener;
 import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
@@ -80,9 +82,7 @@ public class MainFrame extends JFrame {
 	private ControlBar displayedControlBar;
 	private SettingsManager sm;
 	private NotificationDisplayHandler notificationDisplayHandler;
-	
-	private List<ControlBarListener> controlBarListeners;
-	private List<MenuChangeListener> menuChangeListeners;
+	private RemoteLightCore core;
 
 
 	/**
@@ -91,8 +91,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/resources/Icon-128x128.png")));
 		sm = Main.getInstance().getSettingsManager();
-		controlBarListeners = new ArrayList<>();
-		menuChangeListeners = new ArrayList<>();
+		core = Main.getInstance().getCore();
 		
 		setTitle("RemoteLight");
 		setMinimumSize(new Dimension(400, 350));
@@ -112,7 +111,7 @@ public class MainFrame extends JFrame {
 		}
 		
 		// add notification display handler
-		notificationDisplayHandler = new NotificationDisplayHandler(this, Main.getInstance().getCore().getNotificationManager());
+		notificationDisplayHandler = new NotificationDisplayHandler(this, core.getNotificationManager());
 	}
 	
 	private void setFrameContetPane() {
@@ -180,7 +179,7 @@ public class MainFrame extends JFrame {
 				} catch(Exception e) {
 					Logger.error(e, "Error while closing frame");
 				}
-				RemoteLightCore.getInstance().close(true);
+				core.close(true);
 			}
 		}
 	};
@@ -203,21 +202,11 @@ public class MainFrame extends JFrame {
 		}
 		contentArea.removeAll();
 		contentArea.add(panel, BorderLayout.CENTER);
+		core.getEventHandler().call(
+				new MenuEvent(panel, panel.getName(), displayedPanel == null ? null : displayedPanel.getName()));
+		
 		this.displayedPanel = panel;
 		contentArea.updateUI();
-		
-		for(MenuChangeListener l : menuChangeListeners)
-			if(l != null)
-				l.onMenuChange(panel);
-	}
-	
-	public void addMenuChangeListener(MenuChangeListener l) {
-		menuChangeListeners.add(l);
-	}
-	
-	public void removeMenuChangeListener(MenuChangeListener l) {
-		if(menuChangeListeners.contains(l))
-			menuChangeListeners.remove(l);
 	}
 	
 	public MenuPanel getDisplayedPanel() {
@@ -231,9 +220,7 @@ public class MainFrame extends JFrame {
 	public void showControlBar(boolean enabled) {
 		bgrControlBar.setVisible(enabled);
 		
-		for(ControlBarListener l : controlBarListeners)
-			if(l != null)
-				l.onControlBarVisibilityChange(enabled);
+		core.getEventHandler().call(new ControlBarEvent.ControlBarVisibleEvent(enabled));
 	}
 	
 	public void setControlBarPanel(ControlBar panel) {
@@ -242,9 +229,7 @@ public class MainFrame extends JFrame {
 		this.displayedControlBar = panel;
 		bgrControlBar.updateUI();
 		
-		for(ControlBarListener l : controlBarListeners)
-			if(l != null)
-				l.onControlBarChange(panel);
+		core.getEventHandler().call(new ControlBarEvent.ControlBarChangeEvent(panel));
 	}
 	
 	public ControlBar getDisplayedControlBar() {
@@ -253,15 +238,6 @@ public class MainFrame extends JFrame {
 	
 	public boolean isControlBarShown() {
 		return this.displayedControlBar != null && bgrControlBar.isVisible();
-	}
-	
-	public void addControlBarListener(ControlBarListener l) {
-		controlBarListeners.add(l);
-	}
-	
-	public void removeControlBarListener(ControlBarListener l) {
-		if(controlBarListeners.contains(l))
-			controlBarListeners.remove(l);
 	}
 	
 	public void updateFrame() {

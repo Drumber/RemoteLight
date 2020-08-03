@@ -5,12 +5,11 @@ package de.lars.remotelightcore.event.events;
  */
 public interface Stated {
 	
-	public enum STATE {
+	public enum State {
 		PRE,
 		POST;
 	}
 	
-	void setState(STATE state);
-	STATE getState();
+	State getState();
 
 }

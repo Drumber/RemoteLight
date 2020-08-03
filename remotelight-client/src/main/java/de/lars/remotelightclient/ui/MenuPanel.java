@@ -24,11 +24,7 @@ package de.lars.remotelightclient.ui;
 
 import javax.swing.JPanel;
 
-public class MenuPanel extends JPanel {
-
-	/**
-	 * 
-	 */
+public abstract class MenuPanel extends JPanel {
 	private static final long serialVersionUID = 9123620383194990973L;
 	
 	public MenuPanel() {
@@ -40,5 +36,8 @@ public class MenuPanel extends JPanel {
 	 */
 	public void onEnd(MenuPanel newPanel) {
 	}
+	
+	@Override
+	public abstract String getName();
 
 }

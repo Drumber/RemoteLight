@@ -35,15 +35,13 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class ColorsPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2572544853394733969L;
+	
 	private Color[] defaultColors = {Color.ORANGE, Color.RED, Color.MAGENTA, Color.GREEN, Color.BLUE, Color.CYAN, Color.WHITE, Color.BLACK};
 	private List<Color> colors;
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
@@ -83,6 +81,11 @@ public class ColorsPanel extends MenuPanel {
 	public void onEnd(MenuPanel newPanel) {
 		sm.getSettingObject("colorspanel.colors").setValue(ColorPicker.paletteColors); //$NON-NLS-1$
 		super.onEnd(newPanel);
+	}
+	
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Colors");
 	}
 
 }

@@ -27,7 +27,12 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -42,15 +47,13 @@ import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class AnimationsPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5490750381498859042L;
+	
 	private MainFrame mainFrame;
 	private AnimationManager am = RemoteLightCore.getInstance().getAnimationManager();
 	private SettingsManager sm = Main.getInstance().getSettingsManager();
@@ -149,5 +152,10 @@ public class AnimationsPanel extends MenuPanel {
 			am.setDelay(speed);
 		}
 	};
+	
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Animations");
+	}
 
 }

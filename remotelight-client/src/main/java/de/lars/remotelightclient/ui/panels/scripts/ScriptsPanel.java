@@ -22,7 +22,12 @@
 
 package de.lars.remotelightclient.ui.panels.scripts;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -30,7 +35,15 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -58,11 +71,8 @@ import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 
 public class ScriptsPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1750844483582377827L;
+	
 	private MainFrame mainFrame;
 	private SettingsManager sm;
 	private LuaManager luaManager;
@@ -281,6 +291,11 @@ public class ScriptsPanel extends MenuPanel {
 				});
 		// show notification
 		Main.getInstance().showNotification(notification);
+	}
+	
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Scripts");
 	}
 	
 }

@@ -13,9 +13,9 @@ import de.lars.remotelightcore.event.events.Stated;
 public class ShutdownEvent implements Event, Cancellable, Stated {
 	
 	private boolean cancelled;
-	private STATE state;
+	private final State state;
 	
-	public ShutdownEvent(STATE state) {
+	public ShutdownEvent(final State state) {
 		this.state = state;
 	}
 
@@ -30,12 +30,7 @@ public class ShutdownEvent implements Event, Cancellable, Stated {
 	}
 
 	@Override
-	public void setState(STATE state) {
-		this.state = state;
-	}
-
-	@Override
-	public STATE getState() {
+	public State getState() {
 		return state;
 	}
 

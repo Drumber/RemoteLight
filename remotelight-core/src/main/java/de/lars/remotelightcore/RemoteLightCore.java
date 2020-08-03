@@ -40,7 +40,7 @@ import de.lars.remotelightcore.colors.ColorManager;
 import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.event.EventHandler;
-import de.lars.remotelightcore.event.events.Stated.STATE;
+import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightcore.io.AutoSave;
 import de.lars.remotelightcore.io.FileStorage;
@@ -311,7 +311,7 @@ public class RemoteLightCore {
 	
 	public void close(boolean autoexit) {
 		shuttingDown = true;
-		ShutdownEvent event = eventHandler.call(new ShutdownEvent(STATE.PRE));
+		ShutdownEvent event = eventHandler.call(new ShutdownEvent(State.PRE));
 		if(event.isCancelled()) {
 			Logger.warn("The shutdown routine was cancelled by an event.");
 			return;
@@ -354,7 +354,7 @@ public class RemoteLightCore {
 				e.printStackTrace();
 			}
 			
-			eventHandler.call(new ShutdownEvent(STATE.POST));
+			eventHandler.call(new ShutdownEvent(State.POST));
 			instance = null;
 			
 			if(autoexit) {

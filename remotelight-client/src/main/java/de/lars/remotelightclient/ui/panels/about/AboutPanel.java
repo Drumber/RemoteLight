@@ -27,7 +27,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -152,6 +158,11 @@ public class AboutPanel extends MenuPanel {
 		UiUtils.addWebsiteHyperlink(lbl, url); //$NON-NLS-1$
 		lbl.setFont(Style.getFontRegualar(15));
 		panelContent.add(lbl);
+	}
+
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.About");
 	}
 
 }

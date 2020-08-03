@@ -22,13 +22,28 @@
 
 package de.lars.remotelightclient.ui.panels.output;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import de.lars.remotelightclient.Main;
@@ -38,7 +53,11 @@ import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.comps.BigImageButton;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.ui.panels.output.outputComps.*;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
@@ -59,11 +78,8 @@ import de.lars.remotelightcore.out.OutputManager;
 import jiconfont.IconCode;
 
 public class OutputPanel extends MenuPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8004937110428129961L;
+	
 	private MainFrame mainFrame;
 	private SimulatorFrame emulator;
 	private OutputManager om = RemoteLightCore.getInstance().getOutputManager();
@@ -456,5 +472,10 @@ public class OutputPanel extends MenuPanel {
 			}
 		}
 	};
+	
+	@Override
+	public String getName() {
+		return i18n.getString("Basic.Output");
+	}
 	
 }
