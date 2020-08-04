@@ -36,6 +36,14 @@ public class PluginPropertiesParser {
 	
 	private PluginInfo pluginInfo;
 
+	/**
+	 * Create a new plugin properties file parser
+	 * 
+	 * @param prop		properties to parse
+	 * @param jarFile	the plugin file
+	 * @throws PluginLoadException
+	 * 			if something is missing or could not parsed
+	 */
 	public PluginPropertiesParser(Properties prop, File jarFile) throws PluginLoadException {
 		// parse main class property
 		String main = parseMainClass(prop);
@@ -45,14 +53,27 @@ public class PluginPropertiesParser {
 		}
 		
 		// create a new PluginInfo instance and parse other properties
-		pluginInfo = new PluginInfo(jarFile.getAbsolutePath(), main);
+		pluginInfo = new PluginInfo(jarFile, main);
 		parseProperties(prop);
 	}
 	
+	/**
+	 * Tries to parse the main class property
+	 * 
+	 * @param prop	property to parse from
+	 * @return		main class string or null
+	 */
 	private String parseMainClass(Properties prop) {
 		return prop.getProperty(DefaultProperties.MAIN.getKey());
 	}
 	
+	/**
+	 * Parse all default properties definded in {@link DefaultProperties}
+	 * 
+	 * @param prop	the property to parse from
+	 * @throws PluginLoadException
+	 * 			if something is missing or could not parsed
+	 */
 	private void parseProperties(Properties prop) throws PluginLoadException {
 		DefaultProperties[] defaultProps = DefaultProperties.values();
 		for(DefaultProperties dflprop : defaultProps) {

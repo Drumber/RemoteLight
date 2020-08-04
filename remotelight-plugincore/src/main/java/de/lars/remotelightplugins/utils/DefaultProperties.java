@@ -34,6 +34,10 @@ public enum DefaultProperties {
 	AUTHOR("author", true),
 	/** plugin version (should be in format 'x.x.x') */
 	VERSION("version", true),
+	/** plugin dependencies without which the plugin will not work */
+	DEPENDENCIES("dependencies", false),
+	/** plugin soft dependencies that are optional */
+	SOFTDEPENDENCIES("softdependencies", false),
 	/** plugin website url */
 	URL("url", false);
 	
