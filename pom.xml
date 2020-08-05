@@ -78,33 +78,12 @@
 			<artifactId>SimpleFileStorage</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		<!-- Local installed jar file -->
-		<dependency>
-			<groupId>jorensix</groupId>
-			<artifactId>tarsosdsp</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>bildspur</groupId>
-			<artifactId>artnet4j</artifactId>
-			<version>0.6.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>sjoerdvankreel</groupId>
-			<artifactId>xt-audio</artifactId>
-			<version>1.0.5</version>
-		</dependency>
 	</dependencies>
 
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
-		</repository>
-		<!-- local in-project repository -->
-		<repository>
-			<id>project-repository</id>
-			<url>file:///${project.basedir}/repository</url>
 		</repository>
 	</repositories>
 
