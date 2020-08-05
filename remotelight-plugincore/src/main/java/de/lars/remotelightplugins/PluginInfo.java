@@ -53,22 +53,59 @@ public final class PluginInfo {
 		properties.put(DefaultProperties.MAIN, mainClass);
 	}
 
+	/**
+	 * Get the plugin file path
+	 * 
+	 * @return	plugin file
+	 */
 	public File getFile() {
 		return file;
 	}
 
+	/**
+	 * Wrapper method to get the main class from properties.
+	 * 
+	 * @return	the plugins main class
+	 */
 	public String getMainClass() {
 		return properties.get(DefaultProperties.MAIN);
 	}
 	
+	/**
+	 * Wrapper method to get the plugin name from properties.
+	 * 
+	 * @return	the plugin name
+	 */
 	public String getName() {
 		return properties.get(DefaultProperties.NAME);
 	}
 	
+	/**
+	 * Get the properties of the plugin.
+	 * 
+	 * @return	a HashMap holding all defined properties
+	 * 			and their string values.
+	 */
+	public Map<DefaultProperties, String> getProperties() {
+		return properties;
+	}
+	
+	/**
+	 * Get a value from the plugin properties.
+	 * 
+	 * @param key	key of the value
+	 * @return		the value corresponding to the given key
+	 */
 	public String getValue(DefaultProperties key) {
 		return properties.get(key);
 	}
 	
+	/**
+	 * Set a property value.
+	 * 
+	 * @param key	the property key
+	 * @param value	the property value
+	 */
 	public void setValue(DefaultProperties key, String value) {
 		properties.put(key, value);
 	}

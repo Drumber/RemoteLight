@@ -107,24 +107,53 @@ public class PluginManager {
 		for(File pluginFile : files) {
 			if(pluginFile.isFile() && pluginFile.exists()) {
 				
+				boolean error = false;
 				PluginInfo plInfo = null;
 				try {
 					// parse plugin properties file
 					plInfo = loadPluginProperty(pluginFile);
+					
+					// check if plugin scopes match with the application scopes
+					if(plInfo.getProperties().containsKey(DefaultProperties.SCOPE)) {
+						List<String> scopes = plInfo.getListProperty(DefaultProperties.SCOPE);
+						// only check for scopes if the list does not contain 'all' or is not empty
+						if(!scopes.isEmpty() || !scopes.stream().anyMatch("all"::equalsIgnoreCase)) {
+							for(String scope : scopes) {
+								boolean contains = applicationScopes.stream().anyMatch(scope::equalsIgnoreCase);
+								// throw exception if scope is not supported
+								if(!contains) {
+									String err = "The plugin does not support the application scope."
+											+ "\nSupported scopes: " + String.join(", ", scopes)
+											+ "\nApplication scopes: " + String.join(", ", applicationScopes);
+									throw new PluginLoadException(err);
+								}
+							}
+						}
+					}
 				} catch (IOException e1) {
 					Logger.error(e1, "Could not load plugin file: " + pluginFile.getPath());
+					error = true;
 				} catch (PluginLoadException e1) {
-					Logger.error(e1, "Failed to load plugin: " + pluginFile.getPath());
+					Logger.error(e1, "Failed to load plugin: " + pluginFile.getName());
+					error = true;
 				} catch (PluginPropertiesException e) {
 					Logger.error(e, "Invalid or missing plugin properties: " + pluginFile.getPath());
+					error = true;
 				}
 				
 				if(plInfo == null || plInfo.getMainClass() == null) {
 					Logger.error("Invalid plugin property file: " + pluginFile.getPath());
-					continue;
+					error = true;
 				}
 				if(plugins.containsKey(plInfo.getName())) {
 					Logger.error("Plugin with name '" + plInfo.getName() + "' already exists. Please define a unique plugin name.");
+					error = true;
+				}
+				
+				// plugin load error handling
+				if(error) {
+					// add to error list
+					errorPlugins.put(plInfo, "Error while loading. Check console logs for details.");
 					continue;
 				}
 				
