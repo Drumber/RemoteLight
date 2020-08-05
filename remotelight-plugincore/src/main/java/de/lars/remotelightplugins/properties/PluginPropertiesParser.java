@@ -27,7 +27,7 @@ import java.util.Properties;
 
 import de.lars.remotelightplugins.PluginInfo;
 import de.lars.remotelightplugins.PluginManager;
-import de.lars.remotelightplugins.exceptions.PluginLoadException;
+import de.lars.remotelightplugins.exceptions.PluginPropertiesException;
 
 /**
  * Parses the plugin properties file and creates a new {@link PluginInfo} instance.
@@ -40,15 +40,15 @@ public class PluginPropertiesParser {
 	 * Create a new plugin properties file parser
 	 * 
 	 * @param prop		properties to parse
-	 * @param jarFile	the plugin file
-	 * @throws PluginLoadException
-	 * 			if something is missing or could not parsed
+	 * @param jarFile	the plugin file		
+	 * @throws PluginPropertiesException
+	 * 					if something is missing or could not parsed
 	 */
-	public PluginPropertiesParser(Properties prop, File jarFile) throws PluginLoadException {
+	public PluginPropertiesParser(Properties prop, File jarFile) throws PluginPropertiesException {
 		// parse main class property
 		String main = parseMainClass(prop);
 		if(main == null) {
-			throw new PluginLoadException("The '" + DefaultProperties.MAIN.getKey()
+			throw new PluginPropertiesException("The '" + DefaultProperties.MAIN.getKey()
 				+ "' property in the '" + PluginManager.PLUGIN_PROPERTIES + "' file is not defined!");
 		}
 		
@@ -71,10 +71,10 @@ public class PluginPropertiesParser {
 	 * Parse all default properties definded in {@link DefaultProperties}
 	 * 
 	 * @param prop	the property to parse from
-	 * @throws PluginLoadException
-	 * 			if something is missing or could not parsed
+	 * @throws PluginPropertiesException
+	 * 				if something is missing or could not parsed
 	 */
-	private void parseProperties(Properties prop) throws PluginLoadException {
+	private void parseProperties(Properties prop) throws PluginPropertiesException {
 		DefaultProperties[] defaultProps = DefaultProperties.values();
 		for(DefaultProperties dflprop : defaultProps) {
 			if(dflprop == DefaultProperties.MAIN)
@@ -83,7 +83,7 @@ public class PluginPropertiesParser {
 			String value = prop.getProperty(dflprop.getKey());
 			
 			if(value == null && dflprop.isRequired()) {
-				throw new PluginLoadException("Missing required property in '"
+				throw new PluginPropertiesException("Missing required property in '"
 						+ PluginManager.PLUGIN_PROPERTIES + "': " + dflprop.getKey());
 			}
 			

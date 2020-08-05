@@ -30,11 +30,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -46,6 +48,7 @@ import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightplugins.exceptions.PluginLoadException;
+import de.lars.remotelightplugins.exceptions.PluginPropertiesException;
 import de.lars.remotelightplugins.plugininterface.PluginInterface;
 import de.lars.remotelightplugins.properties.DefaultProperties;
 import de.lars.remotelightplugins.properties.PluginPropertiesParser;
@@ -56,21 +59,32 @@ public class PluginManager {
 	
 	/** a RemoteLightCore instance */
 	private final RemoteLightCore core;
+	
 	/** PluginInterface is needed to initialize the plugins */
 	private final PluginInterface pluginInterface;
+	
+	private final Set<String> applicationScopes;
+	
 	/** List of all loaded plugins */
 	private final List<Plugin> loadedPlugins;
+	
 	/** List of plugins that could not be loaded */
 	private final Map<PluginInfo, String> errorPlugins;
+	
 	/** plugin root directory */
 	private final File pluginDir;
 	
 	public PluginManager(final File pluginDir, RemoteLightCore core, PluginInterface pluginInterface) {
 		loadedPlugins = new ArrayList<Plugin>();
 		errorPlugins = new HashMap<PluginInfo, String>();
+		applicationScopes = new HashSet<String>();
+		
 		this.pluginDir = pluginDir;
 		this.core = core;
 		this.pluginInterface = pluginInterface;
+		
+		// All application scopes are supported by default
+		applicationScopes.add("all");
 		
 		// register shutdown listener
 		Listener<ShutdownEvent> shutdownEvent = event -> {
@@ -100,7 +114,9 @@ public class PluginManager {
 				} catch (IOException e1) {
 					Logger.error(e1, "Could not load plugin file: " + pluginFile.getPath());
 				} catch (PluginLoadException e1) {
-					Logger.error(e1, "Invalid or missing plugin properties: " + pluginFile.getPath());
+					Logger.error(e1, "Failed to load plugin: " + pluginFile.getPath());
+				} catch (PluginPropertiesException e) {
+					Logger.error(e, "Invalid or missing plugin properties: " + pluginFile.getPath());
 				}
 				
 				if(plInfo == null || plInfo.getMainClass() == null) {
@@ -171,8 +187,9 @@ public class PluginManager {
 	 * 				the plugins property file
 	 * @throws IOException
 	 * @throws PluginLoadException
+	 * @throws PluginPropertiesException 
 	 */
-	private synchronized PluginInfo loadPluginProperty(File file) throws IOException, PluginLoadException {
+	private synchronized PluginInfo loadPluginProperty(File file) throws IOException, PluginLoadException, PluginPropertiesException {
 		JarFile jarFile = new JarFile(file);
 		JarEntry propEntry = jarFile.getJarEntry(PLUGIN_PROPERTIES);
 		
@@ -438,6 +455,17 @@ public class PluginManager {
 	 */
 	public PluginInterface getPluginInterface() {
 		return pluginInterface;
+	}
+	
+	/**
+	 * Get the application scopes set. By default 'all' is
+	 * included in the set. Remove it from the list if only
+	 * one (or more) specific scopes should be accepted.
+	 * 
+	 * @return	a {@link Set} of scopes as String
+	 */
+	public Set<String> getScopes() {
+		return applicationScopes;
 	}
 
 }

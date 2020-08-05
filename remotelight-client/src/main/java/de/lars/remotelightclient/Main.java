@@ -54,6 +54,7 @@ import de.lars.remotelightplugins.PluginManager;
 public class Main {
 	
 	public final static String VERSION = "v0.2.3";
+	public final static String SCOPE = "swing";
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
@@ -94,6 +95,9 @@ public class Main {
 		
 		// create a new plugin manager
 		pluginManager = new PluginManager(pluginDir, remoteLightCore, new SwingPluginInterface(this));
+		// add scope
+		pluginManager.getScopes().add(SCOPE);
+		// load all plugins
 		pluginManager.loadPlugins();
 	}
 	
