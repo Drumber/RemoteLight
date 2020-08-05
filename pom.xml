@@ -81,7 +81,7 @@
 		<!-- Local installed jar file -->
 		<dependency>
 			<groupId>jorensix</groupId>
-			<artifactId>TarsosDSP</artifactId>
+			<artifactId>tarsosdsp</artifactId>
 			<version>2.4</version>
 		</dependency>
 		<dependency>
@@ -104,7 +104,7 @@
 		<!-- local in-project repository -->
 		<repository>
 			<id>project-repository</id>
-			<url>file://${project.basedir}/repository</url>
+			<url>file:///${project.basedir}/repository</url>
 		</repository>
 	</repositories>
 
