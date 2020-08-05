@@ -33,9 +33,9 @@
 		</dependency>
 		<!-- ColorPicker -->
 		<dependency>
-			<groupId>de.lars.colorpicker</groupId>
-			<artifactId>colorpicker</artifactId>
-			<version>0.3</version>
+			<groupId>com.github.Drumber</groupId>
+			<artifactId>ColorPicker</artifactId>
+			<version>v0.3</version>
 		</dependency>
 		<!-- FlatLaf -->
 		<dependency>
