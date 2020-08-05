@@ -20,7 +20,7 @@
  * <===license-end
  */
 
-package de.lars.remotelightplugins.utils;
+package de.lars.remotelightplugins.properties;
 
 import java.io.File;
 import java.util.Properties;

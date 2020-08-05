@@ -20,7 +20,7 @@
  * <===license-end
  */
 
-package de.lars.remotelightplugins.utils;
+package de.lars.remotelightplugins.properties;
 
 public enum DefaultProperties {
 	
@@ -38,6 +38,8 @@ public enum DefaultProperties {
 	DEPENDENCIES("dependencies", false),
 	/** plugin soft dependencies that are optional */
 	SOFTDEPENDENCIES("softdependencies", false),
+	/** plugin scope (all, mobile, web, swing) */
+	SCOPE("scope", false),
 	/** plugin website url */
 	URL("url", false);
 	

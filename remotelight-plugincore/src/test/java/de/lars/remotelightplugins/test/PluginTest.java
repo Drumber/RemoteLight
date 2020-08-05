@@ -11,7 +11,7 @@ public class PluginTest {
 		File pluginDir = new File("plugins");
 		System.out.println(pluginDir.getAbsolutePath());
 		pluginDir.mkdir();
-		PluginManager manager = new PluginManager(pluginDir, null);
+		PluginManager manager = new PluginManager(pluginDir, null, null);
 		System.out.println("Loading plugins with manager...");
 		manager.loadPlugins();
 		

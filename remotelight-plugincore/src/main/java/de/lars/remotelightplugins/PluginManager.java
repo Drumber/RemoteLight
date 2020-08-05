@@ -46,14 +46,18 @@ import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightplugins.exceptions.PluginLoadException;
-import de.lars.remotelightplugins.utils.DefaultProperties;
+import de.lars.remotelightplugins.plugininterface.PluginInterface;
+import de.lars.remotelightplugins.properties.DefaultProperties;
+import de.lars.remotelightplugins.properties.PluginPropertiesParser;
 import de.lars.remotelightplugins.utils.JarFileFilter;
-import de.lars.remotelightplugins.utils.PluginPropertiesParser;
 
 public class PluginManager {
 	public final static String PLUGIN_PROPERTIES = "plugin.properties";
 	
+	/** a RemoteLightCore instance */
 	private final RemoteLightCore core;
+	/** PluginInterface is needed to initialize the plugins */
+	private final PluginInterface pluginInterface;
 	/** List of all loaded plugins */
 	private final List<Plugin> loadedPlugins;
 	/** List of plugins that could not be loaded */
@@ -61,11 +65,12 @@ public class PluginManager {
 	/** plugin root directory */
 	private final File pluginDir;
 	
-	public PluginManager(final File pluginDir, RemoteLightCore core) {
+	public PluginManager(final File pluginDir, RemoteLightCore core, PluginInterface pluginInterface) {
 		loadedPlugins = new ArrayList<Plugin>();
 		errorPlugins = new HashMap<PluginInfo, String>();
 		this.pluginDir = pluginDir;
 		this.core = core;
+		this.pluginInterface = pluginInterface;
 		
 		// register shutdown listener
 		Listener<ShutdownEvent> shutdownEvent = event -> {
@@ -213,7 +218,7 @@ public class PluginManager {
 		
 			// instantiate and initialize plugin main class
 			Plugin plugin = (Plugin) classLoader.loadClass(mainClass).newInstance();
-			plugin.init(plInfo, core);
+			plugin.init(plInfo, core, pluginInterface);
 			plugin.onLoad();
 			loadedPlugins.add(plugin);
 			
@@ -392,12 +397,47 @@ public class PluginManager {
 	}
 	
 	
+	/**
+	 * Get the plugin root directory.
+	 * 
+	 * @return 	the plugin directory as {@link File}
+	 */
 	public File getPluginDirectory() {
 		return pluginDir;
 	}
 	
+	/**
+	 * Get all loaded plugins
+	 * 
+	 * @return 	ArrayList of all loaded plugins
+	 */
 	public List<Plugin> getLoadedPlugins() {
 		return loadedPlugins;
+	}
+	
+	/**
+	 * Get the plugin by name.
+	 * 
+	 * @param name	the plugin name (case sensitive)
+	 * @return		the plugin with the specified name,
+	 * 				or {@code null} if the plugin could
+	 * 				not be found
+	 */
+	public Plugin getPlugin(String name) {
+		for(Plugin plugin : getLoadedPlugins()) {
+			if(plugin.getName().equals(name))
+				return plugin;
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the plugin interface used to initialize new plugins.
+	 * 
+	 * @return	the plugin interface
+	 */
+	public PluginInterface getPluginInterface() {
+		return pluginInterface;
 	}
 
 }

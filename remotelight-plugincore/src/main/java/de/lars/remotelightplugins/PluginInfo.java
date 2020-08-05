@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.lars.remotelightplugins.utils.DefaultProperties;
+import de.lars.remotelightplugins.properties.DefaultProperties;
 
 /**
  * Plugin information holder

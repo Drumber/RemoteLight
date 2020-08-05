@@ -36,6 +36,7 @@ import org.tinylog.Logger;
 
 import com.formdev.flatlaf.FlatLaf;
 
+import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
@@ -91,7 +92,8 @@ public class Main {
 		File pluginDir = new File(DirectoryUtil.getDataStoragePath() + "plugins");
 		pluginDir.mkdirs();
 		
-		pluginManager = new PluginManager(pluginDir, remoteLightCore);
+		// create a new plugin manager
+		pluginManager = new PluginManager(pluginDir, remoteLightCore, new SwingPluginInterface(this));
 		pluginManager.loadPlugins();
 	}
 	
@@ -187,6 +189,10 @@ public class Main {
 	
 	public MainFrame getMainFrame() {
 		return mainFrame;
+	}
+	
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 	
 	/**

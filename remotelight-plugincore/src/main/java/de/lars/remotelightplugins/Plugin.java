@@ -23,7 +23,8 @@
 package de.lars.remotelightplugins;
 
 import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightplugins.utils.DefaultProperties;
+import de.lars.remotelightplugins.plugininterface.PluginInterface;
+import de.lars.remotelightplugins.properties.DefaultProperties;
 
 /**
  * Plugin super class.
@@ -34,6 +35,7 @@ public abstract class Plugin {
 	
 	private PluginInfo pluginInfo;
 	private RemoteLightCore core;
+	private PluginInterface pluginInterface;
 	private boolean enabled;
 
 	/**
@@ -90,6 +92,15 @@ public abstract class Plugin {
 	}
 	
 	/**
+	 * Get the plugin interface for easy access to all managers.
+	 * 
+	 * @return	PluginInterface instance
+	 */
+	protected final PluginInterface getInterface() {
+		return pluginInterface;
+	}
+	
+	/**
 	 * Enable or disable the plugin
 	 * 
 	 * @param enabled
@@ -124,10 +135,13 @@ public abstract class Plugin {
 	 * 		plugin info holder
 	 * @param core
 	 * 		{@link RemoteLightCore} instance
+	 * @param pluginInterface
+	 * 		plugin interface instance
 	 */
-	final void init(PluginInfo pluginInfo, RemoteLightCore core) {
+	final void init(PluginInfo pluginInfo, RemoteLightCore core, PluginInterface pluginInterface) {
 		this.pluginInfo = pluginInfo;
 		this.core = core;
+		this.pluginInterface = pluginInterface;
 	}
 	
 }
