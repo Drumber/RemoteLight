@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -36,7 +35,6 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class LevelBar extends MusicEffect {
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private Color background = Color.BLACK;
 	private Color color1;
@@ -52,17 +50,11 @@ public class LevelBar extends MusicEffect {
 
 	public LevelBar() {
 		super("LevelBar");
-		
-		s.addSetting(new SettingColor("musicsync.levelbar.color1", "Color 1", SettingCategory.MusicEffect, "", Color.RED));
-		this.addOption("musicsync.levelbar.color1");
-		s.addSetting(new SettingColor("musicsync.levelbar.color2", "Color 2", SettingCategory.MusicEffect, "", Color.RED));
-		this.addOption("musicsync.levelbar.color2");
-		s.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
-		this.addOption("musicsync.levelbar.color3");
-		s.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automatically change color", false));
-		this.addOption("musicsync.levelbar.autochange");
-		s.addSetting(new SettingBoolean("musicsync.levelbar.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
-		this.addOption("musicsync.levelbar.smooth");
+		this.addSetting(new SettingColor("musicsync.levelbar.color1", "Color 1", SettingCategory.MusicEffect, "", Color.RED));
+		this.addSetting(new SettingColor("musicsync.levelbar.color2", "Color 2", SettingCategory.MusicEffect, "", Color.RED));
+		this.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
+		this.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automatically change color", false));
+		this.addSetting(new SettingBoolean("musicsync.levelbar.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
 	}
 	
 	@Override
@@ -182,11 +174,11 @@ public class LevelBar extends MusicEffect {
 	}
 	
 	private void initOptions() {
-		color1 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color1")).getValue();
-		color2 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color2")).getValue();
-		color3 = ((SettingColor) s.getSettingFromId("musicsync.levelbar.color3")).getValue();
-		autoChange = ((SettingBoolean) s.getSettingFromId("musicsync.levelbar.autochange")).getValue();
-		smooth = ((SettingBoolean) s.getSettingFromId("musicsync.levelbar.smooth")).getValue();
+		color1 = ((SettingColor) getSetting("musicsync.levelbar.color1")).getValue();
+		color2 = ((SettingColor) getSetting("musicsync.levelbar.color2")).getValue();
+		color3 = ((SettingColor) getSetting("musicsync.levelbar.color3")).getValue();
+		autoChange = ((SettingBoolean) getSetting("musicsync.levelbar.autochange")).getValue();
+		smooth = ((SettingBoolean) getSetting("musicsync.levelbar.smooth")).getValue();
 	}
 
 }

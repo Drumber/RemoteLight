@@ -298,7 +298,7 @@ public class OutputPanel extends MenuPanel {
 				if(d.getId().equals(btn.getName())) {
 					//double click -> activate
 					if(e.getClickCount() == 2) {
-						if((!currentSettingsPanel.isSetup() || currentSettingsPanel == null) && dm.isIdUsed(d.getId())) {
+						if((currentSettingsPanel == null || !currentSettingsPanel.isSetup()) && dm.isIdUsed(d.getId())) {
 							om.setActiveOutput(d);
 							mainFrame.displayPanel(new OutputPanel(mainFrame));
 							break;

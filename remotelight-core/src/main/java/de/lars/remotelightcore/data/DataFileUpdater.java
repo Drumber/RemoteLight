@@ -32,6 +32,7 @@ import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.settings.Setting;
 
+@SuppressWarnings("deprecation")
 public class DataFileUpdater {
 	
 	public DataFileUpdater(FileStorage fileStorage) {

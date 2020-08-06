@@ -27,7 +27,6 @@ import java.awt.Color;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -42,7 +41,6 @@ import de.lars.remotelightcore.utils.maths.TimeUtil;
 
 public class Lines extends MusicEffect {
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private String[] colorModes = {"Static", "Rainbow #1", "Rainbow #2", "Spectrum"};
 	private int rainbowAllHue = 0;
 	
@@ -56,14 +54,10 @@ public class Lines extends MusicEffect {
 
 	public Lines() {
 		super("Lines");
-		s.addSetting(new SettingBoolean("musicsync.lines.rotate", "Rotate", SettingCategory.MusicEffect, "Rotate strip", false));
-		this.addOption("musicsync.lines.rotate");
-		s.addSetting(new SettingSelection("musicsync.lines.colormode", "Color mode", SettingCategory.MusicEffect, null, colorModes, "Static", Model.ComboBox));
-		this.addOption("musicsync.lines.colormode");
-		s.addSetting(new SettingColor("musicsync.lines.color", "Color", SettingCategory.MusicEffect, "Static color", Color.RED));
-		this.addOption("musicsync.lines.color");
-		s.addSetting(new SettingInt("musicsync.lines.lines", "Lines", SettingCategory.MusicEffect, "Number of lines", 10, 2, 300, 1));
-		this.addOption("musicsync.lines.lines");
+		this.addSetting(new SettingBoolean("musicsync.lines.rotate", "Rotate", SettingCategory.MusicEffect, "Rotate strip", false));
+		this.addSetting(new SettingSelection("musicsync.lines.colormode", "Color mode", SettingCategory.MusicEffect, null, colorModes, "Static", Model.ComboBox));
+		this.addSetting(new SettingColor("musicsync.lines.color", "Color", SettingCategory.MusicEffect, "Static color", Color.RED));
+		this.addSetting(new SettingInt("musicsync.lines.lines", "Lines", SettingCategory.MusicEffect, "Number of lines", 10, 2, 300, 1));
 	}
 	
 	@Override
@@ -79,8 +73,8 @@ public class Lines extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		rotate = s.getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
-		linesNum = s.getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
+		rotate = getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
+		linesNum = getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
 		if(linesNum > strip.length / 2)
 			linesNum = strip.length / 2;
 		maxLineLength = strip.length / linesNum;
@@ -134,7 +128,7 @@ public class Lines extends MusicEffect {
 	
 	
 	private Color getColor(int index, int ledVol) {
-		String mode = s.getSetting(SettingSelection.class, "musicsync.lines.colormode").getSelected();
+		String mode = getSetting(SettingSelection.class, "musicsync.lines.colormode").getSelected();
 		if(mode.equalsIgnoreCase("Rainbow #1")) {
 			return RainbowWheel.getRainbow()[rainbowAllHue];
 		} else if(mode.equalsIgnoreCase("Rainbow #2")) {
@@ -149,7 +143,7 @@ public class Lines extends MusicEffect {
 			return Color.GREEN;
 		}
 		// static color
-		return s.getSetting(SettingColor.class, "musicsync.lines.color").getValue();
+		return getSetting(SettingColor.class, "musicsync.lines.color").getValue();
 	}
 
 }

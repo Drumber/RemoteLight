@@ -50,6 +50,7 @@ public class SettingsManager {
 	}
 	
 	/**
+	 * Get all settings registered by this manager
 	 * 
 	 * @return A list with all settings
 	 */
@@ -57,6 +58,15 @@ public class SettingsManager {
 		return this.settings;
 	}
 	
+	/**
+	 * Get a setting from type and id
+	 * 
+	 * @param <T>	the setting type
+	 * @param type	the setting subclass
+	 * @param id	the setting id
+	 * @return		the setting or {@code null} if no setting with
+	 * 				the given id could be found
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Setting> T getSetting(Class<T> type, String id) {
 		Setting s = getSettingFromId(id);

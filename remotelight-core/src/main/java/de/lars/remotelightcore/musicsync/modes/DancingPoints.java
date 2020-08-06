@@ -28,7 +28,6 @@ import java.util.Random;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -37,7 +36,6 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class DancingPoints extends MusicEffect {
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private int numLEDs;
 	private int numPoints;	// Number of points displayed
 	private int[] pos;		// Position of points
@@ -52,12 +50,9 @@ public class DancingPoints extends MusicEffect {
 	public DancingPoints() {
 		super("DancingPoints");
 		
-		s.addSetting(new SettingBoolean("musicsync.dancingpoints.randomcolor", "Random color", SettingCategory.MusicEffect, "", true));
-		this.addOption("musicsync.dancingpoints.randomcolor");
-		s.addSetting(new SettingColor("musicsync.dancingpoints.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
-		this.addOption("musicsync.dancingpoints.color");
-		s.addSetting(new SettingBoolean("musicsync.dancingpoints.idleactivity", "Idle activity", SettingCategory.MusicEffect, "Move points randomly when no music is playing.", false));
-		this.addOption("musicsync.dancingpoints.idleactivity");
+		this.addSetting(new SettingBoolean("musicsync.dancingpoints.randomcolor", "Random color", SettingCategory.MusicEffect, "", true));
+		this.addSetting(new SettingColor("musicsync.dancingpoints.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		this.addSetting(new SettingBoolean("musicsync.dancingpoints.idleactivity", "Idle activity", SettingCategory.MusicEffect, "Move points randomly when no music is playing.", false));
 	}
 	
 	@Override
@@ -82,7 +77,7 @@ public class DancingPoints extends MusicEffect {
 	@Override
 	public void onLoop() {
 		boolean bump = this.isBump();
-		boolean idleActivity = ((SettingBoolean) s.getSettingFromId("musicsync.dancingpoints.idleactivity")).getValue();
+		boolean idleActivity = ((SettingBoolean) getSetting("musicsync.dancingpoints.idleactivity")).getValue();
 		
 		if(bump) lastBump = System.currentTimeMillis();
 		
@@ -134,11 +129,11 @@ public class DancingPoints extends MusicEffect {
 	
 	
 	private void setColor(int i) {
-		if(((SettingBoolean) s.getSettingFromId("musicsync.dancingpoints.randomcolor")).getValue()) {	// Random color
+		if(((SettingBoolean) getSetting("musicsync.dancingpoints.randomcolor")).getValue()) {	// Random color
 			int rainbowPos = RainbowWheel.getRainbow().length / numPoints * i;
 			color[i] = RainbowWheel.getRainbow()[rainbowPos];
 		} else {
-			color[i] = ((SettingColor) s.getSettingFromId("musicsync.dancingpoints.color")).getValue();
+			color[i] = ((SettingColor) getSetting("musicsync.dancingpoints.color")).getValue();
 		}
 	}
 

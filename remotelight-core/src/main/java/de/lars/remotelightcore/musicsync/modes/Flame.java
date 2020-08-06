@@ -28,7 +28,6 @@ import java.util.Random;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -42,16 +41,13 @@ public class Flame extends MusicEffect {
 	 * https://github.com/atuline/FastLED-SoundReactive/blob/master/notasound/besin.h
 	 */
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int hue;
 
 	public Flame() {
 		super("Flame");
-		s.addSetting(new SettingColor("musicsync.flame.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
-		this.addOption("musicsync.flame.color");
-		s.addSetting(new SettingBoolean("musicsync.flame.rainbow", "Rainbow", SettingCategory.MusicEffect, null, false));
-		this.addOption("musicsync.flame.rainbow");
+		this.addSetting(new SettingColor("musicsync.flame.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
+		this.addSetting(new SettingBoolean("musicsync.flame.rainbow", "Rainbow", SettingCategory.MusicEffect, null, false));
 	}
 	
 	@Override
@@ -63,8 +59,8 @@ public class Flame extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		Color color = ((SettingColor) s.getSettingFromId("musicsync.flame.color")).getValue();
-		boolean rainbow = ((SettingBoolean) s.getSettingFromId("musicsync.flame.rainbow")).getValue();
+		Color color = ((SettingColor) getSetting("musicsync.flame.color")).getValue();
+		boolean rainbow = ((SettingBoolean) getSetting("musicsync.flame.rainbow")).getValue();
 		int ledNum = RemoteLightCore.getLedNum();
 		
 		if(rainbow) {

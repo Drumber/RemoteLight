@@ -28,7 +28,6 @@ import java.util.Random;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -40,7 +39,6 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Bars extends MusicEffect {
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private Color color;
 	private int hue;
@@ -50,15 +48,12 @@ public class Bars extends MusicEffect {
 
 	public Bars() {
 		super("Bars");
-		s.addSetting(new SettingInt("musicsync.bars.barwidth", "Bar width", SettingCategory.MusicEffect, null, 5, 1, 20, 1));
-		this.addOption("musicsync.bars.barwidth");
+		this.addSetting(new SettingInt("musicsync.bars.barwidth", "Bar width", SettingCategory.MusicEffect, null, 5, 1, 20, 1));
 		
 		String[] modes = new String[] {"Rainbow", "Frequency", "Random", "Static"};
-		s.addSetting(new SettingSelection("musicsync.bars.mode", "Color mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
-		this.addOption("musicsync.bars.mode");
+		this.addSetting(new SettingSelection("musicsync.bars.mode", "Color mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
 		
-		s.addSetting(new SettingColor("musicsync.bars.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
-		this.addOption("musicsync.bars.color");
+		this.addSetting(new SettingColor("musicsync.bars.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
 	}
 	
 	@Override
@@ -70,7 +65,7 @@ public class Bars extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		barWidth = ((SettingInt) s.getSettingFromId("musicsync.bars.barwidth")).getValue();	// get bar width from settings
+		barWidth = ((SettingInt) getSetting("musicsync.bars.barwidth")).getValue();	// get bar width from settings
 		
 		double vol = this.getSpl();
 		avgVol = (vol + getMaxSpl() * (0.8 + getSensitivity() / 10)) / 2;	// smooth max volume and calculate average
@@ -99,10 +94,10 @@ public class Bars extends MusicEffect {
 	
 	
 	private void setColor() {
-		String mode = ((SettingSelection) s.getSettingFromId("musicsync.bars.mode")).getSelected();
+		String mode = ((SettingSelection) getSetting("musicsync.bars.mode")).getSelected();
 		switch (mode.toLowerCase()) {
 			case "static":
-				color = ((SettingColor) s.getSettingFromId("musicsync.bars.color")).getValue();
+				color = ((SettingColor) getSetting("musicsync.bars.color")).getValue();
 				break;
 			case "frequency":
 				color = ColorUtil.soundToColor((int) this.getPitch());

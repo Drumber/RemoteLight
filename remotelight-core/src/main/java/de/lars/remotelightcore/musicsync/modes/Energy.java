@@ -27,7 +27,6 @@ import java.awt.Color;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingSelection;
@@ -38,7 +37,6 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Energy extends MusicEffect {
 
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int binMin;
 	private int binLowMax;
@@ -48,10 +46,8 @@ public class Energy extends MusicEffect {
 	public Energy() {
 		super("Energy");
 		String[] modes = new String[] {"RGB", "Mix", "Frequency", "Static"};
-		s.addSetting(new SettingSelection("musicsync.energy.mode", "Mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
-		this.addOption("musicsync.energy.mode");
-		s.addSetting(new SettingColor("musicsync.energy.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
-		this.addOption("musicsync.energy.color");
+		this.addSetting(new SettingSelection("musicsync.energy.mode", "Mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
+		this.addSetting(new SettingColor("musicsync.energy.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
 	}
 	
 	@Override
@@ -65,7 +61,7 @@ public class Energy extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		String mode = ((SettingSelection) s.getSettingFromId("musicsync.energy.mode")).getSelected();
+		String mode = ((SettingSelection) getSetting("musicsync.energy.mode")).getSelected();
 		float[] ampl = getSoundProcessor().getAmplitudes();
 		double mul = 0.01 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		
@@ -105,7 +101,7 @@ public class Energy extends MusicEffect {
 			}
 			
 			if(mode.equals("Static")) {
-				Color color = ((SettingColor) s.getSettingFromId("musicsync.energy.color")).getValue();
+				Color color = ((SettingColor) getSetting("musicsync.energy.color")).getValue();
 				show(a, color);
 			} else {
 				int start = getSoundProcessor().hzToBin(350);	// range from 350Hz...

@@ -31,6 +31,13 @@ import com.blogspot.debukkitsblog.util.FileStorage;
 
 import de.lars.remotelightcore.utils.DirectoryUtil;
 
+/**
+ * @deprecated
+ * Has been replaced by the new {@link de.lars.remotelightcore.io.FileStorage}
+ * system (JSON).<br>
+ * Exists only to update old data files and will be removed in future versions.
+ */
+@Deprecated
 public class DataStorage {
 	
 	private static FileStorage storage;

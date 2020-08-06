@@ -96,7 +96,7 @@ public abstract class Plugin {
 	 * 
 	 * @return	PluginInterface instance
 	 */
-	protected final PluginInterface getInterface() {
+	public final PluginInterface getInterface() {
 		return pluginInterface;
 	}
 	

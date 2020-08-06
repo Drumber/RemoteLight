@@ -27,7 +27,6 @@ import java.awt.Color;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -37,7 +36,6 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 public class RunningLight extends MusicEffect {
 
 	private int pDelay; //previous delay
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private boolean centered;
 	private Color[] strip;
 	private double lastTime = 0;
@@ -46,11 +44,8 @@ public class RunningLight extends MusicEffect {
 
 	public RunningLight() {
 		super("RunningLight");
-
-		s.addSetting(new SettingBoolean("musicsync.runninglight.centered", "Centered", SettingCategory.MusicEffect, "", false));
-		this.addOption("musicsync.runninglight.centered");
-		s.addSetting(new SettingInt("musicsync.runninglight.groupsize", "Group size", SettingCategory.MusicEffect, "Number of LEDs per group", 3, 1, 5, 1));
-		this.addOption("musicsync.runninglight.groupsize");
+		this.addSetting(new SettingBoolean("musicsync.runninglight.centered", "Centered", SettingCategory.MusicEffect, "", false));
+		this.addSetting(new SettingInt("musicsync.runninglight.groupsize", "Group size", SettingCategory.MusicEffect, "Number of LEDs per group", 3, 1, 5, 1));
 	}
 
 	@Override
@@ -69,8 +64,8 @@ public class RunningLight extends MusicEffect {
 
 	@Override
 	public void onLoop() {
-		centered = ((SettingBoolean) s.getSettingFromId("musicsync.runninglight.centered")).getValue();
-		groupSize = ((SettingInt) s .getSettingFromId("musicsync.runninglight.groupsize")).getValue();
+		centered = ((SettingBoolean) getSetting("musicsync.runninglight.centered")).getValue();
+		groupSize = ((SettingInt) getSetting("musicsync.runninglight.groupsize")).getValue();
 		
 		int half = RemoteLightCore.getLedNum() / 2;
 		double pitch = this.getPitch();

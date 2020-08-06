@@ -38,6 +38,8 @@ public class Animation {
 	
 	/**
 	 * Animation with adjustable speed
+	 * 
+	 * @param name	the name of the animation (should be unique)
 	 */
 	public Animation(String name) {
 		this.name = name;
@@ -48,6 +50,9 @@ public class Animation {
 	
 	/**
 	 * Animation with pre-defined speed (not adjustable)
+	 * 
+	 * @param name	the name of the animation (should be unique)
+	 * @param delay	the pre-defined speed/delay in milliseconds
 	 */
 	public Animation(String name, int delay) {
 		this.name = name;
@@ -81,20 +86,45 @@ public class Animation {
 		return this.delay;
 	}
 	
+	/**
+	 * Register a new animation setting.
+	 * 
+	 * @param <T>		setting type
+	 * @param setting	the setting to register
+	 * @return			the registered setting
+	 */
 	public <T extends Setting> T addSetting(T setting) {
 		options.add(setting.getId());
 		return RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
 	}
 	
+	/**
+	 * Get a setting from setting manager
+	 * 
+	 * @param id	the id of the setting
+	 * @return		the setting or null if no setting with
+	 * 				the given id could be found
+	 */
 	public Setting getSetting(String id) {
 		return RemoteLightCore.getInstance().getSettingsManager().getSettingFromId(id);
 	}
 	
 	/**
-	 * @return A list with all setting IDs the animation use
+	 * Get settings used by this animation
+	 * 
+	 * @return	A list with all setting IDs the animation uses
 	 */
 	public List<String> getOptions() {
 		return options;
+	}
+	
+	/**
+	 * Get the amount of LEDs/pixels
+	 * 
+	 * @return	the amount of LEDs
+	 */
+	public int getLeds() {
+		return RemoteLightCore.getLedNum();
 	}
 	
 	public void onEnable() {}

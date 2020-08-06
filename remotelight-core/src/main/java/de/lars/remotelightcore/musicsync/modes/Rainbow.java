@@ -27,7 +27,6 @@ import java.awt.Color;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -36,7 +35,6 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 	private Color[] strip;
 	private int pix;
 	private int half;
@@ -50,26 +48,22 @@ public class Rainbow extends MusicEffect {
 
 	public Rainbow() {
 		super("Rainbow");
-		
-		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "SmoothRise", SettingCategory.MusicEffect, "", true));
-		this.addOption("musicsync.rainbow.smoothrise");
-		s.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "SmoothFall", SettingCategory.MusicEffect, "", true));
-		this.addOption("musicsync.rainbow.smoothfall");
-		s.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
-		this.addOption("musicsync.rainbow.steps");
+		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "SmoothRise", SettingCategory.MusicEffect, "", true));
+		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "SmoothFall", SettingCategory.MusicEffect, "", true));
+		this.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
 	}
 	
 	private void initOptions() {
-		smoothRise = ((SettingBoolean) s.getSettingFromId("musicsync.rainbow.smoothrise")).getValue();
-		smoothFall= ((SettingBoolean) s.getSettingFromId("musicsync.rainbow.smoothfall")).getValue();
-		steps = ((SettingInt) s.getSettingFromId("musicsync.rainbow.steps")).getValue();
+		smoothRise = ((SettingBoolean) getSetting("musicsync.rainbow.smoothrise")).getValue();
+		smoothFall= ((SettingBoolean) getSetting("musicsync.rainbow.smoothfall")).getValue();
+		steps = ((SettingInt) getSetting("musicsync.rainbow.steps")).getValue();
 	}
 	
 	@Override
 	public void onEnable() {
 		this.initOptions();
 		
-		pix = RemoteLightCore.getLedNum();
+		pix = getLeds();
 		half = pix / 2;
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
 		rainbow = new Color[pix];

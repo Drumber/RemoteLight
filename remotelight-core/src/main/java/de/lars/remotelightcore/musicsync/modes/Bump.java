@@ -26,7 +26,6 @@ import java.awt.Color;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
-import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
@@ -39,17 +38,13 @@ public class Bump extends MusicEffect {
 	private int colorIndex = 0;
 	private Color color = Color.black;
 	private int pDelay; //previous delay
-	private SettingsManager s = RemoteLightCore.getInstance().getSettingsManager();
 
 	public Bump() {
 		super("Bump");
 		
-		s.addSetting(new SettingInt("musicsync.bump.speed", "Speed", SettingCategory.MusicEffect, "", 50, 20, 100, 5));
-		this.addOption("musicsync.bump.speed");
-		s.addSetting(new SettingBoolean("musicsync.bump.background", "Background", SettingCategory.MusicEffect, "", true));
-		this.addOption("musicsync.bump.background");
-		s.addSetting(new SettingBoolean("musicsync.bump.center", "Center", SettingCategory.MusicEffect, "", false));
-		this.addOption("musicsync.bump.center");
+		this.addSetting(new SettingInt("musicsync.bump.speed", "Speed", SettingCategory.MusicEffect, "", 50, 20, 100, 5));
+		this.addSetting(new SettingBoolean("musicsync.bump.background", "Background", SettingCategory.MusicEffect, "", true));
+		this.addSetting(new SettingBoolean("musicsync.bump.center", "Center", SettingCategory.MusicEffect, "", false));
 	}
 	
 	@Override
@@ -66,9 +61,9 @@ public class Bump extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(((SettingInt) s .getSettingFromId("musicsync.bump.speed")).getValue());
-		boolean background = ((SettingBoolean) s.getSettingFromId("musicsync.bump.background")).getValue();
-		boolean center = ((SettingBoolean) s.getSettingFromId("musicsync.bump.center")).getValue();
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(((SettingInt) getSetting("musicsync.bump.speed")).getValue());
+		boolean background = ((SettingBoolean) getSetting("musicsync.bump.background")).getValue();
+		boolean center = ((SettingBoolean) getSetting("musicsync.bump.center")).getValue();
 		
 		if(this.isBump()) {
 			if(++colorIndex >= colors.length) {
