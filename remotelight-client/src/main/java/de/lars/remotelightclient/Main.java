@@ -39,6 +39,8 @@ import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.console.ConsoleFrame;
+import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -67,6 +69,7 @@ public class Main {
 	
 	public Main(String[] args, boolean uiMode) {
 		instance = this;
+		CustomOutputStream.init();
 		setupOSSupport();
 		
 		// register error handler in MainFrame
@@ -120,6 +123,11 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// test new console window
+					// TODO remove for before release
+					new ConsoleFrame();
+					
+					// initialize and show the main frame
 					mainFrame = new MainFrame();
 					mainFrame.setVisible(!RemoteLightCore.startParameter.tray);
 				} catch (Exception e) {
