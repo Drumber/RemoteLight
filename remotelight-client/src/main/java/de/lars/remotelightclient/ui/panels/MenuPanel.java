@@ -20,7 +20,7 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.ui;
+package de.lars.remotelightclient.ui.panels;
 
 import javax.swing.JPanel;
 

@@ -45,8 +45,8 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingBooleanPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingColorPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingDoublePanel;

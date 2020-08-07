@@ -38,9 +38,9 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.comps.BigTextButton;
+import de.lars.remotelightclient.ui.components.BigTextButton;
+import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.WrapLayout;

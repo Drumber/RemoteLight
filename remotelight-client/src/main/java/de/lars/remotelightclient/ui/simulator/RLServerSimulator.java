@@ -20,13 +20,14 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.simulator;
+package de.lars.remotelightclient.ui.simulator;
 
 import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -80,6 +81,8 @@ public class RLServerSimulator {
 							}
 						}
 						
+					} catch (SocketException e) {
+						// do nothing
 					} catch (Exception e) {
 						Logger.error(e);
 					}

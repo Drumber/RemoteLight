@@ -29,7 +29,7 @@ import java.io.IOException;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.comps.dialogs.UpdateDialog;
+import de.lars.remotelightclient.ui.components.dialogs.UpdateDialog;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.lang.LangUtil;

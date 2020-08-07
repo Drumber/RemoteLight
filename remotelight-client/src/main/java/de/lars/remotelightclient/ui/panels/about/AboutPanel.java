@@ -37,8 +37,8 @@ import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.MenuPanel;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;

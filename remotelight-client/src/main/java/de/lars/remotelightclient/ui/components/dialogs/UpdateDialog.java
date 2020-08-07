@@ -20,7 +20,7 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.ui.comps.dialogs;
+package de.lars.remotelightclient.ui.components.dialogs;
 
 import java.awt.Desktop;
 import java.io.IOException;

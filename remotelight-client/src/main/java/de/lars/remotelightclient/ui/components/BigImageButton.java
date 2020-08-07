@@ -20,7 +20,7 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.ui.comps;
+package de.lars.remotelightclient.ui.components;
 
 import de.lars.remotelightclient.ui.Style;
 

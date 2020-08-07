@@ -22,7 +22,7 @@
 
 package de.lars.remotelightclient.events;
 
-import de.lars.remotelightclient.ui.MenuPanel;
+import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightcore.event.events.Event;
 
 /**

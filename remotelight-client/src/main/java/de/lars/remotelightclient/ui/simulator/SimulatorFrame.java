@@ -20,32 +20,41 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.simulator;
+package de.lars.remotelightclient.ui.simulator;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.frames.BasicFrame;
+import de.lars.remotelightclient.ui.simulator.RLServerSimulator.ConnectionStateChangeListener;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.lang.i18n;
-import de.lars.remotelightcore.settings.SettingsManager;
-import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
-import de.lars.remotelightcore.settings.types.SettingBoolean;
 
-public class SimulatorFrame extends JFrame {
+public class SimulatorFrame extends BasicFrame {
 	private static final long serialVersionUID = 2752076462014410311L;
 	
 	private RLServerSimulator emulator;
-	private SettingsManager sm;
 	private boolean loopActive = false;
 	private Dimension pixelPanelSize = new Dimension(20, 20);
 	private List<JPanel> pixelPanels;
@@ -57,16 +66,15 @@ public class SimulatorFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public SimulatorFrame() {
+		super("simulator", Main.getInstance().getSettingsManager());
 		pixelPanels = new ArrayList<>();
-		sm = Main.getInstance().getSettingsManager();
 		emulator = new RLServerSimulator();
 		emulator.addStateChangeListener(stateListener);
+		
+		// add window close action
+		setCloseAction(() -> emulator.stop());
 		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
-		addWindowListener(closeListener);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setMinimumSize(new Dimension(300, 100));
-		setSize((Dimension) sm.getSettingObject("simulatorFrame.size").getValue());
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -100,9 +108,7 @@ public class SimulatorFrame extends JFrame {
 		panelScale.setLayout(new BoxLayout(panelScale, BoxLayout.X_AXIS));
 		
 		JCheckBox checkBoxAlwaysTop = new JCheckBox("always on top");
-		sm.addSetting(new SettingBoolean("simulatorFrame.alwaysontop", "always on top", SettingCategory.Intern, null, false));
-		checkBoxAlwaysTop.setSelected(sm.getSetting(SettingBoolean.class, "simulatorFrame.alwaysontop").getValue());
-		setAlwaysOnTop(checkBoxAlwaysTop.isSelected());
+		checkBoxAlwaysTop.setSelected(isAlwayTop());
 		checkBoxAlwaysTop.setBackground(Style.panelDarkBackground);
 		checkBoxAlwaysTop.setForeground(Style.textColor);
 		checkBoxAlwaysTop.setFocusable(false);
@@ -140,17 +146,6 @@ public class SimulatorFrame extends JFrame {
 		scrollPane.setViewportView(panelPixel);
 	}
 	
-	WindowListener closeListener = new WindowAdapter() {
-		public void windowClosing(WindowEvent windowEvent) {
-			if(getExtendedState() == NORMAL) {
-				// save window size
-				sm.getSettingObject("simulatorFrame.size").setValue(getSize());
-			}
-			emulator.stop();
-			dispose();
-		}
-	};
-	
 	public void setFrameTitle(String text) {
 		setTitle(i18n.getString("EmulatorFrame.Title") + text); //$NON-NLS-1$
 	}
@@ -180,8 +175,7 @@ public class SimulatorFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JCheckBox cb = (JCheckBox) e.getSource();
-			sm.getSetting(SettingBoolean.class, "simulatorFrame.alwaysontop").setValue(cb.isSelected());
-			setAlwaysOnTop(cb.isSelected());
+			setAlwaysTop(cb.isSelected());
 		}
 	};
 	
