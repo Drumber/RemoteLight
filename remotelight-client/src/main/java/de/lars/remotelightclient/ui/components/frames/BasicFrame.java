@@ -22,7 +22,7 @@ public class BasicFrame extends JFrame {
 	
 	public final String frameID;
 	public final String settingPrefix;
-	public final SettingsManager sm;
+	protected final SettingsManager sm;
 	private Runnable closeAction;
 	
 	/**

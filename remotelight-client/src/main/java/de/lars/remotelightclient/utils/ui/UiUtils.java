@@ -22,7 +22,13 @@
 
 package de.lars.remotelightclient.utils.ui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -32,8 +38,18 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.Locale;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.FontUIResource;
 
@@ -80,6 +96,10 @@ public class UiUtils {
 	
 	public static void registerIconFont(String path) {
 		IconFontSwing.register(new MenuIconFont(DirectoryUtil.RESOURCES_CLASSPATH + "fonts/" + path));
+	}
+	
+	public static String[] getAvailableFonts() {
+		return GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames(Locale.US);
 	}
 	
 	
