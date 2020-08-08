@@ -7,6 +7,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -24,10 +25,19 @@ public class BasicFrame extends JFrame {
 	public final SettingsManager sm;
 	private Runnable closeAction;
 	
+	/**
+	 * Create a new basic JFrame with always-on-top option and saved window size.
+	 * <p> Will automatically register and unregister frame.
+	 * 
+	 * @param frameID	the unique frame id (is used for saving options)
+	 * @param sm		a setting manager instance
+	 */
 	public BasicFrame(final String frameID, SettingsManager sm) {
 		this.sm = sm;
 		this.frameID = frameID;
 		this.settingPrefix = "frame." + frameID;
+		// register frame
+		Main.getInstance().registerFrame(this);
 		
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -117,6 +127,8 @@ public class BasicFrame extends JFrame {
 			if(closeAction != null) {
 				closeAction.run();
 			}
+			// unregister frame
+			Main.getInstance().unregisterFrame(BasicFrame.this);
 		};
 	};
 

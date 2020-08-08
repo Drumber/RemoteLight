@@ -24,6 +24,8 @@ package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -44,6 +46,7 @@ import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -60,15 +63,21 @@ public class Main {
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
+	private Set<JFrame> frames;
 	private MainFrame mainFrame;
 	private PluginManager pluginManager;
 
+	/**
+	 * Entry point of the program.
+	 * @param args	supports some start parameters (see {@link StartParameterHandler})
+	 */
 	public static void main(String[] args) {
 		new Main(args, true);
 	}
 	
 	public Main(String[] args, boolean uiMode) {
 		instance = this;
+		frames = new HashSet<JFrame>();
 		CustomOutputStream.init();
 		setupOSSupport();
 		
@@ -92,6 +101,9 @@ public class Main {
 	}
 	
 	
+	/**
+	 * Initialize the plugin manager and load plugins.
+	 */
 	private void initPluginManager() {
 		File pluginDir = new File(DirectoryUtil.getDataStoragePath() + "plugins");
 		pluginDir.mkdirs();
@@ -137,6 +149,10 @@ public class Main {
 		});
 	}
 	
+	/**
+	 * Set the Look and Feel from the {@code ui.laf} setting.
+	 * @return	false, if the operation fails
+	 */
 	public boolean setLookAndFeel() {
 		SettingSelection sLaF = (SettingSelection) remoteLightCore.getSettingsManager().getSettingFromId("ui.laf");
 		UiUtils.setThemingEnabled(true);
@@ -172,22 +188,52 @@ public class Main {
 		return false;
 	}
 	
+	/**
+	 * Enable or disable FlatLaf custom window decorations. Works only if
+	 * a FlatLaf Look and Feel is enabled.
+	 * <p> Will refresh all registered frames.
+	 * @param enabled	whether to enable or disable window decorations
+	 */
 	public void setCustomWindowDecorations(boolean enabled) {
 		JFrame.setDefaultLookAndFeelDecorated(enabled);
 		JDialog.setDefaultLookAndFeelDecorated(enabled);
-		if(mainFrame != null && mainFrame.isUndecorated() != enabled) {
-			mainFrame.dispose();
-			mainFrame.setUndecorated(enabled);
-			mainFrame.getRootPane().setWindowDecorationStyle(enabled ? JRootPane.FRAME : JRootPane.NONE);
-			mainFrame.setVisible(true);
+		// loop through all registered frames
+		for(JFrame frame : frames) {
+			if(frame != null && frame.isUndecorated() != enabled) {
+				// refresh frame
+				frame.dispose();
+				frame.setUndecorated(enabled);
+				frame.getRootPane().setWindowDecorationStyle(enabled ? JRootPane.FRAME : JRootPane.NONE);
+				frame.setVisible(true);
+			}
 		}
 	}
 	
-	
+	/**
+	 * Enable some OS specific functionalities, like Apple menu bar name.
+	 */
 	public static void setupOSSupport() {
 		// MacOS menu bar application name
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.application.name", "RemoteLight");
+	}
+	
+	
+	/**
+	 * Register a new JFrame window.
+	 * <p> Is needed to toggle the custom window decorations.
+	 * @param frame	the frame to register
+	 */
+	public void registerFrame(JFrame frame) {
+		frames.add(frame);
+	}
+	
+	/**
+	 * Remove a JFrame window from the list.
+	 * @param frame	the frame to unregister
+	 */
+	public void unregisterFrame(JFrame frame) {
+		frames.remove(frame);
 	}
 	
 	
@@ -217,7 +263,7 @@ public class Main {
 
 	/**
 	 * Returns the number of LEDs of the active output
-	 * @return
+	 * @return	the set number of LEDs or the active output
 	 */
 	public static int getLedNum() {
 		return RemoteLightCore.getLedNum();
