@@ -135,13 +135,13 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					// test new console window
-					// TODO remove for before release
-					new ConsoleFrame();
-					
 					// initialize and show the main frame
 					mainFrame = new MainFrame();
 					mainFrame.setVisible(!RemoteLightCore.startParameter.tray);
+					
+					// test new console window
+					// TODO remove for before release
+					new ConsoleFrame();
 				} catch (Exception e) {
 					Logger.error(e);
 				}

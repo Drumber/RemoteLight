@@ -47,6 +47,9 @@ public class ConsoleFrame extends BasicFrame {
 	private JTextField fieldCmd;
 	private JButton btnSend, btnSettings;
 	private JCheckBox checkAutoScroll;
+	
+	protected String font = "SansSerif";
+	protected int fontSize = 11;
 
 	//TODO add options: auto scroll, always on top, text size/font
 	
@@ -136,8 +139,11 @@ public class ConsoleFrame extends BasicFrame {
 			comboFonts.setToolTipText("Console font");
 			comboFonts.setPreferredSize(new Dimension(100, comboFonts.getPreferredSize().height));
 			comboFonts.addActionListener(e -> {
-				settingFont.setValue(fontNames[comboFonts.getSelectedIndex()]);
-				// TODO update font
+				if(comboFonts.getSelectedIndex() < fontNames.length) {
+					font = fontNames[comboFonts.getSelectedIndex()];
+					settingFont.setValue(font);
+					updateOnlyFont();
+				}
 			});
 			
 			// font size spinner
@@ -145,9 +151,15 @@ public class ConsoleFrame extends BasicFrame {
 			JSpinner spinnerSize = new JSpinner(new SpinnerNumberModel(settingFontSize.getValue(), settingFontSize.getMin(), settingFontSize.getMax(), settingFontSize.getStepsize()));
 			spinnerSize.setToolTipText("Font size");
 			spinnerSize.addChangeListener(e -> {
-				settingFontSize.setValue((int) spinnerSize.getValue());
-				// TODO update font size
+				fontSize = (int) spinnerSize.getValue();
+				settingFontSize.setValue(fontSize);
+				updateOnlyFont();
 			});
+			
+			// set font from saved settings
+			if(comboFonts.getSelectedIndex() < fontNames.length)
+				font = fontNames[comboFonts.getSelectedIndex()];
+			fontSize = (int) spinnerSize.getValue();
 			
 			// configure gridbag layout
 			GridBagConstraints c = new GridBagConstraints();
@@ -252,9 +264,11 @@ public class ConsoleFrame extends BasicFrame {
 			Color c = error ? Color.RED : Style.textColor;
 			StyleContext sc = StyleContext.getDefaultStyleContext();
 			AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-			aset = sc.addAttribute(aset, StyleConstants.FontFamily, "SansSerif");
+			aset = sc.addAttribute(aset, StyleConstants.FontFamily, font);
+			aset = sc.addAttribute(aset, StyleConstants.FontSize, fontSize);
 			
-			textPane.setCaretPosition(textPane.getDocument().getLength());
+			if(checkAutoScroll.isSelected())
+				textPane.setCaretPosition(textPane.getDocument().getLength());
 			textPane.setCharacterAttributes(aset, false);
 			textPane.replaceSelection(s);
 		});
@@ -271,11 +285,22 @@ public class ConsoleFrame extends BasicFrame {
 		panelContent.updateUI();
 	}
 	
+	protected void updateOnlyFont() {
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.FontFamily, font);
+		aset = sc.addAttribute(aset, StyleConstants.FontSize, fontSize);
+		
+		textPane.selectAll();
+		textPane.setCharacterAttributes(aset, false);
+	}
+	
 	protected void setBackgrounds() {
 		setBackground(Style.panelBackground);
 		panelContent.setBackground(getBackground());
 		textPane.setBackground(getBackground());
 		panelActions.setBackground(getBackground());
+		fieldCmd.setBackground(getBackground());
+		fieldCmd.setForeground(Style.textColor);
 		UiUtils.configureButton(btnSend);
 		UiUtils.configureButton(btnSettings);
 	}
