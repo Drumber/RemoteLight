@@ -6,6 +6,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -18,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
@@ -30,9 +33,11 @@ import javax.swing.text.StyleContext;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.events.ConsoleOutEvent;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.CustomTextPane;
 import de.lars.remotelightclient.ui.components.frames.BasicFrame;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.cmd.exceptions.CommandException;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -43,21 +48,20 @@ public class ConsoleFrame extends BasicFrame {
 	private static final long serialVersionUID = 5793847343481919833L;
 	
 	private JPanel panelContent, panelActions, panelSettings;
-	private JTextPane textPane;
+	private CustomTextPane textPane;
 	private JTextField fieldCmd;
 	private JButton btnSend, btnSettings;
-	private JCheckBox checkAutoScroll;
+	private JCheckBox checkAutoScroll, checkShowInput;
 	
 	protected String font = "SansSerif";
 	protected int fontSize = 11;
-
-	//TODO add options: auto scroll, always on top, text size/font
 	
 	public ConsoleFrame() {
 		super("console", Main.getInstance().getSettingsManager());
 		setMinimumSize(new Dimension(300, 200));
 		
-		textPane = new JTextPane();
+		textPane = new CustomTextPane();
+		textPane.setEditable(false);
 		AbstractDocument doc = (AbstractDocument) textPane.getDocument();
 		doc.setDocumentFilter(new ConsoleDocumentFilter());
 		
@@ -77,8 +81,11 @@ public class ConsoleFrame extends BasicFrame {
 			
 			// command filed
 			fieldCmd = new JTextField();
+			fieldCmd.addActionListener(consoleFieldListener);
+			
 			// send button
 			btnSend = new JButton("Send");
+			btnSend.addActionListener(consoleFieldListener);
 			
 			// settings button
 			btnSettings = new JButton();
@@ -128,6 +135,12 @@ public class ConsoleFrame extends BasicFrame {
 			checkAutoScroll.setSelected(settingAutoScroll.getValue());
 			checkAutoScroll.addActionListener(e -> settingAutoScroll.setValue(checkAutoScroll.isSelected()));
 			
+			// show console input checkbox
+			SettingBoolean settingShowInput = sm.addSetting(new SettingBoolean("console.showinput", "Show console input", SettingCategory.Intern, null, true));
+			checkShowInput = new JCheckBox();
+			checkShowInput.setSelected(settingShowInput.getValue());
+			checkShowInput.addActionListener(e -> settingShowInput.setValue(checkShowInput.isSelected()));
+			
 			// font combobox
 			SettingString settingFont = sm.addSetting(new SettingString("console.font", "Console font", SettingCategory.Intern, null, "SansSerif"));
 			String[] fontNames = UiUtils.getAvailableFonts();
@@ -137,7 +150,7 @@ public class ConsoleFrame extends BasicFrame {
 			if(fontIndex == -1) fontIndex = 0;
 			comboFonts.setSelectedIndex(fontIndex);
 			comboFonts.setToolTipText("Console font");
-			comboFonts.setPreferredSize(new Dimension(100, comboFonts.getPreferredSize().height));
+			comboFonts.setPreferredSize(new Dimension(120, comboFonts.getPreferredSize().height));
 			comboFonts.addActionListener(e -> {
 				if(comboFonts.getSelectedIndex() < fontNames.length) {
 					font = fontNames[comboFonts.getSelectedIndex()];
@@ -187,9 +200,19 @@ public class ConsoleFrame extends BasicFrame {
 			c.gridx = 1;
 			panelSettings.add(checkAutoScroll, c);
 			
-			// font combobox
+			// show console input checkbox
 			c.gridx = 0;
 			c.gridy = 2;
+			c.gridwidth = 1;
+			c.anchor = GridBagConstraints.LINE_START;
+			panelSettings.add(new JLabel("Show input"), c);
+			c.anchor = GridBagConstraints.LINE_END;
+			c.gridx = 1;
+			panelSettings.add(checkShowInput, c);
+			
+			// font combobox
+			c.gridx = 0;
+			c.gridy = 3;
 			c.gridwidth = 1;
 			c.anchor = GridBagConstraints.LINE_START;
 			panelSettings.add(new JLabel("Font"), c);
@@ -199,7 +222,7 @@ public class ConsoleFrame extends BasicFrame {
 			
 			// font size spinner
 			c.gridx = 0;
-			c.gridy = 3;
+			c.gridy = 4;
 			c.gridwidth = 1;
 			c.anchor = GridBagConstraints.LINE_START;
 			panelSettings.add(new JLabel("Font size"), c);
@@ -209,7 +232,7 @@ public class ConsoleFrame extends BasicFrame {
 			
 			// spacer
 			c.gridx = 0;
-			c.gridy = 4;
+			c.gridy = 5;
 			c.weighty = 1.0;
 			JPanel spacer = new JPanel();
 			spacer.setBackground(null);
@@ -242,6 +265,9 @@ public class ConsoleFrame extends BasicFrame {
 	};
 	
 	
+	/**
+	 * Show all console messages store id {@link CustomOutputStream#getStringBuilder()}.
+	 */
 	public void showConsoleHistory() {
 		Scanner scanner = new Scanner(CustomOutputStream.getStringBuilder().toString());
 		while(scanner.hasNextLine()) {
@@ -252,7 +278,12 @@ public class ConsoleFrame extends BasicFrame {
 		}
 	}
 	
-	
+	/**
+	 * Append a new console message.
+	 * 
+	 * @param msg	the message to write
+	 * @param error	whether this is an error message or not
+	 */
 	protected void writeConsoleEntry(String msg, boolean error) {
 		SwingUtilities.invokeLater(() -> {
 			String s = msg;
@@ -267,13 +298,58 @@ public class ConsoleFrame extends BasicFrame {
 			aset = sc.addAttribute(aset, StyleConstants.FontFamily, font);
 			aset = sc.addAttribute(aset, StyleConstants.FontSize, fontSize);
 			
-			if(checkAutoScroll.isSelected())
-				textPane.setCaretPosition(textPane.getDocument().getLength());
+			int prevCaretPos = textPane.getCaretPosition();
+			textPane.setCaretPosition(textPane.getDocument().getLength());
 			textPane.setCharacterAttributes(aset, false);
-			textPane.replaceSelection(s);
+			textPane.replaceSelectionUnchecked(s);
+			if(!checkAutoScroll.isSelected()) {
+				textPane.setCaretPosition(prevCaretPos);
+			}
 		});
 	}
 	
+	
+	/** Triggered when the send button or Enter button is pressed */
+	ActionListener consoleFieldListener = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String msg = fieldCmd.getText();
+			fieldCmd.setText("");
+			if(checkShowInput.isSelected())
+				writeConsoleEntry(" > " + msg + '\n', false);
+			executeConsoleCommand(msg);
+		}
+	};
+	
+	/**
+	 * Adds a console command to the system input stream.
+	 * 
+	 * @param cmd	the command to execute
+	 */
+	protected void executeConsoleCommand(String cmd) {
+		// store old system input stream
+		InputStream consoleIn = System.in;
+		// set custom input stream
+		ByteArrayInputStream bais = new ByteArrayInputStream(cmd.getBytes());
+		System.setIn(bais);
+		
+		// also execute command to intern cmd system
+		try {
+			Main.getInstance().getCore().getCommandParser().parse(cmd.split(" "));
+		} catch (CommandException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		// restore old console input stream
+		System.setIn(consoleIn);
+		bais = null;
+	}
+	
+	
+	/**
+	 * Removes the complete console text, add it back with
+	 * new style attributes and update all backgrounds.
+	 */
 	protected void updateStyle() {
 		// clear text pane
 		textPane.setText("");
@@ -285,6 +361,9 @@ public class ConsoleFrame extends BasicFrame {
 		panelContent.updateUI();
 	}
 	
+	/**
+	 * Update only font type and size.
+	 */
 	protected void updateOnlyFont() {
 		StyleContext sc = StyleContext.getDefaultStyleContext();
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.FontFamily, font);
@@ -294,6 +373,9 @@ public class ConsoleFrame extends BasicFrame {
 		textPane.setCharacterAttributes(aset, false);
 	}
 	
+	/**
+	 * Update all background colors.
+	 */
 	protected void setBackgrounds() {
 		setBackground(Style.panelBackground);
 		panelContent.setBackground(getBackground());

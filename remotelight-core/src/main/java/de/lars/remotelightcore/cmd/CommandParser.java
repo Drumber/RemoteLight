@@ -47,7 +47,7 @@ public class CommandParser {
 	}
 	
 	public void parse(String[] args) throws CommandException {
-		if(args == null || args.length == 0)
+		if(args == null || args.length == 0 || args[0].isEmpty())
 			return;
 		if(args[0].equalsIgnoreCase(START.toString())) {
 			if(checkArgsLength(args, 3)) {
