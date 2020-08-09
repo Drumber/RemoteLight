@@ -58,7 +58,7 @@ import de.lars.remotelightplugins.PluginManager;
 
 public class Main {
 	
-	public final static String VERSION = "v0.2.3";
+	public final static String VERSION = RemoteLightCore.VERSION;
 	public final static String SCOPE = "swing";
 	
 	private static Main instance;

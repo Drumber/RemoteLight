@@ -24,7 +24,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -62,8 +61,6 @@ public class ConsoleFrame extends BasicFrame {
 		
 		textPane = new CustomTextPane();
 		textPane.setEditable(false);
-		AbstractDocument doc = (AbstractDocument) textPane.getDocument();
-		doc.setDocumentFilter(new ConsoleDocumentFilter());
 		
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(4, getHeight()));

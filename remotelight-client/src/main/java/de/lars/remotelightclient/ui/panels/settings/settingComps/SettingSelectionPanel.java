@@ -27,7 +27,12 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Enumeration;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightcore.settings.types.SettingSelection;
@@ -58,6 +63,8 @@ public class SettingSelectionPanel extends SettingPanel {
 		
 		if(setting.getModel() == Model.ComboBox) {
 			boxValues = new JComboBox<String>();
+			if(setting.getValues().length > 15)
+				boxValues.setMaximumRowCount(15);
 			boxValues.setModel(new DefaultComboBoxModel<String>(setting.getValues()));
 			if(setting.getSelected() != null && Arrays.asList(setting.getValues()).contains(setting.getSelected())) {
 				boxValues.setSelectedItem(setting.getSelected());

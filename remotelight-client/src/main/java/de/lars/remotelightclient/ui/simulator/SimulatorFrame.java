@@ -75,6 +75,7 @@ public class SimulatorFrame extends BasicFrame {
 		setCloseAction(() -> emulator.stop());
 		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
 		setMinimumSize(new Dimension(300, 100));
+		setBackground(Style.panelBackground);
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
