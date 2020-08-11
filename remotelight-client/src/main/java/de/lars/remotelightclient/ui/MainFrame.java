@@ -49,12 +49,13 @@ import de.lars.remotelightclient.ui.components.dialogs.ErrorDialog;
 import de.lars.remotelightclient.ui.menu.DefaultMenuPanelFactory;
 import de.lars.remotelightclient.ui.menu.MenuItem;
 import de.lars.remotelightclient.ui.menu.MenuPanelFactory;
+import de.lars.remotelightclient.ui.menu.sidemenu.SideMenu;
+import de.lars.remotelightclient.ui.menu.sidemenu.SideMenuExtended;
+import de.lars.remotelightclient.ui.menu.sidemenu.SideMenuSmall;
 import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.ControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
-import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
@@ -76,6 +77,7 @@ public class MainFrame extends JFrame {
 	private JLabel lblNotification;
 	private JPanel contentArea;
 	
+	private SideMenu sideMenu;
 	private String selectedMenu = "output";
 	private MenuPanel displayedPanel;
 	private Set<MenuPanelFactory> menuPanelFactories;
@@ -139,7 +141,6 @@ public class MainFrame extends JFrame {
 		contentPane.add(bgrSideMenu, BorderLayout.WEST);
 		
 		sm.addSetting(new SettingObject("ui.sidemenu.extended", "Extended side menu", false));
-		JPanel sideMenu;
 		if((boolean) sm.getSettingObject("ui.sidemenu.extended").getValue())
 			sideMenu = new SideMenuExtended(this);
 		else
@@ -266,8 +267,25 @@ public class MainFrame extends JFrame {
 		Main.getInstance().showNotification(NotificationType.ERROR, "Could not find menu panel for name " + name);
 	}
 	
-	public JPanel getSideMenu() {
-		return bgrSideMenu;
+	/**
+	 * Replace current side menu.
+	 * 
+	 * @param menu		the new side menu
+	 */
+	public void replaceSideMenu(SideMenu menu) {
+		this.sideMenu = menu;
+		bgrSideMenu.removeAll();
+		bgrSideMenu.add(menu, BorderLayout.CENTER);
+		bgrSideMenu.updateUI();
+	}
+	
+	/**
+	 * Get the current side menu.
+	 * 
+	 * @return		currently displayed side menu
+	 */
+	public SideMenu getSideMenu() {
+		return this.sideMenu;
 	}
 	
 	public String getSelectedMenu() {

@@ -20,9 +20,8 @@
  * <===license-end
  */
 
-package de.lars.remotelightclient.ui.panels.sidemenu;
+package de.lars.remotelightclient.ui.menu.sidemenu;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -33,7 +32,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -41,21 +40,20 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.menu.MenuItem;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.lang.i18n;
 
-public class SideMenuSmall extends JPanel {
-	private static final long serialVersionUID = 1604913473609403672L;
+public class SideMenuExtended extends SideMenu {
+	private static final long serialVersionUID = 7722774169681804161L;
 	
-	private JPanel sideMenu;
 	private MainFrame mainFrame;
 
 	/**
 	 * Create the panel.
 	 */
-	public SideMenuSmall(MainFrame mainFrame) {
+	public SideMenuExtended(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		this.sideMenu = mainFrame.getSideMenu();
 		setBackground(Style.panelAccentBackground);
-		setPreferredSize(new Dimension(40, 300));
+		setPreferredSize(new Dimension(150, 300));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		// add all menu items
@@ -88,13 +86,15 @@ public class SideMenuSmall extends JPanel {
 	/**
 	 * Will remove and re-add all menu items.
 	 */
+	@Override
 	public void updateMenuItems() {
 		removeAll();
 		addMenuItems();
 	}
 	
 	private JButton getMenuButton(MenuItem item) {
-		JButton btn = new JButton("");
+		String displayname = item.getI18nID() == null ? item.getDisplayname() : i18n.getString(item.getI18nID());
+		JButton btn = new JButton(displayname);
 		btn.setName(item.getId());
 		btn.setIcon(item.getIcon());
 		this.configureButton(btn);
@@ -103,12 +103,14 @@ public class SideMenuSmall extends JPanel {
 	
 	private void configureButton(JButton btn) {
 		UiUtils.configureButton(btn, false);
-		btn.setBorderPainted(false);
-		btn.setFocusable(false);
-		btn.setBackground(null);
-		btn.setMaximumSize(new Dimension(40, 30));
-		btn.addMouseListener(buttonHoverListener);
-		btn.addActionListener(buttonActionListener);
+        btn.setBorderPainted(false);
+        btn.setFocusable(false);
+        btn.setBackground(null);
+        btn.setForeground(Style.textColor);
+        btn.setMaximumSize(new Dimension(150, 30));
+        btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.addMouseListener(buttonHoverListener);
+        btn.addActionListener(buttonActionListener);
         if(mainFrame.getSelectedMenu().equals(btn.getName())) {
         	btn.setBackground(Style.accent);
         }
@@ -136,23 +138,21 @@ public class SideMenuSmall extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
-			
-			if(!btn.getName().equals("extend")) {
-				UiUtils.getComponentByName(SideMenuSmall.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
+
+			if(!btn.getName().equals("extend")) { //$NON-NLS-1$
+				UiUtils.getComponentByName(SideMenuExtended.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
+				btn.setBackground(null);
 				btn.setBackground(Style.accent);
 				mainFrame.setSelectedMenu(btn.getName());
 			}
 			
-			if(btn.getName().equals("extend")) {
-				sideMenu.removeAll();
-				sideMenu.add(new SideMenuExtended(mainFrame), BorderLayout.CENTER);
-				Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(true);
-				sideMenu.updateUI();
+			if(btn.getName().equals("extend")) { //$NON-NLS-1$
+				mainFrame.replaceSideMenu(new SideMenuSmall(mainFrame));
+				Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(false);
 			} else {
 				mainFrame.showMenuPanel(btn.getName());
 			}
 		}
 	};
-	
 
 }
