@@ -30,21 +30,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.menu.MenuItem;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
 
 public class SideMenuExtended extends JPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7722774169681804161L;
+	
 	private JPanel sideMenu;
 	private MainFrame mainFrame;
 
@@ -58,71 +60,49 @@ public class SideMenuExtended extends JPanel {
 		setPreferredSize(new Dimension(150, 300));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		// add all menu items
+		addMenuItems();
+	}
+	
+	/**
+	 * Adds all menu items to the sidebar
+	 */
+	private void addMenuItems() {
+		// add extend/collapse button
 		JButton btnExtend = new JButton(""); //$NON-NLS-1$
 		btnExtend.setName("extend"); //$NON-NLS-1$
 		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU)); //$NON-NLS-1$
 		this.configureButton(btnExtend);
 		add(btnExtend);
 		
-		JButton btnOutput = new JButton(i18n.getString("Basic.Output")); //$NON-NLS-1$
-		btnOutput.setName("output"); //$NON-NLS-1$
-		btnOutput.setIcon(Style.getFontIcon(MenuIcon.OUTPUTS)); //$NON-NLS-1$
-		this.configureButton(btnOutput);
-		add(btnOutput);
-		
-		JButton btnColors = new JButton(i18n.getString("Basic.Colors")); //$NON-NLS-1$
-		btnColors.setName("colors"); //$NON-NLS-1$
-		btnColors.setIcon(Style.getFontIcon(MenuIcon.COLOR_PALETTE)); //$NON-NLS-1$
-		this.configureButton(btnColors);
-		add(btnColors);
-		
-		JButton btnAnimations = new JButton(i18n.getString("Basic.Animations")); //$NON-NLS-1$
-		btnAnimations.setName("animations"); //$NON-NLS-1$
-		btnAnimations.setIcon(Style.getFontIcon(MenuIcon.ANOMATION)); //$NON-NLS-1$
-		this.configureButton(btnAnimations);
-		add(btnAnimations);
-		
-		JButton btnScenes = new JButton(i18n.getString("Basic.Scenes")); //$NON-NLS-1$
-		btnScenes.setName("scenes"); //$NON-NLS-1$
-		btnScenes.setIcon(Style.getFontIcon(MenuIcon.SCENE)); //$NON-NLS-1$
-		this.configureButton(btnScenes);
-		add(btnScenes);
-		
-		JButton btnMusicSync = new JButton(i18n.getString("Basic.MusicSync")); //$NON-NLS-1$
-		btnMusicSync.setName("musicsync"); //$NON-NLS-1$
-		btnMusicSync.setIcon(Style.getFontIcon(MenuIcon.MUSICSYNC)); //$NON-NLS-1$
-		this.configureButton(btnMusicSync);
-		add(btnMusicSync);
-		
-		JButton btnScreenColor = new JButton(i18n.getString("Basic.ScreenColor")); //$NON-NLS-1$
-		btnScreenColor.setName("screencolor"); //$NON-NLS-1$
-		btnScreenColor.setIcon(Style.getFontIcon(MenuIcon.SCREENCOLOR)); //$NON-NLS-1$
-		this.configureButton(btnScreenColor);
-		add(btnScreenColor);
-		
-		JButton btnScripts = new JButton(i18n.getString("Basic.Scripts")); //$NON-NLS-1$
-		btnScripts.setName("scripts");
-		btnScripts.setIcon(Style.getFontIcon(MenuIcon.SCRIPT)); //$NON-NLS-1$
-		this.configureButton(btnScripts);
-		add(btnScripts);
-		
-		JButton btnSettings = new JButton(i18n.getString("Basic.Settings")); //$NON-NLS-1$
-		btnSettings.setIcon(Style.getFontIcon(MenuIcon.SETTINGS)); //$NON-NLS-1$
-		btnSettings.setName("settings"); //$NON-NLS-1$
-		this.configureButton(btnSettings);
-		add(btnSettings);
-
-		Component glue = Box.createGlue();
-		add(glue);
-		
-		JButton btnAbout = new JButton(i18n.getString("Basic.About")); //$NON-NLS-1$
-		btnAbout.setIcon(Style.getFontIcon(MenuIcon.ABOUT)); //$NON-NLS-1$
-		btnAbout.setName("about"); //$NON-NLS-1$
-		this.configureButton(btnAbout);
-		add(btnAbout);
-		
+		for(MenuItem item : mainFrame.getMenuItems()) {
+			JButton btn = getMenuButton(item);
+			// add glue before about button
+			if(item.getId().equalsIgnoreCase("about")) {
+				Component glue = Box.createGlue();
+				add(glue);
+			}
+			// add button
+			add(btn);
+		}
 	}
 	
+	/**
+	 * Will remove and re-add all menu items.
+	 */
+	public void updateMenuItems() {
+		removeAll();
+		addMenuItems();
+	}
+	
+	private JButton getMenuButton(MenuItem item) {
+		String displayname = item.getI18nID() == null ? item.getDisplayname() : i18n.getString(item.getI18nID());
+		JButton btn = new JButton(displayname);
+		btn.setName(item.getId());
+		btn.setIcon(item.getIcon());
+		this.configureButton(btn);
+		return btn;
+	}
 	
 	private void configureButton(JButton btn) {
 		UiUtils.configureButton(btn, false);
@@ -175,7 +155,7 @@ public class SideMenuExtended extends JPanel {
 				Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(false);
 				sideMenu.updateUI();
 			} else {
-				mainFrame.menuSelected(btn.getName());
+				mainFrame.showMenuPanel(btn.getName());
 			}
 		}
 	};

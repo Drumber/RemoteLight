@@ -30,6 +30,10 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,19 +46,13 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.events.ControlBarEvent;
 import de.lars.remotelightclient.events.MenuEvent;
 import de.lars.remotelightclient.ui.components.dialogs.ErrorDialog;
+import de.lars.remotelightclient.ui.menu.DefaultMenuPanelFactory;
+import de.lars.remotelightclient.ui.menu.MenuItem;
+import de.lars.remotelightclient.ui.menu.MenuPanelFactory;
 import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
-import de.lars.remotelightclient.ui.panels.about.AboutPanel;
-import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
-import de.lars.remotelightclient.ui.panels.colors.ColorsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.ControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.ui.panels.musicsync.MusicSyncPanel;
-import de.lars.remotelightclient.ui.panels.output.OutputPanel;
-import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
-import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
-import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
-import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuExtended;
 import de.lars.remotelightclient.ui.panels.sidemenu.SideMenuSmall;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -80,6 +78,9 @@ public class MainFrame extends JFrame {
 	
 	private String selectedMenu = "output";
 	private MenuPanel displayedPanel;
+	private Set<MenuPanelFactory> menuPanelFactories;
+	private List<MenuItem> menuItems;
+	
 	private ControlBar displayedControlBar;
 	private SettingsManager sm;
 	private NotificationDisplayHandler notificationDisplayHandler;
@@ -104,8 +105,16 @@ public class MainFrame extends JFrame {
 		
 		setSize((Dimension) sm.getSettingObject("mainFrame.size").getValue());
 		
+		menuPanelFactories = new HashSet<MenuPanelFactory>();
+		menuItems = new ArrayList<MenuItem>();
+		// add default menu items
+		DefaultMenuPanelFactory.addMenuItems(this);
+		// register default menu panel factory
+		this.registerMenuPanelFactory(new DefaultMenuPanelFactory(this, sm));
+		// init components
 		this.setFrameContetPane();
-		this.displayPanel(new OutputPanel(this));
+		// show output menu panel as default
+		this.showMenuPanel("output");
 		
 		if(RemoteLightCore.startParameter.tray) {
 			SystemTrayIcon.showTrayIcon();
@@ -186,6 +195,77 @@ public class MainFrame extends JFrame {
 		}
 	};
 	
+	
+	/**
+	 * Register a new {@link MenuPanelFactory} that can be queried for {@link MenuPanel}s and
+	 * return an instance of the MenuPanel, or {@code null} if that factory does not find
+	 * the menu panel for the given name. If {@code null} is returned, the next
+	 * MenuPanelFactory (if any) will be asked for the matching MenuPanel. If the
+	 * MenuPanel is not found, an error message is output and the old menu panel
+	 * remains displayed.
+	 * 
+	 * @param mpf	the menu panel factory to register
+	 */
+	public void registerMenuPanelFactory(MenuPanelFactory mpf) {
+		menuPanelFactories.add(mpf);
+	}
+	
+	/**
+	 * Unregister the MenuPanelFactory from the Set. If the factory is not found in the
+	 * set, nothing will happen.
+	 * 
+	 * @param mpf		the menu panel factory to unregister
+	 */
+	public void unregisterMenuPanelFactory(MenuPanelFactory mpf) {
+		menuPanelFactories.remove(mpf);
+	}
+	
+	/**
+	 * Add a {@link MenuItem} that is displayed in the sidebar. It should have valid
+	 * information about the targeted MenuPanel.
+	 * 
+	 * @param item		the menu item to add
+	 */
+	public void addMenuItem(MenuItem item) {
+		menuItems.add(item);
+	}
+	
+	/**
+	 * Get all registered MenuItems.
+	 * 
+	 * @return		a list of menu items
+	 */
+	public List<MenuItem> getMenuItems() {
+		return menuItems;
+	}
+	
+	/**
+	 * Remove a {@link MenuItem} from the list. It does not mean that the MenuItem will also disappear
+	 * from the sidebar. You have to update the sidebar manually.
+	 * 
+	 * @param item		the menu item to remove
+	 */
+	public void removeMenuItem(MenuItem item) {
+		menuItems.remove(item);
+	}
+	
+	/**
+	 * Show the menu panel corresponding to the name.
+	 * 
+	 * @param name		the unique name of the menu panel (not case-sensitive)
+	 */
+	public void showMenuPanel(String name) {
+		for(MenuPanelFactory mpf : menuPanelFactories) {
+			MenuPanel mp = mpf.getMenuPanel(name.toLowerCase());
+			if(mp != null) {
+				displayPanel(mp);
+				return;
+			}
+		}
+		Logger.error("Could not find menu panel for name the '" + name + "'.");
+		Main.getInstance().showNotification(NotificationType.ERROR, "Could not find menu panel for name " + name);
+	}
+	
 	public JPanel getSideMenu() {
 		return bgrSideMenu;
 	}
@@ -247,42 +327,6 @@ public class MainFrame extends JFrame {
 		this.setFrameContetPane();
 		this.revalidate();
 		this.repaint();
-	}
-	
-	public void menuSelected(String menu) {
-		switch(menu.toLowerCase())
-		{
-		case "settings":
-			this.displayPanel(new SettingsPanel(this, sm));
-			break;
-		case "output":
-			this.displayPanel(new OutputPanel(this));
-			break;
-		case "colors":
-			this.displayPanel(new ColorsPanel());
-			break;
-		case "animations":
-			this.displayPanel(new AnimationsPanel());
-			break;
-		case "scenes":
-			this.displayPanel(new ScenesPanel());
-			break;
-		case "musicsync":
-			this.displayPanel(new MusicSyncPanel());
-			break;
-		case "screencolor":
-			this.displayPanel(new ScreenColorPanel());
-			break;
-		case "scripts":
-			this.displayPanel(new ScriptsPanel());
-			break;
-		case "about":
-			this.displayPanel(new AboutPanel());
-			break;
-			
-		default:
-			Logger.info("MenuPanel '" + menu + "' not found!");
-		}
 	}
 	
 	/** show error dialog on exception */

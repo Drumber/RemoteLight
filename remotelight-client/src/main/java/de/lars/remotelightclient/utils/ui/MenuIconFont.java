@@ -50,7 +50,7 @@ public class MenuIconFont implements IconFont {
 		
 		ABOUT('\uE900'),
 		ADD('\uE901'),
-		ANOMATION('\uE902'),
+		ANIMATION('\uE902'),
 		ARDUINO('\uE903'),
 		ARTNET('\uE904'),
 		CHAIN('\uE905'),
