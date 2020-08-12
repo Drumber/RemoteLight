@@ -17,6 +17,7 @@
 
 	<properties>
 		<flatlaf.version>0.38</flatlaf.version>
+		<mainclass>de.lars.remotelightclient.Main</mainclass>
 	</properties>
 
 	<dependencies>
@@ -113,7 +114,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>de.lars.remotelightclient.Main</mainClass>
+							<mainClass>${mainclass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -124,6 +125,58 @@
 						<goals>
 							<goal>single</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.github.fvarrui</groupId>
+				<artifactId>javapackager</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<execution>
+						<id>bundle-windows-jre</id>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<name>RemoteLight-Windows</name>
+							<mainClass>${mainclass}</mainClass>
+							<bundleJre>true</bundleJre>
+							<generateInstaller>false</generateInstaller>
+							<jrePath>${project.basedir}/JREs/windows/jdk8u265-b01-jre</jrePath>
+							<platform>windows</platform>
+						</configuration>
+					</execution>
+					<execution>
+						<id>bundle-linux-jre</id>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<name>RemoteLight-Linux</name>
+							<mainClass>${mainclass}</mainClass>
+							<bundleJre>true</bundleJre>
+							<generateInstaller>false</generateInstaller>
+							<jrePath>${project.basedir}/JREs/linux/jdk8u265-b01-jre</jrePath>
+							<platform>linux</platform>
+						</configuration>
+					</execution>
+					<execution>
+						<id>bundle-macos-jre</id>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<name>RemoteLight-MacOS</name>
+							<mainClass>${mainclass}</mainClass>
+							<bundleJre>true</bundleJre>
+							<generateInstaller>false</generateInstaller>
+							<jrePath>${project.basedir}/JREs/mac/jdk8u265-b01-jre</jrePath>
+							<platform>mac</platform>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
