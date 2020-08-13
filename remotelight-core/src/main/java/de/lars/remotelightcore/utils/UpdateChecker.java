@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -74,34 +76,16 @@ public class UpdateChecker {
 		return null;
 	}
 	
-	private boolean compareVersionNumber(String current, String update) {
-		//convert current to double (e.g. 0.2.0.1 -> 0.201)
-		double curD = versionNumberToDouble(current);
-		//convert new to double (e.g. 0.2.0.4 -> 0.204)
-		double newD = versionNumberToDouble(update);
-		return curD < newD;
-	}
-	
-	private double versionNumberToDouble(String versionNumber) {
-		String curIn = versionNumber;
-		String curOut = "";
-		double curD = 0D;
-		if(curIn.contains(".")) {
-			curOut = curIn.substring(0, curIn.indexOf(".") + 1);
-			curIn = curIn.substring(curIn.indexOf(".") + 1);
-			
-			while(curIn.contains(".")) {
-				curOut += curIn.substring(0, curIn.indexOf("."));
-				curIn = curIn.substring(curIn.indexOf(".") + 1);
-			}
-			for(int i = 0; i < curIn.length(); i++) {
-				if(Character.isDigit(curIn.charAt(i))) {
-					curOut += curIn.charAt(i);
-				}
-			}
-			curD = Double.parseDouble(curOut);
-		}
-		return curD;
+	/**
+	 * Compares two version tags.
+	 * @param current	the current version
+	 * @param update	the target version to compare
+	 * @return			true if {@code update} is newer than {@code current}
+	 */
+	public static boolean compareVersionNumber(String current, String update) {
+		ComparableVersion versionA = new ComparableVersion(current);
+		ComparableVersion versionB = new ComparableVersion(update);
+		return versionB.compareTo(versionA) > 0;
 	}
 
 	public String getNewTag() {

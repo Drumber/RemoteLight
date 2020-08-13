@@ -18,6 +18,7 @@ import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.utils.UpdateChecker;
 
 public class CoreTest {
 	
@@ -78,6 +79,18 @@ public class CoreTest {
 		// remove device
 		assertTrue(core.getDeviceManager().removeDevice(device));
 		assertTrue(core.getDeviceManager().getDevice(testDevice) == null);
+	}
+	
+	@DisplayName("Version compare test")
+	@Test
+	public void versionTest() {
+		System.out.println("Version Test");
+		assertFalse(UpdateChecker.compareVersionNumber("0.2.4", "0.2.3"));
+		assertFalse(UpdateChecker.compareVersionNumber("0.2.4", "0.1"));
+		assertTrue(UpdateChecker.compareVersionNumber("0.2.4", "0.2.4.1"));
+		assertTrue(UpdateChecker.compareVersionNumber("v0.1.9", "v0.1.10"));
+		assertTrue(UpdateChecker.compareVersionNumber("v0.3-SNAPSHOT", "v0.3"));
+		assertFalse(UpdateChecker.compareVersionNumber("v0.2", "v0.2.0"));
 	}
 	
 	@DisplayName("RemoteLight Close Test")
