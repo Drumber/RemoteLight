@@ -4,6 +4,8 @@ import javax.swing.Icon;
 
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
+import jiconfont.IconCode;
 
 /**
  * A MenuItem can be registered and shown in the {@link MainFrame}.
@@ -20,6 +22,7 @@ public class MenuItem {
 	private String id;
 	private String displayname;
 	private Icon icon;
+	private IconCode iconCode;
 	private String targetMenuPanel;
 	private String i18nID;
 	
@@ -40,6 +43,22 @@ public class MenuItem {
 	}
 	
 	/**
+	 * Create a new menu item info holder with dynamic icon.
+	 * 
+	 * @param id			unique menu id
+	 * @param displayname	displayed menu name
+	 * @param iconCode		menu icon code (color can be dynamically updated)
+	 * @param targetMenuPanel
+	 * 						the menu panel this item is bound to
+	 */
+	public MenuItem(String id, String displayname, IconCode iconCode, String targetMenuPanel) {
+		this.id = id;
+		this.displayname = displayname;
+		this.iconCode = iconCode;
+		this.targetMenuPanel = targetMenuPanel;
+	}
+	
+	/**
 	 * Create a new simple menu item info holder.
 	 * 
 	 * @param id			unique menu id (displayname will be the same)
@@ -47,7 +66,7 @@ public class MenuItem {
 	 * 						the menu panel this item is bound to
 	 */
 	public MenuItem(String id, String targetMenuPanel) {
-		this(id, id, null, targetMenuPanel);
+		this(id, id, MenuIcon.ERROR, targetMenuPanel);
 	}
 	
 	/**
@@ -69,8 +88,8 @@ public class MenuItem {
 	 * @param i18nID		string id of the i18n bundle (only intern u18n bundle supported)
 	 * @param icon			menu icon
 	 */
-	public MenuItem(String id, String displayname, String i18nID, Icon icon) {
-		this(id, displayname, icon, id);
+	public MenuItem(String id, String displayname, String i18nID, IconCode iconCode) {
+		this(id, displayname, iconCode, id);
 		this.i18nID = i18nID;
 	}
 
@@ -96,6 +115,14 @@ public class MenuItem {
 
 	public void setIcon(Icon icon) {
 		this.icon = icon;
+	}
+
+	public IconCode getIconCode() {
+		return iconCode;
+	}
+
+	public void setIconCode(IconCode iconCode) {
+		this.iconCode = iconCode;
 	}
 
 	public String getTargetMenuPanel() {

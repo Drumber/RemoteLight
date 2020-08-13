@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
@@ -94,9 +95,10 @@ public class SideMenuExtended extends SideMenu {
 	
 	private JButton getMenuButton(MenuItem item) {
 		String displayname = item.getI18nID() == null ? item.getDisplayname() : i18n.getString(item.getI18nID());
+		Icon icon = item.getIconCode() == null ? item.getIcon() : Style.getFontIcon(item.getIconCode());
 		JButton btn = new JButton(displayname);
 		btn.setName(item.getId());
-		btn.setIcon(item.getIcon());
+		btn.setIcon(icon);
 		this.configureButton(btn);
 		return btn;
 	}

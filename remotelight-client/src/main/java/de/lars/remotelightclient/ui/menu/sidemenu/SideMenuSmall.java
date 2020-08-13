@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import de.lars.remotelightclient.Main;
@@ -91,9 +92,10 @@ public class SideMenuSmall extends SideMenu {
 	}
 	
 	private JButton getMenuButton(MenuItem item) {
+		Icon icon = item.getIconCode() == null ? item.getIcon() : Style.getFontIcon(item.getIconCode());
 		JButton btn = new JButton("");
 		btn.setName(item.getId());
-		btn.setIcon(item.getIcon());
+		btn.setIcon(icon);
 		this.configureButton(btn);
 		return btn;
 	}

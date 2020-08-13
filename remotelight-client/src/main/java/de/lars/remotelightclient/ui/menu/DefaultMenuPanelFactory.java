@@ -3,7 +3,6 @@ package de.lars.remotelightclient.ui.menu;
 import java.util.List;
 
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.about.AboutPanel;
 import de.lars.remotelightclient.ui.panels.animations.AnimationsPanel;
@@ -70,15 +69,15 @@ public class DefaultMenuPanelFactory implements MenuPanelFactory {
 	 */
 	public static void addMenuItems(MainFrame frame) {
 		List<MenuItem> s = frame.getMenuItems();
-		s.add(new MenuItem("output", i18n.getString("Basic.Output"), "Basic.Output", Style.getFontIcon(MenuIcon.OUTPUTS)));
-		s.add(new MenuItem("colors", i18n.getString("Basic.Colors"), "Basic.Colors", Style.getFontIcon(MenuIcon.COLOR_PALETTE)));
-		s.add(new MenuItem("animations", i18n.getString("Basic.Animations"), "Basic.Animations", Style.getFontIcon(MenuIcon.ANIMATION)));
-		s.add(new MenuItem("scenes", i18n.getString("Basic.Scenes"), "Basic.Scenes", Style.getFontIcon(MenuIcon.SCENE)));
-		s.add(new MenuItem("musicsync", i18n.getString("Basic.MusicSync"), "Basic.MusicSync", Style.getFontIcon(MenuIcon.MUSICSYNC)));
-		s.add(new MenuItem("screencolor", i18n.getString("Basic.ScreenColor"), "Basic.ScreenColor", Style.getFontIcon(MenuIcon.SCREENCOLOR)));
-		s.add(new MenuItem("scripts", i18n.getString("Basic.Scripts"), "Basic.Scripts", Style.getFontIcon(MenuIcon.SCRIPT)));
-		s.add(new MenuItem("settings", i18n.getString("Basic.Settings"), "Basic.Settings", Style.getFontIcon(MenuIcon.SETTINGS)));
-		s.add(new MenuItem("about", i18n.getString("Basic.About"), "Basic.About", Style.getFontIcon(MenuIcon.ABOUT)));
+		s.add(new MenuItem("output", i18n.getString("Basic.Output"), "Basic.Output", MenuIcon.OUTPUTS));
+		s.add(new MenuItem("colors", i18n.getString("Basic.Colors"), "Basic.Colors", MenuIcon.COLOR_PALETTE));
+		s.add(new MenuItem("animations", i18n.getString("Basic.Animations"), "Basic.Animations", MenuIcon.ANIMATION));
+		s.add(new MenuItem("scenes", i18n.getString("Basic.Scenes"), "Basic.Scenes", MenuIcon.SCENE));
+		s.add(new MenuItem("musicsync", i18n.getString("Basic.MusicSync"), "Basic.MusicSync", MenuIcon.MUSICSYNC));
+		s.add(new MenuItem("screencolor", i18n.getString("Basic.ScreenColor"), "Basic.ScreenColor", MenuIcon.SCREENCOLOR));
+		s.add(new MenuItem("scripts", i18n.getString("Basic.Scripts"), "Basic.Scripts", MenuIcon.SCRIPT));
+		s.add(new MenuItem("settings", i18n.getString("Basic.Settings"), "Basic.Settings", MenuIcon.SETTINGS));
+		s.add(new MenuItem("about", i18n.getString("Basic.About"), "Basic.About", MenuIcon.ABOUT));
 	}
 
 }
