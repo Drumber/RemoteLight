@@ -22,6 +22,7 @@
 
 package de.lars.remotelightclient.ui.menu.sidemenu;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -29,10 +30,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
@@ -45,6 +50,7 @@ public class SideMenuSmall extends SideMenu {
 	private static final long serialVersionUID = 1604913473609403672L;
 	
 	private MainFrame mainFrame;
+	private JPanel root;
 
 	/**
 	 * Create the panel.
@@ -53,7 +59,19 @@ public class SideMenuSmall extends SideMenu {
 		this.mainFrame = mainFrame;
 		setBackground(Style.panelAccentBackground);
 		setPreferredSize(new Dimension(40, 300));
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new BorderLayout());
+		
+		root = new JPanel();
+		root.setBackground(getBackground());
+		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+		
+		JScrollPane scrollPane = new JScrollPane(root);
+		scrollPane.setViewportBorder(null);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(8);
+		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, root.getHeight()));
+		add(scrollPane, BorderLayout.CENTER);
 		
 		// add all menu items
 		addMenuItems();
@@ -68,17 +86,17 @@ public class SideMenuSmall extends SideMenu {
 		btnExtend.setName("extend"); //$NON-NLS-1$
 		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU)); //$NON-NLS-1$
 		this.configureButton(btnExtend);
-		add(btnExtend);
+		root.add(btnExtend);
 		
 		for(MenuItem item : mainFrame.getMenuItems()) {
 			JButton btn = getMenuButton(item);
 			// add glue before about button
 			if(item.getId().equalsIgnoreCase("about")) {
 				Component glue = Box.createGlue();
-				add(glue);
+				root.add(glue);
 			}
 			// add button
-			add(btn);
+			root.add(btn);
 		}
 	}
 	
@@ -137,7 +155,7 @@ public class SideMenuSmall extends SideMenu {
 			JButton btn = (JButton) e.getSource();
 			
 			if(!btn.getName().equals("extend")) {
-				UiUtils.getComponentByName(SideMenuSmall.this, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
+				UiUtils.getComponentByName(root, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
 				btn.setBackground(Style.accent);
 				mainFrame.setSelectedMenu(btn.getName());
 			}
