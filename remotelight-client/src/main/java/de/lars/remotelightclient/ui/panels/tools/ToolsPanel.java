@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.ui.panels.tools;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,18 +19,23 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
+import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.ui.panels.tools.entrypanels.ConsoleEntryPanel;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.SettingsEntryPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class ToolsPanel extends MenuPanel {
 	private static final long serialVersionUID = -560451815834207862L;
 
-	private MainFrame mainFrame;
 	private static List<ToolsPanelEntry> panelEntries = new ArrayList<ToolsPanelEntry>();
 	
 	private JPanel panelContent;
@@ -39,30 +46,42 @@ public class ToolsPanel extends MenuPanel {
 	
 	static {
 		panelEntries.add(new SettingsEntryPanel());
+		panelEntries.add(new ConsoleEntryPanel());
 	}
 	
-	public ToolsPanel(MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
+	public ToolsPanel() {
 		navHistory = new ArrayList<ToolsPanelNavItem>();
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
+		MainFrame mainFrame = Main.getInstance().getMainFrame();
+		mainFrame.showControlBar(true);
+		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
 		panelContent = new JPanel();
-		panelContent.setBackground(Style.panelDarkBackground);
+		panelContent.setBackground(Style.panelBackground);
 		panelContent.setLayout(new BorderLayout());
 		
 		JScrollPane scrollContent = new JScrollPane(panelContent);
+		scrollContent.setViewportBorder(null);
+		scrollContent.setBorder(BorderFactory.createEmptyBorder());
+		scrollContent.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollContent.setAlignmentX(Component.LEFT_ALIGNMENT);
+		scrollContent.getVerticalScrollBar().setUnitIncrement(8);
 		add(scrollContent, BorderLayout.CENTER);
 		
 		panelNavigation = new JPanel();
 		panelNavigation.setLayout(new GridBagLayout());
 		panelNavigation.setBackground(getBackground());
+		panelNavigation.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 		panelNavigation.setVisible(false);
 		add(panelNavigation, BorderLayout.NORTH);
 		
 		panelEntryList = new JPanel();
 		panelEntryList.setLayout(new BoxLayout(panelEntryList, BoxLayout.Y_AXIS));
-		panelEntryList.setBackground(panelContent.getBackground());
+		panelEntryList.setBackground(Style.panelDarkBackground);
+		panelEntryList.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(panelContent.getBackground(), 10),
+				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		
 		initEntryListPanel();
 		showToolsOverview();
@@ -81,6 +100,7 @@ public class ToolsPanel extends MenuPanel {
 					processEntryItemClick(entry);
 				}
 			});
+			panelEntryList.add(Box.createVerticalStrut(5));
 		}
 	}
 	
@@ -98,6 +118,7 @@ public class ToolsPanel extends MenuPanel {
 		panel.setBackground(Style.buttonBackground);
 		panel.addMouseListener(entryItemMouseListener);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setBorder(new LineBorder(Style.textColor));
 		
 		JLabel lblIcon = new JLabel();
 		lblIcon.setMaximumSize(new Dimension(30, 30));
@@ -121,7 +142,9 @@ public class ToolsPanel extends MenuPanel {
 			panel.add(panelBtns);
 		}
 		
-		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		Dimension size = new Dimension(Integer.MAX_VALUE, 50);
+		panel.setMaximumSize(size);
+		panel.setMinimumSize(size);
 		return panel;
 	}
 	

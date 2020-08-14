@@ -58,6 +58,8 @@ public class ConsoleFrame extends BasicFrame {
 	public ConsoleFrame() {
 		super("console", Main.getInstance().getSettingsManager());
 		setMinimumSize(new Dimension(300, 200));
+		setFullClose(false);
+		setTitle("Console");
 		
 		textPane = new CustomTextPane();
 		textPane.setEditable(false);

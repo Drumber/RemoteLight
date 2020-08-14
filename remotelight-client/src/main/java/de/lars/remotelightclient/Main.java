@@ -41,7 +41,6 @@ import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.console.ConsoleFrame;
 import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -133,15 +132,12 @@ public class Main {
 		Logger.info((failed ? "[FAILED] switch to standard LaF: " : "Selected Look and Feel: ") + UIManager.getLookAndFeel().getName());
 		
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					// initialize and show the main frame
 					mainFrame = new MainFrame();
 					mainFrame.setVisible(!RemoteLightCore.startParameter.tray);
-					
-					// test new console window
-					// TODO remove for before release
-					new ConsoleFrame();
 				} catch (Exception e) {
 					Logger.error(e);
 				}

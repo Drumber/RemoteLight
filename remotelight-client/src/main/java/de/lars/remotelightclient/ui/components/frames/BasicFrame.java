@@ -1,6 +1,7 @@
 package de.lars.remotelightclient.ui.components.frames;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -24,6 +25,7 @@ public class BasicFrame extends JFrame {
 	public final String settingPrefix;
 	protected final SettingsManager sm;
 	private Runnable closeAction;
+	private boolean fullClose = true;
 	
 	/**
 	 * Create a new basic JFrame with always-on-top option and saved window size.
@@ -33,6 +35,7 @@ public class BasicFrame extends JFrame {
 	 * @param sm		a setting manager instance
 	 */
 	public BasicFrame(final String frameID, SettingsManager sm) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/Icon-128x128.png")));
 		this.sm = sm;
 		this.frameID = frameID;
 		this.settingPrefix = "frame." + frameID;
@@ -109,6 +112,16 @@ public class BasicFrame extends JFrame {
 	}
 	
 	/**
+	 * Set whether this frame should be reusable when closing or not.
+	 * 
+	 * @param fullClose	set to true when the frame should not be used
+	 * 			again after closing
+	 */
+	public void setFullClose(boolean fullClose) {
+		this.fullClose = fullClose;
+	}
+	
+	/**
 	 * Set the action that should be performed when the window is closed
 	 * 
 	 * @param runnable	the action to perform
@@ -124,11 +137,13 @@ public class BasicFrame extends JFrame {
 				saveSize(getWidth(), getHeight());
 			}
 			dispose();
-			if(closeAction != null) {
-				closeAction.run();
+			if(fullClose) {
+				if(closeAction != null) {
+					closeAction.run();
+				}
+				// unregister frame
+				Main.getInstance().unregisterFrame(BasicFrame.this);
 			}
-			// unregister frame
-			Main.getInstance().unregisterFrame(BasicFrame.this);
 		};
 	};
 

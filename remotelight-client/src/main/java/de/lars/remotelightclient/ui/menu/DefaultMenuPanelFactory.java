@@ -57,7 +57,7 @@ public class DefaultMenuPanelFactory implements MenuPanelFactory {
 		case "about":
 			return new AboutPanel();
 		case "tools":
-			return new ToolsPanel(frame);
+			return new ToolsPanel();
 			
 		default:
 			return null;
