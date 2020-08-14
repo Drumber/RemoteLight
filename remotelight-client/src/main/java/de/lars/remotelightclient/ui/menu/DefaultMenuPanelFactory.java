@@ -13,6 +13,7 @@ import de.lars.remotelightclient.ui.panels.scenes.ScenesPanel;
 import de.lars.remotelightclient.ui.panels.screencolor.ScreenColorPanel;
 import de.lars.remotelightclient.ui.panels.scripts.ScriptsPanel;
 import de.lars.remotelightclient.ui.panels.settings.SettingsPanel;
+import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -55,6 +56,8 @@ public class DefaultMenuPanelFactory implements MenuPanelFactory {
 			return new ScriptsPanel();
 		case "about":
 			return new AboutPanel();
+		case "tools":
+			return new ToolsPanel(frame);
 			
 		default:
 			return null;
@@ -77,6 +80,7 @@ public class DefaultMenuPanelFactory implements MenuPanelFactory {
 		s.add(new MenuItem("screencolor", i18n.getString("Basic.ScreenColor"), "Basic.ScreenColor", MenuIcon.SCREENCOLOR));
 		s.add(new MenuItem("scripts", i18n.getString("Basic.Scripts"), "Basic.Scripts", MenuIcon.SCRIPT));
 		s.add(new MenuItem("settings", i18n.getString("Basic.Settings"), "Basic.Settings", MenuIcon.SETTINGS));
+		s.add(new MenuItem("tools", "Tools"));
 		s.add(new MenuItem("about", i18n.getString("Basic.About"), "Basic.About", MenuIcon.ABOUT));
 	}
 
