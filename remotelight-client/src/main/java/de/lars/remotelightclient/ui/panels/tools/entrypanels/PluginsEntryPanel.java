@@ -112,11 +112,13 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			for(Plugin pl : loaded) {
 				ListElement el = new ListElement(pl.getPluginInfo());
 				panelLoaded.add(el);
+				panelLoaded.add(Box.createVerticalStrut(5));
 			}
 			
 			for(Map.Entry<PluginInfo, String> errPl : error.entrySet()) {
 				ListElement el = new ListElement(errPl.getKey(), errPl.getValue());
 				panelFailed.add(el);
+				panelLoaded.add(Box.createVerticalStrut(5));
 			}
 		}
 		

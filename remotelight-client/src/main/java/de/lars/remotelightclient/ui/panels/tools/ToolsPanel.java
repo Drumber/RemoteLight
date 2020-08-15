@@ -122,6 +122,7 @@ public class ToolsPanel extends MenuPanel {
 		panel.setBorder(new LineBorder(Style.textColor));
 		
 		JLabel lblIcon = new JLabel();
+		lblIcon.setForeground(Style.textColor);
 		lblIcon.setMaximumSize(new Dimension(30, 30));
 		if(entry.getIcon() != null)
 			lblIcon.setIcon(entry.getIcon());
@@ -181,7 +182,9 @@ public class ToolsPanel extends MenuPanel {
 		panelNavigation.removeAll();
 		panelNavigation.setVisible(true);
 		JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
+		lblTitle.setForeground(Style.textColor);
 		JButton btnBack = new JButton("Back");
+		UiUtils.configureButton(btnBack);
 		btnBack.setPreferredSize(new Dimension(80, 25));
 		btnBack.addActionListener(e -> navigateDown());
 		
