@@ -144,6 +144,10 @@ public class PluginManager {
 				if(plInfo == null || plInfo.getMainClass() == null) {
 					Logger.error("Invalid plugin property file: " + pluginFile.getPath());
 					error = true;
+					// create plugin info if null
+					if(plInfo == null) {
+						plInfo = new PluginInfo(pluginDir, null);
+					}
 				}
 				if(plugins.containsKey(plInfo.getName())) {
 					Logger.error("Plugin with name '" + plInfo.getName() + "' already exists. Please define a unique plugin name.");
@@ -459,6 +463,15 @@ public class PluginManager {
 	 */
 	public List<Plugin> getLoadedPlugins() {
 		return loadedPlugins;
+	}
+	
+	/**
+	 * Get all plugins with errors
+	 * 
+	 * @return	Map of error plugins and their error message
+	 */
+	public Map<PluginInfo, String> getErrorPlugins() {
+		return errorPlugins;
 	}
 	
 	/**

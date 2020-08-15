@@ -30,13 +30,14 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.ConsoleEntryPanel;
-import de.lars.remotelightclient.ui.panels.tools.entrypanels.SettingsEntryPanel;
+import de.lars.remotelightclient.ui.panels.tools.entrypanels.PluginsEntryPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class ToolsPanel extends MenuPanel {
 	private static final long serialVersionUID = -560451815834207862L;
 
 	private static List<ToolsPanelEntry> panelEntries = new ArrayList<ToolsPanelEntry>();
+	MainFrame mainFrame;
 	
 	private JPanel panelContent;
 	private JPanel panelNavigation;
@@ -45,15 +46,15 @@ public class ToolsPanel extends MenuPanel {
 	private List<ToolsPanelNavItem> navHistory;
 	
 	static {
-		panelEntries.add(new SettingsEntryPanel());
 		panelEntries.add(new ConsoleEntryPanel());
+		panelEntries.add(new PluginsEntryPanel());
 	}
 	
 	public ToolsPanel() {
 		navHistory = new ArrayList<ToolsPanelNavItem>();
+		mainFrame = Main.getInstance().getMainFrame();
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
-		MainFrame mainFrame = Main.getInstance().getMainFrame();
 		mainFrame.showControlBar(true);
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
