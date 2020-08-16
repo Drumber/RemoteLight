@@ -3,7 +3,6 @@ package de.lars.remotelightclient.ui.panels.tools.entrypanels;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.ListElement;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -112,13 +112,13 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			panelFailed.removeAll();
 			
 			for(Plugin pl : loaded) {
-				ListElement el = new ListElement(pl.getPluginInfo());
+				PluginElement el = new PluginElement(pl.getPluginInfo());
 				panelLoaded.add(el);
 				panelLoaded.add(Box.createVerticalStrut(5));
 			}
 			
 			for(Map.Entry<PluginInfo, String> errPl : error.entrySet()) {
-				ListElement el = new ListElement(errPl.getKey(), errPl.getValue());
+				PluginElement el = new PluginElement(errPl.getKey(), errPl.getValue());
 				panelFailed.add(el);
 				panelLoaded.add(Box.createVerticalStrut(5));
 			}
@@ -128,31 +128,23 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 		/**
 		 * Plugin list element panel
 		 */
-		private class ListElement extends JPanel {
+		private class PluginElement extends ListElement {
 			private static final long serialVersionUID = 4929823177112833763L;
 			private PluginInfo info;
 			private String errorMsg;
 			
-			public ListElement(PluginInfo pluginInfo, String errorMsg) {
+			public PluginElement(PluginInfo pluginInfo, String errorMsg) {
+				super();
 				this.info = pluginInfo;
 				this.errorMsg = errorMsg;
 				init();
 			}
 			
-			public ListElement(PluginInfo pluginInfo) {
+			public PluginElement(PluginInfo pluginInfo) {
 				this(pluginInfo, null);
 			}
 			
 			void init() {
-				setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-				Dimension size = new Dimension(Integer.MAX_VALUE, 50);
-				setMaximumSize(size);
-				setMinimumSize(new Dimension(30, size.height));
-				setPreferredSize(getMinimumSize());
-				setBackground(Style.buttonBackground);
-				setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
-				UiUtils.addHoverColor(this, Style.buttonBackground, Style.hoverBackground);
-
 				String plName = info.getValue(DefaultProperties.DISPLAYNAME);
 				if(plName == null && info.getName() != null)
 					plName = info.getName();
@@ -180,7 +172,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 					lblError.setForeground(Style.error);
 					add(lblError);
 				}
-			} // init end
+			}
 			
 		} // ListElement end
 		
