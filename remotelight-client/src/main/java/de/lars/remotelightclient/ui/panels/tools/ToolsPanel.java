@@ -29,24 +29,28 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.ConsoleEntryPanel;
+import de.lars.remotelightclient.ui.panels.tools.entrypanels.NotificationEntryPanel;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.PluginsEntryPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.lang.i18n;
 
 public class ToolsPanel extends MenuPanel {
 	private static final long serialVersionUID = -560451815834207862L;
 
 	private static List<ToolsPanelEntry> panelEntries = new ArrayList<ToolsPanelEntry>();
-	MainFrame mainFrame;
+	private MainFrame mainFrame;
 	
 	private JPanel panelContent;
 	private JPanel panelNavigation;
 	private JPanel panelEntryList;
 	
+	private ToolsPanelEntry currentToolsPanel;
 	private List<ToolsPanelNavItem> navHistory;
 	
 	static {
 		panelEntries.add(new ConsoleEntryPanel());
 		panelEntries.add(new PluginsEntryPanel());
+		panelEntries.add(new NotificationEntryPanel());
 	}
 	
 	public ToolsPanel() {
@@ -106,10 +110,12 @@ public class ToolsPanel extends MenuPanel {
 	
 	protected void processEntryItemClick(ToolsPanelEntry entry) {
 		entry.onClick();
-		if(entry.getMenuPanel() != null) {
+		JPanel menuPanel = entry.getMenuPanel();
+		if(menuPanel != null) {
 			// show menu panel
-			ToolsPanelNavItem navItem = new ToolsPanelNavItem(entry.getName(), entry.getMenuPanel());
+			ToolsPanelNavItem navItem = new ToolsPanelNavItem(entry.getName(), menuPanel);
 			navigateUp(navItem);
+			currentToolsPanel = entry;
 		}
 	}
 	
@@ -221,6 +227,9 @@ public class ToolsPanel extends MenuPanel {
 			navHistory.remove(navHistory.size()-1);
 			if(navHistory.size() == 0) {
 				showToolsOverview();
+				if(currentToolsPanel != null)
+					currentToolsPanel.onEnd();
+				currentToolsPanel = null;
 			} else {
 				showNavPanel(navHistory.get(navHistory.size()-1));
 			}
@@ -238,7 +247,13 @@ public class ToolsPanel extends MenuPanel {
 
 	@Override
 	public String getName() {
-		return "Tools";
+		return i18n.getString("Basic.Tools");
+	}
+	
+	@Override
+	public void onEnd(MenuPanel newPanel) {
+		if(currentToolsPanel != null)
+			currentToolsPanel.onEnd();
 	}
 
 }

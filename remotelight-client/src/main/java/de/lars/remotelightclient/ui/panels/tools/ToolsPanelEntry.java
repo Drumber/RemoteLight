@@ -42,9 +42,8 @@ public abstract class ToolsPanelEntry {
 	public void onClick() {}
 	
 	/**
-	 * Called when a new navigation is submitted (up or down).
-	 * @param navItem		the event navigation item
+	 * Called when the menu panel gets closed.
 	 */
-	public void onNavigate(ToolsPanelNavItem navItem) {};
+	public void onEnd() {}
 	
 }

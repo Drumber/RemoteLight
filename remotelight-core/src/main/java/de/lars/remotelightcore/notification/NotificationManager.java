@@ -119,6 +119,14 @@ public class NotificationManager {
 		oldNotifications.clear();
 	}
 	
+	/**
+	 * Get all old notifications.
+	 * @return a list of saved notifications
+	 */
+	public List<Notification> getNotificationHistory() {
+		return oldNotifications;
+	}
+	
 	public void addNotificationListener(NotificationListener listener) {
 		listeners.add(listener);
 	}
