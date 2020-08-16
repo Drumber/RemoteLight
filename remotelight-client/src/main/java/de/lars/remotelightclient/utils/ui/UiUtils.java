@@ -171,6 +171,19 @@ public class UiUtils {
 		spinner.setEditor(editor);
 	}
 	
+	public static void addHoverColor(JComponent comp, Color main, Color hover) {
+		comp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((JComponent) e.getSource()).setBackground(hover);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				((JComponent) e.getSource()).setBackground(main);
+			}
+		});
+	}
+	
 	public static void configureTabbedPane(JTabbedPane tp) {
 		if(disableTheming) return;
 		tp.setBackground(Style.panelBackground);

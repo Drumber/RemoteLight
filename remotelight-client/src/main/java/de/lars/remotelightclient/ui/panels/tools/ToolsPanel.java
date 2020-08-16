@@ -15,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -117,9 +116,9 @@ public class ToolsPanel extends MenuPanel {
 	protected JPanel getEntryItemPanel(ToolsPanelEntry entry) {
 		JPanel panel = new JPanel();
 		panel.setBackground(Style.buttonBackground);
-		panel.addMouseListener(entryItemMouseListener);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.setBorder(new LineBorder(Style.textColor));
+		UiUtils.addHoverColor(panel, Style.buttonBackground, Style.hoverBackground);
 		
 		JLabel lblIcon = new JLabel();
 		lblIcon.setForeground(Style.textColor);
@@ -149,17 +148,6 @@ public class ToolsPanel extends MenuPanel {
 		panel.setMinimumSize(size);
 		return panel;
 	}
-	
-	MouseAdapter entryItemMouseListener = new MouseAdapter() {
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			((JComponent) e.getSource()).setBackground(Style.hoverBackground);
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			((JComponent) e.getSource()).setBackground(Style.buttonBackground);
-		}
-	};
 	
 	public void showToolsOverview() {
 		panelNavigation.setVisible(false);

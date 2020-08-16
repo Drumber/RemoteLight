@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +20,7 @@ import org.tinylog.Logger;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightplugins.Plugin;
 import de.lars.remotelightplugins.PluginInfo;
@@ -66,6 +65,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			lblLoaded.setForeground(Style.textColor);
 			lblLoaded.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(lblLoaded);
+			root.add(Box.createVerticalStrut(5));
 			
 			panelLoaded = new JPanel();
 			panelLoaded.setLayout(new BoxLayout(panelLoaded, BoxLayout.Y_AXIS));
@@ -79,6 +79,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			lblFailed.setForeground(Style.textColor);
 			lblFailed.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(lblFailed);
+			root.add(Box.createVerticalStrut(5));
 			
 			panelFailed = new JPanel();
 			panelFailed.setLayout(new BoxLayout(panelFailed, BoxLayout.Y_AXIS));
@@ -87,6 +88,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			root.add(panelFailed);
 			
 			root.add(Box.createVerticalGlue());
+			root.add(Box.createVerticalStrut(10));
 			
 			JButton btnPluginsFolder = new JButton("Open plugins folder");
 			UiUtils.configureButton(btnPluginsFolder);
@@ -142,17 +144,14 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			}
 			
 			void init() {
-				setLayout(new GridBagLayout());
+				setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 				Dimension size = new Dimension(Integer.MAX_VALUE, 50);
 				setMaximumSize(size);
 				setMinimumSize(new Dimension(30, size.height));
 				setPreferredSize(getMinimumSize());
 				setBackground(Style.buttonBackground);
 				setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
-				GridBagConstraints c = new GridBagConstraints();
-				c.weightx = 2;
-				c.gridx = 0;
-				c.gridy = 0;
+				UiUtils.addHoverColor(this, Style.buttonBackground, Style.hoverBackground);
 
 				String plName = info.getValue(DefaultProperties.DISPLAYNAME);
 				if(plName == null && info.getName() != null)
@@ -161,24 +160,25 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 					plName = info.getFile().getName();
 				JLabel lblName = new JLabel(plName);
 				lblName.setForeground(Style.textColor);
-				c.anchor = GridBagConstraints.LINE_START;
-				add(lblName, c);
+				lblName.setAlignmentX(Component.LEFT_ALIGNMENT);
+				add(lblName);
+				add(Box.createHorizontalStrut(5));
 				
 				if(errorMsg == null) {
-					c.gridx = 1;
-					JLabel lblVersion = new JLabel(info.getValue(DefaultProperties.VERSION));
-					lblVersion.setForeground(Style.textColor);
-					add(lblVersion, c);
+					String textVersionAuthor = info.getValue(DefaultProperties.VERSION)
+							+ " by " + info.getValue(DefaultProperties.AUTHOR);
 					
-					c.gridx = 2;
-					JLabel lblAuthor = new JLabel(info.getValue(DefaultProperties.AUTHOR));
-					lblAuthor.setForeground(Style.textColorDarker);
-					add(lblVersion, c);
+					JLabel lblVersionAuthor = new JLabel(textVersionAuthor);
+					lblVersionAuthor.setForeground(Style.textColorDarker);
+					add(lblVersionAuthor);
 				} else {
-					c.gridx = 1;
+					add(Box.createHorizontalStrut(5));
+					add(new JLabel(Style.getFontIcon(MenuIcon.ERROR, 14, Style.error)));
+					add(Box.createHorizontalStrut(2));
+					
 					JLabel lblError = new JLabel(errorMsg);
 					lblError.setForeground(Style.error);
-					add(lblError, c);
+					add(lblError);
 				}
 			} // init end
 			
