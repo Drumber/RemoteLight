@@ -79,7 +79,7 @@ public class DefaultMenuPanelFactory implements MenuPanelFactory {
 		s.add(new MenuItem("musicsync", i18n.getString("Basic.MusicSync"), "Basic.MusicSync", MenuIcon.MUSICSYNC));
 		s.add(new MenuItem("screencolor", i18n.getString("Basic.ScreenColor"), "Basic.ScreenColor", MenuIcon.SCREENCOLOR));
 		s.add(new MenuItem("scripts", i18n.getString("Basic.Scripts"), "Basic.Scripts", MenuIcon.SCRIPT));
-		s.add(new MenuItem("tools", i18n.getString("Basic.Tools"), "Basic.Tools", MenuIcon.ERROR));
+		s.add(new MenuItem("tools", i18n.getString("Basic.Tools"), "Basic.Tools", MenuIcon.TOOLS));
 		s.add(new MenuItem("settings", i18n.getString("Basic.Settings"), "Basic.Settings", MenuIcon.SETTINGS));
 		s.add(new MenuItem("about", i18n.getString("Basic.About"), "Basic.About", MenuIcon.ABOUT));
 	}
