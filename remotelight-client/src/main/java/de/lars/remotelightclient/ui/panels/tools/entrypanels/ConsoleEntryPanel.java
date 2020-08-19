@@ -1,5 +1,7 @@
 package de.lars.remotelightclient.ui.panels.tools.entrypanels;
 
+import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 
 import de.lars.remotelightclient.ui.console.ConsoleFrame;
@@ -16,17 +18,19 @@ public class ConsoleEntryPanel extends ToolsPanelEntry {
 	
 	@Override
 	public void onClick() {
-		if(console == null) {
-			console = new ConsoleFrame();
-		} else if(!console.isVisible()) {
-			console.setVisible(true);
-		}
-		if(console.getState() == JFrame.ICONIFIED) {
-			console.setState(JFrame.NORMAL);
-		}
-		if (console.isVisible() && console.isDisplayable()) {
-			console.requestFocus();
-		}
+		EventQueue.invokeLater(() -> {
+			if(console == null) {
+				console = new ConsoleFrame();
+			} else if(!console.isVisible()) {
+				console.setVisible(true);
+			}
+			if(console.getState() == JFrame.ICONIFIED) {
+				console.setState(JFrame.NORMAL);
+			}
+			if (console.isVisible() && console.isDisplayable()) {
+				console.requestFocus();
+			}
+		});
 	}
 
 }
