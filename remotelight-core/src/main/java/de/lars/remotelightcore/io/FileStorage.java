@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,13 @@ import java.util.Map;
 
 import org.tinylog.Logger;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import de.lars.remotelightcore.RemoteLightCore;
@@ -97,7 +104,7 @@ public class FileStorage {
 		return file;
 	}
 	
-	public void save() throws IOException {
+	public void save() throws IOException, JsonIOException {
 		// create directory if not exists
 		if(!file.exists())
 			file.getParentFile().mkdirs();
@@ -135,30 +142,32 @@ public class FileStorage {
 		// add json array to root
 		jsonRoot.add(KEY_DATA, array);
 		// save to file
-		try (Writer writer = Files.newBufferedWriter(file.toPath())) {
+		try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
 			gson.toJson(jsonRoot, writer);
 		}
 	}
 	
-	public void load() throws IOException {
+	public void load() throws IOException, JsonParseException {
 		if(!file.exists() || !file.isFile()) {
 			Logger.info("Data file does not exists: " + file.getAbsolutePath());
 			return;
 		}
 			
-		try (Reader reader = Files.newBufferedReader(file.toPath())) {
+		try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
 			// read json object from file
 			JsonObject jsonRoot = gson.fromJson(reader, JsonObject.class);
+			if(jsonRoot == null)
+				throw new JsonParseException("Could not parse JSON data from file '" + file.getPath() + "'!");
 			// get json data array
 			JsonElement arrayElement = jsonRoot.get(KEY_DATA);
 			if(arrayElement == null || !arrayElement.isJsonArray())
-				throw new JsonParseException("Invalid data! Expected JsonArray, but got " + arrayElement.getClass().getName());
+				throw new JsonParseException("Invalid data! Expected JsonArray, but got " + (arrayElement == null ? "null" : arrayElement.getClass().getName()));
 			JsonArray array = arrayElement.getAsJsonArray();
 			
 			// add all data to hash map
 			for(JsonElement element : array) {
 				if(element == null || !element.isJsonObject()) {
-					Logger.warn("Invalid data entry! Expected JsonObject, but got '" + element.getClass().getName() + "'. Skipping this data...");
+					Logger.warn("Invalid data entry! Expected JsonObject, but got '" + (arrayElement == null ? "null" : arrayElement.getClass().getName()) + "'. Skipping this data...");
 					continue;
 				}
 				JsonObject jsonEntry = element.getAsJsonObject();

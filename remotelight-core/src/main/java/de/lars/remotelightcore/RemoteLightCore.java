@@ -32,6 +32,9 @@ import org.tinylog.Logger;
 import org.tinylog.configuration.Configuration;
 import org.tinylog.provider.ProviderRegistry;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonParseException;
+
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
@@ -116,8 +119,9 @@ public class RemoteLightCore {
 		try {
 			// try to load data file
 			fileStorage.load();
-		} catch (IOException e) {
+		} catch (IOException | JsonParseException e) {
 			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
+			showErrorNotification(e, "Data File Error");
 		}
 		
 		// initialize AutoSaver
@@ -339,8 +343,8 @@ public class RemoteLightCore {
 			try {
 				// save data file
 				fileStorage.save();
-			} catch (IOException ioe) {
-				Logger.error(ioe, "Could not save data file: " + fileStorage.getFile());
+			} catch (IOException | JsonIOException e) {
+				Logger.error(e, "Could not save data file: " + fileStorage.getFile());
 			}
 			
 			// copy log file and rename
@@ -348,17 +352,16 @@ public class RemoteLightCore {
 					new File(DirectoryUtil.getLogsPath() + "log.txt"),
 					new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");
 			
+			eventHandler.call(new ShutdownEvent(State.POST));
+			instance = null;
+			
 			try {
 				ProviderRegistry.getLoggingProvider().shutdown();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			eventHandler.call(new ShutdownEvent(State.POST));
-			instance = null;
-			
 			if(autoexit) {
-				Thread.sleep(450);
 				System.exit(0);
 			}
 		} catch(Exception e) {
