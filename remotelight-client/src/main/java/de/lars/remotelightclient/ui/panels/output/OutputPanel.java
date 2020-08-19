@@ -32,18 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import de.lars.remotelightclient.Main;
@@ -347,7 +336,6 @@ public class OutputPanel extends MenuPanel {
 	private void configureAddPopup(JMenuItem item, String name) {
 		item.setBackground(Style.panelAccentBackground);
 		item.setContentAreaFilled(false);
-		item.setOpaque(true);
 		item.setForeground(Style.textColor);
 		item.setName(name);
 		item.addActionListener(menuItemListener);
