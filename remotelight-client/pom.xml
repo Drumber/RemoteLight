@@ -18,6 +18,8 @@
 	<properties>
 		<flatlaf.version>0.40</flatlaf.version>
 		<mainclass>de.lars.remotelightclient.Main</mainclass>
+		<!-- set to 'package' to enable or 'none' to disable packager -->
+		<packagerPhase>none</packagerPhase>
 	</properties>
 
 	<dependencies>
@@ -135,11 +137,12 @@
 				<executions>
 					<execution>
 						<id>bundle-windows-jre</id>
-						<phase>package</phase>
+						<phase>${packagerPhase}</phase>
 						<goals>
 							<goal>package</goal>
 						</goals>
 						<configuration>
+							<skip>true</skip>
 							<name>RemoteLight-Windows</name>
 							<mainClass>${mainclass}</mainClass>
 							<bundleJre>true</bundleJre>
@@ -150,7 +153,7 @@
 					</execution>
 					<execution>
 						<id>bundle-linux-jre</id>
-						<phase>package</phase>
+						<phase>${packagerPhase}</phase>
 						<goals>
 							<goal>package</goal>
 						</goals>
@@ -165,7 +168,7 @@
 					</execution>
 					<execution>
 						<id>bundle-macos-jre</id>
-						<phase>package</phase>
+						<phase>${packagerPhase}</phase>
 						<goals>
 							<goal>package</goal>
 						</goals>
