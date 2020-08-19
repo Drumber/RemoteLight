@@ -26,8 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.intellijthemes.*;
+import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatDraculaIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatSolarizedLightIJTheme;
@@ -46,7 +51,9 @@ public class FlatLafThemesUtil {
 	 * IntelliJ Themes
 	 */
 	public final static FlatLaf[] INTELLIJ_THEMES = {
-		new FlatArcIJTheme(), new FlatArcOrangeIJTheme(),
+		new FlatArcIJTheme(), new FlatArcOrangeIJTheme(), new FlatArcDarkIJTheme(), new FlatArcDarkOrangeIJTheme(),
+		new FlatCarbonIJTheme(),
+		new FlatCobalt2IJTheme(),
 		new FlatCyanLightIJTheme(),
 		new FlatDarkFlatIJTheme(), new FlatDarkPurpleIJTheme(),
 		new FlatDraculaIJTheme(),
@@ -69,7 +76,7 @@ public class FlatLafThemesUtil {
 	 * Material Theme UI Lite
 	 */
 	public final static FlatLaf[] Material_THEMES = {
-			new FlatArcDarkIJTheme(), new FlatArcDarkContrastIJTheme(),
+			new com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme(), new FlatArcDarkContrastIJTheme(),
 			new FlatAtomOneDarkIJTheme(), new FlatAtomOneDarkContrastIJTheme(),
 			new FlatAtomOneLightIJTheme(), new FlatAtomOneLightContrastIJTheme(),
 			new com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaIJTheme(), new FlatDraculaContrastIJTheme(),
