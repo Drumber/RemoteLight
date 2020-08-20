@@ -42,11 +42,15 @@ public abstract class Plugin {
 	/** Empty constructor needed to initialize the plugin 
 	 * @throws PluginInitException
 	 */
-	public Plugin() throws PluginInitException {
+	public Plugin() {
 		if(!(getClass().getClassLoader() instanceof PluginClassLoader))
-			throw new PluginInitException("Plugin loaded with wrong class loader. Please use " + PluginClassLoader.class.getName());
+			throw new IllegalStateException("Plugin loaded with wrong class loader. Please use " + PluginClassLoader.class.getName());
 		PluginClassLoader plClassLoader = (PluginClassLoader) getClass().getClassLoader();
-		plClassLoader.initPlugin(this);
+		try {
+			plClassLoader.initPlugin(this);
+		} catch (PluginInitException e) {
+			throw new IllegalStateException("Error while initializing plugin.", e);
+		}
 	}
 
 	/**

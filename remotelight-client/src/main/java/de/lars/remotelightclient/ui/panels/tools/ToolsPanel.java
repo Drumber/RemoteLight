@@ -222,6 +222,7 @@ public class ToolsPanel extends MenuPanel {
 		c.weightx = 0;
 		c.fill = GridBagConstraints.NONE;
 		panelNavigation.add(Box.createHorizontalStrut(btnBack.getPreferredSize().width), c);
+		panelNavigation.updateUI();
 	}
 	
 	
