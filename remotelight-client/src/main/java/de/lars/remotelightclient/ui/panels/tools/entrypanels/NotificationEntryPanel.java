@@ -42,6 +42,7 @@ import javax.swing.border.LineBorder;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.ListElement;
+import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationManager;
@@ -62,7 +63,8 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 		return "Notification History";
 	}
 	
-	public JPanel getMenuPanel() {
+	@Override
+	public JPanel getMenuPanel(ToolsPanel context) {
 		return new NotificationPanel();
 	};
 	

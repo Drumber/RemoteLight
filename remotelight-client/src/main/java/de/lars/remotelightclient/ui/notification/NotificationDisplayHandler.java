@@ -61,6 +61,9 @@ public class NotificationDisplayHandler {
 		timer = new Timer(Notification.NORMAL, timerListener);
 		timer.stop();
 		timer.setInitialDelay(0);
+		
+		// show pending notifications
+		showNotification();
 	}
 	
 	
