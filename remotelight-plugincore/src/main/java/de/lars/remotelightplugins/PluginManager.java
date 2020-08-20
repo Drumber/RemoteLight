@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +45,7 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.ShutdownEvent;
+import de.lars.remotelightplugins.exceptions.PluginException;
 import de.lars.remotelightplugins.exceptions.PluginLoadException;
 import de.lars.remotelightplugins.exceptions.PluginPropertiesException;
 import de.lars.remotelightplugins.plugininterface.PluginInterface;
@@ -63,7 +62,11 @@ public class PluginManager {
 	/** PluginInterface is needed to initialize the plugins */
 	private final PluginInterface pluginInterface;
 	
+	/** a set of scopes the current environment includes */
 	private final Set<String> applicationScopes;
+	
+	/** List of all class loaders used to load the plugins */
+	private final List<PluginClassLoader> classLoaders;
 	
 	/** List of all loaded plugins */
 	private final List<Plugin> loadedPlugins;
@@ -75,6 +78,7 @@ public class PluginManager {
 	private final File pluginDir;
 	
 	public PluginManager(final File pluginDir, RemoteLightCore core, PluginInterface pluginInterface) {
+		classLoaders = new ArrayList<PluginClassLoader>();
 		loadedPlugins = new ArrayList<Plugin>();
 		errorPlugins = new HashMap<PluginInfo, String>();
 		applicationScopes = new HashSet<String>();
@@ -189,11 +193,15 @@ public class PluginManager {
 		
 		// enabling every loaded plugin
 		for(Plugin plugin : loadedPlugins) {
-			if(plugin.isLoaded()) {
-				plugin.setEnabled(true);
-			} else {
-				Logger.warn("Plugin " + plugin.getName() + " failed to load!");
-				plugin.setEnabled(false);
+			try {
+				enablePlugin(plugin);
+			} catch (PluginException e) {
+				Logger.error(e, "Failed to enable plugin after loading.");
+				core.showErrorNotification(e, "Plugin load Error");
+				// disable plugin
+				try {
+					disablePlugin(plugin);
+				} catch (IOException e2) {}
 			}
 		}
 		
@@ -205,11 +213,50 @@ public class PluginManager {
 	/**
 	 * Disable all loaded plugins
 	 */
-	public void disablePlugins() {
+	public synchronized void disablePlugins() {
 		for(Plugin plugin : loadedPlugins) {
-			if(plugin.isEnabled())
-				plugin.setEnabled(false);
+			try {
+				disablePlugin(plugin);
+			} catch (IOException e) {
+				Logger.error(e, "Error while disabling plugin: " + plugin.getName());
+			}
 		}
+	}
+	
+	/**
+	 * Disable a single plugin
+	 * 
+	 * @param plugin		the plugin to disable
+	 * @throws IOException	thrown when failed to close class loader
+	 */
+	public synchronized void disablePlugin(Plugin plugin) throws IOException {
+		if(plugin.isEnabled()) {
+			plugin.setEnabled(false);
+			Logger.info("Disabled plugin '" + plugin.getName() + "'.");
+			ClassLoader classLoader = plugin.getClass().getClassLoader();
+			if(classLoader instanceof PluginClassLoader) {
+				classLoaders.remove(classLoader);
+				((PluginClassLoader) classLoader).close();
+			}
+		}
+	}
+	
+	/**
+	 * Enable a single (loaded) plugin.
+	 * 
+	 * @param plugin			the plugin to load
+	 * @throws PluginException	thrown when the plugin is already enabled,
+	 * 							not loaded or loaded by a wrong class loader
+	 */
+	public synchronized void enablePlugin(Plugin plugin) throws PluginException {
+		if(plugin.isEnabled())
+			throw new PluginException("Plugin '" + plugin.getName() + "' is already enabled.");
+		if(!plugin.isLoaded())
+			throw new PluginException("Plugin '" + plugin.getName() + "' is not loaded. (plugin#isLoaded == false)");
+		if(!(plugin.getClass().getClassLoader() instanceof PluginClassLoader))
+			throw new PluginException("Plugin '" + plugin.getName() + "' was loaded with wrong class loader."+
+					"Expected " + PluginClassLoader.class.getName() + " but is " + plugin.getClass().getClassLoader().getClass().getName());
+		plugin.setEnabled(true);
 	}
 	
 	/**
@@ -262,18 +309,18 @@ public class PluginManager {
 	 */
 	private synchronized void loadPlugin(File file, final PluginInfo plInfo) throws MalformedURLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		// create a new class loader
-		try(URLClassLoader classLoader = new URLClassLoader(new URL[] {file.toURI().toURL()});) {;
-			// the plugins main class
-			final String mainClass = plInfo.getMainClass();
+		PluginClassLoader classLoader = new PluginClassLoader(file, plInfo, core, pluginInterface);
+		// the plugins main class
+		final String mainClass = plInfo.getMainClass();
+	
+		// instantiate and initialize plugin main class
+		Plugin plugin = (Plugin) classLoader.loadClass(mainClass).newInstance();
+		//plugin.init(plInfo, core, pluginInterface); called by the custom class loader
+		classLoaders.add(classLoader);
+		plugin.onLoad();
+		loadedPlugins.add(plugin);
 		
-			// instantiate and initialize plugin main class
-			Plugin plugin = (Plugin) classLoader.loadClass(mainClass).newInstance();
-			plugin.init(plInfo, core, pluginInterface);
-			plugin.onLoad();
-			loadedPlugins.add(plugin);
-			
-			Logger.info("Successfully loaded plugin " + plugin.getName());
-		}
+		Logger.info("Successfully loaded plugin " + plugin.getName());
 	}
 	
 	

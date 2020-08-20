@@ -23,6 +23,7 @@
 package de.lars.remotelightplugins;
 
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightplugins.exceptions.PluginInitException;
 import de.lars.remotelightplugins.plugininterface.PluginInterface;
 import de.lars.remotelightplugins.properties.DefaultProperties;
 
@@ -37,6 +38,16 @@ public abstract class Plugin {
 	private RemoteLightCore core;
 	private PluginInterface pluginInterface;
 	private boolean enabled;
+	
+	/** Empty constructor needed to initialize the plugin 
+	 * @throws PluginInitException
+	 */
+	public Plugin() throws PluginInitException {
+		if(!(getClass().getClassLoader() instanceof PluginClassLoader))
+			throw new PluginInitException("Plugin loaded with wrong class loader. Please use " + PluginClassLoader.class.getName());
+		PluginClassLoader plClassLoader = (PluginClassLoader) getClass().getClassLoader();
+		plClassLoader.initPlugin(this);
+	}
 
 	/**
 	 * This method is called on plugin load.

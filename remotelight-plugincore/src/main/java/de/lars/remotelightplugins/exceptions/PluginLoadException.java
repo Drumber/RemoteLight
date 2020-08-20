@@ -25,7 +25,7 @@ package de.lars.remotelightplugins.exceptions;
 /**
  * Thrown when failed to load a plugin.
  */
-public class PluginLoadException extends Exception {
+public class PluginLoadException extends PluginException {
 	private static final long serialVersionUID = 5252242798892196789L;
 
 	/**

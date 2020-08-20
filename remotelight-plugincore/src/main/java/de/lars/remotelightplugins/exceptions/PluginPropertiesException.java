@@ -25,7 +25,7 @@ package de.lars.remotelightplugins.exceptions;
 /**
  * Thrown when failed to parse or invalid plugin properties file.
  */
-public class PluginPropertiesException extends Exception {
+public class PluginPropertiesException extends PluginException {
 	private static final long serialVersionUID = 121679394833970208L;
 
 	/**
