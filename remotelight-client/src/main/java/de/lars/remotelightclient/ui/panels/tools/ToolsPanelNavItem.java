@@ -31,6 +31,7 @@ public class ToolsPanelNavItem {
 	
 	private String title;
 	private JPanel content;
+	private ToolsNavListener listener;
 	
 	/**
 	 * Create a new navigation item.
@@ -39,9 +40,21 @@ public class ToolsPanelNavItem {
 	 * @param content	the content to show
 	 */
 	public ToolsPanelNavItem(String title, JPanel content) {
-		super();
 		this.title = title;
 		this.content = content;
+	}
+	
+	/**
+	 * Create a new navigation item.
+	 * 
+	 * @param title		the panel title
+	 * @param content	the content to show
+	 * @param listener	the navigation listener
+	 */
+	public ToolsPanelNavItem(String title, JPanel content, ToolsNavListener listener) {
+		this.title = title;
+		this.content = content;
+		this.listener = listener;
 	}
 
 	public String getTitle() {
@@ -58,6 +71,10 @@ public class ToolsPanelNavItem {
 
 	public void setContent(JPanel content) {
 		this.content = content;
+	}
+	
+	public ToolsNavListener getListener() {
+		return listener;
 	}
 
 }

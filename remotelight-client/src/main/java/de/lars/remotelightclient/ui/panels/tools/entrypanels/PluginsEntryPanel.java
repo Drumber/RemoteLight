@@ -41,6 +41,7 @@ import org.tinylog.Logger;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.ListElement;
+import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -63,7 +64,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 	}
 	
 	@Override
-	public JPanel getMenuPanel() {
+	public JPanel getMenuPanel(ToolsPanel context) {
 		return new PluginsPanel();
 	}
 	

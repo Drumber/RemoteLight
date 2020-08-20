@@ -52,9 +52,10 @@ public abstract class ToolsPanelEntry {
 	
 	/**
 	 * Optional panel that is shown (if not null) when the entry is clicked.
-	 * @return		the menu JPanel or null
+	 * @param context	the tools panel instance
+	 * @return			the menu JPanel or null
 	 */
-	public JPanel getMenuPanel() {
+	public JPanel getMenuPanel(ToolsPanel context) {
 		return null;
 	}
 	

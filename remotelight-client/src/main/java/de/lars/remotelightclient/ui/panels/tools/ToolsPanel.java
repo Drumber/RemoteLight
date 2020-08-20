@@ -132,7 +132,7 @@ public class ToolsPanel extends MenuPanel {
 	
 	protected void processEntryItemClick(ToolsPanelEntry entry) {
 		entry.onClick();
-		JPanel menuPanel = entry.getMenuPanel();
+		JPanel menuPanel = entry.getMenuPanel(this);
 		if(menuPanel != null) {
 			// show menu panel
 			ToolsPanelNavItem navItem = new ToolsPanelNavItem(entry.getName(), menuPanel);
@@ -227,6 +227,8 @@ public class ToolsPanel extends MenuPanel {
 	
 	protected void showNavPanel(ToolsPanelNavItem navItem) {
 		showContent(navItem.getContent());
+		if(navItem.getListener() != null)
+			navItem.getListener().onShow();
 		showTitle(navItem.getTitle(), true);
 	}
 	
@@ -246,7 +248,9 @@ public class ToolsPanel extends MenuPanel {
 	 */
 	public void navigateDown() {
 		if(navHistory.size() > 0) {
-			navHistory.remove(navHistory.size()-1);
+			ToolsPanelNavItem prevItem = navHistory.remove(navHistory.size()-1);
+			if(prevItem.getListener() != null)
+				prevItem.getListener().onBack();
 			if(navHistory.size() == 0) {
 				showToolsOverview();
 				if(currentToolsPanel != null)
