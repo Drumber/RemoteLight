@@ -76,5 +76,9 @@ public class ToolsPanelNavItem {
 	public ToolsNavListener getListener() {
 		return listener;
 	}
+	
+	public void setListener(ToolsNavListener listener) {
+		this.listener = listener;
+	}
 
 }

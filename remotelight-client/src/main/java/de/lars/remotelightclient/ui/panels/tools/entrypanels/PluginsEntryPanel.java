@@ -135,7 +135,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			panelFailed.removeAll();
 			
 			for(Plugin pl : loaded) {
-				PluginElement el = new PluginElement(pl.getPluginInfo());
+				PluginElement el = new PluginElement(pl);
 				panelLoaded.add(el);
 				panelLoaded.add(Box.createVerticalStrut(5));
 			}
@@ -153,18 +153,28 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 		 */
 		private class PluginElement extends ListElement {
 			private static final long serialVersionUID = 4929823177112833763L;
-			private PluginInfo info;
-			private String errorMsg;
+			private final Plugin plugin;
+			private final PluginInfo info;
+			private final String errorMsg;
 			
-			public PluginElement(PluginInfo pluginInfo, String errorMsg) {
+			public PluginElement(Plugin plugin, String errorMsg) {
 				super();
-				this.info = pluginInfo;
+				this.plugin = plugin;
+				this.info = plugin.getPluginInfo();
 				this.errorMsg = errorMsg;
 				init();
 			}
 			
-			public PluginElement(PluginInfo pluginInfo) {
-				this(pluginInfo, null);
+			public PluginElement(Plugin plugin) {
+				this(plugin, null);
+			}
+			
+			public PluginElement(PluginInfo info, String errorMsg) {
+				super();
+				this.plugin = null;
+				this.info = info;
+				this.errorMsg = errorMsg;
+				init();
 			}
 			
 			void init() {
@@ -179,9 +189,10 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 				add(lblName);
 				add(Box.createHorizontalStrut(5));
 				
-				if(errorMsg == null) {
+				if(errorMsg == null && plugin != null) {
 					String textVersionAuthor = info.getValue(DefaultProperties.VERSION)
-							+ " by " + info.getValue(DefaultProperties.AUTHOR);
+							+ " by " + info.getValue(DefaultProperties.AUTHOR)
+							+ (!plugin.isEnabled() ? " (disabled)" : "");
 					
 					JLabel lblVersionAuthor = new JLabel(textVersionAuthor);
 					lblVersionAuthor.setForeground(Style.textColorDarker);

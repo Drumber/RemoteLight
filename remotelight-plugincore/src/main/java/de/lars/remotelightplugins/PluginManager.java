@@ -195,13 +195,14 @@ public class PluginManager {
 		for(Plugin plugin : loadedPlugins) {
 			try {
 				enablePlugin(plugin);
-			} catch (PluginException e) {
-				Logger.error(e, "Failed to enable plugin after loading.");
+			} catch (Exception e) {
+				// catch any exception, so we can also enable the other plugins
+				Logger.error(e, "Failed to enable plugin '" + plugin.getName() + "' after loading.");
 				core.showErrorNotification(e, "Plugin load Error");
 				// disable plugin
 				try {
 					disablePlugin(plugin);
-				} catch (IOException e2) {}
+				} catch (Exception e2) {}
 			}
 		}
 		
