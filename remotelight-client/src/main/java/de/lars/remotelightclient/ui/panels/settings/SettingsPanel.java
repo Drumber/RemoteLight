@@ -77,7 +77,7 @@ public class SettingsPanel extends MenuPanel {
 	
 	/** some settings that should be displayed in the right order */
 	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "ui.windowdecorations", "%remains%"};
-	private final String[] OTHERS_SETTING_ORDER = {"%remains%"};
+	private final String[] OTHERS_SETTING_ORDER = {"main.checkupdates", "main.checkupdates.prerelease", "%remains%"};
 
 	/**
 	 * Create the panel.

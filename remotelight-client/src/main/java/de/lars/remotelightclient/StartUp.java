@@ -68,7 +68,9 @@ public class StartUp {
 				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
 					// show update dialog
 					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
-					if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless()) {
+					if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless() &&
+					  (!updateChecker.isPreRelease() || s.getSetting(SettingBoolean.class, "main.checkupdates.prerelease").getValue()))
+					{
 						// show update notification
 						String[] options = {"Details", "Download"};
 						Notification notification = new Notification(NotificationType.IMPORTANT,
@@ -88,6 +90,8 @@ public class StartUp {
 								});
 						notification.setHideOnOptionClick(false);
 						Main.getInstance().showNotification(notification);
+						Logger.info(String.format("There is an update available! Current version: %s New version: %s Download here: %s", 
+								Main.VERSION, updateChecker.getNewTag(), updateChecker.getNewUrl()));
 					}
 				}
 				
@@ -117,6 +121,7 @@ public class StartUp {
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
 		s.addSetting(new SettingBoolean("main.checkupdates", "Check for updates", SettingCategory.Others, "Shows a notification when a new version is available.", true));
+		s.addSetting(new SettingBoolean("main.checkupdates.prerelease", "Notification for pre-releases", SettingCategory.Others, "If activated, a notification is also shown for pre-releases.", true));
 		
 		//Intern
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
