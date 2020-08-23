@@ -24,6 +24,8 @@ package de.lars.remotelightclient.ui.components.frames;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -31,6 +33,9 @@ import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.Stated.State;
+import de.lars.remotelightcore.event.events.types.ShutdownEvent;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -68,9 +73,17 @@ public class BasicFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		// add window close listener
 		addWindowListener(windowCloseListener);
+		// register shutdown listener
+		Main.getInstance().getCore().getEventHandler().register(shutdownListener);
 		
-		initSavedSize();
 		initSavedAlwaysTop();
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// set saved size
+				initSavedSize();
+			}
+		});
 	}
 	
 	/**
@@ -167,6 +180,14 @@ public class BasicFrame extends JFrame {
 				Main.getInstance().unregisterFrame(BasicFrame.this);
 			}
 		};
+	};
+	
+	Listener<ShutdownEvent> shutdownListener = new Listener<ShutdownEvent>() {
+		@Override
+		public void onEvent(ShutdownEvent event) {
+			if(event.getState() == State.PRE && isShowing())
+				saveSize(getWidth(), getHeight());
+		}
 	};
 
 }
