@@ -98,7 +98,7 @@ public class MainFrame extends JFrame {
 		core = Main.getInstance().getCore();
 		Main.getInstance().registerFrame(this);
 		
-		setTitle("RemoteLight");
+		setTitle("RemoteLight" + (RemoteLightCore.DEVBUILD?" [SNAPSHOT]":""));
 		setMinimumSize(new Dimension(400, 350));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 850, 440);

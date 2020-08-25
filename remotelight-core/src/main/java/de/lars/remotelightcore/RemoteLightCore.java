@@ -65,6 +65,7 @@ public class RemoteLightCore {
 	private static long startMillis = System.currentTimeMillis();
 	
 	public final static String VERSION = "v0.2.4";
+	public final static boolean DEVBUILD = true;
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	
@@ -377,6 +378,8 @@ public class RemoteLightCore {
 		new File(DirectoryUtil.getDataStoragePath()).mkdir();
 		new File(DirectoryUtil.getLogsPath()).mkdir();
 		Configuration.set("writerF.file", DirectoryUtil.getLogsPath() + "log.txt");
+		if(DEVBUILD)
+			Configuration.set("writerC.format", "[{date: HH:mm:ss}] [{level}] [{thread}] ({line}){class-name}.{method}(): {message}");
 	}
 
 }
