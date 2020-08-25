@@ -18,6 +18,7 @@
 	<properties>
 		<flatlaf.version>0.40</flatlaf.version>
 		<mainclass>de.lars.remotelightclient.Main</mainclass>
+		<builtby>Drumber</builtby>
 		<!-- set to 'package' to enable or 'none' to disable packager -->
 		<packagerPhase>none</packagerPhase>
 	</properties>
@@ -118,6 +119,11 @@
 						<manifest>
 							<mainClass>${mainclass}</mainClass>
 						</manifest>
+						<manifestEntries>
+							<Application-Version>${project.version}</Application-Version>
+							<Built-By>${builtby}</Built-By>
+							<SplashScreen-Image>resources/Splashscreen.png</SplashScreen-Image>
+						</manifestEntries>
 					</archive>
 				</configuration>
 				<executions>
@@ -130,6 +136,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- native bundles -->
 			<plugin>
 				<groupId>io.github.fvarrui</groupId>
 				<artifactId>javapackager</artifactId>
