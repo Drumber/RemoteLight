@@ -104,10 +104,14 @@ public class FileStorage {
 		return file;
 	}
 	
-	public void save() throws IOException, JsonIOException {
+	public synchronized void save() throws IOException, JsonIOException {
 		// create directory if not exists
-		if(!file.exists())
+		if(!file.exists()) {
 			file.getParentFile().mkdirs();
+		// check if file is writable
+		} else if(!Files.isWritable(file.toPath())) {
+			throw new IOException("Can not write to data file! File is locked or the application has no write access.");
+		}
 		
 		// json root element
 		JsonObject jsonRoot = new JsonObject();
@@ -147,17 +151,19 @@ public class FileStorage {
 		}
 	}
 	
-	public void load() throws IOException, JsonParseException {
+	public synchronized void load() throws IOException, JsonParseException {
 		if(!file.exists() || !file.isFile()) {
 			Logger.info("Data file does not exists: " + file.getAbsolutePath());
 			return;
 		}
+		if(!Files.isReadable(file.toPath()))
+			throw new IOException("Can not read data file! File is locked or the application has no read access.");
 			
 		try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
 			// read json object from file
 			JsonObject jsonRoot = gson.fromJson(reader, JsonObject.class);
 			if(jsonRoot == null)
-				throw new JsonParseException("Could not parse JSON data from file '" + file.getPath() + "'!");
+				throw new JsonParseException("Could not parse JSON data from file '" + file.getPath() + "'! Gson returned null.");
 			// get json data array
 			JsonElement arrayElement = jsonRoot.get(KEY_DATA);
 			if(arrayElement == null || !arrayElement.isJsonArray())

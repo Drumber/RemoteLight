@@ -191,7 +191,15 @@ public class MainFrame extends JFrame {
 				} catch(Exception e) {
 					Logger.error(e, "Error while closing frame");
 				}
-				core.close(true);
+				
+				// start close routine in new thread
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						// close RemoteLightCore
+						core.close(true);
+					}
+				}, "Shutdown Thread").start();
 			}
 		}
 	};

@@ -29,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.tinylog.Logger;
 
+import com.google.gson.JsonIOException;
+
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.AutoSaveEvent;
@@ -110,7 +112,7 @@ public class AutoSave implements Runnable {
 		// saving to data file
 		try {
 			fileStorage.save();
-		} catch (IOException e) {
+		} catch (IOException | JsonIOException e) {
 			Logger.error(e, "Error while auto saving data.");
 			core.showErrorNotification(e, "AutoSave");
 		}

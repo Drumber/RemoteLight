@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
+import com.google.gson.JsonIOException;
+
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.settings.Setting;
@@ -71,7 +73,7 @@ public class DataFileUpdater {
 		try {
 			fileStorage.save();
 			Logger.debug("...saved");
-		} catch (IOException e) {
+		} catch (IOException | JsonIOException e) {
 			Logger.error(e, "Attemp to save new file storage failed.");
 		}
 	}
