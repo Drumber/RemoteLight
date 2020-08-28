@@ -149,6 +149,7 @@ public class AboutPanel extends MenuPanel {
 		addLabel("Luaj", "https://sourceforge.net/projects/luaj");
 		addLabel("FlatLaf", "https://github.com/JFormDesigner/FlatLaf");
 		addLabel("XT-Audio", "https://sjoerdvankreel.github.io/xt-audio/");
+		addLabel("jIconFont", "https://github.com/jIconFont/jiconfont-swing");
 	}
 	
 	private void addLabel(String name, String url) {

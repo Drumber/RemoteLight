@@ -125,7 +125,7 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 						// TODO add details panel
 					});
 					
-					el.add(btnView);
+					//el.add(btnView); TODO add notification details panel
 					add(el);
 					add(Box.createVerticalStrut(10));
 				}
