@@ -45,6 +45,7 @@ import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightplugins.Plugin;
 import de.lars.remotelightplugins.PluginInfo;
 import de.lars.remotelightplugins.PluginManager;
@@ -83,6 +84,16 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			root = new JPanel();
 			root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
 			root.setBackground(getBackground());
+			
+			// show info message if plugin system is disabled
+			if(!Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").getValue()
+					&& pluginManager.getLoadedPlugins().size() == 0) {
+				JLabel lblDisabledPl = new JLabel("Plugins are disabled. Go to settings and enable plugins if you want to use this feature.");
+				lblDisabledPl.setForeground(Style.warn);
+				lblDisabledPl.setAlignmentX(Component.LEFT_ALIGNMENT);
+				root.add(lblDisabledPl);
+				root.add(Box.createVerticalStrut(10));
+			}
 			
 			JLabel lblLoaded = new JLabel("Loaded Plugins (" + pluginManager.getLoadedPlugins().size() + ")");
 			lblLoaded.setForeground(Style.textColor);

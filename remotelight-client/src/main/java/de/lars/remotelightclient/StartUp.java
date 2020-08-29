@@ -122,6 +122,7 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
 		s.addSetting(new SettingBoolean("main.checkupdates", "Check for updates", SettingCategory.Others, "Shows a notification when a new version is available.", true));
 		s.addSetting(new SettingBoolean("main.checkupdates.prerelease", "Notification for pre-releases", SettingCategory.Others, "If activated, a notification is also shown for pre-releases.", true));
+		s.addSetting(new SettingBoolean("plugins.enable", "Enable plugins", SettingCategory.Others, "Option to enable or disable the plugin system. Requires a restart to take effect.", true));
 		
 		//Intern
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));

@@ -115,8 +115,13 @@ public class Main {
 		pluginManager = new PluginManager(pluginDir, remoteLightCore, new SwingPluginInterface(this));
 		// add scope
 		pluginManager.getScopes().add(SCOPE);
-		// load all plugins
-		pluginManager.loadPlugins();
+		// check if plugin system is enabled
+		if(getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").getValue()) {
+			// load all plugins
+			pluginManager.loadPlugins();
+		} else {
+			Logger.info("Plugin system is disabled in settings. Plugins are not loaded!");
+		}
 	}
 	
 	
