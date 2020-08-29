@@ -141,7 +141,23 @@
 				<groupId>io.github.fvarrui</groupId>
 				<artifactId>javapackager</artifactId>
 				<version>1.1.0</version>
+				<!-- General configuration -->
+				<configuration>
+					<mainClass>${mainclass}</mainClass>
+					<runnableJar>${project.basedir}/target/RemoteLight-${project.version}.jar</runnableJar>
+					<copyDependencies>false</copyDependencies>
+					<generateInstaller>false</generateInstaller>
+					<bundleJre>true</bundleJre>
+					<!-- copy splashscreen and add vm args -->
+					<additionalResources>
+						<additionalResource>${project.basedir}/src/main/resources/resources/Splashscreen.png</additionalResource>
+					</additionalResources>
+					<vmArgs>
+						<vmArg>-splash:Splashscreen.png</vmArg>
+					</vmArgs>
+				</configuration>
 				<executions>
+					<!-- WINDOWS -->
 					<execution>
 						<id>bundle-windows-jre</id>
 						<phase>${packagerPhase}</phase>
@@ -149,15 +165,19 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
-							<skip>true</skip>
 							<name>RemoteLight-Windows</name>
-							<mainClass>${mainclass}</mainClass>
-							<bundleJre>true</bundleJre>
-							<generateInstaller>false</generateInstaller>
 							<jrePath>${project.basedir}/JREs/windows/jdk8u265-b01-jre</jrePath>
 							<platform>windows</platform>
+							<iconFile>${project.basedir}/icons/icon-ico.ico</iconFile>
+							<winConfig>
+								<!-- new method for icon file in next release of javapackager -->
+								<!-- <icoFile>${project.basedir}/icons/icon-ico.ico</icoFile> -->
+								<companyName>RemoteLight</companyName>
+								<productName>RemoteLight</productName>
+							</winConfig>
 						</configuration>
 					</execution>
+					<!-- LINUX -->
 					<execution>
 						<id>bundle-linux-jre</id>
 						<phase>${packagerPhase}</phase>
@@ -166,13 +186,14 @@
 						</goals>
 						<configuration>
 							<name>RemoteLight-Linux</name>
-							<mainClass>${mainclass}</mainClass>
-							<bundleJre>true</bundleJre>
-							<generateInstaller>false</generateInstaller>
 							<jrePath>${project.basedir}/JREs/linux/jdk8u265-b01-jre</jrePath>
 							<platform>linux</platform>
+							<iconFile>${project.basedir}/icons/icon-png.png</iconFile>
+							<!-- <linuxConfig> <pngFile>${project.basedir}/icons/icon-png.png</pngFile> 
+								</linuxConfig> -->
 						</configuration>
 					</execution>
+					<!-- MAC OS -->
 					<execution>
 						<id>bundle-macos-jre</id>
 						<phase>${packagerPhase}</phase>
@@ -181,11 +202,11 @@
 						</goals>
 						<configuration>
 							<name>RemoteLight-MacOS</name>
-							<mainClass>${mainclass}</mainClass>
-							<bundleJre>true</bundleJre>
-							<generateInstaller>false</generateInstaller>
 							<jrePath>${project.basedir}/JREs/mac/jdk8u265-b01-jre</jrePath>
 							<platform>mac</platform>
+							<iconFile>${project.basedir}/icons/icon-icns.icns</iconFile>
+							<!-- <macConfig> <icnsFile>${project.basedir}/icons/icon-icns.icns</icnsFile> 
+								</macConfig> -->
 						</configuration>
 					</execution>
 				</executions>

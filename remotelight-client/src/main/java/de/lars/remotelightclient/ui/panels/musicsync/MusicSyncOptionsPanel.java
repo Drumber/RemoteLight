@@ -151,7 +151,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		
 		sliderAdjustment = new JSlider();
 		sliderAdjustment.setMinimum(50);
-		sliderAdjustment.setMaximum(700);
+		sliderAdjustment.setMaximum(1000);
 		sliderAdjustment.setPreferredSize(size);
 		sliderAdjustment.setMaximumSize(size);
 		sliderAdjustment.setFocusable(false);
