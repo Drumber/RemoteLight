@@ -1,4 +1,23 @@
 ## Changelog
+#### v0.2.4-rc1
+- added new rainbow modes to Rainbow animation
+- added plugin system for java plugins
+- code related changes
+  - improved project structure
+  - added event handler
+  - code optimization and clean up
+- added Tools panel
+  - added custom console window
+  - added notification history
+  - added plugins overview
+- UI optimization
+  - sidebar is now scrollable
+  - fixed some UI bugs
+  - fixed pending notifications not shown after start up
+  - added splash screen to indicate that the program is starting
+- added option to disable update notification for pre-releases
+- soft fixed data file saving issues (please report any bug)
+
 #### v0.2.3
 - small bug fixes
 - added `color` command

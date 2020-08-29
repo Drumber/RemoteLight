@@ -14,7 +14,21 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 - Music reactive effects / Visualizer
 - Ambilight
 - Lua scripts
+- Custom Java Plugins
 - Neopixel simulator
+
+## Table of contents
+* [Hardware](#hardware)
+* [Software](#software)
+* [Downloads](#downloads)
+* [Quick Start](#quick-start)
+  * [Arduino](#arduino)
+  * [Raspberry Pi](#raspberry-pi)
+  * [Simulator](#simulator)
+* [Lua scripts](#lua-scripts)
+* [Start parameters](#start-parameters)
+* [Commands](#commands)
+* [Plugins](#plugins)
 
 ## Hardware
 - Windows/Linux/MacOS computer (not required when using Raspberry Pi)
@@ -33,7 +47,7 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 
 ## Quick Start
 ### Arduino
-*[Youtube Tutorial available](https://youtu.be/1jguUgaUdNk)*  
+*[Youtube Tutorial available](https://youtu.be/1jguUgaUdNk)*  | *[view Wiring Guide](https://github.com/Drumber/RemoteLight/wiki/Arduino-Wiring)*
 
 RemoteLight uses the Glediator protocol for Arduino. Download the [Glediator sketch](http://www.solderlab.de/index.php/downloads/file/33-ws2812-glediator-interface-v1), change the number of pixels and upload it to your Arduino.
 > Note: Solderlab.de seems to be offline. You can alternatively download the sketch [here](https://workupload.com/file/vsSx8TBP) or use the [FastLED](https://github.com/marmilicious/FastLED_examples/blob/master/Glediator_test1.ino) variant.
@@ -42,7 +56,7 @@ Connect the Arduino to your computer and start RemoteLight. Click '*Add*' to add
 Now you can activate the output by double clicking on it or by clicking on '*Activate*'.
 
 ### Raspberry Pi
-*[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*  
+*[Youtube Tutorial available](https://youtu.be/3NTMhhIGqto)*  | *[view Wiring Guide](https://github.com/Drumber/RemoteLight/wiki/Raspberry-Pi-Wiring)*  
 [RemoteLightServer repository](https://github.com/Drumber/RemoteLightServer)
 
 First of all your Raspberry Pi must be prepared to control WS2811/WS2812 LEDs. There is a well described tutorial on tutorials-raspberrypi.com. [**> Tutorial <**](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  
@@ -116,6 +130,13 @@ color <HEX> or color <r> <g> <b>
 list [<AnimationManager/MusicSyncManager/SceneManager>]
 close
 ```
+
+## Plugins
+> More plugins and info material about creating own plugins will come soon
+
+[View here for example plugins](https://github.com/RemoteLight/PluginExamples)  
+Recommend plugin:  
+ \> [Effect Playlist](https://github.com/RemoteLight/PluginExamples/tree/master/EffectPlaylist): create automatic effect sequences
 
 ## Images
 <img src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" width="300"> <img src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" width="380">
