@@ -110,7 +110,8 @@ public class RemoteLightCore {
 		// set default exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 		
-		// init event handler
+		// init notification manager and event handler
+		notificationManager = new NotificationManager();
 		eventHandler = new EventHandler();
 		
 		// create data file
@@ -122,7 +123,7 @@ public class RemoteLightCore {
 			fileStorage.load();
 		} catch (IOException | JsonParseException e) {
 			Logger.error(e, "Could not load data file: " + dataFile.getAbsolutePath());
-			showErrorNotification(e, "Data File Error");
+			showErrorNotification(e, "Data File Error. Please report on GitHub.");
 		}
 		
 		// initialize AutoSaver
@@ -130,7 +131,6 @@ public class RemoteLightCore {
 		
 		updateDataFile(); // backwards compatibility to versions < v0.2.2
 		
-		notificationManager = new NotificationManager();
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
 		deviceManager = new DeviceManager(fileStorage, fileStorage.KEY_DEVICES_LIST);
