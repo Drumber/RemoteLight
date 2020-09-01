@@ -39,6 +39,8 @@ import de.lars.remotelightcore.musicsync.sound.Shared;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundDevice;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -248,26 +250,27 @@ public class MusicSyncManager extends EffectManager {
 	public List<Setting> getCurrentMusicEffectOptions() {
 		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		List<Setting> tmp = new ArrayList<>();
-		for(String s : getActiveEffect().getOptions()) {
-			tmp.add(sm.getSettingFromId(s));
+		if(getActiveEffect() != null) {
+			for(String s : getActiveEffect().getOptions()) {
+				tmp.add(sm.getSettingFromId(s));
+			}
 		}
 		return tmp;
 	}
 	
 	public void start(MusicEffect effect) {
-		RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);
+		RemoteLightCore core = RemoteLightCore.getInstance();
+		core.getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);
 		
 		if(soundProcessor == null) {
 			soundProcessor = new SoundProcessing(this);
 		}
 		if(!soundProcessor.isMixerSet() && !soundProcessor.isNativeSoundEnabled()) {
-			//Main.getInstance().getMainFrame().printNotification("Please select a input!", NotificationType.Error);
-			// TODO message system
+			core.showNotification(new Notification(NotificationType.WARN, "MusicSync", "Please select a sound input first."));
 			return;
 		}
 		if(!soundProcessor.isConfigured()) {
-			//Main.getInstance().getMainFrame().printNotification("Sound input not configured!", NotificationType.Error);
-			// TODO message system
+			core.showNotification(new Notification(NotificationType.WARN, "MusicSync", "The sound input is not configured."));
 			return;
 		}
 		if(soundProcessor.isNativeSoundEnabled()) {

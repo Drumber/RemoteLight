@@ -73,8 +73,8 @@ public class ErrorDialog {
 		JScrollPane scroll = new JScrollPane(text);
 		scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
-		scroll.setSize(new Dimension(200, 150));
-		scroll.setPreferredSize(new Dimension(200, 150));
+		scroll.setSize(new Dimension(300, 150));
+		scroll.setPreferredSize(new Dimension(300, 150));
 		root.add(scroll);
 		
 		String[] options = {"Close", "Report"};

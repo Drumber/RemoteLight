@@ -99,6 +99,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		add(bgrScrollOptions);
 		
 		scrollPaneOpt = new JScrollPane();
+		scrollPaneOpt.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneOpt.setViewportBorder(null);
 		scrollPaneOpt.setBorder(BorderFactory.createEmptyBorder());
 		scrollPaneOpt.getVerticalScrollBar().setUnitIncrement(8);
@@ -279,7 +280,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		group.add(rbuttonNativeSound);
 		rbuttonNativeSound.setActionCommand("_NativeSound_");
 		rbuttonNativeSound.addActionListener(inputSelectedListener);
-		if(!msm.isNativeSoundConfigured()) {
+		if(!msm.isNativeSoundConfigured() || input == null) {
 			rbuttonNativeSound.setEnabled(false);
 			rbuttonNativeSound.setText("Use native sound library (not configured)");
 		} else {
@@ -326,9 +327,9 @@ public class MusicSyncOptionsPanel extends JPanel {
 					rbuttonNativeSound.setEnabled(false);
 					rbuttonNativeSound.setText("Use native sound library (not configured)");
 					return;
-				} else {
+				} else if(!msm.getSoundProcessor().isNativeSoundEnabled()) {
 					msm.setNativeSoundEnabled(true);
-					RemoteLightCore.getInstance().getMusicSyncManager().newSoundProcessor();
+					msm.newSoundProcessor();
 				}
 			} else {
 				msm.setNativeSoundEnabled(false);
@@ -339,7 +340,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 						//save last selected to data file
 						sm.getSettingObject("musicsync.input").setValue(info.toString()); //$NON-NLS-1$
 						//refresh SoundProcessor
-						RemoteLightCore.getInstance().getMusicSyncManager().newSoundProcessor();
+						msm.newSoundProcessor();
 						break;
 					}
 				}
