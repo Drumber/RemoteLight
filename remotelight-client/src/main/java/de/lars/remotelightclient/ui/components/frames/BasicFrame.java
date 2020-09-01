@@ -69,13 +69,6 @@ public class BasicFrame extends JFrame {
 		// register frame
 		Main.getInstance().registerFrame(this);
 		
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		// add window close listener
-		addWindowListener(windowCloseListener);
-		// register shutdown listener
-		Main.getInstance().getCore().getEventHandler().register(shutdownListener);
-		
 		initSavedAlwaysTop();
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -84,6 +77,14 @@ public class BasicFrame extends JFrame {
 				initSavedSize();
 			}
 		});
+		
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		// add window close listener
+		addWindowListener(windowCloseListener);
+		// register shutdown listener
+		Main.getInstance().getCore().getEventHandler().register(shutdownListener);
+		// show the frame
+		setVisible(true);
 	}
 	
 	/**
