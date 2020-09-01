@@ -24,6 +24,8 @@ package de.lars.remotelightclient;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,6 +43,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.dialogs.NoFileAccessDialog;
 import de.lars.remotelightclient.ui.components.frames.SplashFrame;
 import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
@@ -86,6 +89,14 @@ public class Main {
 		
 		// register error handler in MainFrame
 		ExceptionHandler.registerListener(MainFrame.onException);
+		
+		// check file access
+		IOException fileAcessExcpt = checkFileAccess();
+		if(fileAcessExcpt != null) {
+			System.err.println("No File Access!");
+			fileAcessExcpt.printStackTrace();
+			NoFileAccessDialog.showDialog(fileAcessExcpt.getMessage());
+		}
 		
 		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook
@@ -221,6 +232,49 @@ public class Main {
 		// MacOS menu bar application name
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.application.name", "RemoteLight");
+	}
+	
+	/**
+	 * Check data file read and write access.
+	 * @return	null if the file is readable and writable,
+	 * 			the exception otherwise
+	 */
+	public static IOException checkFileAccess() {
+		IOException stack = null;
+		File dataFile = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.FILE_STORAGE_NAME);
+		if(!dataFile.exists() && !dataFile.getParentFile().mkdirs()) {
+			stack = new IOException("Could not create directory '" + dataFile.getParent() + "'.");
+		} else if(dataFile.getParentFile().exists()) {
+			// create temp file to test directory access
+			try {
+				File tmp = new File(dataFile.getParent(), "test.tmp");
+				if(tmp.exists()) {
+					if(!tmp.delete())
+						stack = new IOException("Could not delete temp file 'test.tmp'. No file access?");
+				} else if(!tmp.exists()) {
+					tmp.createNewFile();
+					tmp.delete();
+				}
+			} catch (Exception e) {
+				stack = new IOException("Failed to create temporary test file. No file access?", e);
+			}
+			// check if data file is accessible
+			if(dataFile.exists()) {
+				boolean writable = Files.isWritable(dataFile.toPath());
+				boolean readable = Files.isReadable(dataFile.toPath());
+				if(!writable || !readable) {
+					String errMsg = "Data file '" + dataFile.getAbsoluteFile() + "' ";
+					if(!writable && !readable)
+						errMsg += "is not writable and not readable.";
+					else if(!writable)
+						errMsg += "is not writable.";
+					else if(!readable)
+						errMsg = "is not readable.";
+					stack = new IOException(errMsg);
+				}
+			}
+		}
+		return stack;
 	}
 	
 	

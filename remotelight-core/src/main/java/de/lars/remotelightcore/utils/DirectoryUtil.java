@@ -22,7 +22,11 @@
 
 package de.lars.remotelightcore.utils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -84,7 +88,7 @@ public class DirectoryUtil {
 	 */
 	public static void deleteOldLogs(int days) {
 		File dir = new File(DirectoryUtil.getLogsPath());
-		dir.mkdir();
+		dir.mkdirs();
 		for(File log : dir.listFiles()) {
 			long diff = new Date().getTime() - log.lastModified();
 
