@@ -41,6 +41,7 @@ import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.arduino.ComPort;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.lang.i18n;
+import de.lars.remotelightcore.out.OutputManager;
 
 public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 
@@ -116,7 +117,7 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
-		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(OutputManager.MIN_PIXELS), new Integer(OutputManager.MIN_PIXELS), null, new Integer(1)));
 		UiUtils.configureSpinner(spinnerPixels);
 		panelPixels.add(spinnerPixels);
 		
@@ -205,9 +206,6 @@ public class ArduinoSettingsPanel extends DeviceSettingsPanel {
 			if(ports.contains(pname)) {
 				comboPorts.setSelectedItem(pname);
 			}
-		}
-		if(arduino.getPixels() <= 0) {
-			arduino.setPixels(1);
 		}
 		spinnerPixels.setValue(arduino.getPixels());
 		

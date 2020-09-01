@@ -36,6 +36,7 @@ import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightcore.lang.i18n;
+import de.lars.remotelightcore.out.OutputManager;
 
 public class RLServerSettingsPanel extends DeviceSettingsPanel {
 
@@ -112,7 +113,7 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
-		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(OutputManager.MIN_PIXELS), new Integer(OutputManager.MIN_PIXELS), null, new Integer(1)));
 		UiUtils.configureSpinner(spinnerPixels);
 		panelPixels.add(spinnerPixels);
 		
@@ -192,9 +193,6 @@ public class RLServerSettingsPanel extends DeviceSettingsPanel {
 		}
 		if(rlServer.getIp() != null) {
 			fieldHostname.setText(rlServer.getIp());
-		}
-		if(rlServer.getPixels() <= 0) {
-			rlServer.setPixels(1);
 		}
 		spinnerPixels.setValue(rlServer.getPixels());
 		

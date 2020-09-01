@@ -52,6 +52,7 @@ import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationManager;
 import de.lars.remotelightcore.notification.NotificationType;
+import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
@@ -242,13 +243,16 @@ public class RemoteLightCore {
 	 * @return
 	 */
 	public static int getLedNum() {
-		if(instance.getOutputManager().getActiveOutput() != null) {
-			if(instance.getOutputManager().getActiveOutput().getOutputPatch().getClone() > 0) {
-				return instance.getOutputManager().getActiveOutput().getOutputPatch().getPatchedPixelNumber();
+		Output out = instance.getOutputManager().getActiveOutput();
+		if(out != null) {
+			if(out.getOutputPatch().getClone() > 0) {
+				return out.getOutputPatch().getPatchedPixelNumber();
 			}
-			return instance.getOutputManager().getActiveOutput().getPixels();
+			return out.getPixels();
 		}
-		return 0;
+		// return not 0 to prevent ArithmeticException or ArrayIndexOutOfBoundsException which
+		// which can occur for some effects
+		return OutputManager.MIN_PIXELS;
 	}
 	
 	/**

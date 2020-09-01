@@ -27,6 +27,7 @@ import java.io.Serializable;
 
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.out.Output;
+import de.lars.remotelightcore.out.OutputManager;
 
 public abstract class Device extends Output implements Serializable {
 	
@@ -42,6 +43,8 @@ public abstract class Device extends Output implements Serializable {
 	public Device(String id, int pixels) {
 		super(id, pixels);
 		rgbOrder = RgbOrder.RGB;
+		if(pixels < OutputManager.MIN_PIXELS)
+			setPixels(OutputManager.MIN_PIXELS);
 	}
 	
 	public abstract ConnectionState connect();

@@ -40,6 +40,7 @@ public abstract class Output implements Serializable {
 	
 	public Output(String id, int pixels) {
 		this.id = id;
+		this.pixels = pixels;
 		outputPatch = new OutputPatch(pixels);
 	}
 

@@ -36,6 +36,7 @@ import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.lang.i18n;
+import de.lars.remotelightcore.out.OutputManager;
 
 public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 
@@ -166,7 +167,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
-		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinnerPixels.setModel(new SpinnerNumberModel(new Integer(OutputManager.MIN_PIXELS), new Integer(OutputManager.MIN_PIXELS), null, new Integer(1)));
 		UiUtils.configureSpinner(spinnerPixels);
 		spinnerPixels.addChangeListener(universeUpdateListener);
 		panelPixels.add(spinnerPixels);
@@ -246,9 +247,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 			fieldId.setText(artnet.getId());
 		}
 		
-		if(artnet.getPixels() <= 0) {
-			artnet.setPixels(1);
-		}
 		spinnerPixels.setValue(artnet.getPixels());
 		
 		chckbxBroadcast.setSelected(artnet.isBroadcast());

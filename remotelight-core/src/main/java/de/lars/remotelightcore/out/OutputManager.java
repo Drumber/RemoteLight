@@ -38,6 +38,9 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class OutputManager {
 	
+	/** minimum amount of pixels to prevent errors in some effects */
+	public static final int MIN_PIXELS = 2;
+	
 	private RemoteLightCore core;
 	private SettingsManager sm;
 	private volatile Output activeOutput;
