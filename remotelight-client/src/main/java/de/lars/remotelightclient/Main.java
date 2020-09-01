@@ -242,9 +242,8 @@ public class Main {
 	public static IOException checkFileAccess() {
 		IOException stack = null;
 		File dataFile = new File(DirectoryUtil.getDataStoragePath() + DirectoryUtil.FILE_STORAGE_NAME);
-		if(!dataFile.exists() && !dataFile.getParentFile().mkdirs()) {
-			stack = new IOException("Could not create directory '" + dataFile.getParent() + "'.");
-		} else if(dataFile.getParentFile().exists()) {
+		dataFile.getParentFile().mkdirs();
+		if(dataFile.getParentFile().exists()) {
 			// create temp file to test directory access
 			try {
 				File tmp = new File(dataFile.getParent(), "test.tmp");

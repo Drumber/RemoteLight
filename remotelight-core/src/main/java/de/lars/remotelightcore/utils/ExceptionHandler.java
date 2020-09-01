@@ -112,12 +112,12 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 		String issueText = String.format(""
 				+ "This issue was automatically created by the RemoteLight ExceptionHandler.\n"
 				+ "RemoteLightCore version: %s\n"
-				+ "Java version: %s\n"
+				+ "Java version: %s (%s)\n"
 				+ "OS: %s\n"
 				+ "StackTrace:\n```\n%s\n```"
 				+ "\n*%s*",
 				RemoteLightCore.VERSION,
-				System.getProperty("java.version"),
+				System.getProperty("java.version"), System.getProperty("java.vendor"),
 				System.getProperty("os.name"),
 				getStackTrace(e),
 				DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.US).format(new Date()));

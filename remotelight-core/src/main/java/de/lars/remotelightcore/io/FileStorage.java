@@ -148,6 +148,8 @@ public class FileStorage {
 		// save to file
 		try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
 			gson.toJson(jsonRoot, writer);
+			// should actually be flushed automatically on auto close,
+			// but apparently does not work for some users
 			writer.flush();
 		}
 	}
