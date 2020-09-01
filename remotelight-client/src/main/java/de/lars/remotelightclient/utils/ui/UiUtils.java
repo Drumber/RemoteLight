@@ -40,16 +40,7 @@ import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.FontUIResource;
 
@@ -67,6 +58,10 @@ public class UiUtils {
 	
 	public static void setThemingEnabled(boolean themingEnabled) {
 		disableTheming = !themingEnabled;
+	}
+	
+	public static boolean isThemingEnabled() {
+		return !disableTheming;
 	}
 	
 	public static Font loadFont(String name, int style) {

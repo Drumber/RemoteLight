@@ -337,6 +337,7 @@ public class OutputPanel extends MenuPanel {
 		item.setBackground(Style.panelAccentBackground);
 		item.setContentAreaFilled(false);
 		item.setForeground(Style.textColor);
+		item.setOpaque(UiUtils.isThemingEnabled());
 		item.setName(name);
 		item.addActionListener(menuItemListener);
 	}
