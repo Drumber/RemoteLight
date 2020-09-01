@@ -46,7 +46,7 @@ public class NoFileAccessDialog {
 		
 		String contentText = String.format("RemoteLight cannot access the '%s' directory. "
 				+ "This means that your settings and saved outputs cannot be saved or loaded.\n"
-				+ "Please make sure that the directory can be accessed. This may be restricted by folder permissions or anti virus programs.",
+				+ "Please make sure that the directory can be accessed. This may be restricted by folder permissions or anti-virus programs.",
 				DirectoryUtil.getDataStoragePath());
 		
 		JTextArea text = new JTextArea(contentText);

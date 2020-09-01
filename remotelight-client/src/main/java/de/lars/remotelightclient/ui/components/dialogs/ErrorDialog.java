@@ -30,7 +30,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -55,7 +61,7 @@ public class ErrorDialog {
 		header.setFont(Style.getFontRegualar(12));
 		root.add(header);
 		
-		root.add(Box.createRigidArea(new Dimension(0, 20)));
+		root.add(Box.createVerticalStrut(20));
 		
 		String exceptionString = ExceptionHandler.getStackTrace(e);
 		
@@ -65,6 +71,7 @@ public class ErrorDialog {
 		text.setEditable(false);
 		
 		JScrollPane scroll = new JScrollPane(text);
+		scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
 		scroll.setSize(new Dimension(200, 150));
 		scroll.setPreferredSize(new Dimension(200, 150));
