@@ -148,6 +148,7 @@ public class FileStorage {
 		// save to file
 		try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
 			gson.toJson(jsonRoot, writer);
+			writer.flush();
 		}
 	}
 	
