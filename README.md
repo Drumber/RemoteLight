@@ -2,8 +2,8 @@
 
 RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) and some other addressable LED strips. It offers a modern, user-friendly UI and a lot of features.
 
-<img alt="UI Overview Dark" src="images/Outputs_Dark.png" width="430"> <img alt="UI Overview Light" src="images/Outputs_Light.png" width="430">  
-<img alt="UI Overview FlatLaf Dark" src="images/Outputs_FlatLaf-Dark.png" width="430"> <img alt="UI Overview Monokei Pro" src="images/Outputs_FlatLaf-MonokeiPro.png" width="430">
+<img alt="UI Overview Dark" src="images/Outputs_Dark.png" width="410"> <img alt="UI Overview Light" src="images/Outputs_Light.png" width="410">  
+<img alt="UI Overview FlatLaf Dark" src="images/Outputs_FlatLaf-Dark.png" width="410"> <img alt="UI Overview Monokei Pro" src="images/Outputs_FlatLaf-MonokeiPro.png" width="410">
 
 ## Features
 - Easy to use
@@ -141,11 +141,11 @@ Recommend plugin:
  \> [Effect Playlist](https://github.com/RemoteLight/PluginExamples/tree/master/EffectPlaylist): create automatic effect sequences
 
 ## Images
-<img alt="Animations with Simulator" src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" height="250"> <img alt="ScreenColor" src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" height="250">
+<img alt="Animations with Simulator" src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" height="220"> <img alt="ScreenColor" src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" height="220">
 
 Supports a bunch of different theme combinations, thanks to the [FlatLaf LookAndFeels](https://github.com/JFormDesigner/FlatLaf).
-<img alt="Color Picker" src="images/Colors_FlatLaf-SolarizedLight.png" width="425"> <img alt="Animations" src="images/Animations_FlatLaf-NightOwl.png" width="425">
-<img alt="Plugins List" src="images/Plugins_FlatLaf-Carbon.png" width="425"> <img alt="Settings UI" src="images/Settings_FlatLaf-Darcula.png" width="425">
+<img alt="Color Picker" src="images/Colors_FlatLaf-SolarizedLight.png" width="410"> <img alt="Animations" src="images/Animations_FlatLaf-NightOwl.png" width="410">
+<img alt="Plugins List" src="images/Plugins_FlatLaf-Carbon.png" width="410"> <img alt="Settings UI" src="images/Settings_FlatLaf-Darcula.png" width="410">
 
 ## Video Demo
 <a href="https://www.youtube.com/watch?v=u8ptqaTGteg"><img src="https://img.youtube.com/vi/u8ptqaTGteg/0.jpg" width="280"></a>  <a href="https://www.youtube.com/watch?v=-5hKRAyPDT8"><img src="https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg" width="280"></a>
