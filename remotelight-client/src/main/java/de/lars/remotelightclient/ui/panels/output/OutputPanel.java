@@ -46,6 +46,7 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPane
 import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.VirtualOutputSettingsPanel;
 import de.lars.remotelightclient.ui.simulator.SimulatorFrame;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -58,6 +59,7 @@ import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.devices.virtual.VirtualOutput;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
@@ -136,6 +138,11 @@ public class OutputPanel extends MenuPanel {
 		itemArtnet.setIcon(Style.getFontIcon(MenuIcon.ARTNET)); //$NON-NLS-1$
 		this.configureAddPopup(itemArtnet, "artnet");
 		popupMenu.add(itemArtnet);
+		
+		JMenuItem itemVirtual = new JMenuItem("Virtual");
+		itemVirtual.setIcon(Style.getFontIcon(MenuIcon.ERROR)); //$NON-NLS-1$
+		this.configureAddPopup(itemVirtual, "virtual");
+		popupMenu.add(itemVirtual);
 		
 		JMenu mnLink = new JMenu(i18n.getString("OutputPanel.Link")); //$NON-NLS-1$
 		mnLink.setIcon(Style.getFontIcon(MenuIcon.LINK_STRIPS)); //$NON-NLS-1$
@@ -309,8 +316,13 @@ public class OutputPanel extends MenuPanel {
 			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
 		} else if(d instanceof Artnet) {
 			panel = new ArtnetSettingsPanel((Artnet) d, setup);
-		} else if(d instanceof Chain) {
+		} else if(d instanceof VirtualOutput) {
+			panel = new VirtualOutputSettingsPanel((VirtualOutput) d, setup)
+;		} else if(d instanceof Chain) {
 			panel = new ChainSettingsPanel((Chain) d, setup);
+		} else {
+			// no panel for the device type available
+			Main.getInstance().showNotification(NotificationType.WARN, "UI Error", "There is no configuaration panel for device type '" + d.getClass().getSimpleName() + "'.");
 		}
 		
 		if(panel != null) {
@@ -372,6 +384,9 @@ public class OutputPanel extends MenuPanel {
 				break;
 			case "artnet":
 				device = new Artnet(null);
+				break;
+			case "virtual":
+				device = new VirtualOutput(null, OutputManager.MIN_PIXELS);
 				break;
 			case "multioutput": //TODO //$NON-NLS-1$
 				
