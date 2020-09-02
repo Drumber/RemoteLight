@@ -36,13 +36,7 @@ public class DeviceManager {
 	private List<Device> devices;
 	
 	public DeviceManager() {
-		this(null, null);
-	}
-	
-	public DeviceManager(FileStorage storage, String key) {
 		devices = new ArrayList<Device>();
-		if(storage != null && key != null)
-			loadDevices(storage, key);
 	}
 	
 	/**

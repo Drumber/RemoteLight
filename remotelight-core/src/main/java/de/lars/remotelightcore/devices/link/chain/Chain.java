@@ -30,20 +30,22 @@ import java.util.Objects;
 
 import org.tinylog.Logger;
 
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 
 public class Chain extends Device {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5415005609912021244L;
-	private List<Device> devices;
+	
+	private transient List<Device> devices;
+	private ArrayList<String> deviceIds;
 
 	public Chain(String id) {
 		super(id, 0);
 		devices = new ArrayList<>();
+		deviceIds = new ArrayList<String>();
 	}
 	
 	public List<Device> getDevices() {
@@ -54,17 +56,20 @@ public class Chain extends Device {
 		for(Device d : devices) {
 			Objects.requireNonNull(d, "Device should not be null.");
 			this.devices.add(d);
+			this.deviceIds.add(d.getId());
 		}
 		updatePixelNum();
 	}
 	
 	public void removeDevice(Device d) {
 		devices.remove(d);
+		deviceIds.remove(d.getId());
 		updatePixelNum();
 	}
 	
 	public void clearDevices() {
 		devices.clear();
+		deviceIds.clear();
 	}
 	
 	public void updatePixelNum() {
@@ -109,8 +114,29 @@ public class Chain extends Device {
 
 	@Override
 	public void onLoad() {
-		for(Device d : devices)
-			d.onLoad();
+		if(devices == null)
+			devices = new ArrayList<Device>();
+		if(deviceIds == null)
+			deviceIds = new ArrayList<String>();
+		
+		List<String> listNotFound = new ArrayList<String>();
+		// try to find saved devices by id
+		for(String id : deviceIds) {
+			Device d = RemoteLightCore.getInstance().getDeviceManager().getDevice(id);
+			if(d != null) {
+				devices.add(d);
+			} else {
+				listNotFound.add(id);
+			}
+		}
+		if(listNotFound.size() > 0) {
+			// remove all not found devices and show error message
+			deviceIds.removeAll(listNotFound);
+			String notFound = String.join(", ", listNotFound);
+			Logger.warn("[Chain] Could not find devices: " + notFound);
+			RemoteLightCore.getInstance().showNotification(
+					new Notification(NotificationType.WARN, getId() + " (Chain)", "Could not find the following devices: " + notFound));
+		}
 	}
 
 	@Override

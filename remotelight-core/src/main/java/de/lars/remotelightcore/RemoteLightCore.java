@@ -134,7 +134,7 @@ public class RemoteLightCore {
 		
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
-		deviceManager = new DeviceManager(fileStorage, fileStorage.KEY_DEVICES_LIST);
+		deviceManager = new DeviceManager();
 		outputManager = new OutputManager();
 		luaManager = new LuaManager();
 		colorManager = new ColorManager();
@@ -145,6 +145,9 @@ public class RemoteLightCore {
 		musicManager = new MusicSyncManager();
 		screenColorManager = new ScreenColorManager();
 		effectManagerHelper = new EffectManagerHelper();
+		
+		// load devices
+		deviceManager.loadDevices(fileStorage, fileStorage.KEY_DEVICES_LIST);
 		
 		// console cmd reader
 		commandParser = new CommandParser(instance);

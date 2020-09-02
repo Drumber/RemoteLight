@@ -28,6 +28,7 @@ import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
+import de.lars.remotelightcore.devices.virtual.VirtualOutput;
 import de.lars.remotelightcore.out.Output;
 
 public class OutputUtil {
@@ -41,6 +42,9 @@ public class OutputUtil {
 		}
 		if(o instanceof Artnet) {
 			return "Artnet";
+		}
+		if(o instanceof VirtualOutput) {
+			return "VirtualOutput";
 		}
 		if(o instanceof Chain) {
 			return "Chain";
@@ -56,6 +60,8 @@ public class OutputUtil {
 			return RemoteLightServer.class;
 		case "Artnet":
 			return Artnet.class;
+		case "VirtualOutput":
+			return VirtualOutput.class;
 		case "Chain":
 			return Chain.class;
 		default:
