@@ -45,6 +45,7 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPan
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.MultiOutputSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.VirtualOutputSettingsPanel;
 import de.lars.remotelightclient.ui.simulator.SimulatorFrame;
@@ -58,6 +59,7 @@ import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
 import de.lars.remotelightcore.devices.link.chain.Chain;
+import de.lars.remotelightcore.devices.link.multi.MultiOutput;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
 import de.lars.remotelightcore.devices.virtual.VirtualOutput;
 import de.lars.remotelightcore.lang.i18n;
@@ -150,8 +152,9 @@ public class OutputPanel extends MenuPanel {
 		popupMenu.add(mnLink);
 		
 		JMenuItem itemMultiOutput = new JMenuItem(i18n.getString("OutputPanel.MultiOutput")); //$NON-NLS-1$
+		itemMultiOutput.setIcon(Style.getFontIcon(MenuIcon.LINK_STRIPS));
 		this.configureAddPopup(itemMultiOutput, "multioutput"); //$NON-NLS-1$
-		//mnLink.add(itemMultiOutput); TODO
+		mnLink.add(itemMultiOutput);
 		
 		JMenuItem itemChain = new JMenuItem(i18n.getString("OutputPanel.Chain")); //$NON-NLS-1$
 		itemChain.setIcon(Style.getFontIcon(MenuIcon.CHAIN)); //$NON-NLS-1$
@@ -264,15 +267,17 @@ public class OutputPanel extends MenuPanel {
 	
 	public void addDeviceButtons(JPanel panel) {
 		for(Device d : dm.getDevices()) {
-			IconCode icon = null; //$NON-NLS-1$
+			IconCode icon = null;
 			if(d instanceof Arduino) {
-				icon = MenuIcon.ARDUINO; //$NON-NLS-1$
+				icon = MenuIcon.ARDUINO;
 			} else if(d instanceof RemoteLightServer) {
-				icon = MenuIcon.RASPBERRYPI; //$NON-NLS-1$
+				icon = MenuIcon.RASPBERRYPI;
 			} else if(d instanceof Artnet) {
-				icon = MenuIcon.ARTNET; //$NON-NLS-1$
+				icon = MenuIcon.ARTNET;
 			} else if(d instanceof Chain) {
 				icon = MenuIcon.CHAIN;
+			} else if(d instanceof MultiOutput) {
+				icon = MenuIcon.LINK_STRIPS;
 			} else {
 				icon = MenuIcon.ERROR;
 			}
@@ -317,9 +322,11 @@ public class OutputPanel extends MenuPanel {
 		} else if(d instanceof Artnet) {
 			panel = new ArtnetSettingsPanel((Artnet) d, setup);
 		} else if(d instanceof VirtualOutput) {
-			panel = new VirtualOutputSettingsPanel((VirtualOutput) d, setup)
-;		} else if(d instanceof Chain) {
+			panel = new VirtualOutputSettingsPanel((VirtualOutput) d, setup);
+		} else if(d instanceof Chain) {
 			panel = new ChainSettingsPanel((Chain) d, setup);
+		} else if(d instanceof MultiOutput) {
+			panel = new MultiOutputSettingsPanel((MultiOutput) d, setup);
 		} else {
 			// no panel for the device type available
 			Main.getInstance().showNotification(NotificationType.WARN, "UI Error", "There is no configuaration panel for device type '" + d.getClass().getSimpleName() + "'.");
@@ -388,8 +395,8 @@ public class OutputPanel extends MenuPanel {
 			case "virtual":
 				device = new VirtualOutput(null, OutputManager.MIN_PIXELS);
 				break;
-			case "multioutput": //TODO //$NON-NLS-1$
-				
+			case "multioutput": //$NON-NLS-1$
+				device = new MultiOutput(null);
 				break;
 			case "chain": //$NON-NLS-1$
 				device = new Chain(null);

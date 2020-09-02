@@ -141,11 +141,11 @@ public class Chain extends Device {
 
 	@Override
 	public void send(Color[] pixels) {
-		if(super.getPixels() == pixels.length) {
+		if(pixels.length >= super.getPixels()) {
 			int index = 0;
 			for(Device d : devices) {
 				Color[] subArray = Arrays.copyOfRange(pixels, index, index + d.getPixels());
-				d.send(subArray);
+				d.onOutput(subArray);
 				index += d.getPixels();
 			}
 		} else {

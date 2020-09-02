@@ -27,7 +27,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -40,23 +42,24 @@ import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.link.chain.Chain;
+import de.lars.remotelightcore.devices.link.multi.DividingMethod;
+import de.lars.remotelightcore.devices.link.multi.MultiOutput;
 import de.lars.remotelightcore.lang.i18n;
 
-public class ChainSettingsPanel extends DeviceSettingsPanel {
-	
-	/**
-	 * 
-	 */
+public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 	private static final long serialVersionUID = 2517187347534151946L;
-	private Chain chain;
+	
+	private MultiOutput multi;
 	private JTextField fieldId;
 	private JPanel panelDevices;
 	private JPanel panelAdd;
 	private JComboBox<String> boxOutputs;
+	private JComboBox<DividingMethod> comboProcessing;
+	private JLabel lblPixels;
 
-	public ChainSettingsPanel(Chain chain, boolean setup) {
-		super(chain, setup);
-		this.chain = chain;
+	public MultiOutputSettingsPanel(MultiOutput multi, boolean setup) {
+		super(multi, setup);
+		this.multi = multi;
 		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -75,9 +78,47 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		fieldId = new JTextField();
 		panelId.add(fieldId);
 		fieldId.setColumns(10);
-		if(chain.getId() != null) {
-			fieldId.setText(chain.getId());
+		if(multi.getId() != null) {
+			fieldId.setText(multi.getId());
 		}
+		
+		lblPixels = new JLabel("Pixels: " + multi.getPixels());
+		lblPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblPixels.setForeground(Style.textColor);
+		lblPixels.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
+		add(lblPixels);
+		
+		JPanel panelProcessing = new JPanel();
+		FlowLayout flowLayout2 = (FlowLayout) panelProcessing.getLayout();
+		flowLayout2.setAlignment(FlowLayout.LEFT);
+		panelProcessing.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelProcessing.setBackground(Style.panelBackground);
+		add(panelProcessing);
+		
+		JLabel lblProcessing = new JLabel("Dividing method: ");
+		lblProcessing.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblProcessing.setForeground(Style.textColor);
+		panelProcessing.add(lblProcessing);
+		
+		comboProcessing = new JComboBox<DividingMethod>();
+		comboProcessing.setModel(new DefaultComboBoxModel<DividingMethod>(DividingMethod.values()));
+		comboProcessing.setSelectedItem(multi.getProcessingMethod());
+		panelProcessing.add(comboProcessing);
+		
+		JLabel lblDescription = new JLabel(multi.getProcessingMethod().getDescription());
+		lblDescription.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblDescription.setForeground(Style.textColor);
+		lblDescription.setBackground(Style.panelBackground);
+		lblDescription.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+		add(lblDescription);
+		comboProcessing.addActionListener(e -> {
+			multi.setProcessingMethod((DividingMethod) comboProcessing.getSelectedItem());
+			// update description text
+			lblDescription.setText(multi.getProcessingMethod().getDescription());
+			lblDescription.updateUI();
+			// update pixel count
+			updatePixelLabel();
+		});
 		
 		panelDevices = new JPanel();
 		panelDevices.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -94,10 +135,14 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		add(panelAdd);
 	}
 	
+	private void updatePixelLabel() {
+		lblPixels.setText("Pixels: " + multi.getPixels());
+	}
+	
 	private void addDevicesToPanel() {
 		panelDevices.removeAll();
 		
-		for(Device d : chain.getDevices()) {
+		for(Device d : multi.getDevices()) {
 			JPanel dPanel = new JPanel();
 			dPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 1));
 			dPanel.setBackground(Style.buttonBackground);
@@ -110,7 +155,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 			btnRemove.setForeground(Color.RED);
 			UiUtils.configureButton(btnRemove);
 			btnRemove.addActionListener(e -> {
-				chain.removeDevice(d);
+				multi.removeDevice(d);
 				addDevicesToPanel();
 				updateComboDevices();
 			});
@@ -118,6 +163,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 			dPanel.setPreferredSize(new Dimension((int) dPanel.getPreferredSize().getWidth(), 27));
 			panelDevices.add(dPanel);
 		}
+		updatePixelLabel();
 		updateUI();
 	}
 	
@@ -134,7 +180,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 				String selOutput = (String) boxOutputs.getSelectedItem();
 				Device device = RemoteLightCore.getInstance().getDeviceManager().getDevice(selOutput);
 				if(device != null) {
-					chain.addDevices(device);
+					multi.addDevices(device);
 					boxOutputs.removeItem(selOutput);
 					addDevicesToPanel();
 				}
@@ -146,7 +192,7 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 	private void updateComboDevices() {
 		boxOutputs.removeAllItems();
 		for(Device d : RemoteLightCore.getInstance().getDeviceManager().getDevices()) {
-			if(!(d instanceof Chain) && !chain.getDevices().contains(d)) {
+			if(!(d instanceof Chain) && !multi.getDevices().contains(d)) {
 				boxOutputs.addItem(d.getId());
 			}
 		}
@@ -158,7 +204,8 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		if(fieldId.getText().isEmpty()) {
 			return false;
 		}
-		chain.setId(fieldId.getText());
+		multi.setId(fieldId.getText());
+		multi.setProcessingMethod((DividingMethod) comboProcessing.getSelectedItem());
 		return true;
 	}
 
