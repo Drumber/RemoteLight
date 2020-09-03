@@ -28,7 +28,13 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import de.lars.remotelightclient.ui.Style;
@@ -163,10 +169,8 @@ public class NotificationPane extends JPanel {
 			lblClose.setVisible(true);
 			isFocussed = true;
 			if(handler != null && handler.timer != null) {
-				// reset timer
-				handler.timer.setInitialDelay(handler.timer.getDelay());
-				handler.timer.restart();
-				handler.timer.setInitialDelay(0);
+				// reset timer when user moved mouse over notification
+				handler.resetNotificationTimer();
 			}
 		};
 		

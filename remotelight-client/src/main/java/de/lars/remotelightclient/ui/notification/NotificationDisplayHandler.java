@@ -22,13 +22,12 @@
 
 package de.lars.remotelightclient.ui.notification;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JLayeredPane;
-import javax.swing.Timer;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.events.MenuEvent;
@@ -46,6 +45,7 @@ public class NotificationDisplayHandler {
 	private JLayeredPane layeredPane;
 	
 	protected Timer timer;
+	protected NotificationTask activeTask;
 	private NotificationPane currentPane;
 	private int posX, posY;
 	
@@ -58,15 +58,16 @@ public class NotificationDisplayHandler {
 		Main.getInstance().getCore().getEventHandler().register(onMenuChange);
 		manager.addNotificationListener(notificationListener);
 		
-		timer = new Timer(Notification.NORMAL, timerListener);
-		timer.stop();
-		timer.setInitialDelay(0);
+		timer = new Timer();
 		
 		// show pending notifications
 		showNotification();
 	}
 	
 	
+	/**
+	 * Show notification if the manager has one and schedule the timer
+	 */
 	private void showNotification() {
 		if(manager.hasNext()) {
 			Notification noti = manager.getNext();
@@ -80,8 +81,11 @@ public class NotificationDisplayHandler {
 			updateLocation();
 			// add it to layered pane
 			layeredPane.add(pane, JLayeredPane.POPUP_LAYER);
-			timer.setInitialDelay(noti.getDisplayTime());
-			timer.restart();
+			
+			if(activeTask != null)
+				activeTask.cancel(); // to be save there is no other scheduled task
+			activeTask = new NotificationTask();
+			timer.schedule(activeTask, noti.getDisplayTime()); // schedule timer
 		}
 	}
 	
@@ -89,6 +93,10 @@ public class NotificationDisplayHandler {
 	 * Remove currently displayed notification
 	 */
 	protected void hideNotification() {
+		if(activeTask != null) {
+			activeTask.cancel();
+			activeTask = null;
+		}
 		if(currentPane != null) {
 			currentPane.setVisible(false);
 			layeredPane.remove(currentPane);
@@ -96,34 +104,31 @@ public class NotificationDisplayHandler {
 		}
 	}
 	
-	
-	/** triggered when timer delay is over */
-	private ActionListener timerListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(currentPane != null) {
-				if(currentPane.isFocussed())
-					return; // mouse entered notification -> leave notification displayed
-				hideNotification();
-			}
-			if(!manager.hasNext()) {
-				// no more notifications, stop timer
-				timer.stop();
-				return;
-			}
-			// manager has pending notification, show it
-			showNotification();
+	/**
+	 * Cancel current timer tasks and reset timer for current notification.
+	 * e.g. if mouse entered notification pane
+	 */
+	protected void resetNotificationTimer() {
+		if(activeTask != null) {
+			activeTask.cancel();
 		}
-	};
+		if(currentPane != null) {
+			activeTask = new NotificationTask();
+			timer.schedule(activeTask, currentPane.getNotification().getDisplayTime());
+		}
+	}
+	
 	
 	/** triggered when a new notification is added */
 	private NotificationListener notificationListener = new NotificationListener() {
 		@Override
 		public void onNotification(NotificationManager manager) {
-			if(!timer.isRunning()) {
-				timer.setInitialDelay(0);
-				timer.start();
+			// check if currentPane is null (timer is inactive)
+			if(currentPane == null) {
+				showNotification();
 			}
+			// if currentPane is not null, pending notifications will be
+			// automatically shown in the timerTask
 		}
 	};
 	
@@ -144,6 +149,9 @@ public class NotificationDisplayHandler {
 		}
 	};
 	
+	/**
+	 * Calculate notification position to not overlap the bottom bar
+	 */
 	private void updateLocation() {
 		int w = root.getContentPane().getSize().width;
 		int h = root.getContentPane().getSize().height;		
@@ -163,6 +171,32 @@ public class NotificationDisplayHandler {
 						
 		if(currentPane != null) {
 			currentPane.setLocation(posX, posY);
+		}
+	}
+	
+	
+	/**
+	 * TimerTask that is used by the timer
+	 */
+	private class NotificationTask extends TimerTask {
+
+		/** triggered when timer delay is over (hide notification) */
+		@Override
+		public void run() {
+			if(currentPane != null) {
+				if(currentPane.isFocussed()) {
+					// mouse entered notification -> leave notification displayed and restart timer
+					resetNotificationTimer();
+					return;
+				}
+				// hide the current notification
+				hideNotification();
+			}
+			// check for pending notifications
+			if(manager.hasNext()) {
+				// manager has pending notification, show it
+				showNotification();
+			}
 		}
 	}
 
