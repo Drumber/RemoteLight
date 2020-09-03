@@ -76,10 +76,20 @@ public class PixelOutputStream {
 		this.active = active;
 	}
 	
+	/**
+	 * Add pixel stream receiver
+	 * @param receiver	pixel stream receiver interface
+	 * @return			true if this instance did not already contain the specified receiver
+	 */
 	public boolean addReceiver(PixelStreamReceiver receiver) {
 		return setReceiver.add(receiver);
 	}
 	
+	/**
+	 * Remove pixel stream receiver
+	 * @param receiver	pixel stream receiver interface
+	 * @return			true if this instance contained the specified receiver
+	 */
 	public boolean removeReceiver(PixelStreamReceiver receiver) {
 		return setReceiver.remove(receiver);
 	}
