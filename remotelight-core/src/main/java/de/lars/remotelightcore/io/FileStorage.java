@@ -107,7 +107,7 @@ public class FileStorage {
 	public synchronized void save() throws IOException, JsonIOException {
 		// create directory if not exists
 		if(!file.exists()) {
-			file.getParentFile().mkdirs();
+			file.getAbsoluteFile().getParentFile().mkdirs();
 		// check if file is writable
 		} else if(!Files.isWritable(file.toPath())) {
 			throw new IOException("Can not write to data file! File is locked or the application has no write access.");

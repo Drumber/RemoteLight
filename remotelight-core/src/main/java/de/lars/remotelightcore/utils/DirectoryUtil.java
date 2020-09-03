@@ -185,6 +185,8 @@ public class DirectoryUtil {
 	
 	public static void copyZipFromJar(String zipFolder, File destination) throws IOException {
 		InputStream is = DirectoryUtil.class.getResourceAsStream(zipFolder);
+		if(is == null)
+			throw new IOException("Could not find zip folder '" + zipFolder + "' in classpath.");
 		ZipInputStream zis = new ZipInputStream(is);
 		byte[] buffer = new byte[1024];
 		

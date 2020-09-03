@@ -24,7 +24,7 @@ public class CoreTest {
 	
 	@DisplayName("Before Initialization Test")
 	@BeforeAll
-	static void before() {
+	static void beforeTest() {
 		System.out.println("Before Init Test");
 		assertThrows(IllegalStateException.class, () -> RemoteLightCore.getInstance());
 	}
