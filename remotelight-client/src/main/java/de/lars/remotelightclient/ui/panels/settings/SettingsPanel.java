@@ -76,7 +76,7 @@ public class SettingsPanel extends MenuPanel {
 	private List<SettingPanel> settingPanels;
 	
 	/** some settings that should be displayed in the right order */
-	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "ui.windowdecorations", "%remains%"};
+	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "ui.windowdecorations", "ui.font", "ui.fontsize", "%remains%"};
 	private final String[] OTHERS_SETTING_ORDER = {"main.checkupdates", "main.checkupdates.prerelease", "%remains%"};
 
 	/**
@@ -190,6 +190,9 @@ public class SettingsPanel extends MenuPanel {
 			// set default locale
 			String langCode = ((SettingSelection) sm.getSettingFromId("ui.language")).getSelected();
 			i18n.setLocale(langCode);
+			
+			// set custom font
+			Style.setSelectedFont();
 			
 			// set Look And Feel
 			Main.getInstance().setLookAndFeel();

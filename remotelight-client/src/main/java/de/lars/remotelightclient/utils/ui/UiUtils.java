@@ -55,6 +55,7 @@ import jiconfont.swing.IconFontSwing;
 public class UiUtils {
 	
 	private static boolean disableTheming = true;
+	private static int defaultFontSize = 11;
 	
 	public static void setThemingEnabled(boolean themingEnabled) {
 		disableTheming = !themingEnabled;
@@ -70,7 +71,7 @@ public class UiUtils {
 		Font out = null;
 		try {
 			Font font = Font.createFont(Font.TRUETYPE_FONT, is);
-			out = font.deriveFont(style, 11);
+			out = font.deriveFont(style, defaultFontSize);
 		} catch (FontFormatException | IOException e) {
 			Logger.error(e, "Could not load font: " + fName);
 		}
@@ -87,6 +88,22 @@ public class UiUtils {
 				UIManager.put(key, f);
 			}
 		}
+	}
+	
+	/**
+	 * Set the default font size used for initializing fonts.
+	 * @param size		font size
+	 */
+	public static void setDefaultFontSize(int size) {
+		defaultFontSize = size;
+	}
+	
+	/**
+	 * Get the default font size used for initializing fonts.
+	 * @return			font size
+	 */
+	public static int getDefaultFontSize() {
+		return defaultFontSize;
 	}
 	
 	public static void registerIconFont(String path) {

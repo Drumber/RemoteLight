@@ -42,10 +42,10 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.ui.MainFrame;
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.dialogs.NoFileAccessDialog;
 import de.lars.remotelightclient.ui.components.frames.SplashFrame;
 import de.lars.remotelightclient.ui.console.CustomOutputStream;
+import de.lars.remotelightclient.ui.font.DefaultFonts;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -104,7 +104,7 @@ public class Main {
 		
 		Logger.info("Starting RemoteLightClient version " + VERSION);
 		
-		Style.loadFonts();				// Load custom fonts
+		DefaultFonts.registerDefaultFonts(); // register default fonts
 		
 		new StartUp(RemoteLightCore.startParameter);
 		

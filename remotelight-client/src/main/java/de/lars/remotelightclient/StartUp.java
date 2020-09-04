@@ -30,6 +30,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.dialogs.UpdateDialog;
+import de.lars.remotelightclient.ui.font.FontManager;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.lang.LangUtil;
@@ -40,6 +41,7 @@ import de.lars.remotelightcore.notification.listeners.NotificationOptionListener
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
@@ -57,6 +59,9 @@ public class StartUp {
 		// set default language
 		String langCode = ((SettingSelection) s.getSettingFromId("ui.language")).getSelected();
 		i18n.setLocale(langCode);
+		
+		// init menu icons and custom font
+		Style.initFonts();
 		
 		copyLuaExamples();
 		
@@ -115,6 +120,8 @@ public class StartUp {
 		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", Style.STYLES, "Dark", Model.ComboBox));
 		s.addSetting(new SettingSelection("ui.laf", "LookAndFeel", SettingCategory.General, "UI Components Look and Feel", Style.getLookAndFeels().toArray(new String[0]),  "System default", Model.ComboBox));
 		s.addSetting(new SettingBoolean("ui.windowdecorations", "Custom window decorations", SettingCategory.General, "Only available on Windows 10 and in combination with FlatLaf Look and Feels", false));
+		s.addSetting(new SettingSelection("ui.font", "UI Font", SettingCategory.General, "Set a custom UI font", FontManager.getAllFontNames().toArray(new String[0]), "Muli", Model.ComboBox));
+		s.addSetting(new SettingInt("ui.fontsize", "UI Font size", SettingCategory.General, "Default UI font size", 11, 9, 20, 1));
 		// update style setting if already set
 		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
 		

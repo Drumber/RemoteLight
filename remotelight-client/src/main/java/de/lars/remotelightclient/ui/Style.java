@@ -36,10 +36,14 @@ import org.tinylog.Logger;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.ui.font.FontManager;
+import de.lars.remotelightclient.ui.font.FontResource;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.notification.NotificationType;
+import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import jiconfont.IconCode;
@@ -340,16 +344,50 @@ public class Style {
 	private static Font bold;
 	private static Font light;
 	
-	public static void loadFonts() {
+	public static void initFonts() {
 		// register icon font
 		UiUtils.registerIconFont("icons/menuicons.ttf");
-		// load fonts
-		regular = UiUtils.loadFont("muli/Muli-Regular.ttf", Font.PLAIN);
-		bold = UiUtils.loadFont("muli/Muli-ExtraBold.ttf", Font.BOLD);
-		light = UiUtils.loadFont("muli/Muli-Light.ttf", Font.ITALIC);
-		if(regular != null) {
-			UiUtils.setUIFont(new FontUIResource(regular));
+		// load font from settings
+		setSelectedFont();
+	}
+	
+	/**
+	 * Set UI font and size from setting value of {@code ui.font} and {@code ui.fontsize}.
+	 */
+	public static void setSelectedFont() {
+		SettingsManager sm = Main.getInstance().getSettingsManager();
+		SettingSelection settingFont = sm.getSetting(SettingSelection.class, "ui.font");
+		SettingInt settingSize = sm.getSetting(SettingInt.class, "ui.fontsize");
+		if(settingSize != null) {
+			UiUtils.setDefaultFontSize(settingSize.getValue());
 		}
+		if(settingFont != null) {
+			setUiFont(settingFont.getSelected());
+		}
+	}
+	
+	/**
+	 * Set the font of the UI. The font must be registered in
+	 * the {@link FontManager} and must not be null.
+	 * @param name	font family name
+	 * @return		true if the font was set, false otherwise
+	 */
+	public static boolean setUiFont(String name) {
+		FontResource fr = FontManager.getAllFonts().get(name);
+		if(fr == null)
+			return false;
+		Font reg = fr.getRegular();
+		if(reg != null)
+			regular = reg;
+		Font bol = fr.getBold();
+		if(bol != null)
+			bold = bol;
+		Font ita = fr.getItalic();
+		if(ita != null)
+			light = ita;
+		// set default ui font
+		UiUtils.setUIFont(new FontUIResource(reg));
+		return true;
 	}
 	
 	public static Font getFontRegualar(int size) {
