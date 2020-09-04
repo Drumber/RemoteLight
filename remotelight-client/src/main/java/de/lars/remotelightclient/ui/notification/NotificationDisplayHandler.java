@@ -155,10 +155,11 @@ public class NotificationDisplayHandler {
 	private void updateLocation() {
 		int w = root.getContentPane().getSize().width;
 		int h = root.getContentPane().getSize().height;		
-		int space = 10;
+		int spaceX = 20;
+		int spaceY = 10;
 		
-		posX = w - NotificationPane.DEFAULT_WIDTH  - space;
-		posY = h - NotificationPane.DEFAULT_HEIGHT - space;
+		posX = w - NotificationPane.DEFAULT_WIDTH  - spaceX;
+		posY = h - NotificationPane.DEFAULT_HEIGHT - spaceY;
 		
 		if(root.isControlBarShown()) {
 			// add control bar offset

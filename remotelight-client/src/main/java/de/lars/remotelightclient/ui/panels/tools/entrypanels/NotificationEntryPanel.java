@@ -107,7 +107,7 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 					long millis = noti.getCreationTime();
 					String creationTime = DateFormat.getTimeInstance().format(new Date(millis));
 					JLabel lblTime = new JLabel(creationTime);
-					lblMessage.setForeground(Style.textColorDarker);
+					lblTime.setForeground(Style.textColorDarker);
 					el.add(Box.createHorizontalGlue());
 					el.add(Box.createHorizontalStrut(10));
 					el.add(lblTime);
