@@ -85,12 +85,12 @@ public class CoreTest {
 	@Test
 	public void versionTest() {
 		System.out.println("Version Test");
-		assertFalse(UpdateChecker.compareVersionNumber("0.2.4", "0.2.3"));
-		assertFalse(UpdateChecker.compareVersionNumber("0.2.4", "0.1"));
-		assertTrue(UpdateChecker.compareVersionNumber("0.2.4", "0.2.4.1"));
-		assertTrue(UpdateChecker.compareVersionNumber("v0.1.9", "v0.1.10"));
-		assertTrue(UpdateChecker.compareVersionNumber("v0.3-SNAPSHOT", "v0.3"));
-		assertFalse(UpdateChecker.compareVersionNumber("v0.2", "v0.2.0"));
+		assertFalse(UpdateChecker.isVersionNewer("0.2.4", "0.2.3"));
+		assertFalse(UpdateChecker.isVersionNewer("0.2.4", "0.1"));
+		assertTrue(UpdateChecker.isVersionNewer("0.2.4", "0.2.4.1"));
+		assertTrue(UpdateChecker.isVersionNewer("v0.1.9", "v0.1.10"));
+		assertTrue(UpdateChecker.isVersionNewer("v0.3-SNAPSHOT", "v0.3"));
+		assertFalse(UpdateChecker.isVersionNewer("v0.2", "v0.2.0"));
 	}
 	
 	@DisplayName("RemoteLight Close Test")

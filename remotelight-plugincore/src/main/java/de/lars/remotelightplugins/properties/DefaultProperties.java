@@ -41,7 +41,11 @@ public enum DefaultProperties {
 	/** plugin scope (all, mobile, web, swing) */
 	SCOPE("scope", false),
 	/** plugin website url */
-	URL("url", false);
+	URL("url", false),
+	/** minimum RemoteLightCore version */
+	MIN_VERSION("minVersion", false),
+	/** maximum RemoteLightCore version */
+	MAX_VERSION("maxVersion", false);
 	
 	private final String key;
 	private final boolean required;

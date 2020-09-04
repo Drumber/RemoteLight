@@ -60,7 +60,7 @@ public class UpdateChecker {
 			
 			String curVersionNumber = getVersionNumber(curTag);
 			String newVersionNumber = getVersionNumber(newTag);
-			newVersionAvailable = compareVersionNumber(curVersionNumber, newVersionNumber);
+			newVersionAvailable = isVersionNewer(curVersionNumber, newVersionNumber);
 			
 			scanner.close();
 		} catch (IOException e) {
@@ -77,15 +77,31 @@ public class UpdateChecker {
 	}
 	
 	/**
-	 * Compares two version tags.
+	 * Check if the version tag 'update' is more recent than 'current'.
 	 * @param current	the current version
 	 * @param update	the target version to compare
-	 * @return			true if {@code update} is newer than {@code current}
+	 * @return			true if {@code update} is greater than {@code current}
 	 */
-	public static boolean compareVersionNumber(String current, String update) {
+	public static boolean isVersionNewer(String current, String update) {
 		ComparableVersion versionA = new ComparableVersion(current);
 		ComparableVersion versionB = new ComparableVersion(update);
 		return versionB.compareTo(versionA) > 0;
+	}
+	
+	/**
+	 * Compares two version tags and return whether 'target' is less than (positive),
+	 * equal (zero) or greater than 'current' version tag.
+	 * (see {@link ComparableVersion#compareTo(ComparableVersion)} for details)
+	 * @param current	the current version
+	 * @param target	the target version to compare
+	 * @return			negative number: target version is older<br>
+	 * 					zero: target version is equal<br>
+	 * 					positive number: target version is newer
+	 */
+	public static int compareVersionNumber(String current, String target) {
+		ComparableVersion versionA = new ComparableVersion(current);
+		ComparableVersion versionB = new ComparableVersion(target);
+		return versionB.compareTo(versionA);
 	}
 
 	public String getNewTag() {

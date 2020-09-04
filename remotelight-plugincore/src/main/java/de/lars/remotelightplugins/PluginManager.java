@@ -45,6 +45,7 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.Stated.State;
 import de.lars.remotelightcore.event.events.types.ShutdownEvent;
+import de.lars.remotelightcore.utils.UpdateChecker;
 import de.lars.remotelightplugins.exceptions.PluginException;
 import de.lars.remotelightplugins.exceptions.PluginLoadException;
 import de.lars.remotelightplugins.exceptions.PluginPropertiesException;
@@ -117,23 +118,8 @@ public class PluginManager {
 					// parse plugin properties file
 					plInfo = loadPluginProperty(pluginFile);
 					
-					// check if plugin scopes match with the application scopes
-					if(plInfo.getProperties().containsKey(DefaultProperties.SCOPE)) {
-						List<String> scopes = plInfo.getListProperty(DefaultProperties.SCOPE);
-						// only check for scopes if the list does not contain 'all' or is not empty
-						if(!scopes.isEmpty() || !scopes.stream().anyMatch("all"::equalsIgnoreCase)) {
-							for(String scope : scopes) {
-								boolean contains = applicationScopes.stream().anyMatch(scope::equalsIgnoreCase);
-								// throw exception if scope is not supported
-								if(!contains) {
-									String err = "The plugin does not support the application scope."
-											+ "\nSupported scopes: " + String.join(", ", scopes)
-											+ "\nApplication scopes: " + String.join(", ", applicationScopes);
-									throw new PluginLoadException(err);
-								}
-							}
-						}
-					}
+					// check plugin requirements (scope, version...)
+					checkPluginRequirements(plInfo);
 				} catch (IOException e1) {
 					Logger.error(e1, "Could not load plugin file: " + pluginFile.getPath());
 					error = true;
@@ -492,6 +478,49 @@ public class PluginManager {
 		}
 		
 		return sorted;
+	}
+	
+	/**
+	 * Check plugin properties requirements, like min and maxVersion, scope, (not dependencies)...
+	 * 
+	 * @throws PluginLoadException	if at least one requirement is not fulfilled
+	 */
+	private void checkPluginRequirements(PluginInfo plInfo) throws PluginLoadException {
+		// check if plugin scopes match with the application scopes
+		if(plInfo.getProperties().containsKey(DefaultProperties.SCOPE)) {
+			List<String> scopes = plInfo.getListProperty(DefaultProperties.SCOPE);
+			// only check for scopes if the list does not contain 'all' or is not empty
+			if(!scopes.isEmpty() || !scopes.stream().anyMatch("all"::equalsIgnoreCase)) {
+				for(String scope : scopes) {
+					boolean contains = applicationScopes.stream().anyMatch(scope::equalsIgnoreCase);
+					// throw exception if scope is not supported
+					if(!contains) {
+						String err = "The plugin does not support the application scope."
+								+ "\nSupported scopes: " + String.join(", ", scopes)
+								+ "\nApplication scopes: " + String.join(", ", applicationScopes);
+						throw new PluginLoadException(err);
+					}
+				}
+			}
+		}
+		// check minVersion property
+		if(plInfo.getProperties().containsKey(DefaultProperties.MIN_VERSION) && plInfo.getValue(DefaultProperties.MIN_VERSION) != null) {
+			String minVersion = plInfo.getValue(DefaultProperties.MIN_VERSION);
+			// compare version tags
+			if(UpdateChecker.compareVersionNumber(minVersion, RemoteLightCore.VERSION) < 0) {
+				throw new PluginLoadException(String.format("The plugin does require at least RemoteLight version '%s'. Current version: %s",
+						minVersion, RemoteLightCore.VERSION));
+			}
+		}
+		// check maxVersion property
+		if(plInfo.getProperties().containsKey(DefaultProperties.MAX_VERSION) && plInfo.getValue(DefaultProperties.MAX_VERSION) != null) {
+			String maxVersion = plInfo.getValue(DefaultProperties.MAX_VERSION);
+			// compare version tags
+			if(UpdateChecker.compareVersionNumber(maxVersion, RemoteLightCore.VERSION) > 0) {
+				throw new PluginLoadException(String.format("The plugin works only up to RemoteLight version '%s'. Current version: %s",
+						maxVersion, RemoteLightCore.VERSION));
+			}
+		}
 	}
 	
 	
