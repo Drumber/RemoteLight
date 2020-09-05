@@ -69,7 +69,7 @@ public class FileStoreTest {
 		System.out.println("Time elapsed: " + duration + " ms");
 		
 		// delete file
-		file.deleteOnExit();
+		file.delete();
 	}
 	
 	

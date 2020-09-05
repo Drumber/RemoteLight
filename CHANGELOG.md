@@ -1,4 +1,17 @@
 ## Changelog
+#### v0.2.4-rc2
+- minor UI fixes and improvements
+  - fixed window size sometimes not saving
+  - fixed output Add-popup-menu background
+  - added setting to customize the UI font and font size
+  - fixed notification overlaps scrollbar
+  - other minor fixes like text color
+- fixed data file not completely saved to disk (issue #10)
+- fixed MusicSync error when no sound input is selected (issue #11)
+- added virtual output so that e.g. plugins can forward output data
+- added Multi output ([learn more](https://github.com/Drumber/RemoteLight/wiki/MultiOutput))
+- fixed Chain output ([learn more](https://github.com/Drumber/RemoteLight/wiki/Chain))
+
 #### v0.2.4-rc1
 - added new rainbow modes to Rainbow animation
 - added plugin system for java plugins
