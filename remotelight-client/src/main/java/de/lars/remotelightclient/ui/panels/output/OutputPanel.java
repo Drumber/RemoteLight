@@ -142,7 +142,7 @@ public class OutputPanel extends MenuPanel {
 		popupMenu.add(itemArtnet);
 		
 		JMenuItem itemVirtual = new JMenuItem("Virtual");
-		itemVirtual.setIcon(Style.getFontIcon(MenuIcon.ERROR)); //$NON-NLS-1$
+		itemVirtual.setIcon(Style.getFontIcon(MenuIcon.VIRTUAL)); //$NON-NLS-1$
 		this.configureAddPopup(itemVirtual, "virtual");
 		popupMenu.add(itemVirtual);
 		
@@ -274,6 +274,8 @@ public class OutputPanel extends MenuPanel {
 				icon = MenuIcon.RASPBERRYPI;
 			} else if(d instanceof Artnet) {
 				icon = MenuIcon.ARTNET;
+			} else if(d instanceof VirtualOutput) {
+				icon = MenuIcon.VIRTUAL;
 			} else if(d instanceof Chain) {
 				icon = MenuIcon.CHAIN;
 			} else if(d instanceof MultiOutput) {

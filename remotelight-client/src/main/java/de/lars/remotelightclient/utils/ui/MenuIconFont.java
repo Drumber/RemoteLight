@@ -71,7 +71,8 @@ public class MenuIconFont implements IconFont {
 		ERROR('\uE914'),
 		HELP('\uE915'),
 		CONTROL('\uE916'),
-		TOOLS('\uE917');
+		TOOLS('\uE917'),
+		VIRTUAL('\uE918');
 
 		private final char character;
 		
