@@ -27,6 +27,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
@@ -80,6 +81,8 @@ public class Style {
 		ColorPickerStyle.setBackgrounds(Style.panelBackground);
 		ColorPickerStyle.colorText = Style.textColor;
 		ColorPickerStyle.colorButtonBackground = Style.buttonBackground;
+		// update default UI properties
+		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent));
 	}
 	
 	public static void setStyle() {

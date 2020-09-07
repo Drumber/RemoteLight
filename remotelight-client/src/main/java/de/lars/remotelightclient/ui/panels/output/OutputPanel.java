@@ -119,7 +119,6 @@ public class OutputPanel extends MenuPanel {
 		scrollPane.setViewportView(panelDevices);
 		
 		popupMenu = new JPopupMenu();
-		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Style.accent)); //$NON-NLS-1$
 		panelDevices.add(popupMenu);
 		
 		BigImageButton add =  new BigImageButton(Style.getFontIcon(MenuIcon.ADD, 23), i18n.getString("Basic.Add")); //$NON-NLS-1$ //$NON-NLS-2$
