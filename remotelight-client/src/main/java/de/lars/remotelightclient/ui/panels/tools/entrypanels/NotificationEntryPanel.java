@@ -82,6 +82,7 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 				JLabel lblEmpty = new JLabel("There are no notifications", SwingConstants.CENTER);
 				lblEmpty.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 				lblEmpty.setFont(Style.getFontBold(14));
+				lblEmpty.setForeground(Style.textColor);
 				lblEmpty.setAlignmentY(Component.CENTER_ALIGNMENT);
 				add(lblEmpty);
 			} else {

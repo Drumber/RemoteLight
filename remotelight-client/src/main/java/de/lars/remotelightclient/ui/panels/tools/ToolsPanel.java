@@ -174,6 +174,7 @@ public class ToolsPanel extends MenuPanel {
 		Dimension size = new Dimension(Integer.MAX_VALUE, 50);
 		panel.setMaximumSize(size);
 		panel.setMinimumSize(size);
+		panel.setPreferredSize(new Dimension(50, size.height));
 		return panel;
 	}
 	
