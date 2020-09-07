@@ -136,6 +136,7 @@ close
 ## Plugins
 > More plugins and info material about creating own plugins will come soon
 
+[View here for plugin creation guide](https://github.com/Drumber/RemoteLight/wiki/Create-Plugin)  
 [View here for example plugins](https://github.com/RemoteLight/PluginExamples)  
 Recommend plugin:  
  \> [Effect Playlist](https://github.com/RemoteLight/PluginExamples/tree/master/EffectPlaylist): create automatic effect sequences
