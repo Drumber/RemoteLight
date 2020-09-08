@@ -247,6 +247,14 @@ public class MusicSyncManager extends EffectManager {
 		return this.effects;
 	}
 	
+	public void addMusicEffect(MusicEffect effect) {
+		effects.add(effect);
+	}
+	
+	public void removeMusicEffect(MusicEffect effect) {
+		effects.remove(effect);
+	}
+	
 	public List<Setting> getCurrentMusicEffectOptions() {
 		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		List<Setting> tmp = new ArrayList<>();

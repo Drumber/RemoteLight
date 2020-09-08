@@ -22,11 +22,20 @@
 
 package de.lars.remotelightcore.musicsync.sound;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
 
 import org.tinylog.Logger;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtMix;
+import com.xtaudio.xt.XtSample;
+import com.xtaudio.xt.XtService;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
