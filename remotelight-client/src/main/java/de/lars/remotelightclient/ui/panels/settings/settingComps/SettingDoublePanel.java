@@ -22,6 +22,8 @@
 
 package de.lars.remotelightclient.ui.panels.settings.settingComps;
 
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -59,6 +61,7 @@ public class SettingDoublePanel extends SettingPanel {
 		}
 		
 		spinner = new JSpinner();
+		spinner.setPreferredSize(new Dimension(60, spinner.getPreferredSize().height));
 		spinner.setModel(new SpinnerNumberModel(setting.getValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
