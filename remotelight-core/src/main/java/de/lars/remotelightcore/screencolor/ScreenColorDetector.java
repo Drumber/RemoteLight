@@ -75,9 +75,9 @@ public class ScreenColorDetector {
 		monitorWidth	= monitor.getDefaultConfiguration().getBounds().width;
 		monitorHeight	= monitor.getDefaultConfiguration().getBounds().height;
 		
-		Logger.debug("Selected monitor: " + monitor.getIDstring() + " " + width + "x" + height);
+		Logger.debug("Selected monitor: " + monitor.getIDstring() + " " + monitorWidth + "x" + monitorHeight);
 	}
-		
+			
 	public Color[] getColors() {
 		try {
 			Robot robot = new Robot();
@@ -98,14 +98,13 @@ public class ScreenColorDetector {
 				}
 			} else {
 				// multiple LEDs have the same color (width = 1)
-				double ledsPerPixel = leds / width;
-				double ledPos = 0.0;
-				
-				for(int i = 0; i < width; i++) {
-					int led = (int) ledPos;
-					BufferedImage section = img.getSubimage(this.monitorOffsetX + i, y, 1, height);
-					colors[led] = getAvgColor(section);
-					ledPos += ledsPerPixel;
+				double pixelPerLed = 1.0 * width / leds;
+				double xPos = 0.0;
+						
+				for(int i = 0; i < leds; i++) {
+					BufferedImage section = img.getSubimage((int) xPos, 0, 1, height);
+					colors[i] = getAvgColor(section);
+					xPos += pixelPerLed;
 				}
 			}
 			
