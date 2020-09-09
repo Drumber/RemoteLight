@@ -36,6 +36,7 @@ import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -49,6 +50,8 @@ public class ScreenColorManager extends EffectManager {
 	private final Rectangle area;
 	private boolean inverted = false;
 	private int delay;
+	protected float brightnessThreshold;
+	protected float saturationMultiplier;
 	
 	public ScreenColorManager() {
 		active = false;
@@ -61,6 +64,11 @@ public class ScreenColorManager extends EffectManager {
 		SettingInt settingY = sm.addSetting(new SettingInt("screencolor.area.y", "Scan Area Y", SettingCategory.Intern, "Y-position of the scan area", 500, 0, Integer.MAX_VALUE, 5));
 		SettingInt settingW = sm.addSetting(new SettingInt("screencolor.area.width", "Scan Area Width", SettingCategory.Intern, "Width of the scan area", 500, 10, Integer.MAX_VALUE, 5));
 		SettingInt settingH = sm.addSetting(new SettingInt("screencolor.area.height", "Scan Area Height", SettingCategory.Intern, "Height of the scan area", 50, 5, Integer.MAX_VALUE, 5));
+		
+		SettingInt settingBrghtThreshold = sm.addSetting(new SettingInt("screencolor.filter.brightness.threshold", "Brightness Threshold", SettingCategory.Intern, "Show black if brightness of pixel is below threshold", 0, 0, 100, 5));
+		SettingDouble settingSaturationMltplr = sm.addSetting(new SettingDouble("screencolor.filter.saturation.multiplier", "Saturation Multiplier", SettingCategory.Intern, "Multiply the saturation of every color (default 1)", 1.0, 0.01, 2.0, 0.05));
+		setSaturationMultiplier(settingSaturationMltplr.getValue());
+		setBrightnessThreshold(settingBrghtThreshold.getValue());
 		
 		area = new Rectangle();
 		setScanArea(settingX.getValue(), settingY.getValue(), settingW.getValue(), settingH.getValue());
@@ -91,6 +99,9 @@ public class ScreenColorManager extends EffectManager {
 					
 					int pixels = RemoteLightCore.getLedNum();
 					detector = new ScreenColorDetector(pixels, currentMonitor, area);
+					
+					detector.brightnessThreshold = brightnessThreshold;
+					detector.saturationMultiplier = saturationMultiplier;
 					
 					while(active) {
 						Color[] c = detector.getColors();
@@ -188,6 +199,22 @@ public class ScreenColorManager extends EffectManager {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Set brightness threshold value
+	 * @param threshold		value between 0 and 100
+	 */
+	public void setBrightnessThreshold(int threshold) {
+		brightnessThreshold = threshold / 100.0f;
+		if(detector != null)
+			detector.brightnessThreshold = brightnessThreshold;
+	}
+	
+	public void setSaturationMultiplier(double multiplier) {
+		saturationMultiplier = (float) multiplier;
+		if(detector != null)
+			detector.saturationMultiplier = saturationMultiplier;
 	}
 
 }

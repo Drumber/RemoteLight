@@ -93,7 +93,7 @@ public class ScreenColorDetector {
 				
 				for(int i = 0; i < leds; i++) {
 					BufferedImage section = img.getSubimage(offsetX, 0, widthSection, height);
-					colors[i] = getAvgColor(section);
+					colors[i] = getColorForSection(section);
 					offsetX += widthSection;
 				}
 			} else {
@@ -103,7 +103,7 @@ public class ScreenColorDetector {
 						
 				for(int i = 0; i < leds; i++) {
 					BufferedImage section = img.getSubimage((int) xPos, 0, 1, height);
-					colors[i] = getAvgColor(section);
+					colors[i] = getColorForSection(section);
 					xPos += pixelPerLed;
 				}
 			}
@@ -114,6 +114,17 @@ public class ScreenColorDetector {
 			Logger.error(e);
 		}
 		return null;
+	}
+	
+	
+	private Color getColorForSection(BufferedImage imgSection) {
+		Color color = getAvgColor(imgSection);
+		final float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		// apply filters
+		color = increaseSaturation(hsb);
+		color = brightnessThreshold(hsb);
+		
+		return color;
 	}
 	
 	//adapted from https://javastart.pl/b/programowanie/ambilight-w-oparciu-o-jave-i-arduino/
@@ -140,6 +151,26 @@ public class ScreenColorDetector {
         g = g / loops;
         b = b / loops;
         return new Color(r, g, b);
+    }
+    
+    //------------------
+    // Color Filters
+    //------------------
+    
+    protected float saturationMultiplier = 1.0f;
+    protected float brightnessThreshold = 0.0f;
+    
+    private Color increaseSaturation(float[] hsb) {
+    	hsb[1] = hsb[1] * saturationMultiplier;
+    	if(hsb[1] > 1.0f) hsb[1] = 1.0f;
+    	return Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+    }
+    
+    private Color brightnessThreshold(float[] hsb) {
+    	// return black if brightness is below threshold
+    	if(hsb[2] < brightnessThreshold)
+    		return Color.BLACK;
+    	return Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
     }
 
 }

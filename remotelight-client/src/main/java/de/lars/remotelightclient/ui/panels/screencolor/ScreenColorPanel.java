@@ -39,8 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -67,6 +69,7 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingInt;
 
 public class ScreenColorPanel extends MenuPanel {
@@ -110,14 +113,13 @@ public class ScreenColorPanel extends MenuPanel {
 		panelMonitors.setLayout(wlayout);
 		panelMonitors.setBackground(Style.panelDarkBackground);
 		
-		JScrollPane scrollPane = new JScrollPane(panelMonitors);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		bgrMonitors.add(scrollPane, BorderLayout.CENTER);
+		JScrollPane scrollPaneMonitors = new JScrollPane(panelMonitors);
+		scrollPaneMonitors.setViewportBorder(null);
+		scrollPaneMonitors.setBorder(BorderFactory.createEmptyBorder());
+		scrollPaneMonitors.getVerticalScrollBar().setUnitIncrement(16);
+		bgrMonitors.add(scrollPaneMonitors, BorderLayout.CENTER);
 		
-		size = new Dimension(Integer.MAX_VALUE, 400);
+		size = new Dimension(Integer.MAX_VALUE, 1000);
 		JPanel bgrOptions = new JPanel();
 		bgrOptions.setPreferredSize(size);
 		bgrOptions.setBackground(Style.panelBackground);
@@ -127,8 +129,14 @@ public class ScreenColorPanel extends MenuPanel {
 		panelOptions = new JPanel();
 		panelOptions.setBorder(new EmptyBorder(5, 20, 0, 0));
 		panelOptions.setBackground(Style.panelBackground);
-		bgrOptions.add(panelOptions, BorderLayout.CENTER);
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
+		
+		JScrollPane scrollPane = new JScrollPane(panelOptions);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setViewportBorder(null);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.getVerticalScrollBar().setUnitIncrement(8);
+		bgrOptions.add(scrollPane, BorderLayout.CENTER);
 		
 		this.addOptions();
 		SwingUtilities.invokeLater(new Runnable() {
@@ -237,7 +245,7 @@ public class ScreenColorPanel extends MenuPanel {
 		
 		btnEnable = new JButton();
 		UiUtils.configureButtonWithBorder(btnEnable, Style.accent);
-		Dimension size = new Dimension(80, 25);
+		Dimension size = new Dimension(100, 25);
 		btnEnable.setPreferredSize(size);
 		btnEnable.setMinimumSize(size);
 		btnEnable.setMaximumSize(size);
@@ -254,6 +262,18 @@ public class ScreenColorPanel extends MenuPanel {
 				enableScreenColor(!scm.isActive());
 			}
 		});
+		
+		JLabel lblAdvanced = new JLabel("Advanced options");
+		lblAdvanced.setForeground(Style.textColor);
+		panel.add(Box.createVerticalStrut(20));
+		panel.add(lblAdvanced);
+		
+		SettingPanel spBrghtThreshold = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.filter.brightness.threshold")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spBrghtThreshold));
+		settingPanels.add(spBrghtThreshold);
+		SettingPanel spSaturationMulplr = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.filter.saturation.multiplier")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spSaturationMulplr));
+		settingPanels.add(spSaturationMulplr);
 	}
 	
 	private SettingPanel configureSettingPanel(SettingPanel spanel) {
@@ -270,6 +290,9 @@ public class ScreenColorPanel extends MenuPanel {
 			settingPanel.setValue();
 			setScreenColorSettings();
 			drawOverlayRect();
+			
+			scm.setBrightnessThreshold(((SettingInt) sm.getSettingFromId("screencolor.filter.brightness.threshold")).getValue());
+			scm.setSaturationMultiplier(((SettingDouble) sm.getSettingFromId("screencolor.filter.saturation.multiplier")).getValue());
 			
 			if(scm.getCurrentMonitor() != null) {
 				// set max settings values
