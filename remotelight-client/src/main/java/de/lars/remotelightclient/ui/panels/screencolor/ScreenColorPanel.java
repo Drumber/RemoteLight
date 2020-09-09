@@ -185,21 +185,23 @@ public class ScreenColorPanel extends MenuPanel {
 			panel.setBlur(false);
 			panel.setBorder(BorderFactory.createLineBorder(Style.accent));
 			selectedMonitorPanel = panel;
-			drawYPosLine();
+			drawOverlayRect();
 		} else {
 			panel.setBlur(true);
 			panel.setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 
-	private void drawYPosLine() {
+	private void drawOverlayRect() {
 		for(ImagePanel ip : monitorPanels) {
 			if(ip.getName().equals(scm.getCurrentMonitor().getIDstring())) {
-				int ypos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(); //$NON-NLS-1$
-				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(); //$NON-NLS-1$
+				Rectangle scanArea = scm.getScanArea();
+				int y = scanArea.y / MONITOR_SCALE;
+				int x = scanArea.x / MONITOR_SCALE;
+				int w = scanArea.width / MONITOR_SCALE;
+				int h = scanArea.height / MONITOR_SCALE;
 				
-				int y = ypos / MONITOR_SCALE;
-				ip.enableLine(0, y, ip.getWidth(), yHeight / MONITOR_SCALE);
+				ip.enableLine(x, y, w, h);
 				ip.repaint();
 			} else {
 				ip.disableLine();
@@ -215,12 +217,20 @@ public class ScreenColorPanel extends MenuPanel {
 		SettingPanel spDelay = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.delay")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spDelay));
 		settingPanels.add(spDelay);
-		SettingPanel spYPos = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.ypos")); //$NON-NLS-1$
-		panel.add(configureSettingPanel(spYPos));
-		settingPanels.add(spYPos);
-		SettingPanel spYHeight = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.yheight")); //$NON-NLS-1$
-		panel.add(configureSettingPanel(spYHeight));
-		settingPanels.add(spYHeight);
+		
+		SettingPanel spX = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.area.x")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spX));
+		settingPanels.add(spX);
+		SettingPanel spY = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.area.y")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spY));
+		settingPanels.add(spY);
+		SettingPanel spW = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.area.width")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spW));
+		settingPanels.add(spW);
+		SettingPanel spH = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.area.height")); //$NON-NLS-1$
+		panel.add(configureSettingPanel(spH));
+		settingPanels.add(spH);
+		
 		SettingPanel spInvert = SettingsUtil.getSettingPanel(sm.getSettingFromId("screencolor.invert")); //$NON-NLS-1$
 		panel.add(configureSettingPanel(spInvert));
 		settingPanels.add(spInvert);
@@ -259,15 +269,17 @@ public class ScreenColorPanel extends MenuPanel {
 		public void onSettingChanged(SettingPanel settingPanel) {
 			settingPanel.setValue();
 			setScreenColorSettings();
-			drawYPosLine();
+			drawOverlayRect();
 			
 			if(scm.getCurrentMonitor() != null) {
-				int height = scm.getCurrentMonitor().getDefaultConfiguration().getBounds().height;
-				int yPos = ((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(); //$NON-NLS-1$
-				int yHeight = ((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(); //$NON-NLS-1$
+				// set max settings values
+				Rectangle bounds = scm.getCurrentMonitor().getDefaultConfiguration().getBounds();
+				Rectangle area = scm.getScanArea();
 				
-				((SettingInt) sm.getSettingFromId("screencolor.ypos")).setMax(height - yHeight); //$NON-NLS-1$
-				((SettingInt) sm.getSettingFromId("screencolor.yheight")).setMax(height - yPos); //$NON-NLS-1$
+				((SettingInt) sm.getSettingFromId("screencolor.area.x")).setMax(bounds.width - area.width);
+				((SettingInt) sm.getSettingFromId("screencolor.area.width")).setMax(bounds.width - area.x);
+				((SettingInt) sm.getSettingFromId("screencolor.area.y")).setMax(bounds.height - area.height);
+				((SettingInt) sm.getSettingFromId("screencolor.area.height")).setMax(bounds.height - area.y);
 				
 				for(SettingPanel sp : settingPanels) {
 					sp.updateComponents();
@@ -280,12 +292,8 @@ public class ScreenColorPanel extends MenuPanel {
 		if(enable) {
 			if(selectedMonitorPanel != null) {
 				btnEnable.setText(i18n.getString("ScreenColorPanel.Disable")); //$NON-NLS-1$
-				
-				scm.start(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue(),	//YPos //$NON-NLS-1$
-						((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue(),	//YHeight //$NON-NLS-1$
-						((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue(),		//Delay //$NON-NLS-1$
-						((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue(),//Invert //$NON-NLS-1$
-						ScreenColorManager.getMonitorByID(selectedMonitorPanel.getName()));		//Monitor
+				// start screen color
+				scm.start();
 				
 			} else {
 				Main.getInstance().showNotification(NotificationType.ERROR, i18n.getString("ScreenColorPanel.NeedSelectMonitor"));
@@ -299,8 +307,11 @@ public class ScreenColorPanel extends MenuPanel {
 	private void setScreenColorSettings() {
 		scm.setInverted(((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue()); //$NON-NLS-1$
 		scm.setDelay(((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue()); //$NON-NLS-1$
-		scm.setYPos(((SettingInt) sm.getSettingFromId("screencolor.ypos")).getValue()); //$NON-NLS-1$
-		scm.setYHeight(((SettingInt) sm.getSettingFromId("screencolor.yheight")).getValue()); //$NON-NLS-1$
+		scm.setScanArea(
+				((SettingInt) sm.getSettingFromId("screencolor.area.x")).getValue(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.y")).getValue(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.width")).getValue(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.height")).getValue());
 	}
 	
 	@Override

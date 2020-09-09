@@ -25,12 +25,13 @@ package de.lars.remotelightcore.screencolor;
 import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -45,6 +46,7 @@ public class ScreenColorManager extends EffectManager {
 	private SettingsManager sm;
 	private GraphicsDevice currentMonitor;
 	private ScreenColorDetector detector;
+	private final Rectangle area;
 	private boolean inverted = false;
 	private int delay;
 	
@@ -53,12 +55,18 @@ public class ScreenColorManager extends EffectManager {
 		sm = RemoteLightCore.getInstance().getSettingsManager();
 		sm.addSetting(new SettingObject("screencolor.monitor", "", ""));
 		sm.addSetting(new SettingInt("screencolor.delay", "Delay", SettingCategory.Intern, "Delay (ms) between scanning the screen", 150, 25, 2000, 5));
-		sm.addSetting(new SettingInt("screencolor.ypos", "Scan Y-position", SettingCategory.Intern, "Y-position at which the pixels are scanned (0 is at the top)", 500, 0, 2160, 5));
-		sm.addSetting(new SettingInt("screencolor.yheight", "Area height", SettingCategory.Intern, "The height of the scan area", 20, 0, 200, 5));
 		sm.addSetting(new SettingBoolean("screencolor.invert", "Invert", SettingCategory.Intern, "", false));
 		
+		SettingInt settingX = sm.addSetting(new SettingInt("screencolor.area.x", "Scan Area X", SettingCategory.Intern, "X-position of the scan area", 0, 0, Integer.MAX_VALUE, 5));
+		SettingInt settingY = sm.addSetting(new SettingInt("screencolor.area.y", "Scan Area Y", SettingCategory.Intern, "Y-position of the scan area", 500, 0, Integer.MAX_VALUE, 5));
+		SettingInt settingW = sm.addSetting(new SettingInt("screencolor.area.width", "Scan Area Width", SettingCategory.Intern, "Width of the scan area", 500, 10, Integer.MAX_VALUE, 5));
+		SettingInt settingH = sm.addSetting(new SettingInt("screencolor.area.height", "Scan Area Height", SettingCategory.Intern, "Height of the scan area", 50, 5, Integer.MAX_VALUE, 5));
+		
+		area = new Rectangle();
+		setScanArea(settingX.getValue(), settingY.getValue(), settingW.getValue(), settingH.getValue());
+		
 		String lastMonitor = (String) sm.getSettingObject("screencolor.monitor").getValue();
-		if(!lastMonitor.equals("")) {
+		if(lastMonitor != null && !lastMonitor.equals("")) {
 			currentMonitor = getMonitorByID(lastMonitor);
 		}
 	}
@@ -68,23 +76,21 @@ public class ScreenColorManager extends EffectManager {
 		return "ScreenColorManager";
 	}
 	
-	public void start(int yPos, int yHeight, int delay, boolean invert, GraphicsDevice monitor) {
-		if(!active) {
+	public void start() {
+		if(!active && currentMonitor != null) {
+			
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
 					RemoteLightCore.getInstance().getEffectManagerHelper().stopAllExceptFor(EffectType.ScreenColor);
 					active = true;
-					inverted = invert;
-					ScreenColorManager.this.delay = delay;
-					currentMonitor = monitor;
 					//save monitor in settings
-					sm.getSettingObject("screencolor.monitor").setValue(monitor.getIDstring());
+					sm.getSettingObject("screencolor.monitor").setValue(currentMonitor.getIDstring());
 					Logger.info("Started ScreenColor thread.");
 					
 					int pixels = RemoteLightCore.getLedNum();
-					detector = new ScreenColorDetector(pixels, monitor, yPos, yHeight);
+					detector = new ScreenColorDetector(pixels, currentMonitor, area);
 					
 					while(active) {
 						Color[] c = detector.getColors();
@@ -102,7 +108,8 @@ public class ScreenColorManager extends EffectManager {
 							OutputManager.addToOutput(out);
 							
 						} else {
-							Logger.error("[ScreenColor] There are more color measuring points than LEDs!");
+							Logger.error("[ScreenColor] There are more color measuring points than LEDs! Disabling ScreenColor...");
+							stop();
 						}
 						
 						try {
@@ -135,20 +142,27 @@ public class ScreenColorManager extends EffectManager {
 		return currentMonitor;
 	}
 	
+	/**
+	 * Set the bounds of the scan area.
+	 * @param x			x position
+	 * @param y			y position
+	 * @param width		area width
+	 * @param height	area height
+	 */
+	public void setScanArea(int x, int y, int width, int height) {
+		area.setBounds(x, y, width, height);
+	}
+	
+	/**
+	 * Get the scan area.
+	 * @return			scan area as rectangle
+	 */
+	public Rectangle getScanArea() {
+		return area;
+	}
+	
 	public void setInverted(boolean invert) {
 		this.inverted = invert;
-	}
-	
-	public void setYPos(int ypos) {
-		if(detector != null) {
-			detector.setYPos(ypos);
-		}
-	}
-	
-	public void setYHeight(int yHeight) {
-		if(detector != null) {
-			detector.setYHeight(yHeight);
-		}
 	}
 	
 	public void setDelay(int delay) {

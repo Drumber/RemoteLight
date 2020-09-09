@@ -33,57 +33,83 @@ import org.tinylog.Logger;
 
 public class ScreenColorDetector {
 	
-	private int pixel;
-	private int offsetY, yHeight;
+	private int leds;
+	
 	private int x, y;
 	private int width, height;
 	
-	public ScreenColorDetector(int pixel, GraphicsDevice monitor, int offsetY, int yHeight) {
-		this.pixel = pixel;
+	// monitor offsets for multi monitor environments
+	private int monitorOffsetX;
+	private int monitorOffsetY;
+	// monitor width and height
+	private int monitorWidth;
+	private int monitorHeight;
+	
+	public ScreenColorDetector(int leds, GraphicsDevice monitor, Rectangle area) {
+		this.leds = leds;
 		this.setMonitor(monitor);
-		this.setYPos(offsetY);
-		this.setYHeight(yHeight);
+		this.setAreaBounds(area.x, area.y, area.width, area.height);
 	}
 	
-	
-	public void setYPos(int ypos) {
-		this.offsetY = ypos;
-		if(offsetY + yHeight > height) {
-			this.offsetY = height - yHeight;
-		}
-	}
-	
-	public void setYHeight(int yHeight) {
-		this.yHeight = yHeight;
-		if(yHeight + offsetY > height) {
-			offsetY = height - yHeight;
-		}
+	/**
+	 * Set the bounds of the scan area
+	 * @param x			x position
+	 * @param y			y position
+	 * @param width		area height
+	 * @param height	area width
+	 */
+	public void setAreaBounds(int x, int y, int width, int height) {
+		if(x >= 0 && x < monitorWidth)
+			this.x = x;
+		if(y >= 0 && y < monitorHeight)
+			this.y = y;
+		if(width <= monitorWidth - this.x)
+			this.width = width;
+		if(height <= monitorHeight - this.y)
+			this.height = height;
 	}
 	
 	public void setMonitor(GraphicsDevice monitor) {
-		x = monitor.getDefaultConfiguration().getBounds().x;
-		y = monitor.getDefaultConfiguration().getBounds().y;
-		width = monitor.getDefaultConfiguration().getBounds().width;
-		height = monitor.getDefaultConfiguration().getBounds().height;
+		monitorOffsetX	= monitor.getDefaultConfiguration().getBounds().x;
+		monitorOffsetY	= monitor.getDefaultConfiguration().getBounds().y;
+		monitorWidth	= monitor.getDefaultConfiguration().getBounds().width;
+		monitorHeight	= monitor.getDefaultConfiguration().getBounds().height;
 		
-		Logger.debug("Selected monitor: " + monitor.getIDstring() + " " + width + " | " + height);
+		Logger.debug("Selected monitor: " + monitor.getIDstring() + " " + width + "x" + height);
 	}
-	
+		
 	public Color[] getColors() {
 		try {
 			Robot robot = new Robot();
-			BufferedImage img = robot.createScreenCapture(new Rectangle(x, y, width, height));
-			Color[] c = new Color[pixel];
+			BufferedImage img = robot.createScreenCapture(new Rectangle(monitorOffsetX+x, monitorOffsetY+y, width, height));
+			Color[] colors = new Color[leds];
 			
-			int space = width / pixel;
-			int x = 0;
+			// width per section
+			int widthSection = width / leds;
 			
-			for(int i = 0; i < pixel; i++) {
-				BufferedImage section = img.getSubimage(x, offsetY, space, yHeight);
-				c[i] = getAvgColor(section);
-				x += space;
+			if(widthSection > 0) {
+				// every LED has at least 1 monitor pixel
+				int offsetX = 0;
+				
+				for(int i = 0; i < leds; i++) {
+					BufferedImage section = img.getSubimage(offsetX, 0, widthSection, height);
+					colors[i] = getAvgColor(section);
+					offsetX += widthSection;
+				}
+			} else {
+				// multiple LEDs have the same color (width = 1)
+				double ledsPerPixel = leds / width;
+				double ledPos = 0.0;
+				
+				for(int i = 0; i < width; i++) {
+					int led = (int) ledPos;
+					BufferedImage section = img.getSubimage(this.monitorOffsetX + i, y, 1, height);
+					colors[led] = getAvgColor(section);
+					ledPos += ledsPerPixel;
+				}
 			}
-			return c;
+			
+			return colors;
 			
 		} catch(AWTException e) {
 			Logger.error(e);
@@ -95,10 +121,14 @@ public class ScreenColorDetector {
     private Color getAvgColor(BufferedImage imgSection) {
         int width = imgSection.getWidth();
         int height = imgSection.getHeight();
+        
+        int xIncrement = Math.max(1, (width / 4));
+        int yIncrement = Math.max(1, (height / 4));
+        
         int r = 0, g = 0, b = 0;
         int loops = 0;
-        for (int x = 0; x < width; x += (width / 4)) {
-            for (int y = 0; y < height; y += (height / 4)) {
+        for (int x = 0; x < width; x += xIncrement) {
+            for (int y = 0; y < height; y += yIncrement) {
                 int rgb = imgSection.getRGB(x, y);
                 Color color = new Color(rgb);
                 r += color.getRed();

@@ -22,18 +22,16 @@
 
 package de.lars.remotelightclient.ui.components;
 
-import java.awt.Image;
-
-import javax.swing.JPanel;
-
-import de.lars.remotelightclient.ui.Style;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import de.lars.remotelightclient.ui.Style;
 
 public class ImagePanel extends JPanel {
 	
@@ -43,9 +41,9 @@ public class ImagePanel extends JPanel {
 	private static final long serialVersionUID = -5453343680456337041L;
 	private Image img;
 	private JLabel lbl;
-	private boolean blur;
+	private boolean gray;
 	private boolean line;
-	private int x1, x2, y1, y2; //cordinates for the line
+	private int x, w, y, h; // rectangle bounds
 	
 	public ImagePanel(Image img, Dimension size) {
 		this(img, "", size);
@@ -75,12 +73,16 @@ public class ImagePanel extends JPanel {
 		this.img = img;
 	}
 	
+	/**
+	 * Enable or disable semi transparent overlay
+	 * @param active
+	 */
 	public void setBlur(boolean active) {
-		blur = active;
+		gray = active;
 	}
 	
 	public boolean isBlurred() {
-		return blur;
+		return gray;
 	}
 	
 	@Override
@@ -88,13 +90,13 @@ public class ImagePanel extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(this.resize(img, getWidth(), getHeight()), 0, 0, null);
 		
-		if(blur) {
+		if(gray) {
 			g.setColor(new Color(0, 0, 0, 150));
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 		if(line) {
 			g.setColor(new Color(255, 0, 0, 180));
-			g.fillRect(x1, y1, x2, y2);
+			g.fillRect(x, y, w, h);
 			//System.out.println(x1 + "/" + y1 + " ; " + x2 + "/" + y2);
 		}
 	}
@@ -103,12 +105,12 @@ public class ImagePanel extends JPanel {
 		return im.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 	}
 	
-	public void enableLine(int x1, int y1, int x2, int y2) {
+	public void enableLine(int x, int y, int width, int height) {
 		line = true;
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
+		this.x = x;
+		this.y = y;
+		this.w = width;
+		this.h = height;
 	}
 	
 	public void disableLine() {
