@@ -22,28 +22,38 @@
 
 package de.lars.remotelightcore.musicsync.sound.nativesound;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.tinylog.Logger;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtPrint;
+import com.xtaudio.xt.XtStream;
+import com.xtaudio.xt.XtStreamCallback;
 
 import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 
-public class NativeSoundInputStream implements XtStreamCallback {
+public class NativeSoundInputStream extends Thread implements XtStreamCallback {
 	
 	private AudioFormat format;
 	private NativeSoundFormat formatInfo;
 	
 	private PipedInputStream in;
 	private PipedOutputStream out;
+	
+	private DataBuffer dataBuffer;
 
 	public NativeSoundInputStream(NativeSoundFormat soundInfo) {
 		format = convertToAudioFormat(soundInfo);
 		this.formatInfo = soundInfo;
+		
+		dataBuffer = new DataBuffer();
 		
 		// send data to OutputStream which forwards it to the InputStream
 		in = new PipedInputStream();
@@ -52,6 +62,7 @@ public class NativeSoundInputStream implements XtStreamCallback {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.start();
 	}
 	
 	public PipedInputStream getInputStream() {
@@ -102,10 +113,8 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	            throw new IllegalArgumentException();
 		}
 		
-		try {
-			out.write(buffer.array(), 0, bufferSize);
-		} catch(IOException e) {
-			close();
+		synchronized (dataBuffer) {
+			dataBuffer.putData(buffer.array(), bufferSize);
 		}
 	}
 	
@@ -116,11 +125,31 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	}
 	
 	
+	@Override
+	public void run() {
+		while(out != null) {
+			synchronized (dataBuffer) {
+				if(dataBuffer.available) {
+					try {
+						dataBuffer.available = false;
+						out.write(dataBuffer.buffer, 0, dataBuffer.bufferSize);
+					} catch(IOException e) {
+						close();
+					}
+				}
+			}
+		}
+	}
+	
+	
 	public void close() {
 		try {
-			out.close();
 			in.close();
+			out.close();
 		} catch (IOException e) {
+		} finally {
+			in = null;
+			out = null;
 		}
 	}
 	
@@ -134,6 +163,21 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	
 	public static AudioFormat convertToAudioFormat(NativeSoundFormat finfo) {
 		return new AudioFormat(finfo.getSampleRate(), finfo.getSampleSizeInBits(), finfo.getChannels(), finfo.isSigned(), finfo.isBigEndian());
+	}
+	
+	
+	private class DataBuffer {
+		
+		private boolean available;
+		private byte[] buffer;
+		private int bufferSize;
+		
+		void putData(byte[] buffer, int bufferSize) {
+			this.buffer = buffer;
+			this.bufferSize = bufferSize;
+			available = true;
+		}
+		
 	}
 	
 }
