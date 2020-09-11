@@ -86,7 +86,7 @@ public class Rainbow extends MusicEffect {
 	public void onLoop() {
 		this.initOptions();
 		
-		double mul = 0.1 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
+		double mul = 0.2 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
 		
 		int x = 0;
