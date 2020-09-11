@@ -378,6 +378,7 @@ public class MusicSyncManager extends EffectManager {
 		effects.add(new Bars());
 		effects.add(new RainbowNoise());
 		effects.add(new Lines());
+		effects.add(new Explosions());
 	}
 
 }
