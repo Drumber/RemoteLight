@@ -25,7 +25,9 @@ package de.lars.remotelightcore.musicsync;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
 import de.lars.remotelightcore.settings.Setting;
 
@@ -50,7 +52,7 @@ public class MusicEffect {
 	 */
 	public MusicEffect(String name) {
 		this.name = name;
-		this.displayname = name; //TODO Language system
+		this.displayname = name;
 		this.options = new ArrayList<String>();
 	}
 	
@@ -107,12 +109,46 @@ public class MusicEffect {
 	}
 	
 	/**
-	 * Get settings used by this music effect
+	 * Get all settings used by this music effect
 	 * 
-	 * @return	A list with all setting IDs the effect uses
+	 * @return	a list with all setting IDs the effect uses
 	 */
 	public List<String> getOptions() {
-		return this.options;
+		return options;
+	}
+	
+	/**
+	 * Hidden settings will not be displayed.
+	 * The setting must be in the options list.
+	 * 
+	 * @param id		the id of the setting
+	 * @param hidden	whether the setting should be hidden
+	 */
+	public void hideSetting(String id, boolean hidden) {
+		Setting setting = getSetting(id);
+		if(setting != null)
+			hideSetting(setting, hidden);
+	}
+	
+	/**
+	 * Hidden settings will not be displayed.
+	 * The setting must be in the options list.
+	 * 
+	 * @param setting	the setting to hide
+	 * @param hidden	whether the setting should be hidden
+	 */
+	public void hideSetting(Setting setting, boolean hidden) {
+		if(hidden)
+			setting.addFlag(Setting.HIDDEN);
+		else
+			setting.removeFlag(Setting.HIDDEN);
+	}
+	
+	/**
+	 * Trigger an {@link EffectOptionsUpdateEvent}
+	 */
+	public void updateEffectOptions() {
+		RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.MusicSync));
 	}
 	
 	/**

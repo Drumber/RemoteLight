@@ -28,6 +28,7 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -42,7 +43,10 @@ import de.lars.remotelightclient.ui.components.BigTextButton;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
@@ -90,6 +94,7 @@ public class MusicSyncPanel extends MenuPanel {
 		add(bgrOptions);
 		
 		addMusicEffectPanels();
+		Main.getInstance().getCore().getEventHandler().register(onEffectOptionsUpdate);
 	}
 	
 	public void addMusicEffectPanels() {
@@ -131,12 +136,26 @@ public class MusicSyncPanel extends MenuPanel {
 	
 	private void showMusicEffectOptions() {
 		if(msm.getCurrentMusicEffectOptions() != null && msm.getCurrentMusicEffectOptions().size() > 0) {
-			List<Setting> options = msm.getCurrentMusicEffectOptions();
+			// get all effect options and show only non-hidden
+			List<Setting> options = msm.getCurrentMusicEffectOptions()
+					.stream()
+					.filter(s -> !s.hasFlag(Setting.HIDDEN))
+					.collect(Collectors.toList());
 			muiscEffectOptions.addMusicEffectOptions(options);
 		} else {
 			muiscEffectOptions.removeMusicEffectOptions();
 		}
 	}
+	
+	/** Triggered by MusicEffects (e.g. when a settings was hidden) */
+	private Listener<EffectOptionsUpdateEvent> onEffectOptionsUpdate = new Listener<EffectOptionsUpdateEvent>() {
+		@Override
+		public void onEvent(EffectOptionsUpdateEvent event) {
+			if(event.getType() == EffectType.MusicSync) {
+				showMusicEffectOptions();
+			}
+		}
+	};
 	
 	@Override
 	public String getName() {

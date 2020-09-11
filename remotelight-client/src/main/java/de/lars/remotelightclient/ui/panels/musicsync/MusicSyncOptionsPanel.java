@@ -206,6 +206,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			@Override
 			public void run() {
 				initInputPanel();
+				updateUI();
 			}
 		});
 	}

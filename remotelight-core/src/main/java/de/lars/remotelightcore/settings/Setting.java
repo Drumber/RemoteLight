@@ -23,6 +23,8 @@
 package de.lars.remotelightcore.settings;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -30,17 +32,22 @@ import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 public class Setting implements Serializable {
 	private static final long serialVersionUID = -7324328394259004155L;
 	
+	// default flags
+	public transient static final String HIDDEN = "hidden";
+	
 	private String name;
 	private String id;
 	private String description;
 	private SettingCategory category;
 	private transient SettingValueListener listener;
+	private transient Set<String> flags;
 	
 	public Setting(String id, String name, String description, SettingCategory category) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.category = category;
+		initFlagsSet();
 		if(name == null) this.name = "";
 		if(description == null) this.description = "";
 	}
@@ -79,6 +86,46 @@ public class Setting implements Serializable {
 
 	public void setCategory(SettingCategory category) {
 		this.category = category;
+	}
+	
+	/**
+	 * Add a setting flag
+	 * @param flag	the flag to add
+	 * @return		true if the flag was not already added
+	 */
+	public boolean addFlag(String flag) {
+		initFlagsSet();
+		return flags.add(flag);
+	}
+	
+	/**
+	 * Remove a setting flag
+	 * @param flag	the flag to remove
+	 * @return		true if the flag was present in the set
+	 */
+	public boolean removeFlag(String flag) {
+		initFlagsSet();
+		return flags.remove(flag);
+	}
+	
+	/**
+	 * Check if this setting instance contains the flag
+	 * @param flag	the flag to check for
+	 * @return		true if this settings contains the flag
+	 */
+	public boolean hasFlag(String flag) {
+		initFlagsSet();
+		return flags.contains(flag);
+	}
+	
+	public Set<String> getFlags() {
+		initFlagsSet();
+		return flags;
+	}
+	
+	private void initFlagsSet() {
+		if(flags == null)
+			flags = new HashSet<String>();
 	}
 	
 	public void setValueListener(SettingValueListener listener) {
