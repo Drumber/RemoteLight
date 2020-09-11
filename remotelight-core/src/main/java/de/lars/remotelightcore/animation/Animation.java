@@ -22,19 +22,12 @@
 
 package de.lars.remotelightcore.animation;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.lars.remotelightcore.Effect;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.settings.Setting;
-
-public class Animation {
+public class Animation extends Effect {
 	
-	private String name;
-	private String displayname;
 	private int delay;
 	private boolean adjustable;
-	private List<String> options;
 	
 	/**
 	 * Animation with adjustable speed
@@ -42,10 +35,8 @@ public class Animation {
 	 * @param name	the name of the animation (should be unique)
 	 */
 	public Animation(String name) {
-		this.name = name;
-		this.displayname = name; //TODO Language system
+		super(name);
 		adjustable = true;
-		options = new ArrayList<String>();
 	}
 	
 	/**
@@ -55,27 +46,9 @@ public class Animation {
 	 * @param delay	the pre-defined speed/delay in milliseconds
 	 */
 	public Animation(String name, int delay) {
-		this.name = name;
-		this.displayname = name; //TODO Language system
+		super(name);
 		this.delay = delay;
 		adjustable = false;
-		options = new ArrayList<String>();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDisplayname() {
-		return displayname;
-	}
-
-	public void setDisplayname(String displayname) {
-		this.displayname = displayname;
 	}
 	
 	public boolean isAdjustable() {
@@ -85,50 +58,5 @@ public class Animation {
 	public int getDelay() {
 		return this.delay;
 	}
-	
-	/**
-	 * Register a new animation setting.
-	 * 
-	 * @param <T>		setting type
-	 * @param setting	the setting to register
-	 * @return			the registered setting
-	 */
-	public <T extends Setting> T addSetting(T setting) {
-		options.add(setting.getId());
-		return RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
-	}
-	
-	/**
-	 * Get a setting from setting manager
-	 * 
-	 * @param id	the id of the setting
-	 * @return		the setting or null if no setting with
-	 * 				the given id could be found
-	 */
-	public Setting getSetting(String id) {
-		return RemoteLightCore.getInstance().getSettingsManager().getSettingFromId(id);
-	}
-	
-	/**
-	 * Get settings used by this animation
-	 * 
-	 * @return	A list with all setting IDs the animation uses
-	 */
-	public List<String> getOptions() {
-		return options;
-	}
-	
-	/**
-	 * Get the amount of LEDs/pixels
-	 * 
-	 * @return	the amount of LEDs
-	 */
-	public int getLeds() {
-		return RemoteLightCore.getLedNum();
-	}
-	
-	public void onEnable() {}
-	public void onDisable() {}
-	public void onLoop() {}
 
 }
