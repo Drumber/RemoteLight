@@ -43,11 +43,12 @@ public class Flame extends MusicEffect {
 	
 	private Color[] strip;
 	private int hue;
+	private boolean rainbow;
 
 	public Flame() {
 		super("Flame");
-		this.addSetting(new SettingColor("musicsync.flame.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
 		this.addSetting(new SettingBoolean("musicsync.flame.rainbow", "Rainbow", SettingCategory.MusicEffect, null, false));
+		this.addSetting(new SettingColor("musicsync.flame.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
 	}
 	
 	@Override
@@ -59,8 +60,13 @@ public class Flame extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
+		if(rainbow != getSetting(SettingBoolean.class, "musicsync.flame.rainbow").getValue()) {
+			rainbow = getSetting(SettingBoolean.class, "musicsync.flame.rainbow").getValue();
+			// hide color option on rainbow mode
+			this.hideSetting("musicsync.flame.color", rainbow);
+			this.updateEffectOptions();
+		}
 		Color color = ((SettingColor) getSetting("musicsync.flame.color")).getValue();
-		boolean rainbow = ((SettingBoolean) getSetting("musicsync.flame.rainbow")).getValue();
 		int ledNum = RemoteLightCore.getLedNum();
 		
 		if(rainbow) {

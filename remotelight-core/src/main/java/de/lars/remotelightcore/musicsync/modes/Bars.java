@@ -39,6 +39,7 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Bars extends MusicEffect {
 	
+	private String mode;
 	private Color[] strip;
 	private Color color;
 	private int hue;
@@ -49,10 +50,8 @@ public class Bars extends MusicEffect {
 	public Bars() {
 		super("Bars");
 		this.addSetting(new SettingInt("musicsync.bars.barwidth", "Bar width", SettingCategory.MusicEffect, null, 5, 1, 20, 1));
-		
 		String[] modes = new String[] {"Rainbow", "Frequency", "Random", "Static"};
 		this.addSetting(new SettingSelection("musicsync.bars.mode", "Color mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
-		
 		this.addSetting(new SettingColor("musicsync.bars.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
 	}
 	
@@ -94,10 +93,17 @@ public class Bars extends MusicEffect {
 	
 	
 	private void setColor() {
-		String mode = ((SettingSelection) getSetting("musicsync.bars.mode")).getSelected();
+		String prevMode = mode;
+		mode = getSetting(SettingSelection.class, "musicsync.bars.mode").getSelected();
+		if(!mode.equals(prevMode)) {
+			// hide color option when mode is not static
+			this.hideSetting("musicsync.bars.color", !mode.equals("Static"));
+			this.updateEffectOptions();
+		}
+		
 		switch (mode.toLowerCase()) {
 			case "static":
-				color = ((SettingColor) getSetting("musicsync.bars.color")).getValue();
+				color = getSetting(SettingColor.class, "musicsync.bars.color").getValue();
 				break;
 			case "frequency":
 				color = ColorUtil.soundToColor((int) this.getPitch());

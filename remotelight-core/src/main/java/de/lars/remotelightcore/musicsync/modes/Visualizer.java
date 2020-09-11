@@ -37,11 +37,13 @@ public class Visualizer extends MusicEffect {
 	
 	private Color[] strip;
 	private boolean rainbow = false;
+	private SettingBoolean sRainbow;
+	private SettingColor sColor;
 
 	public Visualizer() {
 		super("Visualizer");
-		this.addSetting(new SettingColor("musicsync.visualizer.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
-		this.addSetting(new SettingBoolean("musicsync.visualizer.rainbow", "Rainbow", SettingCategory.MusicEffect, "", false));
+		sRainbow = this.addSetting(new SettingBoolean("musicsync.visualizer.rainbow", "Rainbow", SettingCategory.MusicEffect, "", false));
+		sColor = this.addSetting(new SettingColor("musicsync.visualizer.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
 	}
 	
 	@Override
@@ -52,7 +54,11 @@ public class Visualizer extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		rainbow = ((SettingBoolean) getSetting("musicsync.visualizer.rainbow")).getValue();
+		if(rainbow != sRainbow.getValue()) {
+			rainbow = sRainbow.getValue();
+			this.hideSetting(sColor, rainbow);
+			this.updateEffectOptions();
+		}
 		
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
 		int[] fftData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
@@ -73,7 +79,7 @@ public class Visualizer extends MusicEffect {
 			int mltiplr = RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
 			return RainbowWheel.getRainbow()[led * mltiplr];
 		} else {
-			return ((SettingColor) getSetting("musicsync.visualizer.color")).getValue();
+			return sColor.getValue();
 		}
 	}
 

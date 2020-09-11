@@ -229,7 +229,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	};
 	
 	
-	public void addMusicEffectOptions(List<Setting> settings) {
+	public synchronized void addMusicEffectOptions(List<Setting> settings) {
 		bgrEffectOptionsScroll.setVisible(true);
 		bgrEffectOptions.removeAll();
 		
@@ -248,6 +248,8 @@ public class MusicSyncOptionsPanel extends JPanel {
 			bgrEffectOptions.add(spanel);
 			settingPanels.add(spanel);
 		}
+		bgrEffectOptions.revalidate();
+		bgrEffectOptions.repaint();
 		updateUI();
 	}
 	

@@ -37,9 +37,10 @@ public class LevelBar extends MusicEffect {
 	
 	private Color[] strip;
 	private Color background = Color.BLACK;
-	private Color color1;
-	private Color color2;
-	private Color color3;
+	private SettingColor sColor1;
+	private SettingColor sColor2;
+	private SettingColor sColor3;
+	private SettingBoolean sAutoChange;
 	private boolean autoChange;
 	private boolean smooth;
 	private ArrayList<Color[]> pattern = new ArrayList<>();
@@ -50,28 +51,26 @@ public class LevelBar extends MusicEffect {
 
 	public LevelBar() {
 		super("LevelBar");
-		this.addSetting(new SettingColor("musicsync.levelbar.color1", "Color 1", SettingCategory.MusicEffect, "", Color.RED));
-		this.addSetting(new SettingColor("musicsync.levelbar.color2", "Color 2", SettingCategory.MusicEffect, "", Color.RED));
-		this.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
-		this.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automatically change color", false));
 		this.addSetting(new SettingBoolean("musicsync.levelbar.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
+		this.addSetting(new SettingColor("musicsync.levelbar.background", "Background", SettingCategory.MusicEffect, "Visualizer background color", Color.BLACK));
+		sAutoChange = this.addSetting(new SettingBoolean("musicsync.levelbar.autochange", "AutoChange", SettingCategory.MusicEffect, "Automatically change color", false));
+		sColor1 = this.addSetting(new SettingColor("musicsync.levelbar.color1", "Color 1", SettingCategory.MusicEffect, "", Color.RED));
+		sColor2 = this.addSetting(new SettingColor("musicsync.levelbar.color2", "Color 2", SettingCategory.MusicEffect, "", Color.RED));
+		sColor3 = this.addSetting(new SettingColor("musicsync.levelbar.color3", "Color 3", SettingCategory.MusicEffect, "", Color.RED));
 	}
 	
 	@Override
 	public void onEnable() {
 		this.initPattern();
-		this.initOptions();
-		
 		pix = RemoteLightCore.getLedNum();
 		half = pix / 2;
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
-		
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
-		this.initOptions();
+		this.handleOptions();
 		
 		double mul = 0.1 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
@@ -103,10 +102,9 @@ public class LevelBar extends MusicEffect {
 				count = 0;
 		}
 		
-		
 		//half 1
 		for(int i = 0; i < half; i++) {
-			Color c = color1;
+			Color c = sColor1.getValue();
 			
 			if(autoChange) //auto color change
 				c = pattern.get(count)[0];
@@ -115,13 +113,13 @@ public class LevelBar extends MusicEffect {
 				c = background;
 			} else {
 				if(i < half / 3) {
-					c = color3;
+					c = sColor3.getValue();
 					
 					if(autoChange) //auto color change
 						c = pattern.get(count)[2];
 				}
 				else if(i < (half / 3) * 2) {
-					c = color2;
+					c = sColor2.getValue();
 					
 					if(autoChange) //auto color change
 						c = pattern.get(count)[1];
@@ -134,19 +132,19 @@ public class LevelBar extends MusicEffect {
 		for(int i = 0; i < half; i++) {
 			Color c = background;
 			if(i < leds) {
-				c = color1;
+				c = sColor1.getValue();
 				
 				if(autoChange) //auto color change
 					c = pattern.get(count)[0];
 				
 					if(i >= (half / 3) * 2) {
-						c = color3;
+						c = sColor3.getValue();
 						
 						if(autoChange) //auto color change
 							c = pattern.get(count)[2];
 					}
 					else if(i >= half / 3) {
-						c = color2;
+						c = sColor2.getValue();
 						
 						if(autoChange) //auto color change
 							c = pattern.get(count)[1];
@@ -160,6 +158,7 @@ public class LevelBar extends MusicEffect {
 	}
 	
 	private void initPattern() {
+		// TODO add option for custom patterns
 		pattern.add(new Color[] {Color.RED, new Color(255, 114, 0), new Color(255, 178, 0)});
 		pattern.add(new Color[] {new Color(7, 0, 255), new Color(0, 146, 255), new Color(0, 255, 185)});
 		pattern.add(new Color[] {new Color(100, 0, 255), new Color(212, 0, 255), new Color(255, 0, 154)});
@@ -173,12 +172,18 @@ public class LevelBar extends MusicEffect {
 		
 	}
 	
-	private void initOptions() {
-		color1 = ((SettingColor) getSetting("musicsync.levelbar.color1")).getValue();
-		color2 = ((SettingColor) getSetting("musicsync.levelbar.color2")).getValue();
-		color3 = ((SettingColor) getSetting("musicsync.levelbar.color3")).getValue();
-		autoChange = ((SettingBoolean) getSetting("musicsync.levelbar.autochange")).getValue();
-		smooth = ((SettingBoolean) getSetting("musicsync.levelbar.smooth")).getValue();
+	private void handleOptions() {
+		if(autoChange != sAutoChange.getValue()) {
+			autoChange = sAutoChange.getValue();
+			// hide color options on auto change
+			this.hideSetting(sColor1, autoChange);
+			this.hideSetting(sColor2, autoChange);
+			this.hideSetting(sColor3, autoChange);
+			// update effect options panel
+			this.updateEffectOptions();
+		}
+		smooth = getSetting(SettingBoolean.class, "musicsync.levelbar.smooth").getValue();
+		background = getSetting(SettingColor.class, "musicsync.levelbar.background").getValue();
 	}
 
 }

@@ -42,6 +42,7 @@ import de.lars.remotelightcore.utils.maths.TimeUtil;
 public class Lines extends MusicEffect {
 	
 	private String[] colorModes = {"Static", "Rainbow #1", "Rainbow #2", "Spectrum"};
+	private String mode;
 	private int rainbowAllHue = 0;
 	
 	private Color[] strip;
@@ -73,8 +74,7 @@ public class Lines extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		rotate = getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
-		linesNum = getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
+		handleSettings();
 		if(linesNum > strip.length / 2)
 			linesNum = strip.length / 2;
 		maxLineLength = strip.length / linesNum;
@@ -128,7 +128,6 @@ public class Lines extends MusicEffect {
 	
 	
 	private Color getColor(int index, int ledVol) {
-		String mode = getSetting(SettingSelection.class, "musicsync.lines.colormode").getSelected();
 		if(mode.equalsIgnoreCase("Rainbow #1")) {
 			return RainbowWheel.getRainbow()[rainbowAllHue];
 		} else if(mode.equalsIgnoreCase("Rainbow #2")) {
@@ -144,6 +143,18 @@ public class Lines extends MusicEffect {
 		}
 		// static color
 		return getSetting(SettingColor.class, "musicsync.lines.color").getValue();
+	}
+	
+	private void handleSettings() {
+		String prevMode = mode;
+		mode = getSetting(SettingSelection.class, "musicsync.lines.colormode").getSelected();
+		if(!mode.equals(prevMode)) {
+			// hide color option when static mode is not selected
+			this.hideSetting("musicsync.lines.color", !mode.equals("Static"));
+			this.updateEffectOptions();
+		}
+		rotate = getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
+		linesNum = getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
 	}
 
 }
