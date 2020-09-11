@@ -95,5 +95,11 @@ public class Meteor extends Animation {
 		
 		return new Color(r, g, b);
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.meteor.color", getSetting(SettingBoolean.class, "animation.meteor.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

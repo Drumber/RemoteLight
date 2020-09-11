@@ -42,10 +42,10 @@ public class Scanner extends Animation {
 	private Color color, color2;
 	private Color[] strip;
 	private String lastMode;
+	private boolean randomColor;
 
 	public Scanner() {
 		super("Scanner");
-//		Main.getInstance().getSettingsManager().removeSetting("animation.scanner.mode");
 		this.addSetting(new SettingBoolean("animation.scanner.randomcolor", "Random color", SettingCategory.Intern, null, true));
 		this.addSetting(new SettingColor("animation.scanner.color", "Color", SettingCategory.Intern,	null, Color.RED));
 		this.addSetting(new SettingSelection("animation.scanner.mode", "Mode", SettingCategory.Intern, "",
@@ -68,11 +68,18 @@ public class Scanner extends Animation {
 	public void onLoop() {
 		String mode = ((SettingSelection) this.getSetting("animation.scanner.mode")).getSelected();
 		if(!mode.equals(lastMode)) {
-			PixelColorUtils.setAllPixelsBlack();
 			strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
 			lastMode = mode;
 			pos = 0;
 		}
+		boolean prevRandomColor = randomColor;
+		randomColor = getSetting(SettingBoolean.class, "animation.scanner.randomcolor").getValue();
+		if(randomColor != prevRandomColor) {
+			// update options panel
+			this.hideSetting("animation.scanner.color", getSetting(SettingBoolean.class, "animation.scanner.randomcolor").getValue());
+			this.updateEffectOptions();
+		}
+		
 		if(mode.equals("Single")) {
 			single();
 		} else if(mode.equals("Dual")) {
@@ -95,7 +102,7 @@ public class Scanner extends Animation {
 				color = getRandomColor();
 			}
 		}
-		if(!((SettingBoolean) getSetting("animation.scanner.randomcolor")).getValue()) {
+		if(!randomColor) {
 			color = ((SettingColor) getSetting("animation.scanner.color")).getValue();
 		}
 		strip[pos] = color;
@@ -117,7 +124,7 @@ public class Scanner extends Animation {
 				color2 = getRandomColor();
 			}
 		}
-		if(!((SettingBoolean) getSetting("animation.scanner.randomcolor")).getValue()) {
+		if(!randomColor) {
 			color = ((SettingColor) getSetting("animation.scanner.color")).getValue();
 			color2 = color;
 		}

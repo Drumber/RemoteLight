@@ -85,6 +85,12 @@ public class Particles extends Animation {
 		super.onLoop();
 	}
 	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.particles.color", !getSetting(SettingBoolean.class, "animation.particles.staticcolor").getValue());
+		super.onSettingUpdate();
+	}
+	
 	
 	private class Particle {
 		

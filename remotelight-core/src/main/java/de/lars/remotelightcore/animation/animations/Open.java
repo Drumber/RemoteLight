@@ -98,4 +98,10 @@ public class Open extends Animation {
 		super.onLoop();
 	}
 	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.open.color", getSetting(SettingBoolean.class, "animation.open.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
+	
 }

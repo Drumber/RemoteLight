@@ -62,5 +62,11 @@ public class Fade extends Animation {
 
 		super.onLoop();
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.fade.color", getSetting(SettingBoolean.class, "animation.fade.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

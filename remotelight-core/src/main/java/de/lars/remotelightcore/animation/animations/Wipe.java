@@ -81,5 +81,11 @@ public class Wipe extends Animation {
 		} while(ColorUtil.similar(c, color));
 		return c;
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.wipe.color", getSetting(SettingBoolean.class, "animation.wipe.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

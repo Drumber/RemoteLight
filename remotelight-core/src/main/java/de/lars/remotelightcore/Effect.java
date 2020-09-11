@@ -118,8 +118,13 @@ public abstract class Effect {
 		// update settings (e.g. for hiding options)
 		onSettingUpdate();
 	}
+	
+	public void onSettingUpdate() {
+		this.updateEffectOptions();
+	}
+	
+	public void updateEffectOptions() {}
 	public void onDisable() {}
 	public void onLoop() {}
-	public void onSettingUpdate() {}
 
 }

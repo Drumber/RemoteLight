@@ -189,5 +189,15 @@ public class Snake extends Animation {
 		
 		snakeDirection.add(lastDir);
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		boolean hideColors = getSetting(SettingBoolean.class, "animation.snake.randomcolor").getValue() ||
+				getSetting(SettingBoolean.class, "animation.snake.rainbow").getValue();
+		this.hideSetting("animation.snake.colortale", hideColors);
+		this.hideSetting("animation.snake.colorhead", hideColors);
+		this.hideSetting("animation.snake.colorfruit", hideColors);
+		super.onSettingUpdate();
+	}
 
 }

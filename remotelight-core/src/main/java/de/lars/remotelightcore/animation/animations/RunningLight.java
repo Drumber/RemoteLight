@@ -99,5 +99,11 @@ public class RunningLight extends Animation {
 		
 		super.onLoop();
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.runninglight.color", getSetting(SettingBoolean.class, "animation.runninglight.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

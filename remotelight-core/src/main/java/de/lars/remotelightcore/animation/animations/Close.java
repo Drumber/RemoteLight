@@ -88,5 +88,11 @@ public class Close extends Animation {
 		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.close.color", getSetting(SettingBoolean.class, "animation.close.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

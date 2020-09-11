@@ -72,5 +72,11 @@ public class Breath extends Animation {
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(tmp, RemoteLightCore.getLedNum()));
 		super.onLoop();
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.breath.color", getSetting(SettingBoolean.class, "animation.breath.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }

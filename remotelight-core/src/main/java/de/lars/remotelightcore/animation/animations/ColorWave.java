@@ -97,5 +97,11 @@ public class ColorWave extends Animation {
 		}
 		return ColorUtil.dimColor(c, dim);
 	}
+	
+	@Override
+	public void onSettingUpdate() {
+		this.hideSetting("animation.colorwave.color", getSetting(SettingBoolean.class, "animation.colorwave.randomcolor").getValue());
+		super.onSettingUpdate();
+	}
 
 }
