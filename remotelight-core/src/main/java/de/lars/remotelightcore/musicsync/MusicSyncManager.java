@@ -266,6 +266,11 @@ public class MusicSyncManager extends EffectManager {
 		return tmp;
 	}
 	
+	public void onEffectOptionChanged() {
+		if(activeEffect != null)
+			activeEffect.onSettingUpdate();
+	}
+	
 	public void start(MusicEffect effect) {
 		RemoteLightCore core = RemoteLightCore.getInstance();
 		core.getEffectManagerHelper().stopAllExceptFor(EffectType.MusicSync);

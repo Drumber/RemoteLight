@@ -23,6 +23,9 @@
 package de.lars.remotelightcore.musicsync;
 
 import de.lars.remotelightcore.Effect;
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
+import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
 
 public class MusicEffect extends Effect {
@@ -43,6 +46,14 @@ public class MusicEffect extends Effect {
 	 */
 	public MusicEffect(String name) {
 		super(name);
+	}
+	
+	
+	/**
+	 * Trigger an {@link EffectOptionsUpdateEvent}
+	 */
+	public void updateEffectOptions() {
+		RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.MusicSync));
 	}
 	
 	public boolean isBump() {

@@ -265,6 +265,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
 			}
+			msm.onEffectOptionChanged();
 		}
 	};
 	

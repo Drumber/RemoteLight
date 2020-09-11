@@ -44,9 +44,12 @@ import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -55,8 +58,8 @@ public class AnimationsPanel extends MenuPanel {
 	private static final long serialVersionUID = 5490750381498859042L;
 	
 	private MainFrame mainFrame;
-	private AnimationManager am = RemoteLightCore.getInstance().getAnimationManager();
-	private SettingsManager sm = Main.getInstance().getSettingsManager();
+	private AnimationManager am;
+	private SettingsManager sm;
 	private AnimationOptionsPanel optionsPanel;
 	private JPanel bgrAnimations;
 	private JPanel bgrSettings;
@@ -65,6 +68,8 @@ public class AnimationsPanel extends MenuPanel {
 	 * Create the panel.
 	 */
 	public AnimationsPanel() {
+		am = RemoteLightCore.getInstance().getAnimationManager();
+		sm = Main.getInstance().getSettingsManager();
 		sm.addSetting(new SettingObject("animations.speed", null, 50));
 		
 		mainFrame = Main.getInstance().getMainFrame();
@@ -98,6 +103,8 @@ public class AnimationsPanel extends MenuPanel {
 		optionsPanel = new AnimationOptionsPanel(bgrSettings);
 		bgrSettings.add(optionsPanel, BorderLayout.CENTER);
 		this.addAnimationPanels();
+		
+		Main.getInstance().getCore().getEventHandler().register(onAnimationOptionUpdate);
 	}
 	
 	private void addAnimationPanels() {
@@ -150,6 +157,15 @@ public class AnimationsPanel extends MenuPanel {
 			int speed = ((JSlider) e.getSource()).getValue();
 			sm.getSettingObject("animations.speed").setValue(speed);
 			am.setDelay(speed);
+		}
+	};
+	
+	private Listener<EffectOptionsUpdateEvent> onAnimationOptionUpdate = new Listener<EffectOptionsUpdateEvent>() {
+		@Override
+		public void onEvent(EffectOptionsUpdateEvent event) {
+			if(event.getType() == EffectType.Animation) {
+				optionsPanel.showOptions();
+			}
 		}
 	};
 	

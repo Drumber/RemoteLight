@@ -22,13 +22,24 @@
 
 package de.lars.remotelightclient.ui.panels.animations;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
@@ -140,14 +151,17 @@ public class AnimationOptionsPanel extends JPanel {
 		showOptions();
 	}
 	
-	public void showOptions() {
+	public synchronized void showOptions() {
 		panelBackground.removeAll();
 		JLabel lblTitel = new JLabel(i18n.getString("AnimationOptionsPanel.Options")); //$NON-NLS-1$
 		lblTitel.setFont(Style.getFontBold(11));
 		lblTitel.setForeground(Style.textColor);
 		panelBackground.add(lblTitel);
 		
-		List<Setting> settings = RemoteLightCore.getInstance().getAnimationManager().getCurrentAnimationOptions();
+		List<Setting> settings = RemoteLightCore.getInstance().getAnimationManager().getCurrentAnimationOptions()
+				.stream()
+				.filter(s -> !s.hasFlag(Setting.HIDDEN))
+				.collect(Collectors.toList());
 		if(settings == null || settings.size() <= 0) {
 			lblTitel.setText(i18n.getString("AnimationOptionsPanel.CurrentAnimationNoOption")); //$NON-NLS-1$
 		} else {
@@ -161,6 +175,9 @@ public class AnimationOptionsPanel extends JPanel {
 				settingPanels.add(spanel);
 			}
 		}
+		
+		panelBackground.revalidate();
+		panelBackground.repaint();
 		updateUI();
 	}
 	
@@ -182,6 +199,7 @@ public class AnimationOptionsPanel extends JPanel {
 			for(SettingPanel sp : settingPanels) {
 				sp.setValue();
 			}
+			Main.getInstance().getCore().getAnimationManager().onEffectOptionChanged();
 		}
 	};
 

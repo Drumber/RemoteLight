@@ -3,8 +3,6 @@ package de.lars.remotelightcore;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.EffectManagerHelper.EffectType;
-import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.settings.Setting;
 
 public abstract class Effect {
@@ -108,13 +106,6 @@ public abstract class Effect {
 	}
 	
 	/**
-	 * Trigger an {@link EffectOptionsUpdateEvent}
-	 */
-	public void updateEffectOptions() {
-		RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.MusicSync));
-	}
-	
-	/**
 	 * Get the amount of LEDs/pixels
 	 * 
 	 * @return	the amount of LEDs
@@ -123,8 +114,12 @@ public abstract class Effect {
 		return RemoteLightCore.getLedNum();
 	}
 	
-	public void onEnable() {}
+	public void onEnable() {
+		// update settings (e.g. for hiding options)
+		onSettingUpdate();
+	}
 	public void onDisable() {}
 	public void onLoop() {}
+	public void onSettingUpdate() {}
 
 }

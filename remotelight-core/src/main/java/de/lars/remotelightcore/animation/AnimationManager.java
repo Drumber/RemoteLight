@@ -29,8 +29,8 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.EffectManager;
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.animations.*;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.Setting;
@@ -85,6 +85,11 @@ public class AnimationManager extends EffectManager {
 			tmp.add(sm.getSettingFromId(s));
 		}
 		return tmp;
+	}
+	
+	public void onEffectOptionChanged() {
+		if(activeAnimation != null)
+			activeAnimation.onSettingUpdate();
 	}
 	
 	public void start(Animation animation) {

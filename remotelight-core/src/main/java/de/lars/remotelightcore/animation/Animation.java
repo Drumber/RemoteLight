@@ -23,6 +23,9 @@
 package de.lars.remotelightcore.animation;
 
 import de.lars.remotelightcore.Effect;
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
+import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 
 public class Animation extends Effect {
 	
@@ -57,6 +60,14 @@ public class Animation extends Effect {
 	
 	public int getDelay() {
 		return this.delay;
+	}
+	
+	
+	/**
+	 * Trigger an {@link EffectOptionsUpdateEvent}
+	 */
+	public void updateEffectOptions() {
+		RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.Animation));
 	}
 
 }
