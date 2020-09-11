@@ -138,8 +138,9 @@ close
 
 [View here for plugin creation guide](https://github.com/Drumber/RemoteLight/wiki/Create-Plugin)  
 [View here for example plugins](https://github.com/RemoteLight/PluginExamples)  
-Recommend plugin:  
- \> [Effect Playlist](https://github.com/RemoteLight/PluginExamples/tree/master/EffectPlaylist): create automatic effect sequences
+Recommended plugins:  
+* [Effect Playlist](https://github.com/RemoteLight/PluginExamples/tree/master/EffectPlaylist): create automatic effect sequences
+* [OpenRGB Plugin](https://github.com/RemoteLight/OpenRGB-Plugin): add OpenRGB support and control your whole RGB setup
 
 ## Images
 <img alt="Animations with Simulator" src="https://user-images.githubusercontent.com/29163322/67697661-32e26d80-f9a9-11e9-88e2-7f649d96bd36.PNG" height="220"> <img alt="ScreenColor" src="https://user-images.githubusercontent.com/29163322/67697662-32e26d80-f9a9-11e9-8863-f4718c65a363.PNG" height="220">
