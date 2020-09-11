@@ -42,12 +42,24 @@ public class Energy extends MusicEffect {
 	private int binLowMax;
 	private int binMidMax;
 	private int binHighMax;
+	private String mode;
+	
+	// settings
+	private SettingColor sColorStatic;
+	private SettingColor sColorLow;
+	private SettingColor sColorMid;
+	private SettingColor sColorHigh;
 	
 	public Energy() {
 		super("Energy");
-		String[] modes = new String[] {"RGB", "Mix", "Frequency", "Static"};
+		String[] modes = new String[] {"Stacked", "Mix", "Frequency", "Static"};
 		this.addSetting(new SettingSelection("musicsync.energy.mode", "Mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
-		this.addSetting(new SettingColor("musicsync.energy.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		// static color
+		sColorStatic = this.addSetting(new SettingColor("musicsync.energy.color.static", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		// stacked presets
+		sColorLow = this.addSetting(new SettingColor("musicsync.energy.color.low", "Color Lows", SettingCategory.MusicEffect, "Color for low tones", Color.RED));
+		sColorMid = this.addSetting(new SettingColor("musicsync.energy.color.mid", "Color Mids", SettingCategory.MusicEffect, "Color for mid tones", Color.GREEN));
+		sColorHigh = this.addSetting(new SettingColor("musicsync.energy.color.high", "Color Highs", SettingCategory.MusicEffect, "Color for high tones", Color.BLUE));
 	}
 	
 	@Override
@@ -61,13 +73,13 @@ public class Energy extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		String mode = ((SettingSelection) getSetting("musicsync.energy.mode")).getSelected();
+		handleSettings();
 		float[] ampl = getSoundProcessor().getAmplitudes();
 		double mul = 0.01 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		
-		/* function: -a(x - ledNum/2)^ + 255 */
+		/* function: -a(x - ledNum/2)^2 + 255 */
 		
-		if(mode.equals("RGB") || mode.equals("Mix")) {
+		if(mode.equals("Stacked") || mode.equals("Mix")) {
 			// amplitude to b of each rgb channel
 			double avgLow = ArrayUtil.maxOfArray(ArrayUtil.subArray(ampl, binMin, binLowMax));		// red
 			double avgMid = ArrayUtil.maxOfArray(ArrayUtil.subArray(ampl, binLowMax, binMidMax));	// green
@@ -85,8 +97,8 @@ public class Energy extends MusicEffect {
 				aArray[i] = a;
 			}
 			
-			if(mode.equals("RGB")) {
-				Color[] colors = {Color.RED, Color.GREEN, Color.BLUE};
+			if(mode.equals("Stacked")) {
+				Color[] colors = {sColorLow.getValue(), sColorMid.getValue(), sColorHigh.getValue()};
 				show(aArray, colors);
 			} else {
 				showMix(aArray[0], aArray[1], aArray[2]);
@@ -101,7 +113,7 @@ public class Energy extends MusicEffect {
 			}
 			
 			if(mode.equals("Static")) {
-				Color color = ((SettingColor) getSetting("musicsync.energy.color")).getValue();
+				Color color = sColorStatic.getValue();
 				show(a, color);
 			} else {
 				int start = getSoundProcessor().hzToBin(350);	// range from 350Hz...
@@ -167,6 +179,22 @@ public class Energy extends MusicEffect {
 		int g = (int) (c.getGreen() * val / 255.0);
 		int b = (int) (c.getBlue() * val / 255.0);
 		return new Color(r, g, b);
+	}
+	
+	private void handleSettings() {
+		String prevMode = mode;
+		mode = ((SettingSelection) getSetting("musicsync.energy.mode")).getSelected();
+		if(!mode.equals(prevMode)) { // mode changed
+			// hide static color option
+			this.hideSetting(sColorStatic, !mode.equals("Static"));
+			// hide stacked preset color options
+			boolean stacked = mode.equals("Stacked");
+			this.hideSetting(sColorLow, !stacked);
+			this.hideSetting(sColorMid, !stacked);
+			this.hideSetting(sColorHigh, !stacked);
+			// notify change event
+			this.updateEffectOptions();
+		}
 	}
 
 }
