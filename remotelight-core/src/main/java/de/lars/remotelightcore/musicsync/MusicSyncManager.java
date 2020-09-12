@@ -49,6 +49,8 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class MusicSyncManager extends EffectManager {
 	
+	public static final int MAX_GAIN = 10;
+	
 	/** should the native sound library be loaded */
 	public static boolean initNativeSound = true;
 	

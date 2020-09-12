@@ -116,5 +116,13 @@ public class MathHelper {
 	public static float map(float value, float from1, float to1, float from2, float to2) {
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
+	
+	public static float capMinMax(float value, float min, float max) {
+		if(value > max)
+			return max;
+		if(value < min)
+			return min;
+		return value;
+	}
 
 }
