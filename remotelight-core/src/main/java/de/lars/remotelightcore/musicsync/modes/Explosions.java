@@ -8,8 +8,9 @@ import java.util.Random;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
+import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.out.OutputManager;
-import de.lars.remotelightcore.utils.color.ColorUtil;
+import de.lars.remotelightcore.utils.color.HSLColor;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 import de.lars.remotelightcore.utils.maths.MathHelper;
@@ -18,7 +19,7 @@ public class Explosions extends MusicEffect {
 	
 	private Color[] strip;
 	private List<Explosion> listExplosions;
-	private int numExplosions = 5;
+	private int maxExplosions;
 
 	public Explosions() {
 		super("Explosions");
@@ -27,15 +28,24 @@ public class Explosions extends MusicEffect {
 	@Override
 	public void onEnable() {
 		listExplosions = new ArrayList<>();
+		maxExplosions = RemoteLightCore.getLedNum() / 5;
 		super.onEnable();
 	}
 	
 	@Override
 	public void onLoop() {
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		numExplosions = 3;
 		
-		Random ran = new Random();
+		if(this.isBump() && listExplosions.size() < maxExplosions) {
+			Random ran = new Random();
+			Color c = RainbowWheel.getRandomColor();
+			int center = ran.nextInt(strip.length); // random center point
+			
+			float multiplier = (float) ((MusicSyncManager.MAX_GAIN + 1 - getAdjustment()) * 0.05f);
+			float power = (float) ((getMaxSpl() + 1.0 - getSpl()) * multiplier);
+			power = MathHelper.capMinMax(power, 0.05f, 1.5f);
+			listExplosions.add(new Explosion(c, center, power));
+		}
 		
 		Iterator<Explosion> iterator = listExplosions.iterator();
 		while (iterator.hasNext()) {
@@ -48,13 +58,6 @@ public class Explosions extends MusicEffect {
 			}
 		}
 		
-		if(listExplosions.size() < numExplosions) {
-			Color c = RainbowWheel.getRandomColor();
-			int center = ran.nextInt(strip.length);
-			float power = ran.nextFloat() + 1.0f;
-			listExplosions.add(new Explosion(c, center, power));
-		}
-		
 		OutputManager.addToOutput(strip);
 		super.onLoop();
 	}
@@ -64,14 +67,18 @@ public class Explosions extends MusicEffect {
 
 		Color color;
 		int centerPoint;
-		float power;
+		float power; // should be between 0.0 and 1.0
 		float radius;
+		float size = 0.15f; // lower = larger explosion
 		
-		public Explosion(Color color, int centerPoint, float power) {
+		public Explosion(Color color, int centerPoint, float size) {
 			this.color = color;
 			this.centerPoint = centerPoint;
-			this.power = power;
-			radius = 0.45f;
+			this.size = size;
+			this.radius = 0.06f;
+			// calc power
+			this.power = 0.0f - (size / 5.0f) + 1.1f;
+			this.power = MathHelper.capMinMax(power, 0.5f, 1.5f);
 		}
 		
 		
@@ -79,12 +86,13 @@ public class Explosions extends MusicEffect {
 			calcRadius();
 			
 			for(int i = 0; i < (int) radius; i++) {
-				// distance from radius
-				int distance = (int) (radius - i);
+				// distance between radius
+				float distance = radius - (1.0f*i);
+				// calculate color depending on distance
 				Color c = calcColor(distance);
 				
-				int posR = centerPoint - 1 + distance;
-				int posL = centerPoint - distance;
+				int posR = centerPoint - 1 + (int) distance;
+				int posL = centerPoint - (int) distance;
 				if(posR < strip.length)
 					input[posR] = c;
 				if(posL >= 0)
@@ -92,23 +100,26 @@ public class Explosions extends MusicEffect {
 			}
 			
 			// decrease power
-			power -= 0.05f;
-			power = Math.max(0f, power);
+			power -= 0.015f;
+			power = Math.max(0.0f, power);
 			
 			return input;
 		}
 		
 		void calcRadius() {
-			// function: f(x) = 2^(-x) + 1
-			float speed = (float) Math.pow(2, -radius) + 1;
+			// function: f(x) = 2^(-size * x) + 1
+			float speed = (float) Math.pow(2, -size * radius) + 1;
 			radius *= speed;
 		}
 		
-		Color calcColor(int distance) {
-			float value = distance;
-			float maxValue = (int) radius;
-			int brightness = 255 - (int) (MathHelper.map(value, 0f, maxValue, 0f, 255f) * power);
-			return ColorUtil.dimColorSimple(color, brightness);
+		Color calcColor(float distance) {
+			// distance = distance away from radius
+			HSLColor hsl = new HSLColor(color);
+			
+			// map distance between 0.0 and 1.0
+			float dist = MathHelper.map(distance, 0.0f, radius, 0.0f, 1.0f) * power;
+			float brightness = MathHelper.capMinMax(dist, 0.0f, 1.0f);
+			return hsl.adjustLuminance(brightness * 100.0f);
 		}
 		
 	}
