@@ -10,6 +10,11 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.HSLColor;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -17,12 +22,17 @@ import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class Explosions extends MusicEffect {
 	
+	private SettingColor sColor;
 	private Color[] strip;
 	private List<Explosion> listExplosions;
 	private int maxExplosions;
+	private int rainbowStep;
 
 	public Explosions() {
 		super("Explosions");
+		String[] modes = {"Random", "Rainbow", "Frequency", "Static"};
+		this.addSetting(new SettingSelection("musicsync.explosions.mode", "Mode", SettingCategory.MusicEffect, "Explosion color mode", modes, "Random", Model.ComboBox));
+		sColor = this.addSetting(new SettingColor("musicsync.explosions.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
 	}
 
 	@Override
@@ -38,7 +48,7 @@ public class Explosions extends MusicEffect {
 		
 		if(this.isBump() && listExplosions.size() < maxExplosions) {
 			Random ran = new Random();
-			Color c = RainbowWheel.getRandomColor();
+			Color c = getColor();
 			int center = ran.nextInt(strip.length); // random center point
 			
 			float multiplier = (float) ((MusicSyncManager.MAX_GAIN + 1 - getAdjustment()) * 0.05f);
@@ -60,6 +70,25 @@ public class Explosions extends MusicEffect {
 		
 		OutputManager.addToOutput(strip);
 		super.onLoop();
+	}
+	
+	private Color getColor() {
+		String mode = this.getSetting(SettingSelection.class, "musicsync.explosions.mode").getSelected();
+		switch (mode.toLowerCase()) {
+		case "random":
+			return RainbowWheel.getRandomColor();
+		case "rainbow":
+			rainbowStep += 10;
+			if(rainbowStep >= RainbowWheel.getRainbow().length)
+				rainbowStep = 0;
+			int hue = Math.min(RainbowWheel.getRainbow().length-1, new Random().nextInt(50) + rainbowStep);
+			return RainbowWheel.getRainbow()[hue];
+		case "frequency":
+			return ColorUtil.soundToColor((int) this.getPitch());
+		case "static":
+		default:
+			return sColor.getValue();
+		}
 	}
 	
 	
@@ -122,6 +151,13 @@ public class Explosions extends MusicEffect {
 			return hsl.adjustLuminance(brightness * 100.0f);
 		}
 		
+	}
+	
+	@Override
+	public void onSettingUpdate() {
+		String mode = this.getSetting(SettingSelection.class, "musicsync.explosions.mode").getSelected();
+		this.hideSetting(sColor, !mode.equals("Static"));
+		super.onSettingUpdate();
 	}
 	
 }
