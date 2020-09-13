@@ -22,40 +22,70 @@
 
 package de.lars.remotelightcore.musicsync.sound.nativesound;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFormat;
 
 import org.tinylog.Logger;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtPrint;
+import com.xtaudio.xt.XtStream;
+import com.xtaudio.xt.XtStreamCallback;
 
 import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 
-public class NativeSoundInputStream implements XtStreamCallback {
+public class NativeSoundInputStream implements XtStreamCallback, Runnable {
 	
 	private AudioFormat format;
 	private NativeSoundFormat formatInfo;
 	
 	private PipedInputStream in;
 	private PipedOutputStream out;
+	
+	private int bufferSize = -1;
+	private ByteBuffer buffer;
+	private Object data;
 
 	public NativeSoundInputStream(NativeSoundFormat soundInfo) {
 		format = convertToAudioFormat(soundInfo);
 		this.formatInfo = soundInfo;
 		
 		// send data to OutputStream which forwards it to the InputStream
-		in = new PipedInputStream();
+		out = new PipedOutputStream();
 		try {
-			out = new PipedOutputStream(in);
+			in = new PipedInputStream(out);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
+		
+		
 	}
 	
 	public PipedInputStream getInputStream() {
 		return in;
+	}
+	
+	
+	@Override
+	public void run() {
+		Logger.debug("Starting NativeSoundInputStream Thread...");
+		while(out != null) {
+			if(data != null) {
+				writeData(data);
+			}
+			try {
+				// need some delay in the loop, because of too high CPU usage
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				Logger.error(e, "Hey! I got some error while sleeping in the NativeSoundInputStream Thread house.");
+			}
+		}
+		Logger.debug("Stopping NativeSoundInputStream Thread...");
 	}
 
 	@Override
@@ -68,19 +98,22 @@ public class NativeSoundInputStream implements XtStreamCallback {
 			Logger.error(XtPrint.errorToString(error));
 		}
 		
-		ByteBuffer buffer = ((StreamContext) user).buffer;
+		if(buffer == null)
+			buffer = ((StreamContext) user).buffer;
 		
 		if(!stream.isInterleaved()) {
-			int bufferSize = getBufferSize(stream, frames);
-			// issue on Linux: stream.frames == frames -> buffer ArrayIndexOutOfBounds
-			// this is not the best fix for it, but at least it works....
-			if(!XtAudio.isWin32())
-				bufferSize /= 2;
-			writeData(input, buffer, bufferSize);
+			if(bufferSize == -1) {
+				bufferSize = getBufferSize(stream, frames);
+				// issue on Linux: stream.frames == frames -> buffer ArrayIndexOutOfBounds
+				// this is not the best fix for it, but at least it works....
+				if(!XtAudio.isWin32())
+					bufferSize /= 2;
+			}
+			data = input;
 		}
 	}
 	
-	private void writeData(Object input, ByteBuffer buffer, int bufferSize) {
+	private void writeData(Object input) {
 		buffer.clear();
 		switch(formatInfo.getXtFormat().mix.sample) {
 			case UINT8:
@@ -101,7 +134,7 @@ public class NativeSoundInputStream implements XtStreamCallback {
 	        default:
 	            throw new IllegalArgumentException();
 		}
-		
+		// write to byte stream
 		try {
 			out.write(buffer.array(), 0, bufferSize);
 		} catch(IOException e) {
@@ -121,6 +154,9 @@ public class NativeSoundInputStream implements XtStreamCallback {
 			out.close();
 			in.close();
 		} catch (IOException e) {
+		} finally {
+			out = null;
+			in = null;
 		}
 	}
 	

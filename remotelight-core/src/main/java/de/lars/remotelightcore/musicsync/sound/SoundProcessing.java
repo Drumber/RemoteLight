@@ -132,6 +132,8 @@ public class SoundProcessing implements PitchDetectionHandler {
 					
 					nsound.openDevice(service, xtDeviceIndex, xformat, nsis);
 					uais = new UniversalAudioInputStream(nsis.getInputStream(), NativeSoundInputStream.convertToTarosDSPFormat(nformat));
+					// start new thread for NativeSoundInputStream
+					new Thread(nsis, "NativeSoundInputStream").start();
 				}
 				
 				dispatcher = new AudioDispatcher(uais, bufferSize, overlap);
