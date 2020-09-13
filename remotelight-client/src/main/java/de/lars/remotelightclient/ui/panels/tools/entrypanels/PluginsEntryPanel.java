@@ -26,6 +26,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,8 @@ import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightplugins.Plugin;
 import de.lars.remotelightplugins.PluginInfo;
@@ -124,6 +128,10 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			root.add(Box.createVerticalGlue());
 			root.add(Box.createVerticalStrut(10));
 			
+			Box horizontalBox = Box.createHorizontalBox();
+			horizontalBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			root.add(horizontalBox);
+			
 			JButton btnPluginsFolder = new JButton("Open plugins folder");
 			UiUtils.configureButton(btnPluginsFolder);
 			btnPluginsFolder.addActionListener(e -> {
@@ -133,7 +141,20 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 					Logger.error(e1, "Could not open plugins directory.");
 				}
 			});
-			root.add(btnPluginsFolder);
+			horizontalBox.add(btnPluginsFolder);
+			
+			JButton btnLearnMore = new JButton("Learn more");
+			UiUtils.configureButton(btnLearnMore);
+			btnLearnMore.addActionListener(e -> {
+				// open plugins wiki page
+				try {
+					Desktop.getDesktop().browse(new URI(RemoteLightCore.WIKI + "/Plugins"));
+				} catch (URISyntaxException | IOException ex) {
+					Main.getInstance().showNotification(NotificationType.ERROR, "Could not open " + RemoteLightCore.WIKI + "/Plugins");
+				}
+			});
+			horizontalBox.add(Box.createHorizontalGlue());
+			horizontalBox.add(btnLearnMore);
 			
 			initPluginPanels();
 			add(root, BorderLayout.CENTER);
