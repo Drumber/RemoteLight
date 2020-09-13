@@ -25,7 +25,10 @@ package de.lars.remotelightclient.ui.panels.about;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -36,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.StartUp;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
@@ -81,6 +85,15 @@ public class AboutPanel extends MenuPanel {
 		lblVersion.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		lblVersion.setFont(Style.getFontRegualar(15));
 		lblVersion.setForeground(Style.textColorDarker);
+		lblVersion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		lblVersion.setToolTipText("Click to check for updates");
+		lblVersion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// check for updates
+				StartUp.checkForUpdates(true);
+			}
+		});
 		horizontalBox.add(lblVersion);
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(5);

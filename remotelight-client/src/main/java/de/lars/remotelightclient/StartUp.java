@@ -65,41 +65,49 @@ public class StartUp {
 		
 		copyLuaExamples();
 		
+		// check for updates
+		if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
+			checkForUpdates(false);
+		}
+	}
+	
+	/**
+	 * Check for updates in separate thread.
+	 * @param notAvailableMsg	whether to show notification if no update available
+	 */
+	public static void checkForUpdates(boolean notAvailableMsg) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				
-				//check for update (this block blocks the thread)
-				if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
-					// show update dialog
-					UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
-					if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless() &&
-					  (!updateChecker.isPreRelease() || s.getSetting(SettingBoolean.class, "main.checkupdates.prerelease").getValue()))
-					{
-						// show update notification
-						String[] options = {"Details", "Download"};
-						Notification notification = new Notification(NotificationType.IMPORTANT,
-								"Update available", "RemoteLight " + updateChecker.getNewTag() + " is available.",
-								options, Notification.LONG, new NotificationOptionListener() {
-									@Override
-									public void onOptionClicked(String option, int index) {
-										if(index == 0) {
-											// show detail dialog
-											UpdateDialog.showUpdateDialog(updateChecker);
-										} else if(index == 1) {
-											// open download site
-											UpdateDialog.openDownloadSite(updateChecker.getNewUrl());
-										}
-											
+				// show update dialog
+				UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
+				if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless() &&
+				  (!updateChecker.isPreRelease() || Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "main.checkupdates.prerelease").getValue()))
+				{
+					// show update notification
+					String[] options = {"Details", "Download"};
+					Notification notification = new Notification(NotificationType.IMPORTANT,
+							"Update available", "RemoteLight " + updateChecker.getNewTag() + " is available.",
+							options, Notification.LONG, new NotificationOptionListener() {
+								@Override
+								public void onOptionClicked(String option, int index) {
+									if(index == 0) {
+										// show detail dialog
+										UpdateDialog.showUpdateDialog(updateChecker);
+									} else if(index == 1) {
+										// open download site
+										UpdateDialog.openDownloadSite(updateChecker.getNewUrl());
 									}
-								});
-						notification.setHideOnOptionClick(false);
-						Main.getInstance().showNotification(notification);
-						Logger.info(String.format("There is an update available! Current version: %s New version: %s Download here: %s", 
-								Main.VERSION, updateChecker.getNewTag(), updateChecker.getNewUrl()));
-					}
+										
+								}
+							});
+					notification.setHideOnOptionClick(false);
+					Main.getInstance().showNotification(notification);
+					Logger.info(String.format("There is an update available! Current version: %s New version: %s Download here: %s", 
+							Main.VERSION, updateChecker.getNewTag(), updateChecker.getNewUrl()));
+				} else if(notAvailableMsg) {
+					Main.getInstance().showNotification(NotificationType.INFO, "No Update Available", "There is no new version available.");
 				}
-				
 			}
 		}, "UpdateChecker Thread").start();
 	}
