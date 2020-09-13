@@ -69,6 +69,7 @@ public class AboutPanel extends MenuPanel {
 		verticalBox.add(horizontalBox);
 		
 		JLabel lblRemoteLight = new JLabel("RemoteLight"); //$NON-NLS-1$
+		lblRemoteLight.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		lblRemoteLight.setFont(Style.getFontBold(30));
 		lblRemoteLight.setForeground(new Color(20, 110, 170));
 		horizontalBox.add(lblRemoteLight);
@@ -77,6 +78,7 @@ public class AboutPanel extends MenuPanel {
 		horizontalBox.add(horizontalStrut);
 		
 		JLabel lblVersion = new JLabel(Main.VERSION);
+		lblVersion.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		lblVersion.setFont(Style.getFontRegualar(15));
 		lblVersion.setForeground(Style.textColorDarker);
 		horizontalBox.add(lblVersion);
@@ -104,6 +106,15 @@ public class AboutPanel extends MenuPanel {
 		
 		Component horizontalStrut_2 = Box.createHorizontalStrut(10);
 		horizontalBox_1.add(horizontalStrut_2);
+		
+		JLabel lblWiki = new JLabel("Wiki"); //$NON-NLS-1$
+		lblWiki.setForeground(Style.accent);
+		UiUtils.addWebsiteHyperlink(lblWiki, RemoteLightCore.WIKI);
+		lblWiki.setFont(Style.getFontRegualar(14));
+		horizontalBox_1.add(lblWiki);
+		
+		Component horizontalStrut_3 = Box.createHorizontalStrut(10);
+		horizontalBox_1.add(horizontalStrut_3);
 		
 		JLabel lblGithub = new JLabel("GitHub"); //$NON-NLS-1$
 		lblGithub.setForeground(Style.accent);

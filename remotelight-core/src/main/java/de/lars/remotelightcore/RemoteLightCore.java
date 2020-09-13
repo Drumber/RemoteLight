@@ -65,10 +65,11 @@ public class RemoteLightCore {
 	private static boolean shuttingDown = false;
 	private static long startMillis = System.currentTimeMillis();
 	
-	public final static String VERSION = "v0.2.4-rc3";
+	public final static String VERSION = "v0.2.4";
 	public final static boolean DEVBUILD = false;
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
+	public final static String WIKI = "https://github.com/Drumber/RemoteLight/wiki";
 	
 	private static RemoteLightCore instance;
 	private static boolean headless;
