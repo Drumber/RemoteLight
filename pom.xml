@@ -113,6 +113,10 @@
 					<emptyLineAfterHeader>true</emptyLineAfterHeader>
 					<canUpdateCopyright>true</canUpdateCopyright>
 					<includes>**/*.java</includes>
+					<excludes>
+						<exclude>**/WrapLayout.java</exclude>
+						<exclude>**/HSLColor.java</exclude>
+					</excludes>
 					<roots>
 						<root>src/main/java</root>
 					</roots>
