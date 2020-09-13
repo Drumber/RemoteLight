@@ -1,4 +1,14 @@
 ## Changelog
+#### v0.2.4
+- minor UI fixes
+- improved ScreenColor
+  - the width and x-posiotion of the scan area can now be adjusted
+  - added brightness threshold and saturation setting
+- effect options (Animations & MusicSync) that are currently not applied are now hidden
+- added Explosions music visualizer
+- added custom color presets for Energy music visualizer
+- added check for updates when clicking on version tag in About panel
+
 #### v0.2.4-rc2
 - minor UI fixes and improvements
   - fixed window size sometimes not saving
