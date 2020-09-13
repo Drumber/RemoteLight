@@ -103,99 +103,110 @@ public class PluginManager {
 	 * Load all plugins located in the specified plugin directory
 	 */
 	public void loadPlugins() {
-		// get all files in plugin directory
-		File[] files = pluginDir.listFiles(new JarFileFilter());
-		// store all plugins temporary in the HashMap
-		Map<String, PluginInfo> plugins = new HashMap<String, PluginInfo>();
-		
-		// loading all plugins from plugin dir
-		for(File pluginFile : files) {
-			if(pluginFile.isFile() && pluginFile.exists()) {
-				
-				boolean error = false;
-				PluginInfo plInfo = null;
-				try {
-					// parse plugin properties file
-					plInfo = loadPluginProperty(pluginFile);
-					
-					// check plugin requirements (scope, version...)
-					checkPluginRequirements(plInfo);
-				} catch (IOException e1) {
-					Logger.error(e1, "Could not load plugin file: " + pluginFile.getPath());
-					error = true;
-				} catch (PluginLoadException e1) {
-					Logger.error(e1, "Failed to load plugin: " + pluginFile.getName());
-					error = true;
-				} catch (PluginPropertiesException e) {
-					Logger.error(e, "Invalid or missing plugin properties: " + pluginFile.getPath());
-					error = true;
-				}
-				
-				if(plInfo == null || plInfo.getMainClass() == null) {
-					Logger.error("Invalid plugin property file: " + pluginFile.getPath());
-					error = true;
-					// create plugin info if null
-					if(plInfo == null) {
-						plInfo = new PluginInfo(pluginDir, null);
-					}
-				}
-				if(plugins.containsKey(plInfo.getName())) {
-					Logger.error("Plugin with name '" + plInfo.getName() + "' already exists. Please define a unique plugin name.");
-					error = true;
-				}
-				
-				// plugin load error handling
-				if(error) {
-					// add to error list
-					errorPlugins.put(plInfo, "Error while loading. Check console logs for details.");
-					continue;
-				}
-				
-				// add it to the plugins HashMap
-				plugins.put(plInfo.getName(), plInfo);
-			}
-		}
-		
-		// sort plugins by dependencies
-		List<PluginInfo> sortedPlugins = sortByPluginDependencies(plugins);
-		
-		// load plugins
-		Iterator<PluginInfo> sortedIterator = sortedPlugins.iterator();
-		while(sortedIterator.hasNext()) {
-			PluginInfo info = sortedIterator.next();
-			
-			try {
-				loadPlugin(info.getFile(), info);
-			} catch (IOException e) {
-				Logger.error(e, "Error while accessing jar file: " + info.getFile().getPath());
-			} catch (InstantiationException e) {
-				Logger.error(e, "Could not instantiate plugin main class: " + info.getName());
-			} catch (IllegalAccessException e) {
-				Logger.error(e, "Could not access plugin main class: " + info.getName());
-			} catch (ClassNotFoundException e) {
-				Logger.error(e, "Could not find plugin main class: " + info.getName());
-			}
-		}
-		
-		// enabling every loaded plugin
-		for(Plugin plugin : loadedPlugins) {
-			try {
-				enablePlugin(plugin);
-			} catch (Exception e) {
-				// catch any exception, so we can also enable the other plugins
-				Logger.error(e, "Failed to enable plugin '" + plugin.getName() + "' after loading.");
-				core.showErrorNotification(e, "Plugin load Error");
-				// disable plugin
-				try {
-					disablePlugin(plugin);
-				} catch (Exception e2) {}
-			}
-		}
-		
-		if(errorPlugins.size() > 0)
-			Logger.info("Could not load " + errorPlugins.size() + " plugins.");
-		Logger.info("Loaded " + loadedPlugins.size() + " plugins.");
+		Thread pluginThread = new Thread(pluginLoadRunnable, "Plugin Thread");
+		pluginThread.start();
 	}
+	
+	/**
+	 * Load plugins in seperate thread
+	 */
+	Runnable pluginLoadRunnable = new Runnable() {
+		@Override
+		public void run() {
+			// get all files in plugin directory
+			File[] files = pluginDir.listFiles(new JarFileFilter());
+			// store all plugins temporary in the HashMap
+			Map<String, PluginInfo> plugins = new HashMap<String, PluginInfo>();
+			
+			// loading all plugins from plugin dir
+			for(File pluginFile : files) {
+				if(pluginFile.isFile() && pluginFile.exists()) {
+					
+					boolean error = false;
+					PluginInfo plInfo = null;
+					try {
+						// parse plugin properties file
+						plInfo = loadPluginProperty(pluginFile);
+						
+						// check plugin requirements (scope, version...)
+						checkPluginRequirements(plInfo);
+					} catch (IOException e1) {
+						Logger.error(e1, "Could not load plugin file: " + pluginFile.getPath());
+						error = true;
+					} catch (PluginLoadException e1) {
+						Logger.error(e1, "Failed to load plugin: " + pluginFile.getName());
+						error = true;
+					} catch (PluginPropertiesException e) {
+						Logger.error(e, "Invalid or missing plugin properties: " + pluginFile.getPath());
+						error = true;
+					}
+					
+					if(plInfo == null || plInfo.getMainClass() == null) {
+						Logger.error("Invalid plugin property file: " + pluginFile.getPath());
+						error = true;
+						// create plugin info if null
+						if(plInfo == null) {
+							plInfo = new PluginInfo(pluginDir, null);
+						}
+					}
+					if(plugins.containsKey(plInfo.getName())) {
+						Logger.error("Plugin with name '" + plInfo.getName() + "' already exists. Please define a unique plugin name.");
+						error = true;
+					}
+					
+					// plugin load error handling
+					if(error) {
+						// add to error list
+						errorPlugins.put(plInfo, "Error while loading. Check console logs for details.");
+						continue;
+					}
+					
+					// add it to the plugins HashMap
+					plugins.put(plInfo.getName(), plInfo);
+				}
+			}
+			
+			// sort plugins by dependencies
+			List<PluginInfo> sortedPlugins = sortByPluginDependencies(plugins);
+			
+			// load plugins
+			Iterator<PluginInfo> sortedIterator = sortedPlugins.iterator();
+			while(sortedIterator.hasNext()) {
+				PluginInfo info = sortedIterator.next();
+				
+				try {
+					loadPlugin(info.getFile(), info);
+				} catch (IOException e) {
+					Logger.error(e, "Error while accessing jar file: " + info.getFile().getPath());
+				} catch (InstantiationException e) {
+					Logger.error(e, "Could not instantiate plugin main class: " + info.getName());
+				} catch (IllegalAccessException e) {
+					Logger.error(e, "Could not access plugin main class: " + info.getName());
+				} catch (ClassNotFoundException e) {
+					Logger.error(e, "Could not find plugin main class: " + info.getName());
+				}
+			}
+			
+			// enabling every loaded plugin
+			for(Plugin plugin : loadedPlugins) {
+				try {
+					enablePlugin(plugin);
+				} catch (Exception e) {
+					// catch any exception, so we can also enable the other plugins
+					Logger.error(e, "Failed to enable plugin '" + plugin.getName() + "' after loading.");
+					core.showErrorNotification(e, "Plugin load Error");
+					// disable plugin
+					try {
+						disablePlugin(plugin);
+					} catch (Exception e2) {}
+				}
+			}
+			
+			if(errorPlugins.size() > 0)
+				Logger.info("Could not load " + errorPlugins.size() + " plugins.");
+			Logger.info("Loaded " + loadedPlugins.size() + " plugins.");
+		}
+	};
 	
 	/**
 	 * Disable all loaded plugins
