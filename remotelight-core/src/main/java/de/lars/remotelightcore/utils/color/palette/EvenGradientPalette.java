@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
-public class EvenGradientPalette extends ColorPalette {
+public class EvenGradientPalette extends ColorPalette implements GradientStepSize {
 	
 	public final static float DEFAULT_STEPSIZE = 0.1f;
 	
@@ -65,6 +65,14 @@ public class EvenGradientPalette extends ColorPalette {
 	 */
 	public EvenGradientPalette add(int r, int g, int b) {
 		return add(new Color(r, g, b));
+	}
+	
+	public float getStepSize() {
+		return stepSize;
+	}
+	
+	public void setStepSize(float stepSize) {
+		this.stepSize = stepSize;
 	}
 	
 	@Override

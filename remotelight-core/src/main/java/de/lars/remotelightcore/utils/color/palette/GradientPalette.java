@@ -6,15 +6,13 @@ import java.util.List;
 
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
-public class GradientPalette extends AbstractPalette {
+public class GradientPalette extends AbstractPalette implements GradientStepSize {
 	
 	protected List<Color> listColor;
 	protected List<Float> listPosition;
 	
 	protected float stepSize;
 	protected float currentStep;
-	protected int currentIndex;
-	protected int targetIndex;
 	
 	public GradientPalette(float stepSize) {
 		listColor = new ArrayList<Color>();
@@ -25,7 +23,7 @@ public class GradientPalette extends AbstractPalette {
 	}
 	
 	public GradientPalette() {
-		this(0.1f);
+		this(0.05f);
 	}
 	
 	/**
@@ -89,10 +87,6 @@ public class GradientPalette extends AbstractPalette {
 		if(index > 0) {
 			listColor.remove(index);
 			listPosition.remove(index);
-			if(index == size()) {
-				currentIndex = 0;
-				increaseTargetIndex(1);
-			}
 		}
 		return this;
 	}
@@ -106,28 +100,36 @@ public class GradientPalette extends AbstractPalette {
 	public Color getNext() {
 		if(listColor.size() == 0)
 			throw new IllegalStateException("Could not return next item. The list is empty!");
-		if(currentIndex == targetIndex && size() > 1)
-			increaseTargetIndex(1);
 		
-		float diff = listPosition.get(targetIndex) - listPosition.get(currentIndex);
-		if(diff < 0)
-			diff += 1.0f;
-		float step = currentStep / diff;
-		Color c = ColorUtil.fadeToColor(listColor.get(currentIndex), listColor.get(targetIndex), step);
+		// get nearest start gradient position
+		int startIndex = listPosition.size() - 1;
+		for(; startIndex >= 0; startIndex--) {
+			if(listPosition.get(startIndex) <= currentStep)
+				break;
+		}
+		// get next gradient position
+		int endIndex = startIndex + 1;
+		if(endIndex >= listPosition.size())
+			endIndex = 0;
 		
-		step += stepSize;
-		if(step > 1.0f)
-			step -= 1.0f;
+		// offset start position
+		float start = currentStep - listPosition.get(startIndex);
+		if(start < 0)
+			start += 1.0f;
+		// offset end position
+		float end = listPosition.get(endIndex) - listPosition.get(startIndex);
+		if(end < 0)
+			end += 1.0f;
 		
-		currentIndex = targetIndex;
-		increaseTargetIndex(1);
+		// calculate color fading step
+		float step = start / end;
+		Color c = ColorUtil.fadeToColor(listColor.get(startIndex), listColor.get(endIndex), step);
+		
+		currentStep += stepSize;
+		if(currentStep > 1.0f)
+			currentStep -= 1.0f;
+		
 		return c;
-	}
-	
-	protected void increaseTargetIndex(int amount) {
-		targetIndex += amount;
-		if(targetIndex >= size())
-			targetIndex -= size();
 	}
 	
 	/**
@@ -144,6 +146,14 @@ public class GradientPalette extends AbstractPalette {
 	 */
 	public List<Color> getColors() {
 		return new ArrayList<Color>(listColor);
+	}
+	
+	public float getStepSize() {
+		return stepSize;
+	}
+	
+	public void setStepSize(float stepSize) {
+		this.stepSize = stepSize;
 	}
 
 	@Override
