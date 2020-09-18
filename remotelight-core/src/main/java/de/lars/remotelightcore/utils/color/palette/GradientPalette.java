@@ -6,13 +6,15 @@ import java.util.List;
 
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
-public class GradientPalette extends AbstractPalette implements GradientStepSize {
+public class GradientPalette extends AbstractPalette implements ColorGradient {
 	
 	protected List<Color> listColor;
 	protected List<Float> listPosition;
 	
 	protected float stepSize;
 	protected float currentStep;
+	protected boolean reverseOnEnd;
+	protected boolean directionReversed = false;
 	
 	public GradientPalette(float stepSize) {
 		listColor = new ArrayList<Color>();
@@ -125,9 +127,24 @@ public class GradientPalette extends AbstractPalette implements GradientStepSize
 		float step = start / end;
 		Color c = ColorUtil.fadeToColor(listColor.get(startIndex), listColor.get(endIndex), step);
 		
-		currentStep += stepSize;
-		if(currentStep > 1.0f)
-			currentStep -= 1.0f;
+		
+		if(reverseOnEnd && directionReversed) {
+			currentStep -= stepSize;
+		} else {
+			currentStep += stepSize;
+		}
+		
+		if(currentStep > 1.0f) {
+			if(reverseOnEnd) {
+				currentStep -= stepSize;
+				directionReversed = !directionReversed;
+			} else {
+				currentStep -= 1.0f;
+			}
+		} else if(currentStep < 0.0f) {
+			currentStep += stepSize;
+			directionReversed = !directionReversed;
+		}
 		
 		return c;
 	}
@@ -159,6 +176,16 @@ public class GradientPalette extends AbstractPalette implements GradientStepSize
 	@Override
 	public int size() {
 		return listColor.size();
+	}
+
+	@Override
+	public void setReverseOnEnd(boolean reverse) {
+		this.reverseOnEnd = reverse;
+	}
+
+	@Override
+	public boolean isReverseOnEnd() {
+		return reverseOnEnd;
 	}
 
 }

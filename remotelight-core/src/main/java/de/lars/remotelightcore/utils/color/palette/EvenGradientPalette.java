@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
-public class EvenGradientPalette extends ColorPalette implements GradientStepSize {
+public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	
 	public final static float DEFAULT_STEPSIZE = 0.1f;
 	
@@ -85,6 +85,21 @@ public class EvenGradientPalette extends ColorPalette implements GradientStepSiz
 		EvenGradientPalette gp = new EvenGradientPalette(stepSize);
 		gp.listColor = palette.listColor;
 		return gp;
+	}
+
+	/**
+	 * Not supported by this palette type!
+	 */
+	@Override
+	public void setReverseOnEnd(boolean reverse) {
+	}
+
+	/**
+	 * Not supported by this palette type!
+	 */
+	@Override
+	public boolean isReverseOnEnd() {
+		return false;
 	}
 
 }

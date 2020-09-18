@@ -11,7 +11,7 @@ import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
-import de.lars.remotelightcore.utils.color.palette.GradientStepSize;
+import de.lars.remotelightcore.utils.color.palette.ColorGradient;
 import de.lars.remotelightcore.utils.color.palette.Palettes;
 
 public class GradientAnimation extends Animation {
@@ -37,8 +37,9 @@ public class GradientAnimation extends Animation {
 	public void onLoop() {
 		palette = Palettes.getPalette(sGradient.getSelected());
 		
-		if(palette instanceof GradientStepSize) {
-			((GradientStepSize) palette).setStepSize((float) sStepSize.getValue());
+		if(palette instanceof ColorGradient) {
+			((ColorGradient) palette).setStepSize((float) sStepSize.getValue());
+			((ColorGradient) palette).setReverseOnEnd(true);
 		}
 		
 		if(strip.length > 1) {
@@ -56,7 +57,7 @@ public class GradientAnimation extends Animation {
 	@Override
 	public void onSettingUpdate() {
 		if(palette != null) {
-			this.hideSetting(sStepSize, !(palette instanceof GradientStepSize));
+			this.hideSetting(sStepSize, !(palette instanceof ColorGradient));
 		}
 		super.onSettingUpdate();
 	}
