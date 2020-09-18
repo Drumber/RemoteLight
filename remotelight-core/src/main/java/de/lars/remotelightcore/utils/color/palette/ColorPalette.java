@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class ColorPalette implements Iterable<Color> {
+public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	
 	protected List<Color> listColor;
 	protected int curIndex = 0;
@@ -67,10 +67,6 @@ public class ColorPalette implements Iterable<Color> {
 			curIndex -= listColor.size();
 	}
 	
-	/**
-	 * Get the amount of colors of the palette.
-	 * @return			color palette size
-	 */
 	public int size() {
 		return listColor.size();
 	}
