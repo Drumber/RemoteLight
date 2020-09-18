@@ -192,6 +192,7 @@ public class AnimationManager extends EffectManager {
 		animations.add(new RainbowNoise());
 		animations.add(new Particles());
 		animations.add(new SortAlgo());
+		animations.add(new GradientAnimation());
 	}
 
 }
