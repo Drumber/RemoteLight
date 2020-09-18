@@ -43,6 +43,43 @@ public class GradientPalette extends AbstractPalette {
 	}
 	
 	/**
+	 * Add a color gradient to the palette.
+	 * @param position		gradient position in range 0.0...1.0
+	 * @param r				red
+	 * @param g				green
+	 * @param b				blue
+	 * @return				the instance ({@code this})
+	 */
+	public GradientPalette add(float position, int r, int g, int b) {
+		return add(position, new Color(r, g, b));
+	}
+	
+	/**
+	 * Add a color gradient to the palette using a range from 0 to 255. The position
+	 * will be mapped to a range between 0.0 and 1.0.
+	 * @param position		gradient position in range 0...255
+	 * @param color			color for the specified position
+	 * @return				the instance ({@code this})
+	 */
+	public GradientPalette add(int position, Color color) {
+		float pos = 1.0f / 255.0f * (float) position;
+		return add(pos, color);
+	}
+	
+	/**
+	 * Add a color gradient to the palette using a range from 0 to 255. The position
+	 * will be mapped to a range between 0.0 and 1.0.
+	 * @param position		gradient position in range 0...255
+	 * @param r				red
+	 * @param g				green
+	 * @param b				blue
+	 * @return				the instance ({@code this})
+	 */
+	public GradientPalette add(int position, int r, int g, int b) {
+		return add(position, new Color(r, g, b));
+	}
+	
+	/**
 	 * Remove a color gradient from the palette.
 	 * @param position		gradient position
 	 * @return				the instance ({@code this})

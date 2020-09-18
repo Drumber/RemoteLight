@@ -1,6 +1,7 @@
 package de.lars.remotelightcore.utils.color.palette;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
@@ -42,6 +43,28 @@ public class EvenGradientPalette extends ColorPalette {
 		targetIndex += amount;
 		if(targetIndex >= size())
 			targetIndex -= size();
+	}
+	
+	/**
+	 * Add the specified color(s) to the palette.
+	 * @param colors	color(s) to add
+	 * @return			the instance ({@code this})
+	 */
+	public EvenGradientPalette add(Color... colors) {
+		if(colors != null)
+			listColor.addAll(Arrays.asList(colors));
+		return this;
+	}
+	
+	/**
+	 * Add the specified color to the palette.
+	 * @param r			red
+	 * @param g			green
+	 * @param b			blue
+	 * @return			the instance ({@code this})
+	 */
+	public EvenGradientPalette add(int r, int g, int b) {
+		return add(new Color(r, g, b));
 	}
 	
 	@Override
