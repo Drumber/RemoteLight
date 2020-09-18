@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>de.lars</groupId>
 		<artifactId>remotelight</artifactId>
-		<version>0.2.4</version>
+		<version>0.2.5-beta</version>
 	</parent>
 
 	<artifactId>remotelight-client</artifactId>
@@ -16,7 +16,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<flatlaf.version>0.41</flatlaf.version>
+		<flatlaf.version>0.42</flatlaf.version>
 		<mainclass>de.lars.remotelightclient.Main</mainclass>
 		<builtby>Drumber</builtby>
 		<!-- set to 'package' to enable or 'none' to disable packager -->
