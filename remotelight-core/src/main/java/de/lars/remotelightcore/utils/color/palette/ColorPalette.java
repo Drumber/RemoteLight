@@ -109,6 +109,11 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 		listColor.remove(index);
 	}
 	
+	@Override
+	public void clear() {
+		listColor.clear();
+	}
+	
 	/**
 	 * Get the {@link ArrayList} used by this color palette.
 	 * @return			array list instance

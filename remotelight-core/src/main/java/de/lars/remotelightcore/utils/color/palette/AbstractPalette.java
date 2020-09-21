@@ -5,6 +5,11 @@ import java.awt.Color;
 public abstract class AbstractPalette {
 	
 	/**
+	 * Clear the whole color palette
+	 */
+	public abstract void clear();
+	
+	/**
 	 * Get the next color of the palette.
 	 * @return			next color in palette
 	 */

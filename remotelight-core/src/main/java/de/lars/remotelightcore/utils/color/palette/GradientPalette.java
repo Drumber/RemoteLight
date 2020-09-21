@@ -25,7 +25,7 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	}
 	
 	public GradientPalette() {
-		this(0.05f);
+		this(0.005f);
 	}
 	
 	/**
@@ -91,6 +91,12 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 			listPosition.remove(index);
 		}
 		return this;
+	}
+	
+	@Override
+	public void clear() {
+		listColor.clear();
+		listPosition.clear();
 	}
 
 	/**

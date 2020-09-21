@@ -25,7 +25,7 @@ public class GradientAnimation extends Animation {
 		super("Gradient");
 		String[] values = Palettes.getNames().toArray(new String[0]);
 		sGradient = this.addSetting(new SettingSelection("animations.gradient.gradients", "Gradient", SettingCategory.Intern, null, values, values[0], Model.ComboBox));
-		sStepSize = this.addSetting(new SettingDouble("animations.gradient.stepsize", "Step size", SettingCategory.Intern, null, 0.05, 0.001, 1.0, 0.05));
+		sStepSize = this.addSetting(new SettingDouble("animations.gradient.stepsize", "Resolution", SettingCategory.Intern, null, 0.05, 0.0009, 1.0, 0.005));
 	}
 	
 	@Override
