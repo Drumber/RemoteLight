@@ -82,6 +82,45 @@ public class Palettes {
 	public static final GradientPalette MISTRESSNIGHT = put("Mistress Night", new GradientPalette().add(0, 1, 5, 29)
 			.add(51, 36, 10, 23).add(127, 118, 91, 17).add(204, 36, 10, 23).add(255, 1, 4, 28));
 
+	public static final GradientPalette SPELLBOUND = put("Spellbound", new GradientPalette().add(0.00f, 246, 246, 122)
+			.add(0.05f, 212, 252, 129).add(0.10f, 178, 251, 134).add(0.18f, 140, 253, 113).add(0.25f, 93, 247, 137)
+			.add(0.32f, 77, 234, 213).add(0.37f, 93, 199, 238).add(0.40f, 129, 184, 248).add(0.44f, 136, 147, 252)
+			.add(0.50f, 136, 147, 252).add(0.55f, 173, 172, 252).add(0.59f, 191, 186, 253).add(0.64f, 197, 193, 254)
+			.add(0.68f, 205, 189, 254).add(0.73f, 207, 176, 254).add(0.77f, 205, 107, 220).add(0.83f, 187, 77, 166)
+			.add(0.87f, 215, 101, 137).add(0.92f, 255, 168, 159).add(0.97f, 245, 246, 129).add(1.00f, 245, 246, 129));
+
+	public static final GradientPalette FLAME = put("Flame",
+			new GradientPalette().add(0.00f, 254, 113, 23).add(0.17f, 240, 47, 4).add(0.35f, 238, 138, 26)
+					.add(0.50f, 48, 146, 11).add(0.65f, 238, 138, 26).add(0.83f, 240, 47, 4).add(1.00f, 254, 113, 23));
+
+	public static final GradientPalette BUTTERFLYFAIRY = put("Butterfly Fairy",
+			new GradientPalette().add(0.00f, 167, 77, 38).add(0.25f, 215, 167, 105).add(0.50f, 133, 203, 206)
+					.add(0.75f, 19, 88, 138).add(1.00f, 1, 6, 9));
+
+	public static final GradientPalette HANGONFATBOY = put("Hang on fatboy",
+			new GradientPalette().add(0.00f, 239, 146, 58).add(0.12f, 159, 85, 137).add(0.24f, 93, 47, 104)
+					.add(0.38f, 59, 106, 165).add(0.45f, 6, 53, 109).add(0.55f, 6, 53, 109).add(0.62f, 59, 106, 165)
+					.add(0.76f, 93, 47, 104).add(0.88f, 159, 85, 137).add(1.00f, 239, 146, 58));
+
+	public static final GradientPalette SUNLITWAVE = put("Sunlit Wave",
+			new GradientPalette().add(0.00f, 59, 57, 164).add(0.18f, 122, 88, 183).add(0.32f, 89, 45, 142)
+					.add(0.44f, 104, 28, 93).add(0.59f, 118, 23, 43).add(0.78f, 221, 106, 62).add(0.93f, 236, 170, 86)
+					.add(1.00f, 249, 234, 211));
+
+	public static final GradientPalette TROVE = put("Trove",
+			new GradientPalette().add(0.00f, 81, 87, 74).add(0.05f, 68, 124, 105).add(0.10f, 116, 196, 147)
+					.add(0.15f, 142, 140, 109).add(0.20f, 228, 191, 128).add(0.25f, 233, 215, 142)
+					.add(0.30f, 226, 151, 93).add(0.35f, 241, 150, 112).add(0.40f, 225, 101, 82).add(0.45f, 201, 74, 83)
+					.add(0.50f, 190, 81, 104).add(0.55f, 163, 73, 116).add(0.60f, 153, 55, 103).add(0.65f, 101, 56, 125)
+					.add(0.70f, 78, 36, 114).add(0.75f, 145, 99, 182).add(0.80f, 226, 121, 163).add(0.85f, 224, 89, 139)
+					.add(0.90f, 124, 159, 176).add(0.95f, 86, 152, 196).add(1.00f, 154, 191, 136));
+
+	public static final GradientPalette RENMAIDEN = put("Ren Maiden",
+			new GradientPalette().add(0.00f, 50, 153, 52).add(0.15f, 71, 66, 85).add(0.35f, 225, 148, 179)
+					.add(0.50f, 233, 235, 210).add(0.65f, 242, 158, 217).add(0.85f, 228, 136, 51)
+					.add(1.00f, 50, 153, 52));
+	
+
 	// --------------------
 	// Gradients from The Open Clip Art Library
 	// http://soliton.vm.bytemark.co.uk/pub/cpt-city/ocal/index.html
@@ -101,5 +140,13 @@ public class Palettes {
 	public static final GradientPalette METAL_GOLD = put("Metal Gold",
 			new GradientPalette().add(0, 121, 55, 0).add(51, 255, 255, 212).add(102, 255, 156, 6).add(153, 121, 55, 0)
 					.add(204, 121, 119, 52).add(255, 255, 156, 6));
+
+	public static final GradientPalette SPECTRUM = put("Spectrum",
+			new GradientPalette().add(0.00f, 255, 0, 0).add(0.17f, 255, 165, 0).add(0.33f, 255, 255, 0)
+					.add(0.50f, 0, 255, 0).add(0.67f, 0, 255, 255).add(0.83f, 75, 0, 130).add(1.00f, 238, 130, 238));
+
+	public static final GradientPalette PLUM = put("Plum",
+			new GradientPalette().add(0.00f, 221, 160, 221).add(0.20f, 255, 128, 128).add(0.40f, 221, 160, 221)
+					.add(0.60f, 221, 160, 221).add(0.80f, 255, 128, 128).add(1.00f, 221, 160, 221));
 
 }
