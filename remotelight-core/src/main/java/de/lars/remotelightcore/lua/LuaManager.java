@@ -191,10 +191,12 @@ public class LuaManager extends EffectManager {
 	 * Stop the current lua script
 	 */
 	public void stopLuaScript() {
-		debugLib.setInterrupted(true);
 		if(activeScript != null) {
 			Logger.info("Stopped lua script: " + activeScript.getFilePath());
+			
 			activeScript.setActive(false);
+			debugLib.setInterrupted(true);
+			
 			LuaScriptEvent event = new LuaScriptEvent(activeScript, Action.STOP);
 			activeScript = null;
 			PixelColorUtils.setAllPixelsBlack();

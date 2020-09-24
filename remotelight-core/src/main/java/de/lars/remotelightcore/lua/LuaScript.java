@@ -31,6 +31,10 @@ public class LuaScript {
 	 * @return		lua chunk
 	 */
 	public LuaValue load() {
+		// reset global values
+		globals.set(VAL_NAME, LuaValue.NIL);
+		globals.set(FUNC_LOOP, LuaValue.NIL);
+		
 		isActive = true;
 		return globals.loadfile(filePath);
 	}
