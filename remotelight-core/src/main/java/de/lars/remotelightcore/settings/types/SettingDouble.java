@@ -42,7 +42,8 @@ public class SettingDouble extends Setting {
 		this.stepsize = stepsize;
 	}
 
-	public double getValue() {
+	@Override
+	public Double getValue() {
 		return value;
 	}
 

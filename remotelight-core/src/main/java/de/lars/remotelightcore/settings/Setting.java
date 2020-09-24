@@ -29,7 +29,7 @@ import java.util.Set;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 
-public class Setting implements Serializable {
+public abstract class Setting implements Serializable {
 	private static final long serialVersionUID = -7324328394259004155L;
 	
 	// default flags
@@ -87,6 +87,12 @@ public class Setting implements Serializable {
 	public void setCategory(SettingCategory category) {
 		this.category = category;
 	}
+	
+	/**
+	 * Get the stored setting value of this setting instance
+	 * @return		stored setting value
+	 */
+	public abstract Object getValue();
 	
 	/**
 	 * Add a setting flag

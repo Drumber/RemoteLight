@@ -42,7 +42,8 @@ public class SettingInt extends Setting {
 		this.stepsize = stepsize;
 	}
 
-	public int getValue() {
+	@Override
+	public Integer getValue() {
 		return value;
 	}
 

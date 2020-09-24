@@ -55,6 +55,11 @@ public class SettingSelection extends Setting {
 		this.values = values;
 	}
 
+	@Override
+	public String getValue() {
+		return getSelected();
+	}
+	
 	public String getSelected() {
 		return selected;
 	}

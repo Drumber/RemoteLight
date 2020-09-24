@@ -41,6 +41,7 @@ public class SettingObject extends Setting {
 		this.value = value;
 	}
 
+	@Override
 	public Object getValue() {
 		return value;
 	}

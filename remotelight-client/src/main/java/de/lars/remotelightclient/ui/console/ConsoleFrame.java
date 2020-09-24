@@ -35,17 +35,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -182,7 +172,7 @@ public class ConsoleFrame extends BasicFrame {
 			
 			// font size spinner
 			SettingInt settingFontSize = sm.addSetting(new SettingInt("console.fontsize", "Console font size", SettingCategory.Intern, null, 11, 6, 30, 1));
-			JSpinner spinnerSize = new JSpinner(new SpinnerNumberModel(settingFontSize.getValue(), settingFontSize.getMin(), settingFontSize.getMax(), settingFontSize.getStepsize()));
+			JSpinner spinnerSize = new JSpinner(new SpinnerNumberModel(settingFontSize.getValue().intValue(), settingFontSize.getMin(), settingFontSize.getMax(), settingFontSize.getStepsize()));
 			spinnerSize.setToolTipText("Font size");
 			spinnerSize.addChangeListener(e -> {
 				fontSize = (int) spinnerSize.getValue();

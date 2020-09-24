@@ -38,6 +38,7 @@ public class SettingString extends Setting {
 		this.value = value;
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}

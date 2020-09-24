@@ -40,6 +40,7 @@ public class SettingColor extends Setting {
 		this.value = value;
 	}
 
+	@Override
 	public Color getValue() {
 		return value;
 	}

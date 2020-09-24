@@ -38,7 +38,8 @@ public class SettingBoolean extends Setting {
 		this.value = value;
 	}
 	
-	public boolean getValue() {
+	@Override
+	public Boolean getValue() {
 		return value;
 	}
 	
