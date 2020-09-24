@@ -60,6 +60,8 @@ import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.types.LuaScriptEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
@@ -152,6 +154,8 @@ public class ScriptsPanel extends MenuPanel {
 		
 		addOptionButtons();
 		addScriptPanels();
+		// register lua script listener
+		Main.getInstance().getCore().getEventHandler().register(onLuaScriptEvent);
 	}
 	
 	private void addOptionButtons() {
@@ -233,12 +237,16 @@ public class ScriptsPanel extends MenuPanel {
 					}
 				}
 			}
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e1) {}
+		}
+	};
+	
+	private Listener<LuaScriptEvent> onLuaScriptEvent = new Listener<LuaScriptEvent>() {
+		@Override
+		public void onEvent(LuaScriptEvent event) {
 			addScriptPanels();
 		}
 	};
+	
 	
 	/**
 	 * Adds control bar with a speed slider

@@ -172,9 +172,26 @@ public class LuaColor {
 	 * @param c Color
 	 * @return LuaTable with RGB values
 	 */
-	private static LuaTable getLuaTable(Color c) {
+	public static LuaTable getLuaTable(Color c) {
 		Varargs rgb = LuaTable.varargsOf( LuaValue.valueOf(c.getRed()) , LuaValue.valueOf(c.getGreen()) , LuaValue.valueOf(c.getBlue()) );
 		return new LuaTable(rgb);
+	}
+	
+	/**
+	 * Convert lua table color to java color
+	 * @param value lua value
+	 * @return {@link Color} instance
+	 */
+	public static Color getJavaColor(LuaValue value) {
+		LuaTable rgb = value.checktable();
+		if(rgb.length() == 3) {
+			int r = rgb.get(1).checkint();
+			int g = rgb.get(2).checkint();
+			int b = rgb.get(3).checkint();
+			return new Color(r, g, b);
+		} else {
+			throw new LuaError("Expected a table length of 3, got " + rgb.length());
+		}
 	}
 
 }
