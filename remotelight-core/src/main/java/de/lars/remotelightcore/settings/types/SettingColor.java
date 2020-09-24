@@ -40,8 +40,19 @@ public class SettingColor extends Setting {
 		this.value = value;
 	}
 
-	@Override
+	/**
+	 * Get the color value
+	 * @return			stored color value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
 	public Color getValue() {
+		return value;
+	}
+	
+	@Override
+	public Color get() {
 		return value;
 	}
 

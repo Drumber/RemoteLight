@@ -56,7 +56,7 @@ public class SettingSelection extends Setting {
 	}
 
 	@Override
-	public String getValue() {
+	public String get() {
 		return getSelected();
 	}
 	

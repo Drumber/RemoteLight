@@ -42,8 +42,19 @@ public class SettingDouble extends Setting {
 		this.stepsize = stepsize;
 	}
 
+	/**
+	 * Get the double value
+	 * @return			stored double value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
+	public double getValue() {
+		return value;
+	}
+	
 	@Override
-	public Double getValue() {
+	public Double get() {
 		return value;
 	}
 

@@ -41,8 +41,19 @@ public class SettingObject extends Setting {
 		this.value = value;
 	}
 
-	@Override
+	/**
+	 * Get the object value
+	 * @return			stored object value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
 	public Object getValue() {
+		return value;
+	}
+	
+	@Override
+	public Object get() {
 		return value;
 	}
 

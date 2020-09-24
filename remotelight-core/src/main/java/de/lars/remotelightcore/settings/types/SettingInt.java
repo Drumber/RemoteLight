@@ -42,8 +42,19 @@ public class SettingInt extends Setting {
 		this.stepsize = stepsize;
 	}
 
+	/**
+	 * Get the int value
+	 * @return			stored int value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
+	public int getValue() {
+		return value;
+	}
+	
 	@Override
-	public Integer getValue() {
+	public Integer get() {
 		return value;
 	}
 

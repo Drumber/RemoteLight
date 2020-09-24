@@ -92,7 +92,7 @@ public abstract class Setting implements Serializable {
 	 * Get the stored setting value of this setting instance
 	 * @return		stored setting value
 	 */
-	public abstract Object getValue();
+	public abstract Object get();
 	
 	/**
 	 * Add a setting flag

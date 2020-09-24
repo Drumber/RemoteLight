@@ -62,7 +62,7 @@ public class SettingDoublePanel extends SettingPanel {
 		
 		spinner = new JSpinner();
 		spinner.setPreferredSize(new Dimension(60, spinner.getPreferredSize().height));
-		spinner.setModel(new SpinnerNumberModel(setting.getValue().doubleValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		spinner.setModel(new SpinnerNumberModel(setting.get().doubleValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -86,7 +86,7 @@ public class SettingDoublePanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
-		spinner.setModel(new SpinnerNumberModel(setting.getValue().doubleValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		spinner.setModel(new SpinnerNumberModel(setting.get().doubleValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 	}
 
 }

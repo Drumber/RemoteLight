@@ -38,8 +38,19 @@ public class SettingBoolean extends Setting {
 		this.value = value;
 	}
 	
+	/**
+	 * Get the boolean value
+	 * @return			stored boolean value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
+	public boolean getValue() {
+		return value;
+	}
+	
 	@Override
-	public Boolean getValue() {
+	public Boolean get() {
 		return value;
 	}
 	

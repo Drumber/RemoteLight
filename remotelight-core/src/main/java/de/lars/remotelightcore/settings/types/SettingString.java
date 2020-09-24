@@ -38,8 +38,19 @@ public class SettingString extends Setting {
 		this.value = value;
 	}
 
-	@Override
+	/**
+	 * Get the string value
+	 * @return			stored string value
+	 * @deprecated		will be removed in future versions,
+	 * 					use {@link #get()} instead
+	 */
+	@Deprecated
 	public String getValue() {
+		return value;
+	}
+	
+	@Override
+	public String get() {
 		return value;
 	}
 

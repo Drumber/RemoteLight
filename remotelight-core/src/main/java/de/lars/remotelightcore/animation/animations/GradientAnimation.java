@@ -38,7 +38,7 @@ public class GradientAnimation extends Animation {
 		palette = Palettes.getPalette(sGradient.getSelected());
 		
 		if(palette instanceof ColorGradient) {
-			((ColorGradient) palette).setStepSize(sStepSize.getValue().floatValue());
+			((ColorGradient) palette).setStepSize(sStepSize.get().floatValue());
 			((ColorGradient) palette).setReverseOnEnd(true);
 		}
 		

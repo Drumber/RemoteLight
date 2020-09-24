@@ -66,9 +66,9 @@ public class RainbowNoise extends Animation {
 	@Override
 	public void onLoop() {
 		// get increment values from settings
-		float xincrement = ((SettingDouble) getSetting("animation.rainbownoise.xincrement")).getValue().floatValue();
-		float yincrement = ((SettingDouble) getSetting("animation.rainbownoise.yincrement")).getValue().floatValue();
-		zincrement = ((SettingDouble) getSetting("animation.rainbownoise.timeincrement")).getValue().floatValue();
+		float xincrement = ((SettingDouble) getSetting("animation.rainbownoise.xincrement")).get().floatValue();
+		float yincrement = ((SettingDouble) getSetting("animation.rainbownoise.yincrement")).get().floatValue();
+		zincrement = ((SettingDouble) getSetting("animation.rainbownoise.timeincrement")).get().floatValue();
 		
 		zoff += zincrement;
 		float xoff = 0.0f;

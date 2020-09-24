@@ -172,7 +172,7 @@ public class ConsoleFrame extends BasicFrame {
 			
 			// font size spinner
 			SettingInt settingFontSize = sm.addSetting(new SettingInt("console.fontsize", "Console font size", SettingCategory.Intern, null, 11, 6, 30, 1));
-			JSpinner spinnerSize = new JSpinner(new SpinnerNumberModel(settingFontSize.getValue().intValue(), settingFontSize.getMin(), settingFontSize.getMax(), settingFontSize.getStepsize()));
+			JSpinner spinnerSize = new JSpinner(new SpinnerNumberModel(settingFontSize.get().intValue(), settingFontSize.getMin(), settingFontSize.getMax(), settingFontSize.getStepsize()));
 			spinnerSize.setToolTipText("Font size");
 			spinnerSize.addChangeListener(e -> {
 				fontSize = (int) spinnerSize.getValue();

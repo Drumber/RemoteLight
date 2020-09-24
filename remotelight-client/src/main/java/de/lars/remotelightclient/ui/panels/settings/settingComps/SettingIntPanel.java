@@ -58,7 +58,7 @@ public class SettingIntPanel extends SettingPanel {
 		}
 		
 		spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(setting.getValue().intValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		spinner.setModel(new SpinnerNumberModel(setting.get().intValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -82,7 +82,7 @@ public class SettingIntPanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
-		spinner.setModel(new SpinnerNumberModel(setting.getValue().intValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		spinner.setModel(new SpinnerNumberModel(setting.get().intValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
 	}
 
 }
