@@ -108,6 +108,8 @@ public class LuaSettings {
 			Setting setting = getSetting(getId(arg));
 			if(setting == null)
 				return NIL;
+			if(setting instanceof SettingColor)
+				return LuaColor.getLuaTable(((SettingColor) setting).get());
 			return CoerceJavaToLua.coerce(setting.get());
 		}
 	};

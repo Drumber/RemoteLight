@@ -57,6 +57,8 @@ import de.lars.remotelightclient.ui.components.dialogs.ErrorDialog;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
+import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
+import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -65,9 +67,11 @@ import de.lars.remotelightcore.event.events.types.LuaScriptEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
+import de.lars.remotelightcore.lua.LuaScript;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
+import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.DirectoryUtil;
@@ -78,7 +82,7 @@ public class ScriptsPanel extends MenuPanel {
 	private MainFrame mainFrame;
 	private SettingsManager sm;
 	private LuaManager luaManager;
-	private JPanel bgrScripts, bgrOptions, bgrNotification;
+	private JPanel bgrScripts, bgrOptions, bgrSettings, bgrNotification;
 	private JTextArea textNotification;
 	
 	public ScriptsPanel() {
@@ -138,13 +142,24 @@ public class ScriptsPanel extends MenuPanel {
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		bgrScroll.add(scrollPane);
+		bgrScroll.add(scrollPane, BorderLayout.CENTER);
 		
 		bgrScripts = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrScripts.setLayout(wlayout);
 		bgrScripts.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(bgrScripts);
+		
+		bgrSettings = new JPanel();
+		bgrSettings.setLayout(new BoxLayout(bgrSettings, BoxLayout.Y_AXIS));
+		bgrSettings.setBackground(Color.green);
+		
+		JScrollPane scrollSettings = new JScrollPane(bgrSettings);
+		scrollSettings.getVerticalScrollBar().setUnitIncrement(16);
+		scrollSettings.setViewportBorder(null);
+		scrollSettings.setBorder(BorderFactory.createEmptyBorder());
+		scrollSettings.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		bgrScroll.add(scrollSettings, BorderLayout.SOUTH);
 		
 		bgrOptions = new JPanel();
 		bgrOptions.setBackground(Style.panelDarkBackground);
@@ -244,8 +259,25 @@ public class ScriptsPanel extends MenuPanel {
 		@Override
 		public void onEvent(LuaScriptEvent event) {
 			addScriptPanels();
+			addScriptSettings();
 		}
 	};
+	
+	
+	public void addScriptSettings() {
+		bgrSettings.removeAll();
+		LuaScript activeScript = luaManager.getActiveLuaScript();
+		if(activeScript != null) {
+			for(Setting s : activeScript.getScriptSettings()) {
+				SettingPanel spanel = SettingsUtil.getSettingPanel(s);
+				spanel.setSettingChangedListener(p -> {
+					p.setValue();
+				});
+				bgrSettings.add(spanel);
+			}
+		}
+		updateUI();
+	}
 	
 	
 	/**
