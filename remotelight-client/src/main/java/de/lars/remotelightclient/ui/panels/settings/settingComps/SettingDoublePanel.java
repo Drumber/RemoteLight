@@ -56,7 +56,7 @@ public class SettingDoublePanel extends SettingPanel {
 		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
-		if(setting.getValue() > setting.getMax()) {
+		if(setting.get() > setting.getMax()) {
 			setting.setValue(setting.getMax());
 		}
 		

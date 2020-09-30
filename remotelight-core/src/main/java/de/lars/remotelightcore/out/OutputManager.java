@@ -129,7 +129,7 @@ public class OutputManager {
 	 */
 	public int getDelay() {
 		if(((SettingInt) sm.getSettingFromId("out.delay")) != null) {
-			delay = ((SettingInt) sm.getSettingFromId("out.delay")).getValue();
+			delay = ((SettingInt) sm.getSettingFromId("out.delay")).get();
 		}
 		return delay;
 	}

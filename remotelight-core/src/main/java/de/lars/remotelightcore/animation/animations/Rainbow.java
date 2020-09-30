@@ -62,7 +62,7 @@ public class Rainbow extends Animation {
 	
 	@Override
 	public void onLoop() {
-		increment = settingResolution.getValue() * 0.001f;
+		increment = settingResolution.get() * 0.001f;
 		executeSelectedMode();
 		OutputManager.addToOutput(strip);
 		super.onLoop();

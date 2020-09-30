@@ -64,8 +64,8 @@ public class RunningLight extends MusicEffect {
 
 	@Override
 	public void onLoop() {
-		centered = ((SettingBoolean) getSetting("musicsync.runninglight.centered")).getValue();
-		groupSize = ((SettingInt) getSetting("musicsync.runninglight.groupsize")).getValue();
+		centered = ((SettingBoolean) getSetting("musicsync.runninglight.centered")).get();
+		groupSize = ((SettingInt) getSetting("musicsync.runninglight.groupsize")).get();
 		
 		int half = RemoteLightCore.getLedNum() / 2;
 		double pitch = this.getPitch();

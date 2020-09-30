@@ -92,8 +92,8 @@ public class BasicFrame extends JFrame {
 	 */
 	protected synchronized void initSavedSize() {
 		SettingObject settingSize = sm.getSettingObject(settingPrefix + ".size");
-		if(settingSize != null && settingSize.getValue() instanceof int[]) {
-			int[] dataSize = (int[]) settingSize.getValue();
+		if(settingSize != null && settingSize.get() instanceof int[]) {
+			int[] dataSize = (int[]) settingSize.get();
 			if(dataSize.length >= 2) {
 				setPreferredSize(new Dimension(dataSize[0], dataSize[1]));
 				setSize(new Dimension(dataSize[0], dataSize[1]));
@@ -121,7 +121,7 @@ public class BasicFrame extends JFrame {
 	protected synchronized void initSavedAlwaysTop() {
 		SettingBoolean settingAlwayTop = sm.getSetting(SettingBoolean.class, settingPrefix + ".alwaystop");
 		if(settingAlwayTop != null) {
-			setAlwaysOnTop(settingAlwayTop.getValue());
+			setAlwaysOnTop(settingAlwayTop.get());
 		}
 	}
 	

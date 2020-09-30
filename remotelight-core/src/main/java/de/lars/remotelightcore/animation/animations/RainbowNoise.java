@@ -90,7 +90,7 @@ public class RainbowNoise extends Animation {
 			Color color = RainbowWheel.getRainbow()[hue];
 			
 			// change brightness of color (if enabled in options)
-			if(((SettingBoolean)getSetting("animation.rainbownoise.brgightnesschange")).getValue()) {
+			if(((SettingBoolean)getSetting("animation.rainbownoise.brgightnesschange")).get()) {
 				color = ColorUtil.dimColor(color, bright);
 			}
 			

@@ -48,8 +48,8 @@ public class Wipe extends Animation {
 	public void onEnable() {
 		pos = 0;
 		color = RainbowWheel.getRandomColor();
-		if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.wipe.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.wipe.color")).get();
 		}
 		super.onEnable();
 	}
@@ -61,9 +61,9 @@ public class Wipe extends Animation {
 		if(++pos == RemoteLightCore.getLedNum()) {
 			pos = 0;
 			
-			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).getValue()) {
+			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).get()) {
 				if(color == Color.BLACK) {
-					color = ((SettingColor) getSetting("animation.wipe.color")).getValue();
+					color = ((SettingColor) getSetting("animation.wipe.color")).get();
 				} else {
 					color = Color.BLACK;
 				}
@@ -84,7 +84,7 @@ public class Wipe extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.wipe.color", getSetting(SettingBoolean.class, "animation.wipe.randomcolor").getValue());
+		this.hideSetting("animation.wipe.color", getSetting(SettingBoolean.class, "animation.wipe.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

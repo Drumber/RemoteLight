@@ -61,8 +61,8 @@ public class RunningLight extends Animation {
 		}
 		Color c = color[counter];
 		
-		if(!((SettingBoolean) getSetting("animation.runninglight.randomcolor")).getValue()) {
-			c = ((SettingColor) getSetting("animation.runninglight.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.runninglight.randomcolor")).get()) {
+			c = ((SettingColor) getSetting("animation.runninglight.color")).get();
 		}
 		
 		if(pass < 5) {
@@ -102,7 +102,7 @@ public class RunningLight extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.runninglight.color", getSetting(SettingBoolean.class, "animation.runninglight.randomcolor").getValue());
+		this.hideSetting("animation.runninglight.color", getSetting(SettingBoolean.class, "animation.runninglight.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

@@ -55,7 +55,7 @@ public class ColorsPanel extends MenuPanel {
 		colors = new ArrayList<>();
 		
 		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered //$NON-NLS-1$
-		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").getValue())); //$NON-NLS-1$
+		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").get())); //$NON-NLS-1$
 		
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));

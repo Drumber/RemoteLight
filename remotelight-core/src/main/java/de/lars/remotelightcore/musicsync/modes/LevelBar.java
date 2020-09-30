@@ -104,7 +104,7 @@ public class LevelBar extends MusicEffect {
 		
 		//half 1
 		for(int i = 0; i < half; i++) {
-			Color c = sColor1.getValue();
+			Color c = sColor1.get();
 			
 			if(autoChange) //auto color change
 				c = pattern.get(count)[0];
@@ -113,13 +113,13 @@ public class LevelBar extends MusicEffect {
 				c = background;
 			} else {
 				if(i < half / 3) {
-					c = sColor3.getValue();
+					c = sColor3.get();
 					
 					if(autoChange) //auto color change
 						c = pattern.get(count)[2];
 				}
 				else if(i < (half / 3) * 2) {
-					c = sColor2.getValue();
+					c = sColor2.get();
 					
 					if(autoChange) //auto color change
 						c = pattern.get(count)[1];
@@ -132,19 +132,19 @@ public class LevelBar extends MusicEffect {
 		for(int i = 0; i < half; i++) {
 			Color c = background;
 			if(i < leds) {
-				c = sColor1.getValue();
+				c = sColor1.get();
 				
 				if(autoChange) //auto color change
 					c = pattern.get(count)[0];
 				
 					if(i >= (half / 3) * 2) {
-						c = sColor3.getValue();
+						c = sColor3.get();
 						
 						if(autoChange) //auto color change
 							c = pattern.get(count)[2];
 					}
 					else if(i >= half / 3) {
-						c = sColor2.getValue();
+						c = sColor2.get();
 						
 						if(autoChange) //auto color change
 							c = pattern.get(count)[1];
@@ -173,8 +173,8 @@ public class LevelBar extends MusicEffect {
 	}
 	
 	private void handleOptions() {
-		if(autoChange != sAutoChange.getValue()) {
-			autoChange = sAutoChange.getValue();
+		if(autoChange != sAutoChange.get()) {
+			autoChange = sAutoChange.get();
 			// hide color options on auto change
 			this.hideSetting(sColor1, autoChange);
 			this.hideSetting(sColor2, autoChange);
@@ -182,8 +182,8 @@ public class LevelBar extends MusicEffect {
 			// update effect options panel
 			this.updateEffectOptions();
 		}
-		smooth = getSetting(SettingBoolean.class, "musicsync.levelbar.smooth").getValue();
-		background = getSetting(SettingColor.class, "musicsync.levelbar.background").getValue();
+		smooth = getSetting(SettingBoolean.class, "musicsync.levelbar.smooth").get();
+		background = getSetting(SettingColor.class, "musicsync.levelbar.background").get();
 	}
 
 }

@@ -85,7 +85,7 @@ public class NativeSoundConfigPanel extends JPanel {
 	}
 	
 	public void setValues() {
-		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").getValue();
+		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").get();
 		if(serviceIndex == -1)
 			serviceIndex = 0;
 		
@@ -105,16 +105,16 @@ public class NativeSoundConfigPanel extends JPanel {
 		
 		try {
 			comboService.setSelectedIndex(serviceIndex);
-			int samplerate = (int) sm.getSettingObject("nativesound.samplerate").getValue();
+			int samplerate = (int) sm.getSettingObject("nativesound.samplerate").get();
 			comboSampleRate.setSelectedItem(samplerate);
-			int bitrate = (int) sm.getSettingObject("nativesound.bitrate").getValue();
+			int bitrate = (int) sm.getSettingObject("nativesound.bitrate").get();
 			comboBitRate.setSelectedItem(bitrate);
-			int channels = (int) sm.getSettingObject("nativesound.channels").getValue();
+			int channels = (int) sm.getSettingObject("nativesound.channels").get();
 			comboChannels.setSelectedItem(channels);
-			chckbxShowSupportedOnly.setSelected((boolean) sm.getSettingObject("nativesound.panel.showonlysupported").getValue());
+			chckbxShowSupportedOnly.setSelected((boolean) sm.getSettingObject("nativesound.panel.showonlysupported").get());
 			
 			updateDeviceList(serviceIndex);
-			int selectedDeviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").getValue();
+			int selectedDeviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").get();
 			comboDevice.setSelectedIndex(currentDeviceIndexes.indexOf(selectedDeviceIndex));
 		} catch(IllegalArgumentException e) {
 		}

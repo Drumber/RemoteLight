@@ -53,8 +53,8 @@ public class Fade extends Animation {
 		}
 		dimVal--;
 		
-		if(!((SettingBoolean) getSetting("animation.fade.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.fade.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.fade.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.fade.color")).get();
 		}
 
 		Color c = ColorUtil.dimColor(color, dimVal);
@@ -65,7 +65,7 @@ public class Fade extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.fade.color", getSetting(SettingBoolean.class, "animation.fade.randomcolor").getValue());
+		this.hideSetting("animation.fade.color", getSetting(SettingBoolean.class, "animation.fade.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

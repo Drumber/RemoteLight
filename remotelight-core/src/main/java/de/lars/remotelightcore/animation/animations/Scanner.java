@@ -73,10 +73,10 @@ public class Scanner extends Animation {
 			pos = 0;
 		}
 		boolean prevRandomColor = randomColor;
-		randomColor = getSetting(SettingBoolean.class, "animation.scanner.randomcolor").getValue();
+		randomColor = getSetting(SettingBoolean.class, "animation.scanner.randomcolor").get();
 		if(randomColor != prevRandomColor) {
 			// update options panel
-			this.hideSetting("animation.scanner.color", getSetting(SettingBoolean.class, "animation.scanner.randomcolor").getValue());
+			this.hideSetting("animation.scanner.color", getSetting(SettingBoolean.class, "animation.scanner.randomcolor").get());
 			this.updateEffectOptions();
 		}
 		
@@ -103,7 +103,7 @@ public class Scanner extends Animation {
 			}
 		}
 		if(!randomColor) {
-			color = ((SettingColor) getSetting("animation.scanner.color")).getValue();
+			color = ((SettingColor) getSetting("animation.scanner.color")).get();
 		}
 		strip[pos] = color;
 		OutputManager.addToOutput(strip);
@@ -125,7 +125,7 @@ public class Scanner extends Animation {
 			}
 		}
 		if(!randomColor) {
-			color = ((SettingColor) getSetting("animation.scanner.color")).getValue();
+			color = ((SettingColor) getSetting("animation.scanner.color")).get();
 			color2 = color;
 		}
 		strip[pos] = color;

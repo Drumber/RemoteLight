@@ -146,7 +146,7 @@ public class AnimationsPanel extends MenuPanel {
 		DefaultControlBar controlBar = new DefaultControlBar();
 		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);
 		speedSlider.getSlider().addChangeListener(sliderSpeedListener);
-		speedSlider.getSlider().setValue((int) sm.getSettingObject("animations.speed").getValue());
+		speedSlider.getSlider().setValue((int) sm.getSettingObject("animations.speed").get());
 		controlBar.setActionPanel(speedSlider);
 		mainFrame.setControlBarPanel(controlBar);
 	}

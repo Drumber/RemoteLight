@@ -156,7 +156,7 @@ public class SortAlgo extends Animation {
 	private void show() {		
 		Color[] out = Arrays.copyOf(strip, strip.length);
 		
-		boolean showMarker = ((SettingBoolean)getSetting("animation.sortalgo.marker")).getValue();
+		boolean showMarker = ((SettingBoolean)getSetting("animation.sortalgo.marker")).get();
 		if(showMarker) {
 			for(int index : markedIndexes) {
 				out[index] = Color.WHITE;
@@ -171,7 +171,7 @@ public class SortAlgo extends Animation {
 	 */
 	private void doSort() {
 		String algo = (((SettingSelection) getSetting("animation.sortalgo.algorithms"))).getSelected();
-		boolean circle = (((SettingBoolean) getSetting("animation.sortalgo.circle"))).getValue();
+		boolean circle = (((SettingBoolean) getSetting("animation.sortalgo.circle"))).get();
 		
 		if(currentAlgorithm == null || (!circle && !currentAlgorithm.getName().equals(algo))) {
 			// switch algorithm

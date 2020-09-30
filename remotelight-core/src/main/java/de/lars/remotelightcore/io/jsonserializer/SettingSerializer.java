@@ -63,8 +63,8 @@ public class SettingSerializer implements JsonSerializer<List<Setting>> {
 	}
 	
 	protected String getSettingObjectType(SettingObject setting) {
-		if(setting.getValue() != null)
-			return setting.getValue().getClass().getName();
+		if(setting.get() != null)
+			return setting.get().getClass().getName();
 		return null;
 	}
 

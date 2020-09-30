@@ -83,8 +83,8 @@ public class LuaManager extends EffectManager {
 		SettingsManager sm = RemoteLightCore.getInstance().getSettingsManager();
 		sm.addSetting(new SettingBoolean("lua.advanced", "Lua Advanced", SettingCategory.Others, "Allow Lua scripts access to insecure libraries, such as OS and IO lib.", false));
 		sm.addSetting(new SettingInt("lua.instructions", "Lua instruction per ms", SettingCategory.Others, "Number of instructions a Lua script can execute per millisecond.", 40, 1, 500, 1));
-		MAX_INSTRUCTIONS = ((SettingInt) sm.getSettingFromId("lua.instructions")).getValue();
-		boolean advanced = ((SettingBoolean) sm.getSettingFromId("lua.advanced")).getValue();
+		MAX_INSTRUCTIONS = ((SettingInt) sm.getSettingFromId("lua.instructions")).get();
+		boolean advanced = ((SettingBoolean) sm.getSettingFromId("lua.advanced")).get();
 		
 		// set up globals
 		if(advanced) {	// allow access to all libraries

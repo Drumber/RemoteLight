@@ -98,7 +98,7 @@ public class Energy extends MusicEffect {
 			}
 			
 			if(mode.equals("Stacked")) {
-				Color[] colors = {sColorLow.getValue(), sColorMid.getValue(), sColorHigh.getValue()};
+				Color[] colors = {sColorLow.get(), sColorMid.get(), sColorHigh.get()};
 				show(aArray, colors);
 			} else {
 				showMix(aArray[0], aArray[1], aArray[2]);
@@ -113,7 +113,7 @@ public class Energy extends MusicEffect {
 			}
 			
 			if(mode.equals("Static")) {
-				Color color = sColorStatic.getValue();
+				Color color = sColorStatic.get();
 				show(a, color);
 			} else {
 				int start = getSoundProcessor().hzToBin(350);	// range from 350Hz...

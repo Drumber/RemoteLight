@@ -142,7 +142,7 @@ public class Lines extends MusicEffect {
 			return Color.GREEN;
 		}
 		// static color
-		return getSetting(SettingColor.class, "musicsync.lines.color").getValue();
+		return getSetting(SettingColor.class, "musicsync.lines.color").get();
 	}
 	
 	private void handleSettings() {
@@ -153,8 +153,8 @@ public class Lines extends MusicEffect {
 			this.hideSetting("musicsync.lines.color", !mode.equals("Static"));
 			this.updateEffectOptions();
 		}
-		rotate = getSetting(SettingBoolean.class, "musicsync.lines.rotate").getValue();
-		linesNum = getSetting(SettingInt.class, "musicsync.lines.lines").getValue();
+		rotate = getSetting(SettingBoolean.class, "musicsync.lines.rotate").get();
+		linesNum = getSetting(SettingInt.class, "musicsync.lines.lines").get();
 	}
 
 }

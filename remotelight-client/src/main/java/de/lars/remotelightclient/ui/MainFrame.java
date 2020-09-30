@@ -105,7 +105,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		addWindowListener(closeListener);
 		
-		setSize((Dimension) sm.getSettingObject("mainFrame.size").getValue());
+		setSize((Dimension) sm.getSettingObject("mainFrame.size").get());
 		
 		menuPanelFactories = new HashSet<MenuPanelFactory>();
 		menuItems = new ArrayList<MenuItem>();
@@ -141,7 +141,7 @@ public class MainFrame extends JFrame {
 		contentPane.add(bgrSideMenu, BorderLayout.WEST);
 		
 		sm.addSetting(new SettingObject("ui.sidemenu.extended", "Extended side menu", false));
-		if((boolean) sm.getSettingObject("ui.sidemenu.extended").getValue())
+		if((boolean) sm.getSettingObject("ui.sidemenu.extended").get())
 			sideMenu = new SideMenuExtended(this);
 		else
 			sideMenu = new SideMenuSmall(this);
@@ -177,7 +177,7 @@ public class MainFrame extends JFrame {
 	
 	WindowListener closeListener = new WindowAdapter() {
 		public void windowClosing(WindowEvent windowEvent) {
-			if(((SettingBoolean) sm.getSettingFromId("ui.hideintray")).getValue() && SystemTray.isSupported()) {
+			if(((SettingBoolean) sm.getSettingFromId("ui.hideintray")).get() && SystemTray.isSupported()) {
 				SystemTrayIcon.showTrayIcon();
 				dispose();
 			} else {

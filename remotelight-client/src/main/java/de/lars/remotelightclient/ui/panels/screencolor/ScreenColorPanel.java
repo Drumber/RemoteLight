@@ -291,8 +291,8 @@ public class ScreenColorPanel extends MenuPanel {
 			setScreenColorSettings();
 			drawOverlayRect();
 			
-			scm.setBrightnessThreshold(((SettingInt) sm.getSettingFromId("screencolor.filter.brightness.threshold")).getValue());
-			scm.setSaturationMultiplier(((SettingDouble) sm.getSettingFromId("screencolor.filter.saturation.multiplier")).getValue());
+			scm.setBrightnessThreshold(((SettingInt) sm.getSettingFromId("screencolor.filter.brightness.threshold")).get());
+			scm.setSaturationMultiplier(((SettingDouble) sm.getSettingFromId("screencolor.filter.saturation.multiplier")).get());
 			
 			if(scm.getCurrentMonitor() != null) {
 				// set max settings values
@@ -328,13 +328,13 @@ public class ScreenColorPanel extends MenuPanel {
 	}
 	
 	private void setScreenColorSettings() {
-		scm.setInverted(((SettingBoolean) sm.getSettingFromId("screencolor.invert")).getValue()); //$NON-NLS-1$
-		scm.setDelay(((SettingInt) sm.getSettingFromId("screencolor.delay")).getValue()); //$NON-NLS-1$
+		scm.setInverted(((SettingBoolean) sm.getSettingFromId("screencolor.invert")).get()); //$NON-NLS-1$
+		scm.setDelay(((SettingInt) sm.getSettingFromId("screencolor.delay")).get()); //$NON-NLS-1$
 		scm.setScanArea(
-				((SettingInt) sm.getSettingFromId("screencolor.area.x")).getValue(),
-				((SettingInt) sm.getSettingFromId("screencolor.area.y")).getValue(),
-				((SettingInt) sm.getSettingFromId("screencolor.area.width")).getValue(),
-				((SettingInt) sm.getSettingFromId("screencolor.area.height")).getValue());
+				((SettingInt) sm.getSettingFromId("screencolor.area.x")).get(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.y")).get(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.width")).get(),
+				((SettingInt) sm.getSettingFromId("screencolor.area.height")).get());
 	}
 	
 	@Override

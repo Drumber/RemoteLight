@@ -127,7 +127,7 @@ public class Main {
 		// add scope
 		pluginManager.getScopes().add(SCOPE);
 		// check if plugin system is enabled
-		if(getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").getValue()) {
+		if(getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").get()) {
 			// load all plugins
 			pluginManager.loadPlugins();
 		} else {
@@ -192,7 +192,7 @@ public class Main {
 				if(laf.getName().equalsIgnoreCase(lafName)) {
 					FlatLaf.install(laf);
 					UiUtils.setThemingEnabled(false);
-					boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").getValue();
+					boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get();
 					// enable FlatLaf custom window decorations
 					setCustomWindowDecorations(customWindow);
 					return true;

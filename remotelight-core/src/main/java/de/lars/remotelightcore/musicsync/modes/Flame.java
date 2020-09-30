@@ -60,13 +60,13 @@ public class Flame extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		if(rainbow != getSetting(SettingBoolean.class, "musicsync.flame.rainbow").getValue()) {
-			rainbow = getSetting(SettingBoolean.class, "musicsync.flame.rainbow").getValue();
+		if(rainbow != getSetting(SettingBoolean.class, "musicsync.flame.rainbow").get()) {
+			rainbow = getSetting(SettingBoolean.class, "musicsync.flame.rainbow").get();
 			// hide color option on rainbow mode
 			this.hideSetting("musicsync.flame.color", rainbow);
 			this.updateEffectOptions();
 		}
-		Color color = ((SettingColor) getSetting("musicsync.flame.color")).getValue();
+		Color color = ((SettingColor) getSetting("musicsync.flame.color")).get();
 		int ledNum = RemoteLightCore.getLedNum();
 		
 		if(rainbow) {

@@ -79,13 +79,13 @@ public class DancingPoints extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		if(randomColor != sRandomColor.getValue()) {
-			randomColor = sRandomColor.getValue();
+		if(randomColor != sRandomColor.get()) {
+			randomColor = sRandomColor.get();
 			// hide setting on random color mode
 			this.hideSetting(sColor, randomColor);
 			this.updateEffectOptions();
 		}
-		boolean idleActivity = getSetting(SettingBoolean.class, "musicsync.dancingpoints.idleactivity").getValue();
+		boolean idleActivity = getSetting(SettingBoolean.class, "musicsync.dancingpoints.idleactivity").get();
 		boolean bump = this.isBump();
 		
 		if(bump) lastBump = System.currentTimeMillis();
@@ -142,7 +142,7 @@ public class DancingPoints extends MusicEffect {
 			int rainbowPos = RainbowWheel.getRainbow().length / numPoints * i;
 			color[i] = RainbowWheel.getRainbow()[rainbowPos];
 		} else {
-			color[i] = sColor.getValue();
+			color[i] = sColor.get();
 		}
 	}
 

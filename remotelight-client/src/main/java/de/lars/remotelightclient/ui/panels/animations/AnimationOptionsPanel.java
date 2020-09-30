@@ -108,7 +108,7 @@ public class AnimationOptionsPanel extends JPanel {
 		panelMain.add(scrollPane);
 		scrollPane.setViewportView(bgrScroll);
 
-		if((boolean) sm.getSettingObject("animationspanel.optionshidden").getValue()) { //$NON-NLS-1$
+		if((boolean) sm.getSettingObject("animationspanel.optionshidden").get()) { //$NON-NLS-1$
 			hide();
 		} else {
 			expand();

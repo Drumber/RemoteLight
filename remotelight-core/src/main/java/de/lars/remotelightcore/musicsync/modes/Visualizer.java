@@ -54,8 +54,8 @@ public class Visualizer extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		if(rainbow != sRainbow.getValue()) {
-			rainbow = sRainbow.getValue();
+		if(rainbow != sRainbow.get()) {
+			rainbow = sRainbow.get();
 			this.hideSetting(sColor, rainbow);
 			this.updateEffectOptions();
 		}
@@ -79,7 +79,7 @@ public class Visualizer extends MusicEffect {
 			int mltiplr = RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
 			return RainbowWheel.getRainbow()[led * mltiplr];
 		} else {
-			return sColor.getValue();
+			return sColor.get();
 		}
 	}
 

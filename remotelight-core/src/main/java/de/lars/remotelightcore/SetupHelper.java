@@ -58,7 +58,7 @@ public class SetupHelper {
 
 	private void clean() {
 		// delete old logs
-		int days = s.getSetting(SettingInt.class, "logs.deletedays").getValue();
+		int days = s.getSetting(SettingInt.class, "logs.deletedays").get();
 		DirectoryUtil.deleteOldLogs(days);
 	}
 
@@ -82,22 +82,22 @@ public class SetupHelper {
 		s.addSetting(new SettingObject("manager.lastactive.command", "Last active effect start command", null));
 
 		// set values
-		core.getOutputManager().setBrightness((int) s.getSettingObject("out.brightness").getValue());
+		core.getOutputManager().setBrightness((int) s.getSettingObject("out.brightness").get());
 	}
 
 	private void automation() {
 		// setup auto save
 		SettingBoolean sbAutoSave = s.getSetting(SettingBoolean.class, "data.autosave");
 		AutoSave autoSave = core.getAutoSaver();
-		if(sbAutoSave.getValue()) {
+		if(sbAutoSave.get()) {
 			// set delay
-			autoSave.setDelay(s.getSetting(SettingInt.class, "data.autosave.interval").getValue());
+			autoSave.setDelay(s.getSetting(SettingInt.class, "data.autosave.interval").get());
 			// start auto saver
 			autoSave.start();
 		}
 		// add setting listeners
-		sbAutoSave.setValueListener(s -> autoSave.setEnabled(((SettingBoolean) s).getValue()));
-		s.getSetting(SettingInt.class, "data.autosave.interval").setValueListener(s -> autoSave.setDelay(((SettingInt) s).getValue()));
+		sbAutoSave.setValueListener(s -> autoSave.setEnabled(((SettingBoolean) s).get()));
+		s.getSetting(SettingInt.class, "data.autosave.interval").setValueListener(s -> autoSave.setDelay(((SettingInt) s).get()));
 		
 		// perform update checking and auto connect in separate thread
 		new Thread(new Runnable() {
@@ -105,10 +105,10 @@ public class SetupHelper {
 			public void run() {
 
 				// auto connect feature)
-				if (s.getSetting(SettingBoolean.class, "out.autoconnect").getValue()
+				if (s.getSetting(SettingBoolean.class, "out.autoconnect").get()
 						|| RemoteLightCore.startParameter.autoConnect) {
 
-					String outputID = (String) s.getSettingObject("out.lastoutput").getValue();
+					String outputID = (String) s.getSettingObject("out.lastoutput").get();
 					if (outputID != null && core.getDeviceManager().isIdUsed(outputID)) {
 						Device device = core.getDeviceManager().getDevice(outputID);
 						core.getOutputManager().setActiveOutput(device);
@@ -116,8 +116,8 @@ public class SetupHelper {
 				}
 
 				// auto enable last effect
-				if (s.getSetting(SettingBoolean.class, "manager.lastactive.enabled").getValue()) {
-					String cmd = (String) s.getSettingObject("manager.lastactive.command").getValue();
+				if (s.getSetting(SettingBoolean.class, "manager.lastactive.enabled").get()) {
+					String cmd = (String) s.getSettingObject("manager.lastactive.command").get();
 					if (cmd != null) {
 						try {
 							CommandParser commandParser = core.getCommandParser();

@@ -63,10 +63,10 @@ public class Snake extends Animation {
 		snakeColor = new ArrayList<>();
 		snakeDirection = new ArrayList<>();
 		
-		if(!((SettingBoolean) getSetting("animation.snake.randomcolor")).getValue()) {
-			colorTale = ((SettingColor) getSetting("animation.snake.colortale")).getValue();
-			colorHead = ((SettingColor) getSetting("animation.snake.colorhead")).getValue();
-			colorFruit = ((SettingColor) getSetting("animation.snake.colorfruit")).getValue();
+		if(!((SettingBoolean) getSetting("animation.snake.randomcolor")).get()) {
+			colorTale = ((SettingColor) getSetting("animation.snake.colortale")).get();
+			colorHead = ((SettingColor) getSetting("animation.snake.colorhead")).get();
+			colorFruit = ((SettingColor) getSetting("animation.snake.colorfruit")).get();
 		} else {
 			colorTale = RainbowWheel.getRandomColor();
 			colorHead = RainbowWheel.getRandomColor();
@@ -91,17 +91,17 @@ public class Snake extends Animation {
 	
 	@Override
 	public void onLoop() {
-		if(!((SettingBoolean) getSetting("animation.snake.randomcolor")).getValue() && !((SettingBoolean) getSetting("animation.snake.rainbow")).getValue()) {
-			colorTale = ((SettingColor) getSetting("animation.snake.colortale")).getValue();
-			colorHead = ((SettingColor) getSetting("animation.snake.colorhead")).getValue();
-			colorFruit = ((SettingColor) getSetting("animation.snake.colorfruit")).getValue();
-		} else if(((SettingBoolean) getSetting("animation.snake.rainbow")).getValue()) {
+		if(!((SettingBoolean) getSetting("animation.snake.randomcolor")).get() && !((SettingBoolean) getSetting("animation.snake.rainbow")).get()) {
+			colorTale = ((SettingColor) getSetting("animation.snake.colortale")).get();
+			colorHead = ((SettingColor) getSetting("animation.snake.colorhead")).get();
+			colorFruit = ((SettingColor) getSetting("animation.snake.colorfruit")).get();
+		} else if(((SettingBoolean) getSetting("animation.snake.rainbow")).get()) {
 			colorTale = RainbowWheel.getRainbow()[rainbowPos];
 			colorHead = RainbowWheel.getRainbow()[0];
 		}
 		snakeColor.set(0, colorHead);
 		
-		int maxLength = ((SettingInt) getSetting("animation.snake.maxlength")).getValue();
+		int maxLength = ((SettingInt) getSetting("animation.snake.maxlength")).get();
 		if(snakePos.size() > maxLength) {
 			// reset snake
 			onEnable();
@@ -192,8 +192,8 @@ public class Snake extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		boolean hideColors = getSetting(SettingBoolean.class, "animation.snake.randomcolor").getValue() ||
-				getSetting(SettingBoolean.class, "animation.snake.rainbow").getValue();
+		boolean hideColors = getSetting(SettingBoolean.class, "animation.snake.randomcolor").get() ||
+				getSetting(SettingBoolean.class, "animation.snake.rainbow").get();
 		this.hideSetting("animation.snake.colortale", hideColors);
 		this.hideSetting("animation.snake.colorhead", hideColors);
 		this.hideSetting("animation.snake.colorfruit", hideColors);

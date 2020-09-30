@@ -55,7 +55,7 @@ public class SettingBooleanPanel extends SettingPanel {
 		
 		checkBox = new JCheckBox("");
 		checkBox.setOpaque(false);
-		checkBox.setSelected(setting.getValue());
+		checkBox.setSelected(setting.get());
 		checkBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -79,7 +79,7 @@ public class SettingBooleanPanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
-		checkBox.setSelected(setting.getValue());
+		checkBox.setSelected(setting.get());
 	}
 
 }

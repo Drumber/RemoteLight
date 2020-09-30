@@ -54,7 +54,7 @@ public class SoftTwinkles extends Animation {
 	
 	@Override
 	public void onLoop() {
-		DENSITY = ((SettingInt) getSetting("animation.softtwinkles.density")).getValue();
+		DENSITY = ((SettingInt) getSetting("animation.softtwinkles.density")).get();
 		
 		for(int i = 0; i < strip.length; i++) {
 			if(isBlack(strip[i])) continue;

@@ -87,7 +87,7 @@ public class Particles extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.particles.color", !getSetting(SettingBoolean.class, "animation.particles.staticcolor").getValue());
+		this.hideSetting("animation.particles.color", !getSetting(SettingBoolean.class, "animation.particles.staticcolor").get());
 		super.onSettingUpdate();
 	}
 	
@@ -136,8 +136,8 @@ public class Particles extends Animation {
 			int hue = (int) MathHelper.map(hueVal, -1, 1, 0, RainbowWheel.getRainbow().length-1);
 			Color color = RainbowWheel.getRainbow()[hue];
 			
-			if(((SettingBoolean)getSetting("animation.particles.staticcolor")).getValue()) {
-				color = ((SettingColor) getSetting("animation.particles.color")).getValue();
+			if(((SettingBoolean)getSetting("animation.particles.staticcolor")).get()) {
+				color = ((SettingColor) getSetting("animation.particles.color")).get();
 			}
 			
 			float brightVal = (float) brightNoise.eval(brightX, brightY);

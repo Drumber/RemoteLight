@@ -66,7 +66,7 @@ public class StartUp {
 		copyLuaExamples();
 		
 		// check for updates
-		if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).getValue() || startParameter.updateChecker) {
+		if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).get() || startParameter.updateChecker) {
 			checkForUpdates(false);
 		}
 	}
@@ -82,7 +82,7 @@ public class StartUp {
 				// show update dialog
 				UpdateChecker updateChecker = new UpdateChecker(Main.VERSION);
 				if(updateChecker.isNewVersionAvailable() && !RemoteLightCore.isHeadless() &&
-				  (!updateChecker.isPreRelease() || Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "main.checkupdates.prerelease").getValue()))
+				  (!updateChecker.isPreRelease() || Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "main.checkupdates.prerelease").get()))
 				{
 					// show update notification
 					String[] options = {"Details", "Download"};

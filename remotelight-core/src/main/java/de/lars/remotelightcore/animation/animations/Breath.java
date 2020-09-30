@@ -50,8 +50,8 @@ public class Breath extends Animation {
 	
 	@Override
 	public void onLoop() {
-		if(!((SettingBoolean) getSetting("animation.breath.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.breath.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.breath.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.breath.color")).get();
 		}
 		Color tmp = color;
 		
@@ -75,7 +75,7 @@ public class Breath extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.breath.color", getSetting(SettingBoolean.class, "animation.breath.randomcolor").getValue());
+		this.hideSetting("animation.breath.color", getSetting(SettingBoolean.class, "animation.breath.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

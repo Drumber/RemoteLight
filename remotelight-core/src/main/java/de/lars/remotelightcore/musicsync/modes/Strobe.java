@@ -53,8 +53,8 @@ public class Strobe extends MusicEffect {
 		this.addSetting(new SettingInt("musicsync.strobe.flashduration", "Flash duration (in ms)", SettingCategory.MusicEffect, "", 1500, 100, 50000, 100));
 		this.addSetting(new SettingColor("musicsync.strobe.color", "Color", SettingCategory.MusicEffect, "", Color.WHITE));
 		
-		flashRatio = ((SettingInt) getSetting("musicsync.strobe.flashratio")).getValue();
-		flashDuration = ((SettingInt) getSetting("musicsync.strobe.flashduration")).getValue();
+		flashRatio = ((SettingInt) getSetting("musicsync.strobe.flashratio")).get();
+		flashDuration = ((SettingInt) getSetting("musicsync.strobe.flashduration")).get();
 		timer = new Timer(1000 / flashRatio, flashListener);
 		timeUtil = new TimeUtil(flashDuration);
 	}
@@ -74,9 +74,9 @@ public class Strobe extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		color = ((SettingColor) getSetting("musicsync.strobe.color")).getValue();
-		flashRatio = ((SettingInt) getSetting("musicsync.strobe.flashratio")).getValue();
-		flashDuration = ((SettingInt) getSetting("musicsync.strobe.flashduration")).getValue();
+		color = ((SettingColor) getSetting("musicsync.strobe.color")).get();
+		flashRatio = ((SettingInt) getSetting("musicsync.strobe.flashratio")).get();
+		flashDuration = ((SettingInt) getSetting("musicsync.strobe.flashduration")).get();
 		timer.setDelay(1000 / flashRatio);
 		timeUtil.setInterval(flashDuration);
 		

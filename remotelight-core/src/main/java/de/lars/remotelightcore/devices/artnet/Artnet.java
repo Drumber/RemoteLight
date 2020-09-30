@@ -86,7 +86,7 @@ public class Artnet extends Device {
 		artnet.start();
 		
 		// Output is laggy if output delay > 45
-		if(((SettingInt) RemoteLightCore.getInstance().getSettingsManager().getSettingFromId("out.delay")).getValue() > 45) {
+		if(((SettingInt) RemoteLightCore.getInstance().getSettingsManager().getSettingFromId("out.delay")).get() > 45) {
 			((SettingInt) RemoteLightCore.getInstance().getSettingsManager().getSettingFromId("out.delay")).setValue(45);
 			Logger.info("Set output delay to 45 ms for Artnet to work fine.");
 		}

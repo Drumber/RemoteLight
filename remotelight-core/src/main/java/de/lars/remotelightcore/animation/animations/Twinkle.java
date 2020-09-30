@@ -58,7 +58,7 @@ public class Twinkle extends Animation {
 	public void onLoop() {
 		if(time.hasReached()) {
 			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
-			color = ((SettingColor) getSetting("animation.twinkle.color")).getValue();
+			color = ((SettingColor) getSetting("animation.twinkle.color")).get();
 			
 			for(int i = 0; i <= max; i++) {
 				if(new Random().nextInt(3) == 0) {

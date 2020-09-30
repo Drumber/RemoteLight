@@ -54,7 +54,7 @@ public class SettingStringPanel extends SettingPanel {
 		add(lblName);
 		
 		fieldValue = new JTextField();
-		fieldValue.setText(setting.getValue());
+		fieldValue.setText(setting.get());
 		add(fieldValue);
 		fieldValue.setColumns(20);
 		fieldValue.addActionListener(new ActionListener() {
@@ -81,7 +81,7 @@ public class SettingStringPanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
-		fieldValue.setText(setting.getValue());
+		fieldValue.setText(setting.get());
 	}
 
 }

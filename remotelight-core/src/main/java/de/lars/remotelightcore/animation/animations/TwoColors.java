@@ -60,9 +60,9 @@ public class TwoColors extends Animation {
 		
 		Color c;
 		if(color1) {
-			c =((SettingColor) getSetting("animation.twocolors.color1")).getValue();
+			c =((SettingColor) getSetting("animation.twocolors.color1")).get();
 		} else {
-			c = ((SettingColor) getSetting("animation.twocolors.color2")).getValue();
+			c = ((SettingColor) getSetting("animation.twocolors.color2")).get();
 		}
 		
 		PixelColorUtils.setPixel(0, c);

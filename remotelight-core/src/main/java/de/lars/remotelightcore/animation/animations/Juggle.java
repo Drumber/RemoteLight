@@ -50,7 +50,7 @@ public class Juggle extends Animation {
 	
 	@Override
 	public void onLoop() {
-		int dotsNum = ((SettingInt) getSetting("animation.juggle.dotsnumber")).getValue();
+		int dotsNum = ((SettingInt) getSetting("animation.juggle.dotsnumber")).get();
 		
 		dim();
 		int dotHue = 0;

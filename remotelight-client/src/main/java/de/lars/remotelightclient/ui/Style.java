@@ -362,7 +362,7 @@ public class Style {
 		SettingSelection settingFont = sm.getSetting(SettingSelection.class, "ui.font");
 		SettingInt settingSize = sm.getSetting(SettingInt.class, "ui.fontsize");
 		if(settingSize != null) {
-			UiUtils.setDefaultFontSize(settingSize.getValue());
+			UiUtils.setDefaultFontSize(settingSize.get());
 		}
 		if(settingFont != null) {
 			setUiFont(settingFont.getSelected());

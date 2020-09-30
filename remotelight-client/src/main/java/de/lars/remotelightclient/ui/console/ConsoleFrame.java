@@ -143,13 +143,13 @@ public class ConsoleFrame extends BasicFrame {
 			// auto scroll checkbox
 			SettingBoolean settingAutoScroll = sm.addSetting(new SettingBoolean("console.autoscroll", "Auto scroll", SettingCategory.Intern, null, true));
 			checkAutoScroll = new JCheckBox();
-			checkAutoScroll.setSelected(settingAutoScroll.getValue());
+			checkAutoScroll.setSelected(settingAutoScroll.get());
 			checkAutoScroll.addActionListener(e -> settingAutoScroll.setValue(checkAutoScroll.isSelected()));
 			
 			// show console input checkbox
 			SettingBoolean settingShowInput = sm.addSetting(new SettingBoolean("console.showinput", "Show console input", SettingCategory.Intern, null, true));
 			checkShowInput = new JCheckBox();
-			checkShowInput.setSelected(settingShowInput.getValue());
+			checkShowInput.setSelected(settingShowInput.get());
 			checkShowInput.addActionListener(e -> settingShowInput.setValue(checkShowInput.isSelected()));
 			
 			// font combobox
@@ -157,7 +157,7 @@ public class ConsoleFrame extends BasicFrame {
 			String[] fontNames = UiUtils.getAvailableFonts();
 			JComboBox<String> comboFonts = new JComboBox<String>(fontNames);
 			// select saved font
-			int fontIndex = Arrays.asList(fontNames).indexOf(settingFont.getValue());
+			int fontIndex = Arrays.asList(fontNames).indexOf(settingFont.get());
 			if(fontIndex == -1) fontIndex = 0;
 			comboFonts.setSelectedIndex(fontIndex);
 			comboFonts.setToolTipText("Console font");

@@ -90,7 +90,7 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			root.setBackground(getBackground());
 			
 			// show info message if plugin system is disabled
-			if(!Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").getValue()
+			if(!Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").get()
 					&& pluginManager.getLoadedPlugins().size() == 0) {
 				JLabel lblDisabledPl = new JLabel("Plugins are disabled. Go to settings and enable plugins if you want to use this feature.");
 				lblDisabledPl.setForeground(Style.warn);

@@ -116,7 +116,7 @@ public class MusicSyncManager extends EffectManager {
 		}
 		
 		// load last used input
-		input = (String) sm.getSettingObject("musicsync.input").getValue();
+		input = (String) sm.getSettingObject("musicsync.input").get();
 		if(input != null) {
 			if(!input.equals("_NativeSound_")) {
 				// Java sound api
@@ -150,7 +150,7 @@ public class MusicSyncManager extends EffectManager {
 	}
 	
 	public boolean isNativeSoundConfigured() {
-		return (int) sm.getSettingObject("nativesound.serviceindex").getValue() != -1 && nativeSound.isInitialized();
+		return (int) sm.getSettingObject("nativesound.serviceindex").get() != -1 && nativeSound.isInitialized();
 	}
 	
 	public void setNativeSoundEnabled(boolean enable) {
@@ -186,11 +186,11 @@ public class MusicSyncManager extends EffectManager {
 	 * @return new NativeSoundDevice instance
 	 */
 	public NativeSoundDevice buildNativeSoundDevice() {
-		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").getValue();
-		int deviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").getValue();
-		int sampleRate = (int) sm.getSettingObject("nativesound.samplerate").getValue();
-		int bitrate = (int) sm.getSettingObject("nativesound.bitrate").getValue();
-		int channels = (int) sm.getSettingObject("nativesound.channels").getValue();
+		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").get();
+		int deviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").get();
+		int sampleRate = (int) sm.getSettingObject("nativesound.samplerate").get();
+		int bitrate = (int) sm.getSettingObject("nativesound.bitrate").get();
+		int channels = (int) sm.getSettingObject("nativesound.channels").get();
 		return new NativeSoundDevice(serviceIndex, deviceIndex, sampleRate, bitrate, channels);
 	}
 	

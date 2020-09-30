@@ -61,8 +61,8 @@ public class Open extends Animation {
 	public void onLoop() {
 		int half = strip.length / 2;
 		
-		if(!((SettingBoolean) getSetting("animation.open.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.open.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.open.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.open.color")).get();
 		}
 		
 		strip[pos] = color;
@@ -82,10 +82,10 @@ public class Open extends Animation {
 		
 		if(--pos == 0) {
 			pos = half;
-			if(((SettingBoolean) getSetting("animation.open.randomcolor")).getValue() && !fadeOut) {
+			if(((SettingBoolean) getSetting("animation.open.randomcolor")).get() && !fadeOut) {
 				color = RainbowWheel.getRandomColor();
 			}
-			if(((SettingBoolean) getSetting("animation.open.fadeout")).getValue()) {
+			if(((SettingBoolean) getSetting("animation.open.fadeout")).get()) {
 				fadeOut = !fadeOut;
 			} else {
 				fadeOut = false;
@@ -100,7 +100,7 @@ public class Open extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.open.color", getSetting(SettingBoolean.class, "animation.open.randomcolor").getValue());
+		this.hideSetting("animation.open.color", getSetting(SettingBoolean.class, "animation.open.randomcolor").get());
 		super.onSettingUpdate();
 	}
 	

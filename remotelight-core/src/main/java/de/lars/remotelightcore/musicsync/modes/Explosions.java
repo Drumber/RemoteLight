@@ -109,7 +109,7 @@ public class Explosions extends MusicEffect {
 			return ColorUtil.soundToColor((int) this.getPitch());
 		case "static":
 		default:
-			return sColor.getValue();
+			return sColor.get();
 		}
 	}
 	

@@ -57,7 +57,7 @@ public class SettingColorPanel extends SettingPanel {
 		add(lblName);
 		
 		panelColor = new JPanel();
-		panelColor.setBackground(setting.getValue());
+		panelColor.setBackground(setting.get());
 		panelColor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -86,7 +86,7 @@ public class SettingColorPanel extends SettingPanel {
 
 	@Override
 	public void updateComponents() {
-		panelColor.setBackground(setting.getValue());
+		panelColor.setBackground(setting.get());
 	}
 
 }

@@ -84,7 +84,7 @@ public class Muddle extends Animation {
 			}
 			
 			Color color = colors[i];
-			if(((SettingBoolean) getSetting("animation.muddle.rainbow")).getValue()) {	// rainbow mode
+			if(((SettingBoolean) getSetting("animation.muddle.rainbow")).get()) {	// rainbow mode
 				color = RainbowWheel.getRainbow()[hue];
 			}
 			strip[pos] = color;

@@ -51,12 +51,12 @@ public class Meteor extends Animation {
 	public void onLoop() {
 		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
 		
-		if(!((SettingBoolean) getSetting("animation.meteor.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.meteor.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.meteor.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.meteor.color")).get();
 		}
 		
 		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-			boolean sparkle = ((SettingBoolean) getSetting("animation.meteor.sparkletrail")).getValue();
+			boolean sparkle = ((SettingBoolean) getSetting("animation.meteor.sparkletrail")).get();
 			if(!sparkle || new Random().nextInt(10) > 5) {
 				strip[i] = dim(strip[i]);
 			}
@@ -98,7 +98,7 @@ public class Meteor extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.meteor.color", getSetting(SettingBoolean.class, "animation.meteor.randomcolor").getValue());
+		this.hideSetting("animation.meteor.color", getSetting(SettingBoolean.class, "animation.meteor.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

@@ -135,7 +135,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderSensitivity.setName("sensitivity"); //$NON-NLS-1$
 		sliderSensitivity.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderSensitivity);
-		sliderSensitivity.setValue((int) sm.getSettingObject("musicsync.sensitivity").getValue()); //$NON-NLS-1$
+		sliderSensitivity.setValue((int) sm.getSettingObject("musicsync.sensitivity").get()); //$NON-NLS-1$
 		panelSensitivity.add(sliderSensitivity);
 		
 		panelAdjustment = new JPanel();
@@ -161,7 +161,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setName("adjustment"); //$NON-NLS-1$
 		sliderAdjustment.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);
-		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").getValue()); //$NON-NLS-1$
+		sliderAdjustment.setValue((int) sm.getSettingObject("musicsync.adjustment").get()); //$NON-NLS-1$
 		panelAdjustment.add(sliderAdjustment);
 		
 		JPanel panelNativeSoundConfig = new JPanel();
@@ -270,7 +270,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	};
 	
 	private void initInputPanel() {
-		String input = (String) sm.getSettingObject("musicsync.input").getValue(); //$NON-NLS-1$
+		String input = (String) sm.getSettingObject("musicsync.input").get(); //$NON-NLS-1$
 		
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
 		buttonPanel.setBackground(Style.panelDarkBackground);

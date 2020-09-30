@@ -62,12 +62,12 @@ public class ColorWave extends Animation {
 	
 	@Override
 	public void onLoop() {
-		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.colorwave.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.colorwave.color")).get();
 		}
 		
-		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).getValue()) {
-			color = ((SettingColor) getSetting("animation.colorwave.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).get()) {
+			color = ((SettingColor) getSetting("animation.colorwave.color")).get();
 		}
 		
 		PixelColorUtils.shiftRight(1);
@@ -92,7 +92,7 @@ public class ColorWave extends Animation {
 	
 	private Color calcWave(double stepping, Color c) {
 		int dim = (int) (45 * Math.sin(Math.PI * stepping) + 5);
-		if(!((SettingBoolean) getSetting("animation.colorwave.wave")).getValue()) {
+		if(!((SettingBoolean) getSetting("animation.colorwave.wave")).get()) {
 			return c;
 		}
 		return ColorUtil.dimColor(c, dim);
@@ -100,7 +100,7 @@ public class ColorWave extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.colorwave.color", getSetting(SettingBoolean.class, "animation.colorwave.randomcolor").getValue());
+		this.hideSetting("animation.colorwave.color", getSetting(SettingBoolean.class, "animation.colorwave.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

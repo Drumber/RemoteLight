@@ -64,7 +64,7 @@ public class Bars extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		barWidth = ((SettingInt) getSetting("musicsync.bars.barwidth")).getValue();	// get bar width from settings
+		barWidth = ((SettingInt) getSetting("musicsync.bars.barwidth")).get();	// get bar width from settings
 		
 		double vol = this.getSpl();
 		avgVol = (vol + getMaxSpl() * (0.8 + getSensitivity() / 10)) / 2;	// smooth max volume and calculate average
@@ -103,7 +103,7 @@ public class Bars extends MusicEffect {
 		
 		switch (mode.toLowerCase()) {
 			case "static":
-				color = getSetting(SettingColor.class, "musicsync.bars.color").getValue();
+				color = getSetting(SettingColor.class, "musicsync.bars.color").get();
 				break;
 			case "frequency":
 				color = ColorUtil.soundToColor((int) this.getPitch());

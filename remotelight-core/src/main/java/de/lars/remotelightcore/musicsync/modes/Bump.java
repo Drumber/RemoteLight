@@ -61,9 +61,9 @@ public class Bump extends MusicEffect {
 	
 	@Override
 	public void onLoop() {
-		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(((SettingInt) getSetting("musicsync.bump.speed")).getValue());
-		boolean background = ((SettingBoolean) getSetting("musicsync.bump.background")).getValue();
-		boolean center = ((SettingBoolean) getSetting("musicsync.bump.center")).getValue();
+		RemoteLightCore.getInstance().getMusicSyncManager().setDelay(((SettingInt) getSetting("musicsync.bump.speed")).get());
+		boolean background = ((SettingBoolean) getSetting("musicsync.bump.background")).get();
+		boolean center = ((SettingBoolean) getSetting("musicsync.bump.center")).get();
 		
 		if(this.isBump()) {
 			if(++colorIndex >= colors.length) {

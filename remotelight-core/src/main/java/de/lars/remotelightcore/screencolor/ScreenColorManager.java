@@ -67,13 +67,13 @@ public class ScreenColorManager extends EffectManager {
 		
 		SettingInt settingBrghtThreshold = sm.addSetting(new SettingInt("screencolor.filter.brightness.threshold", "Brightness Threshold", SettingCategory.Intern, "Show black if brightness of pixel is below threshold", 0, 0, 100, 5));
 		SettingDouble settingSaturationMltplr = sm.addSetting(new SettingDouble("screencolor.filter.saturation.multiplier", "Saturation Multiplier", SettingCategory.Intern, "Multiply the saturation of every color (default 1)", 1.0, 0.01, 2.0, 0.05));
-		setSaturationMultiplier(settingSaturationMltplr.getValue());
-		setBrightnessThreshold(settingBrghtThreshold.getValue());
+		setSaturationMultiplier(settingSaturationMltplr.get());
+		setBrightnessThreshold(settingBrghtThreshold.get());
 		
 		area = new Rectangle();
-		setScanArea(settingX.getValue(), settingY.getValue(), settingW.getValue(), settingH.getValue());
+		setScanArea(settingX.get(), settingY.get(), settingW.get(), settingH.get());
 		
-		String lastMonitor = (String) sm.getSettingObject("screencolor.monitor").getValue();
+		String lastMonitor = (String) sm.getSettingObject("screencolor.monitor").get();
 		if(lastMonitor != null && !lastMonitor.equals("")) {
 			currentMonitor = getMonitorByID(lastMonitor);
 		}

@@ -74,7 +74,7 @@ public class BrightnessSlider extends JPanel {
 		JSlider slider = new JSlider();
 		bgrSlider.add(slider);
 		slider.setAlignmentX(Component.LEFT_ALIGNMENT);
-		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").getValue()); //$NON-NLS-1$
+		slider.setValue((int) Main.getInstance().getSettingsManager().getSettingObject("out.brightness").get()); //$NON-NLS-1$
 		RemoteLightCore.getInstance().getOutputManager().setBrightness(slider.getValue());
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {

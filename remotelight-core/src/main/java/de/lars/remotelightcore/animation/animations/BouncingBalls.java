@@ -59,7 +59,7 @@ public class BouncingBalls extends Animation {
 	@Override
 	public void onEnable() {
 		this.numLEDs = RemoteLightCore.getLedNum();
-		this.numBalls = ((SettingInt) getSetting("animation.bouncingballs.numballs")).getValue();
+		this.numBalls = ((SettingInt) getSetting("animation.bouncingballs.numballs")).get();
 		this.h = new float[numBalls];
 		this.vImpact0 = (float) Math.sqrt(-2 * GRAVITY * h0);
 		this.vImpact = new float[numBalls];

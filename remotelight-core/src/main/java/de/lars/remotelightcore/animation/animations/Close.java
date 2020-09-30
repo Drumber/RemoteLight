@@ -61,8 +61,8 @@ public class Close extends Animation {
 	public void onLoop() {
 		int half = strip.length / 2;
 		
-		if(!((SettingBoolean) getSetting("animation.close.randomcolor")).getValue() && !fadeToBlack) {
-			color = ((SettingColor) getSetting("animation.close.color")).getValue();
+		if(!((SettingBoolean) getSetting("animation.close.randomcolor")).get() && !fadeToBlack) {
+			color = ((SettingColor) getSetting("animation.close.color")).get();
 		}
 		
 		strip[pos] = color;
@@ -76,7 +76,7 @@ public class Close extends Animation {
 			pos = 0;
 			fadeToBlack = !fadeToBlack;
 			color = RainbowWheel.getRandomColor();
-			if(!((SettingBoolean) getSetting("animation.close.fadeout")).getValue()) {
+			if(!((SettingBoolean) getSetting("animation.close.fadeout")).get()) {
 				strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
 			} else if(fadeToBlack) {
 				color = Color.BLACK;
@@ -91,7 +91,7 @@ public class Close extends Animation {
 	
 	@Override
 	public void onSettingUpdate() {
-		this.hideSetting("animation.close.color", getSetting(SettingBoolean.class, "animation.close.randomcolor").getValue());
+		this.hideSetting("animation.close.color", getSetting(SettingBoolean.class, "animation.close.randomcolor").get());
 		super.onSettingUpdate();
 	}
 

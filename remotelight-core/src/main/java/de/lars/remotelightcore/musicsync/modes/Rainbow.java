@@ -54,9 +54,9 @@ public class Rainbow extends MusicEffect {
 	}
 	
 	private void initOptions() {
-		smoothRise = ((SettingBoolean) getSetting("musicsync.rainbow.smoothrise")).getValue();
-		smoothFall= ((SettingBoolean) getSetting("musicsync.rainbow.smoothfall")).getValue();
-		steps = ((SettingInt) getSetting("musicsync.rainbow.steps")).getValue();
+		smoothRise = ((SettingBoolean) getSetting("musicsync.rainbow.smoothrise")).get();
+		smoothFall= ((SettingBoolean) getSetting("musicsync.rainbow.smoothfall")).get();
+		steps = ((SettingInt) getSetting("musicsync.rainbow.steps")).get();
 	}
 	
 	@Override
