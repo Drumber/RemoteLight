@@ -152,7 +152,7 @@ public class ScriptsPanel extends MenuPanel {
 		
 		bgrSettings = new JPanel();
 		bgrSettings.setLayout(new BoxLayout(bgrSettings, BoxLayout.Y_AXIS));
-		bgrSettings.setBackground(Color.green);
+		bgrSettings.setBackground(Style.panelDarkBackground);
 		
 		JScrollPane scrollSettings = new JScrollPane(bgrSettings);
 		scrollSettings.getVerticalScrollBar().setUnitIncrement(16);
@@ -270,6 +270,7 @@ public class ScriptsPanel extends MenuPanel {
 		if(activeScript != null) {
 			for(Setting s : activeScript.getScriptSettings()) {
 				SettingPanel spanel = SettingsUtil.getSettingPanel(s);
+				spanel.setBackground(bgrSettings.getBackground());
 				spanel.setSettingChangedListener(p -> {
 					p.setValue();
 				});
@@ -287,8 +288,8 @@ public class ScriptsPanel extends MenuPanel {
 		DefaultControlBar controlBar = new DefaultControlBar();
 		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);
 		speedSlider.getSlider().addChangeListener(sliderSpeedListener);
-		speedSlider.getSlider().setValue((int) sm.getSettingObject("scripts.speed").getValue());
-		luaManager.setDelay((int) sm.getSettingObject("scripts.speed").getValue());
+		speedSlider.getSlider().setValue((int) sm.getSettingObject("scripts.speed").get());
+		luaManager.setDelay((int) sm.getSettingObject("scripts.speed").get());
 		controlBar.setActionPanel(speedSlider);
 		mainFrame.setControlBarPanel(controlBar);
 	}
