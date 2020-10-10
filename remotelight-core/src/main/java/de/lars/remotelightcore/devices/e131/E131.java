@@ -137,7 +137,10 @@ public class E131 extends Device {
 	}
 	
 	protected void sendDmxData(int universe, byte[] colorData) {
-		byte[] packetData = e131Packet.createPacket(universe, sequenceNumber, colorData);
+		byte[] packetData;
+		synchronized (e131Packet) {
+			packetData = e131Packet.createPacket(universe, sequenceNumber, colorData);
+		}
 		incrementSequenceNumber();
 		
 		if(getConnectionState() == ConnectionState.CONNECTED) {

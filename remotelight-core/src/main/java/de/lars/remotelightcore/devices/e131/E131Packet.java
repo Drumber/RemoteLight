@@ -20,14 +20,6 @@ public class E131Packet {
 		if(colorData.length > DATA_LENGTH)
 			throw new IllegalStateException("Maximum DMX data length exceeded: " + colorData.length + " (max " + DATA_LENGTH + ")");
 		
-		if(buffer == null) {
-			buffer = ByteBuffer
-					.allocate(LENGTH)
-					.order(ByteOrder.BIG_ENDIAN);
-		} else {
-			buffer.clear();
-		}
-		
 		/*
 		 * Create packet layer instances
 		 */
@@ -47,6 +39,15 @@ public class E131Packet {
 		framingLayer.length = 77 + dmpLayer.length;
 		// Root Layer
 		rootLayer.length = 22 + framingLayer.length;
+		
+		final int bufferLength = framingLayer.length + 38;
+		if(buffer == null || bufferLength != buffer.capacity()) {
+			buffer = ByteBuffer
+					.allocate(bufferLength)
+					.order(ByteOrder.BIG_ENDIAN);
+		} else {
+			buffer.clear();
+		}
 		
 		/*
 		 * Assemble Layers (put data in buffer)
