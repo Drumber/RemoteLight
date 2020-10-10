@@ -1,6 +1,14 @@
 package de.lars.remotelightcore.devices.e131;
 
 import java.awt.Color;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+import org.tinylog.Logger;
 
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
@@ -12,33 +20,84 @@ public class E131 extends Device {
 	
 	private transient int sequenceNumber;
 	private int startUniverse;
+	
+	private String unicastIP;
+	private boolean multicast;
+	private transient DatagramPacket dPacket;
+	private transient DatagramSocket dSocket;
+	private transient E131Packet e131Packet;
 
 	public E131(String id) {
 		super(id, 0);
 	}
+	
+	public void setMulticast(boolean enabled) {
+		multicast = enabled;
+	}
+	
+	public boolean isMulticastMode() {
+		return multicast;
+	}
+	
+	public void setUnicastAddress(String unicastIP) {
+		this.unicastIP = unicastIP;
+	}
+	
+	public String getUnicastAddress() {
+		return unicastIP;
+	}
+	
+	public void setStartUniverse(int startUniverse) {
+		this.startUniverse = startUniverse;
+	}
+	
+	public int getStartUniverse() {
+		return startUniverse;
+	}
+	
+	protected void initializeSocket() {
+		InetAddress address;
+		try {
+			address = getAddress();
+			dPacket = new DatagramPacket(new byte[0], 0, address, PORT);
+			dSocket = new DatagramSocket();
+		} catch (UnknownHostException | SocketException e) {
+			Logger.error(e, "Could not initialize E1.31 client!");
+		}
+	}
+	
+	protected InetAddress getAddress() throws UnknownHostException {
+		if(!multicast) {
+			return InetAddress.getByName(unicastIP);
+		}
+		// multicast address must be 239.255.UHB.ULB (UHB = universe high byte, ULB = universe low byte)
+		byte[] addressBytes = {(byte) 239, (byte) 255, (byte) (startUniverse >> 8), (byte) (startUniverse % 255)};
+		return InetAddress.getByAddress(addressBytes);
+	}
+	
+	@Override
+	public void onLoad() {
+		e131Packet = new E131Packet();
+	}
 
 	@Override
 	public ConnectionState connect() {
-		// TODO Auto-generated method stub
-		return null;
+		if(e131Packet == null) onLoad();
+		initializeSocket();
+		return (dPacket != null && dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.FAILED;
 	}
 
 	@Override
 	public ConnectionState disconnect() {
-		// TODO Auto-generated method stub
-		return null;
+		dSocket.close();
+		dPacket = null;
+		dPacket = null;
+		return ConnectionState.DISCONNECTED;
 	}
 
 	@Override
 	public ConnectionState getConnectionState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onLoad() {
-		// TODO Auto-generated method stub
-		
+		return (dPacket != null && dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.DISCONNECTED;
 	}
 
 	@Override
@@ -76,15 +135,25 @@ public class E131 extends Device {
 	}
 	
 	protected void sendDmxData(int universe, byte[] colorData) {
-		E131Packet packet = new E131Packet();
-		byte[] packetData = packet.createPacket(universe, sequenceNumber, colorData);
+		byte[] packetData = e131Packet.createPacket(universe, sequenceNumber, colorData);
 		incrementSequenceNumber();
-		// TODO: send packet via client
+		
+		if(getConnectionState() == ConnectionState.CONNECTED) {
+			// set the new packet data
+			dPacket.setData(packetData);
+			// send the packet
+			try {
+				dSocket.send(dPacket);
+			} catch (IOException e) {
+				Logger.error(e, "Could not send E1.31 data.");
+				disconnect();
+			}
+		}
 	}
 	
 	protected void incrementSequenceNumber() {
 		if(++sequenceNumber > 255)
 			sequenceNumber = 0;
 	}
-
+	
 }

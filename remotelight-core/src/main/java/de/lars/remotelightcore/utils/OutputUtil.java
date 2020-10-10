@@ -26,6 +26,7 @@ import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
+import de.lars.remotelightcore.devices.e131.E131;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.link.multi.MultiOutput;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
@@ -43,6 +44,9 @@ public class OutputUtil {
 		}
 		if(o instanceof Artnet) {
 			return "Artnet";
+		}
+		if(o instanceof E131) {
+			return "E1.31";
 		}
 		if(o instanceof VirtualOutput) {
 			return "VirtualOutput";
@@ -64,6 +68,8 @@ public class OutputUtil {
 			return RemoteLightServer.class;
 		case "Artnet":
 			return Artnet.class;
+		case "E1.31":
+			return E131.class;
 		case "VirtualOutput":
 			return VirtualOutput.class;
 		case "Chain":
@@ -84,6 +90,9 @@ public class OutputUtil {
 		}
 		if(d instanceof Artnet) {
 			return ((Artnet)d).isBroadcast() ? "Broadcast" : ((Artnet)d).getUnicastAddress();
+		}
+		if(d instanceof E131) {
+			return ((E131)d).isMulticastMode() ? "Multicast" : ((E131)d).getUnicastAddress();
 		}
 		return "No connection info";
 	}
