@@ -135,24 +135,23 @@ public class Artnet extends Device {
 			byte[] rgbColor = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
 			
 			for(int rgb = 0; rgb < rgbColor.length; rgb++) {
-				dmxData[index + rgb] = rgbColor[rgb];
-				
-				if(index + rgb + 1 >= dmxData.length) {
+				if(index + rgb >= dmxData.length) { // universe is full; output universe and use next one
 					sendDmxData(dmxData, universe);
 					universe++;
 					
 					dataLength = 512;
 					if((pixels.length - i) * 3 <= 512) {
-						dataLength = pixels.length * 3;
+						dataLength = (pixels.length - i) * 3 - rgb;
 					}
 					dmxData = new byte[dataLength];
+					index = 0 - rgb;
 				}
+				
+				dmxData[index + rgb] = rgbColor[rgb];
 			}
 			index += 3;
 		}
-		if(universe == startUniverse) {
-			sendDmxData(dmxData, universe);
-		}
+		sendDmxData(dmxData, universe);
 	}
 	
 	private void sendDmxData(byte[] dmxData, int universe) {
@@ -164,11 +163,7 @@ public class Artnet extends Device {
 	}
 	
 	public int getEndUniverse(int startUniverse, int pixels) {
-		int universes = 1;
-		while(universes * 512 < pixels) {
-			universes++;
-		}
-		return startUniverse + universes - 1;
+		return startUniverse + (3 * pixels / 512);
 	}
 
 }
