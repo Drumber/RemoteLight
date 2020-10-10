@@ -46,7 +46,7 @@ public class OutputUtil {
 			return "Artnet";
 		}
 		if(o instanceof E131) {
-			return "E1.31";
+			return "E131";
 		}
 		if(o instanceof VirtualOutput) {
 			return "VirtualOutput";
@@ -68,7 +68,7 @@ public class OutputUtil {
 			return RemoteLightServer.class;
 		case "Artnet":
 			return Artnet.class;
-		case "E1.31":
+		case "E131":
 			return E131.class;
 		case "VirtualOutput":
 			return VirtualOutput.class;

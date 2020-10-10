@@ -45,6 +45,7 @@ import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPan
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArtnetSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ChainSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.DeviceSettingsPanel;
+import de.lars.remotelightclient.ui.panels.output.outputComps.E131SettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.MultiOutputSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.RLServerSettingsPanel;
 import de.lars.remotelightclient.ui.panels.output.outputComps.VirtualOutputSettingsPanel;
@@ -58,6 +59,7 @@ import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.devices.arduino.Arduino;
 import de.lars.remotelightcore.devices.artnet.Artnet;
+import de.lars.remotelightcore.devices.e131.E131;
 import de.lars.remotelightcore.devices.link.chain.Chain;
 import de.lars.remotelightcore.devices.link.multi.MultiOutput;
 import de.lars.remotelightcore.devices.remotelightserver.RemoteLightServer;
@@ -135,10 +137,15 @@ public class OutputPanel extends MenuPanel {
 		this.configureAddPopup(itemRLServer, "rlserver"); //$NON-NLS-1$
 		popupMenu.add(itemRLServer);
 		
-		JMenuItem itemArtnet = new JMenuItem("Artnet");
+		JMenuItem itemArtnet = new JMenuItem("Art-Net");
 		itemArtnet.setIcon(Style.getFontIcon(MenuIcon.ARTNET)); //$NON-NLS-1$
 		this.configureAddPopup(itemArtnet, "artnet");
 		popupMenu.add(itemArtnet);
+		
+		JMenuItem itemE131 = new JMenuItem("E1.31");
+		itemE131.setIcon(Style.getFontIcon(MenuIcon.ARTNET)); //$NON-NLS-1$
+		this.configureAddPopup(itemE131, "e131");
+		popupMenu.add(itemE131);
 		
 		JMenuItem itemVirtual = new JMenuItem("Virtual");
 		itemVirtual.setIcon(Style.getFontIcon(MenuIcon.VIRTUAL)); //$NON-NLS-1$
@@ -273,6 +280,8 @@ public class OutputPanel extends MenuPanel {
 				icon = MenuIcon.RASPBERRYPI;
 			} else if(d instanceof Artnet) {
 				icon = MenuIcon.ARTNET;
+			} else if(d instanceof E131) {
+				icon = MenuIcon.ARTNET; // TODO: add E1.31 icon
 			} else if(d instanceof VirtualOutput) {
 				icon = MenuIcon.VIRTUAL;
 			} else if(d instanceof Chain) {
@@ -322,6 +331,8 @@ public class OutputPanel extends MenuPanel {
 			panel = new RLServerSettingsPanel((RemoteLightServer) d, setup);
 		} else if(d instanceof Artnet) {
 			panel = new ArtnetSettingsPanel((Artnet) d, setup);
+		} else if(d instanceof E131) {
+			panel = new E131SettingsPanel((E131) d, setup);
 		} else if(d instanceof VirtualOutput) {
 			panel = new VirtualOutputSettingsPanel((VirtualOutput) d, setup);
 		} else if(d instanceof Chain) {
@@ -392,6 +403,9 @@ public class OutputPanel extends MenuPanel {
 				break;
 			case "artnet":
 				device = new Artnet(null);
+				break;
+			case "e131":
+				device = new E131(null);
 				break;
 			case "virtual":
 				device = new VirtualOutput(null, OutputManager.MIN_PIXELS);

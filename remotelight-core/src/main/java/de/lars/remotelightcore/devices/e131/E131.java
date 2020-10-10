@@ -105,22 +105,24 @@ public class E131 extends Device {
 		final int dataLength = pixels.length * 3;
 		final int MAX_LENGTH = E131Packet.DATA_LENGTH; // maximal dmx data length
 		
-		byte[] dmxData = new byte[dataLength % MAX_LENGTH];
+		int arrayLength = dataLength > MAX_LENGTH ? MAX_LENGTH : dataLength;
+		byte[] dmxData = new byte[arrayLength];
 		int currUniverse = startUniverse;
 		
 		for(int i = 0; i < pixels.length; i++) {
 			byte[] rgbData = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
 			
 			for(int d = 0; d < rgbData.length; d++) {
-				int index = (MAX_LENGTH * (currUniverse - startUniverse)) + i * 3;
+				int additionalUniverses = currUniverse - startUniverse;
+				int index = (MAX_LENGTH * (currUniverse - startUniverse - additionalUniverses)) + (i * 3 - MAX_LENGTH * additionalUniverses);
 				
-				if(index >= MAX_LENGTH) {
+				if(index + d >= MAX_LENGTH) {
 					// current universe is full; output universe and use next universe
 					sendDmxData(currUniverse, dmxData);
 					
 					// use next universe
 					currUniverse++;
-					index = 0;
+					index = 0 - d;
 					
 					// create new buffer
 					int size = (dataLength - (currUniverse - startUniverse) * MAX_LENGTH) % MAX_LENGTH;
@@ -154,6 +156,10 @@ public class E131 extends Device {
 	protected void incrementSequenceNumber() {
 		if(++sequenceNumber > 255)
 			sequenceNumber = 0;
+	}
+	
+	public int getEndUniverse(int startUniverse, int pixels) {
+		return startUniverse + (3 * pixels / 512);
 	}
 	
 }
