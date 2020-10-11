@@ -13,11 +13,13 @@ variables:
 cache:
     paths:
     - .m2/repository
+    
+before_script:
+    - apt-get install -y zip
         
 build:
     stage: build
     script:
-    - apt-get install zip
     - mvn $MAVEN_CLI_OPTS package
     - zip -r $CTARGET/RemoteLight-Windows.zip $CTARGET/RemoteLight-Windows
     - zip -r $CTARGET/RemoteLight-Linux.zip $CTARGET/RemoteLight-Linux
