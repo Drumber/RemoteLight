@@ -15,7 +15,7 @@ cache:
     - .m2/repository
     
 before_script:
-    - apt-get install -y zip
+    - apt-get update && apt-get install -y zip
         
 build:
     stage: build
