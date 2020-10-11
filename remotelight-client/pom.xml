@@ -20,7 +20,7 @@
 		<mainclass>de.lars.remotelightclient.Main</mainclass>
 		<builtby>Drumber</builtby>
 		<!-- set to 'package' to enable or 'none' to disable packager -->
-		<packagerPhase>none</packagerPhase>
+		<packagerPhase>package</packagerPhase>
 	</properties>
 
 	<dependencies>
