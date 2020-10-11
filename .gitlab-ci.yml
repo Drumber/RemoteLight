@@ -1,4 +1,4 @@
-image: maven:latest
+image: maven:3.6.3-adoptopenjdk-8
 
 stages:
     - build
@@ -15,7 +15,7 @@ cache:
     - .m2/repository
     
 before_script:
-    - apk add zip
+    - apt-get install -y zip
         
 build:
     stage: build
