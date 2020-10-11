@@ -5,22 +5,29 @@ stages:
 
 variables:
     MAVEN_CLI_OPTS: "--batch-mode"
-    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-    CORE: "remotelight-core/"
-    CLIENT: "remotelight-client/"
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -DpackagerPhase=package"
+    CORE: "remotelight-core"
+    CLIENT: "remotelight-client"
+    CTARGET: "remotelight-client/target"
 
 cache:
     paths:
-    - $CORE/target/
-    - $CLIENT/target/
+    - .m2/repository
         
 build:
     stage: build
     script:
+    - apt-get install zip
     - mvn $MAVEN_CLI_OPTS package
+    - zip -r $CTARGET/RemoteLight-Windows.zip $CTARGET/RemoteLight-Windows
+    - zip -r $CTARGET/RemoteLight-Linux.zip $CTARGET/RemoteLight-Linux
+    - zip -r $CTARGET/RemoteLight-MacOS.zip $CTARGET/RemoteLight-MacOS
     artifacts:
         paths:
         - $CLIENT/target/*.jar
+        - $CLIENT/target/RemoteLight-*.zip
+        exclude:
+        - $CLIENT/target/remotelight-client-*.jar
         expire_in: 2 months
     only:
     - master
