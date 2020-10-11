@@ -1,0 +1,27 @@
+image: maven:latest
+
+stages:
+    - build
+
+variables:
+    MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+    CORE: "remotelight-core/"
+    CLIENT: "remotelight-client/"
+
+cache:
+    paths:
+    - .m2/repository/
+    - $CORE/target/
+    - $CLIENT/target/
+        
+build:
+    stage: build
+    script:
+    - mvn $MAVEN_CLI_OPTS package
+    artifacts:
+        paths:
+        - $CLIENT/target/*.jar
+        expire_in: 2 months
+    only:
+    - master
