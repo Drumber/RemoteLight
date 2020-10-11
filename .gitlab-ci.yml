@@ -15,7 +15,7 @@ cache:
     - .m2/repository
     
 before_script:
-    - apt-get install -y zip
+    - apk add zip
         
 build:
     stage: build
