@@ -4,7 +4,7 @@ stages:
     - build
 
 variables:
-    MAVEN_CLI_OPTS: "--batch-mode"
+    MAVEN_CLI_OPTS: "--batch-mode -DpackagerPhase=package"
     MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
     CORE: "remotelight-core"
     CLIENT: "remotelight-client"
@@ -20,8 +20,7 @@ before_script:
 build:
     stage: build
     script:
-    - ls -R
-    - mvn $MAVEN_CLI_OPTS -DpackagerPhase=package package
+    - mvn $MAVEN_CLI_OPTS package
     - zip -r $CTARGET/RemoteLight-Windows.zip $CTARGET/RemoteLight-Windows
     - zip -r $CTARGET/RemoteLight-Linux.zip $CTARGET/RemoteLight-Linux
     - zip -r $CTARGET/RemoteLight-MacOS.zip $CTARGET/RemoteLight-MacOS
