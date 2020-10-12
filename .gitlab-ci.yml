@@ -20,6 +20,7 @@ before_script:
 build:
     stage: build
     script:
+    - ls -R
     - mvn $MAVEN_CLI_OPTS -DpackagerPhase=package package
     - zip -r $CTARGET/RemoteLight-Windows.zip $CTARGET/RemoteLight-Windows
     - zip -r $CTARGET/RemoteLight-Linux.zip $CTARGET/RemoteLight-Linux
