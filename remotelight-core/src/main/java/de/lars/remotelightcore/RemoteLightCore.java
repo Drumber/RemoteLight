@@ -40,7 +40,6 @@ import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.colors.ColorManager;
-import de.lars.remotelightcore.data.DataFileUpdater;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.event.EventHandler;
 import de.lars.remotelightcore.event.events.Stated.State;
@@ -311,9 +310,6 @@ public class RemoteLightCore {
 				Logger.error(e, "Could not backup old data file.");
 			}
 		}
-		
-		// update to new file format (json)
-		new DataFileUpdater(fileStorage);
 		
 		// delete old data file
 		if(!file.delete()) {
