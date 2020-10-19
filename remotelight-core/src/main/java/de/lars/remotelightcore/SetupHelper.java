@@ -73,8 +73,11 @@ public class SetupHelper {
 				"Save the data file periodically", true));
 		s.addSetting(new SettingInt("data.autosave.interval", "Auto save interval (minutes)", SettingCategory.General,
 				"Time interval between automatic saving", 5, 1, 60, 2));
+		
 		s.addSetting(new SettingInt("logs.deletedays", "Delete log files older than x days", SettingCategory.Others,
 				null, 2, 1, 30, 1));
+		s.addSetting(new SettingBoolean("out.effects.disableleds", "Disable LEDs on effect toggle", SettingCategory.Others,
+				"Turn off LEDs when switching/toggling effects.", true));
 
 		// Intern
 		s.addSetting(new SettingObject("out.lastoutput", "Last active Output", null));

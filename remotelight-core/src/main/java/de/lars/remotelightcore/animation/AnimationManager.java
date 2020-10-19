@@ -111,7 +111,7 @@ public class AnimationManager extends EffectManager {
 			activeAnimation.onDisable();
 			activeAnimation = null;
 		}
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+		turnOffLeds();
 	}
 	
 	public void setDelay(int delay) {

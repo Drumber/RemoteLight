@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore;
 
-import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +31,9 @@ import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
 import de.lars.remotelightcore.screencolor.ScreenColorManager;
-import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class EffectManagerHelper {
 	
@@ -76,7 +73,6 @@ public class EffectManagerHelper {
 			scm.stop();
 		if(lua.isActive())
 			lua.stopLuaScript();
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 	}
 	
 	public void stopAllExceptFor(EffectType type) {

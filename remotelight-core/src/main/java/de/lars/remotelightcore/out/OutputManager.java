@@ -32,6 +32,7 @@ import de.lars.remotelightcore.event.events.types.ConnectionEvent;
 import de.lars.remotelightcore.event.events.types.ConnectionEvent.Action;
 import de.lars.remotelightcore.out.OutputActionListener.OutputActionType;
 import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.utils.OutputUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -162,8 +163,7 @@ public class OutputManager {
 		active = enabled;
 		if(!active && activeOutput != null) {
 			deactivate(activeOutput);
-		}
-			
+		}		
 	}
 	
 	/**
@@ -176,7 +176,9 @@ public class OutputManager {
 	
 	public void close() {
 		if(activeOutput != null) {
-			activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+			if(sm.getSetting(SettingBoolean.class, "out.effects.disableleds").get()) {
+				activeOutput.onOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+			}
 			
 			//save last output before closing
 			sm.getSettingObject("out.lastoutput").setValue(activeOutput.getId());

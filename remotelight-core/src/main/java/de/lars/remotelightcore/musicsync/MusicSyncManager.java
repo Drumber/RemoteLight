@@ -293,6 +293,7 @@ public class MusicSyncManager extends EffectManager {
 		}
 		if(activeEffect != null) {
 			activeEffect.onDisable();
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		}
 		if(!soundProcessor.isActive()) {
 			soundProcessor.start();
@@ -314,7 +315,7 @@ public class MusicSyncManager extends EffectManager {
 		}
 		activeEffect = null;
 		soundProcessor.stop();
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+		turnOffLeds();
 	}
 	
 	private void loop() {

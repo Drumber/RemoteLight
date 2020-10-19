@@ -22,6 +22,7 @@
 
 package de.lars.remotelightcore.lua;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -55,6 +56,7 @@ import de.lars.remotelightcore.event.events.types.LuaScriptEvent.Action;
 import de.lars.remotelightcore.lua.utils.LedStrip;
 import de.lars.remotelightcore.lua.utils.LuaColor;
 import de.lars.remotelightcore.lua.utils.LuaSettings;
+import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -149,6 +151,7 @@ public class LuaManager extends EffectManager {
 				// some delay to be sure the previous script is stopped
 				Thread.sleep(10);
 			} catch (InterruptedException e) {}
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		}
 		
 		Logger.info("Started new thread for lua script: " + luaFilePath);
@@ -199,7 +202,7 @@ public class LuaManager extends EffectManager {
 			
 			LuaScriptEvent event = new LuaScriptEvent(activeScript, Action.STOP);
 			activeScript = null;
-			PixelColorUtils.setAllPixelsBlack();
+			turnOffLeds();
 			// call lua script stop event
 			RemoteLightCore.getInstance().getEventHandler().call(event);
 		}

@@ -22,10 +22,23 @@
 
 package de.lars.remotelightcore;
 
+import java.awt.Color;
+
+import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.utils.color.PixelColorUtils;
+
 public abstract class EffectManager {
 
 	public abstract String getName();
 	public abstract void stop();
 	public abstract boolean isActive();
+	
+	protected void turnOffLeds() {
+		if(RemoteLightCore.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "out.effects.disableleds").get()) {
+			// turn off leds when disabling effect
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+		}
+	}
 	
 }
