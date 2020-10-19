@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.com/Drumber/RemoteLight/badges/master/pipeline.svg)](https://gitlab.com/Drumber/RemoteLight/-/pipelines) 
+
 # RemoteLight v0.2 - Multifunctional LED Control Software
 
 RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) and some other addressable LED strips. It offers a modern, user-friendly UI and a lot of features.
