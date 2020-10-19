@@ -361,7 +361,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			}
 			NativeSoundConfigPanel.showDialog();
 			msm.updateNativeSoundDevice();
-			if(msm.getNativeSoundDevice().isValid()) {
+			if(msm.getNativeSoundDevice() != null && msm.getNativeSoundDevice().isValid()) {
 				rbuttonNativeSound.setEnabled(true);
 				rbuttonNativeSound.setText("Use native sound library " + msm.getNativeSoundDevice().getName());
 			}
