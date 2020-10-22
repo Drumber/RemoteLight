@@ -282,13 +282,13 @@ public class RemoteLightCore {
 		showNotification(notification);
 	}
 	
-	public void showErrorNotification(Exception e) {
+	public void showErrorNotification(Throwable e) {
 		Notification notification = new Notification(NotificationType.ERROR, "An error has occurred: " + e.getClass().getCanonicalName());
 		notification.setDisplayTime(Notification.LONG);
 		showNotification(notification);
 	}
 	
-	public void showErrorNotification(Exception e, String title) {
+	public void showErrorNotification(Throwable e, String title) {
 		Notification notification = new Notification(NotificationType.ERROR, title, "An error has occurred: " + e.getClass().getCanonicalName());
 		notification.setDisplayTime(Notification.LONG);
 		showNotification(notification);

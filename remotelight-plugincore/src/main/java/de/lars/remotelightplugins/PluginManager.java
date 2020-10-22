@@ -191,10 +191,12 @@ public class PluginManager {
 			for(Plugin plugin : loadedPlugins) {
 				try {
 					enablePlugin(plugin);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					// catch any exception, so we can also enable the other plugins
 					Logger.error(e, "Failed to enable plugin '" + plugin.getName() + "' after loading.");
-					core.showErrorNotification(e, "Plugin load Error");
+					core.showErrorNotification(e, "Plugin Load Error");
+					// add to error map
+					errorPlugins.put(plugin.getPluginInfo(), "Failed to enable plugin (" + e.getClass().getName() + ")");
 					// disable plugin
 					try {
 						disablePlugin(plugin);
