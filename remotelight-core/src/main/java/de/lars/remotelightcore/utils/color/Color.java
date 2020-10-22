@@ -2,9 +2,64 @@ package de.lars.remotelightcore.utils.color;
 
 import java.io.Serializable;
 
+/**
+ * Color class to replace the {@link java.awt.Color} class.
+ */
 public class Color implements Serializable {
 
 	private static final long serialVersionUID = 2820702792432338448L;
+
+	public static final Color white = new Color(255, 255, 255);
+
+	public static final Color WHITE = white;
+
+	public static final Color lightGray = new Color(192, 192, 192);
+
+	public static final Color LIGHT_GRAY = lightGray;
+
+	public static final Color gray = new Color(128, 128, 128);
+
+	public static final Color GRAY = gray;
+
+	public static final Color darkGray = new Color(64, 64, 64);
+
+	public static final Color DARK_GRAY = darkGray;
+
+	public static final Color black = new Color(0, 0, 0);
+
+	public static final Color BLACK = black;
+
+	public static final Color red = new Color(255, 0, 0);
+
+	public static final Color RED = red;
+
+	public static final Color pink = new Color(255, 175, 175);
+
+	public static final Color PINK = pink;
+
+	public static final Color orange = new Color(255, 200, 0);
+
+	public static final Color ORANGE = orange;
+
+	public static final Color yellow = new Color(255, 255, 0);
+
+	public static final Color YELLOW = yellow;
+
+	public static final Color green = new Color(0, 255, 0);
+
+	public static final Color GREEN = green;
+
+	public static final Color magenta = new Color(255, 0, 255);
+
+	public static final Color MAGENTA = magenta;
+
+	public static final Color cyan = new Color(0, 255, 255);
+
+	public static final Color CYAN = cyan;
+
+	public static final Color blue = new Color(0, 0, 255);
+
+	public static final Color BLUE = blue;
 
 	protected int value;
 
@@ -292,6 +347,32 @@ public class Color implements Serializable {
 	 */
 	public static Color getHSBColor(float h, float s, float b) {
 		return new Color(HSBtoRGB(h, s, b));
+	}
+
+	/**
+	 * <b>Code adapted from the {@link java.awt.Color} class.</b>
+	 * <p>
+	 * Returns a {@code float} array containing only the color components of the
+	 * {@code Color}, in the default sRGB color space. If {@code compArray} is
+	 * {@code null}, an array of length 3 is created for the return value.
+	 * Otherwise, {@code compArray} must have length 3 or greater, and it is filled
+	 * in with the components and returned.
+	 * 
+	 * @param compArray an array that this method fills with color components and
+	 *                  returns
+	 * @return the RGB components in a {@code float} array.
+	 */
+	public float[] getRGBColorComponents(float[] compArray) {
+		float[] f;
+		if (compArray == null) {
+			f = new float[3];
+		} else {
+			f = compArray;
+		}
+		f[0] = ((float) getRed()) / 255f;
+		f[1] = ((float) getGreen()) / 255f;
+		f[2] = ((float) getBlue()) / 255f;
+		return f;
 	}
 
 }
