@@ -22,14 +22,13 @@
 
 package de.lars.remotelightcore.lua;
 
-import de.lars.remotelightcore.utils.color.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
@@ -61,6 +60,7 @@ import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.maths.TimeUtil;
 
@@ -71,7 +71,8 @@ public class LuaManager extends EffectManager {
 	private Globals globals;
 	private CustomLuaDebugLib debugLib;
 	private LuaThread lThread;
-	private Timer timer;
+	private ScheduledExecutorService timerThread;
+	private ScheduledFuture<?> timerTask;
 	private List<File> luaScripts;
 	private LuaScript activeScript;
 	
@@ -111,7 +112,7 @@ public class LuaManager extends EffectManager {
 		globals.set("settings", CoerceJavaToLua.coerce(new LuaSettings()));
 		
 		timeUtil = new TimeUtil(delay, true);
-		timer = new Timer(1, timerUpdate);
+		timerThread = Executors.newScheduledThreadPool(1);
 	}
 	
 	@Override
@@ -167,7 +168,8 @@ public class LuaManager extends EffectManager {
 			if(error.arg(2) != LuaValue.NIL) {
 				throw new LuaError(error.arg(2).tojstring());
 			}
-			timer.start();
+			// start instruction timer
+			timerTask = timerThread.scheduleAtFixedRate(instructionsTimer, 0, 1, TimeUnit.MILLISECONDS);
 			// call lua script start event
 			RemoteLightCore.getInstance().getEventHandler().call(new LuaScriptEvent(activeScript, Action.START));
 		} catch(LuaError e) {
@@ -180,9 +182,9 @@ public class LuaManager extends EffectManager {
 	/**
 	 * Checks every millisecond if the lua script has instructions left
 	 */
-	private ActionListener timerUpdate = new ActionListener() {
+	private final Runnable instructionsTimer = new Runnable() {
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void run() {
 			debugLib.addInstructions(MAX_INSTRUCTIONS);
 			if(debugLib.getInstructionsLeft() > 0) {	// check if instructionsleft is > 0
 				lThread.resume(LuaValue.NIL);
@@ -199,6 +201,8 @@ public class LuaManager extends EffectManager {
 			
 			activeScript.setActive(false);
 			debugLib.setInterrupted(true);
+//			if(timerTask != null)
+//				timerTask.cancel(true);
 			
 			LuaScriptEvent event = new LuaScriptEvent(activeScript, Action.STOP);
 			activeScript = null;
