@@ -23,7 +23,7 @@
 package de.lars.remotelightcore.screencolor;
 
 import java.awt.AWTException;
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
 import java.awt.Robot;

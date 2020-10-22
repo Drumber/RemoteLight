@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.io.Serializable;
 
 public class NorthernLightTrail implements Serializable {

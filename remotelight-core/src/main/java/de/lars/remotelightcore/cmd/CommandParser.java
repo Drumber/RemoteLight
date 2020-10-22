@@ -28,7 +28,6 @@ import static de.lars.remotelightcore.cmd.CMD.LIST;
 import static de.lars.remotelightcore.cmd.CMD.START;
 import static de.lars.remotelightcore.cmd.CMD.STOP;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +35,7 @@ import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
 import de.lars.remotelightcore.colors.ColorManager;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class CommandParser {
 	
@@ -81,7 +81,7 @@ public class CommandParser {
 			if(args.length == 2) {
 				// HEX color
 				try {
-					Color color = Color.decode(args[1]);
+					Color color = Color.decodeHex(args[1]);
 					cmanager.showColor(color);
 				} catch(NumberFormatException e) {
 					throw new CommandException("Invalid HEX color value.", e);

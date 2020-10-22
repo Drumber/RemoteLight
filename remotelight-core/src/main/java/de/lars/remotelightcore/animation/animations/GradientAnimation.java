@@ -1,6 +1,6 @@
 package de.lars.remotelightcore.animation.animations;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;

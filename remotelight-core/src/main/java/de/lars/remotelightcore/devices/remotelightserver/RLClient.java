@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.devices.remotelightserver;
 
-import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -32,9 +31,8 @@ import java.net.Socket;
 
 import org.tinylog.Logger;
 
-import com.google.gson.Gson;
-
 import de.lars.remotelightcore.devices.ConnectionState;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class RLClient implements Serializable {
 	
@@ -49,12 +47,10 @@ public class RLClient implements Serializable {
 	private Socket socket;
 	private PrintWriter out;
 	private ConnectionState state = ConnectionState.DISCONNECTED;
-	private Gson gson;
 	
 	public RLClient(String hostname) {
 		this.hostname = hostname;
 		connected = false;
-		gson = new Gson();
 	}
 	
 	public ConnectionState connect() {
@@ -132,7 +128,19 @@ public class RLClient implements Serializable {
 	}
 	
 	public String serializeToJSON(Color[] pixels) {
-		return gson.toJson(pixels);
+		// create JSON manually to keep support for RemoteLightServer
+		// protocol should be replaced in future versions
+		StringBuilder sb = new StringBuilder("[");
+		for(int i = 0; i < pixels.length; i++) {
+			sb.append("{\"value\":");
+			sb.append(pixels[i].getRGB());
+			sb.append(",\"falpha\":0.0}");
+			if(i != pixels.length - 1) {
+				sb.append(',');
+			}
+		}
+		sb.append(']');
+		return sb.toString();
 	}
 
 }

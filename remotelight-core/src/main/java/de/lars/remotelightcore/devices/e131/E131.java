@@ -1,6 +1,6 @@
 package de.lars.remotelightcore.devices.e131;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

@@ -1,6 +1,6 @@
 package de.lars.remotelightcore.utils.color.palette;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 public abstract class AbstractPalette {
 	

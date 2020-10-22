@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.devices.remotelightserver;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;

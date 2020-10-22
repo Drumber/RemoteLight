@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.settings.types;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;

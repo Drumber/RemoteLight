@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.devices.virtual;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 public interface PixelStreamReceiver {
 	

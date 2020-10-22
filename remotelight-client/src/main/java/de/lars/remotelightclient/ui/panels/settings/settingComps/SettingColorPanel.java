@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 
 import de.lars.colorpicker.ColorPicker;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightcore.settings.types.SettingColor;
 
 public class SettingColorPanel extends SettingPanel {
@@ -57,7 +58,7 @@ public class SettingColorPanel extends SettingPanel {
 		add(lblName);
 		
 		panelColor = new JPanel();
-		panelColor.setBackground(setting.get());
+		panelColor.setBackground(ColorTool.convert(setting.get()));
 		panelColor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -81,12 +82,12 @@ public class SettingColorPanel extends SettingPanel {
 
 	@Override
 	public void setValue() {
-		setting.setValue(panelColor.getBackground());
+		setting.setValue(ColorTool.convert(panelColor.getBackground()));
 	}
 
 	@Override
 	public void updateComponents() {
-		panelColor.setBackground(setting.get());
+		panelColor.setBackground(ColorTool.convert(setting.get()));
 	}
 
 }

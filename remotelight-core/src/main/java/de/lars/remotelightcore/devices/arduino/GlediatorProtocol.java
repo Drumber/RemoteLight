@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.devices.arduino;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class GlediatorProtocol {
 	

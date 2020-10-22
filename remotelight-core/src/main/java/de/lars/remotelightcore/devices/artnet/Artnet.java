@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.devices.artnet;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import org.tinylog.Logger;
 

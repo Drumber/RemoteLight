@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;

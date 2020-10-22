@@ -22,13 +22,13 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import java.awt.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
+import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class RunningLight extends Animation {
@@ -68,19 +68,19 @@ public class RunningLight extends Animation {
 		if(pass < 5) {
 			switch (pass) {
 			case 0:
-				PixelColorUtils.setPixel(0, c.darker().darker());
+				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 70));
 				break;
 			case 1:
-				PixelColorUtils.setPixel(0, c.darker());
+				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 85));
 				break;
 			case 2:
 				PixelColorUtils.setPixel(0, c);
 				break;
 			case 3:
-				PixelColorUtils.setPixel(0, c.darker());
+				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 85));
 				break;
 			case 4:
-				PixelColorUtils.setPixel(0, c.darker().darker());
+				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 70));
 				counter++;
 				break;
 			}

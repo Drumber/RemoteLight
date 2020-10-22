@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.scene;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 

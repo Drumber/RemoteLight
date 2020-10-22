@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.devices.virtual;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;

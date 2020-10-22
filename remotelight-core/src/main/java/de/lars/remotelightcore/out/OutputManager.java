@@ -22,8 +22,6 @@
 
 package de.lars.remotelightcore.out;
 
-import java.awt.Color;
-
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.RemoteLightCore;
@@ -35,6 +33,7 @@ import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.utils.OutputUtil;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class OutputManager {

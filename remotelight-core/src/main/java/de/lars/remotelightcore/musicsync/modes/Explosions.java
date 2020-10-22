@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

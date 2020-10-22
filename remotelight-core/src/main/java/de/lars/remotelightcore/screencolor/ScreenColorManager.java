@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.screencolor;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;

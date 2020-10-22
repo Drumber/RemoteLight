@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.musicsync;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
 

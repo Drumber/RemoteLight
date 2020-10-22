@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.lua;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;

@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;

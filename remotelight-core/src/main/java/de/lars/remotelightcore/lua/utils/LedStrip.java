@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.lua.utils;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;

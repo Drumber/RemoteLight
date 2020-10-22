@@ -39,6 +39,7 @@ import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.font.FontManager;
 import de.lars.remotelightclient.ui.font.FontResource;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -223,7 +224,7 @@ public class Style {
 		textColor = UIManager.getColor("Label.foreground");
 		textColorDarker = UIManager.getColor("Label.disabledForeground");
 		accent = UIManager.getColor("Component.focusedBorderColor");
-		blackIcon = ColorUtil.getAvgRgbValue(panelBackground) > 180;
+		blackIcon = ColorUtil.getAvgRgbValue(ColorTool.convert(panelBackground)) > 180;
 		if(UIManager.getColor("Component.error.focusedBorderColor") != null)
 			error = UIManager.getColor("Component.error.focusedBorderColor");
 		if(UIManager.getColor("Component.warning.focusedBorderColor") != null)

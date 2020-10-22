@@ -102,7 +102,7 @@ public class Color implements Serializable {
 	 * @throws IllegalArgumentException if one value is out of range.
 	 */
 	public Color(int r, int g, int b) {
-		value = ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
+		value = ((255 & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
 		testValueRange(r, g, b);
 	}
 

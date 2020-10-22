@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.utils.color;
 
-import java.awt.Color;
 import java.util.HashMap;
 
 import de.lars.remotelightcore.RemoteLightCore;

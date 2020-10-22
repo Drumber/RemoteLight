@@ -35,6 +35,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -72,7 +73,7 @@ public class ColorsPanel extends MenuPanel {
 	private ColorListener colorChangeListener = new ColorListener() {
 		@Override
 		public void onColorChanged(Color color) {
-			Main.getInstance().getCore().getColorManager().showColor(color);
+			Main.getInstance().getCore().getColorManager().showColor(ColorTool.convert(color));
 		}
 	};
 	

@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.out.patch;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 import java.io.Serializable;
 
 import de.lars.remotelightcore.devices.arduino.RgbOrder;

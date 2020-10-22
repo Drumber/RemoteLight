@@ -1,7 +1,5 @@
 package de.lars.remotelightcore.utils.color;
 
-import java.awt.Color;
-
 // source: https://tips4java.wordpress.com/2009/07/05/hsl-color/
 
 /**
@@ -37,7 +35,7 @@ public class HSLColor
 	{
 		this.rgb = rgb;
 		hsl = fromRGB( rgb );
-		alpha = rgb.getAlpha() / 255.0f;
+		alpha = 1.0f;
 	}
 
 	/**
@@ -393,7 +391,7 @@ public class HSLColor
 		g = Math.min(g, 1.0f);
 		b = Math.min(b, 1.0f);
 
-		return new Color(r, g, b, alpha);
+		return new Color(r, g, b);
 	}
 
 	private static float HueToRGB(float p, float q, float h)

@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.colors;
 
-import java.awt.Color;
+import de.lars.remotelightcore.utils.color.Color;
 
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;

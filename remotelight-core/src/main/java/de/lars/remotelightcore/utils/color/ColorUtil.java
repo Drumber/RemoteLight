@@ -22,8 +22,6 @@
 
 package de.lars.remotelightcore.utils.color;
 
-import java.awt.Color;
-
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 
 public class ColorUtil {
@@ -106,10 +104,9 @@ public class ColorUtil {
 	}
 	
 	public static boolean isBlack(Color c) {
-		return c.getAlpha() == 0 || (
-				c.getRed() == 0 &&
+		return	c.getRed() == 0 &&
 				c.getBlue() == 0 &&
-				c.getGreen() == 0);
+				c.getGreen() == 0;
 	}
 	
 	
@@ -143,9 +140,8 @@ public class ColorUtil {
 	 * @return new color
 	 */
 	public static Color mixColor(Color oldColor, Color newColor) {
-		double alpha = oldColor.getAlpha() + newColor.getAlpha();
-		double weightOld = oldColor.getAlpha() / alpha;
-		double weightNew = newColor.getAlpha() / alpha;
+		float weightOld = 0.5f;
+		float weightNew = 0.5f;
 		
 		int r = (int) (weightOld * oldColor.getRed() + weightNew * newColor.getRed());
 		int g = (int) (weightOld * oldColor.getGreen() + weightNew * newColor.getGreen());
