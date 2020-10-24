@@ -20,16 +20,17 @@
  * <===license-end
  */
 
-package de.lars.remotelightcore.screencolor;
+package de.lars.remotelightclient.screencolor;
 
 import java.awt.AWTException;
-import de.lars.remotelightcore.utils.color.Color;
 import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
 import org.tinylog.Logger;
+
+import de.lars.remotelightcore.utils.color.Color;
 
 public class ScreenColorDetector {
 	

@@ -41,6 +41,7 @@ import org.tinylog.Logger;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
+import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.components.dialogs.NoFileAccessDialog;
 import de.lars.remotelightclient.ui.components.frames.SplashFrame;
@@ -101,6 +102,8 @@ public class Main {
 		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook
 		remoteLightCore.registerShutdownHook();
+		// set ScreenColorManager
+		remoteLightCore.setScreenColorManager(new ScreenColorManager());
 		
 		Logger.info("Starting RemoteLightClient version " + VERSION);
 		

@@ -54,7 +54,7 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
-import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -84,7 +84,7 @@ public class RemoteLightCore {
 	private AnimationManager aniManager;
 	private SceneManager sceneManager;
 	private MusicSyncManager musicManager;
-	private ScreenColorManager screenColorManager;
+	private AbstractScreenColorManager screenColorManager;
 	private LuaManager luaManager;
 	private ColorManager colorManager;
 	
@@ -143,7 +143,6 @@ public class RemoteLightCore {
 		aniManager = new AnimationManager();
 		sceneManager = new SceneManager();
 		musicManager = new MusicSyncManager();
-		screenColorManager = new ScreenColorManager();
 		effectManagerHelper = new EffectManagerHelper();
 		
 		// load devices
@@ -193,8 +192,13 @@ public class RemoteLightCore {
 		return musicManager;
 	}
 	
-	public ScreenColorManager getScreenColorManager() {
+	public AbstractScreenColorManager getScreenColorManager() {
 		return screenColorManager;
+	}
+	
+	public void setScreenColorManager(AbstractScreenColorManager screenColorManager) {
+		this.screenColorManager = screenColorManager;
+		effectManagerHelper.updateManagers();
 	}
 	
 	public EffectManagerHelper getEffectManagerHelper() {

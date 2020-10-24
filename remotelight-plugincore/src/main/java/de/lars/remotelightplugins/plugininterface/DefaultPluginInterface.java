@@ -33,7 +33,7 @@ import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.notification.NotificationManager;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
-import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightplugins.PluginManager;
 
@@ -112,7 +112,7 @@ public class DefaultPluginInterface implements PluginInterface {
 	}
 
 	@Override
-	public ScreenColorManager getScreenColorManager() {
+	public AbstractScreenColorManager getScreenColorManager() {
 		return core.getScreenColorManager();
 	}
 

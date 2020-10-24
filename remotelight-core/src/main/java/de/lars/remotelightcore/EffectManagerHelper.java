@@ -33,7 +33,7 @@ import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
-import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 
 public class EffectManagerHelper {
 	
@@ -41,7 +41,7 @@ public class EffectManagerHelper {
 	private AnimationManager am;
 	private MusicSyncManager msm;
 	private SceneManager sm;
-	private ScreenColorManager scm;
+	private AbstractScreenColorManager scm;
 	private LuaManager lua;
 	
 	public enum EffectType {
@@ -49,6 +49,10 @@ public class EffectManagerHelper {
 	}
 	
 	public EffectManagerHelper() {
+		updateManagers();
+	}
+	
+	protected void updateManagers() {
 		RemoteLightCore remoteLightCore = RemoteLightCore.getInstance();
 		am = remoteLightCore.getAnimationManager();
 		msm = remoteLightCore.getMusicSyncManager();
@@ -69,7 +73,7 @@ public class EffectManagerHelper {
 			msm.stop();
 		if(sm.isActive())
 			sm.stop();
-		if(scm.isActive())
+		if(scm != null && scm.isActive())
 			scm.stop();
 		if(lua.isActive())
 			lua.stopLuaScript();
@@ -85,7 +89,7 @@ public class EffectManagerHelper {
 		if(type != EffectType.MusicSync && msm.isActive()) {
 			msm.stop();
 		}
-		if(type != EffectType.ScreenColor && scm.isActive()) {
+		if(type != EffectType.ScreenColor && scm != null && scm.isActive()) {
 			scm.stop();
 		}
 		if(type != EffectType.Lua && lua.isActive()) {
@@ -100,7 +104,7 @@ public class EffectManagerHelper {
 	 */
 	public EffectManager getActiveManager() {
 		for(EffectManager em : allManager) {
-			if(em.isActive())
+			if(em != null && em.isActive())
 				return em;
 		}
 		return null;

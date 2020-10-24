@@ -32,7 +32,7 @@ import de.lars.remotelightcore.musicsync.MusicSyncManager;
 import de.lars.remotelightcore.notification.NotificationManager;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.SceneManager;
-import de.lars.remotelightcore.screencolor.ScreenColorManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightplugins.PluginManager;
 
@@ -127,10 +127,13 @@ public interface PluginInterface {
 	
 	/**
 	 * Get the ScreenColor manager to start or stop the ScreenColor season.
+	 * <p>
+	 * The RemoteLight environment must support ScreenColor, otherwise this method
+	 * returns {@code null}.
 	 * 
-	 * @return	the ScreenColor manager instance
+	 * @return	the ScreenColor manager instance or {@code null} if not supported
 	 */
-	ScreenColorManager getScreenColorManager();
+	AbstractScreenColorManager getScreenColorManager();
 	
 	/**
 	 * Get the Lua manager to controlling Lua scripts.

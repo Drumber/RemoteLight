@@ -20,28 +20,28 @@
  * <===license-end
  */
 
-package de.lars.remotelightcore.screencolor;
+package de.lars.remotelightclient.screencolor;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 
 import org.tinylog.Logger;
 
-import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
-public class ScreenColorManager extends EffectManager {
+public class ScreenColorManager extends AbstractScreenColorManager {
 	
 	private boolean active;
 	private SettingsManager sm;
@@ -77,11 +77,6 @@ public class ScreenColorManager extends EffectManager {
 		if(lastMonitor != null && !lastMonitor.equals("")) {
 			currentMonitor = getMonitorByID(lastMonitor);
 		}
-	}
-	
-	@Override
-	public String getName() {
-		return "ScreenColorManager";
 	}
 	
 	public void start() {

@@ -53,6 +53,7 @@ import javax.swing.border.TitledBorder;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.ImagePanel;
@@ -66,7 +67,6 @@ import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.notification.NotificationType;
-import de.lars.remotelightcore.screencolor.ScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingDouble;
@@ -86,7 +86,7 @@ public class ScreenColorPanel extends MenuPanel {
 	private JButton btnEnable;
 	
 	public ScreenColorPanel() {
-		scm = RemoteLightCore.getInstance().getScreenColorManager();
+		scm = (ScreenColorManager) RemoteLightCore.getInstance().getScreenColorManager();
 		sm = Main.getInstance().getSettingsManager();
 		monitorPanels = new ArrayList<ImagePanel>();
 		settingPanels = new ArrayList<SettingPanel>();
