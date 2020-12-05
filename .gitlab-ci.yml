@@ -21,9 +21,10 @@ build:
     stage: build
     script:
     - mvn $MAVEN_CLI_OPTS package
-    - zip -r $CTARGET/RemoteLight-Windows.zip $CTARGET/RemoteLight-Windows
-    - zip -r $CTARGET/RemoteLight-Linux.zip $CTARGET/RemoteLight-Linux
-    - zip -r $CTARGET/RemoteLight-MacOS.zip $CTARGET/RemoteLight-MacOS
+    - cd $CTARGET
+    - zip -r RemoteLight-Windows.zip RemoteLight-Windows
+    - zip -r RemoteLight-Linux.zip RemoteLight-Linux
+    - zip -r RemoteLight-MacOS.zip RemoteLight-MacOS
     artifacts:
         paths:
         - $CLIENT/target/*.jar
