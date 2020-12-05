@@ -1,7 +1,5 @@
 package de.lars.remotelightcore.musicsync.modes;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 import de.lars.remotelightcore.musicsync.MusicEffect;
 
 public class Flickering extends MusicEffect {
@@ -20,11 +18,11 @@ public class Flickering extends MusicEffect {
 	}
 	
 
-//	@Override
-//	public void onEnable() {
-//		avgAmplitudes = 1.0;
-//		super.onEnable();
-//	}
+	@Override
+	public void onEnable() {
+		avgAmplitudes = 1.0;
+		super.onEnable();
+	}
 	
 	
 	@Override

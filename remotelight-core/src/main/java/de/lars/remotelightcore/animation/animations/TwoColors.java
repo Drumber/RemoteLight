@@ -22,27 +22,32 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class TwoColors extends Animation {
 	
+	private final String[] DIRECTIONS = {"Left", "Center", "Right"};
 	private int colorCounter = 0;
 	private boolean color1 = true;
 
 	public TwoColors() {
 		super("Two Colors");
+		this.addSetting(new SettingSelection("animation.twocolors.direction", "Direction", SettingCategory.Intern, null, DIRECTIONS, DIRECTIONS[0], SettingSelection.Model.ComboBox));
+		this.addSetting(new SettingInt("animation.twocolors.groupsize", "Group size", SettingCategory.Intern, null, 2, 1, 50, 1));
 		this.addSetting(new SettingColor("animation.twocolors.color1", "Color 1", SettingCategory.Intern,	null, Color.RED));
 		this.addSetting(new SettingColor("animation.twocolors.color2", "Color 2", SettingCategory.Intern,	null, Color.GREEN));
 	}
 	
 	@Override
 	public void onEnable() {
+		// this fills the strip when activating the animation
 		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
 			onLoop();
 		}
@@ -51,21 +56,38 @@ public class TwoColors extends Animation {
 	
 	@Override
 	public void onLoop() {
-		PixelColorUtils.shiftRight(1);
+		final int groupSize = getSetting(SettingInt.class, "animation.twocolors.groupsize").get();
+		final String direction = getSetting(SettingSelection.class, "animation.twocolors.direction").get();
+		int newPixelPos = 0;
 		
-		if(++colorCounter == 2) {
+		// shift the pixels depending on the direction
+		if(direction.equalsIgnoreCase(DIRECTIONS[0])) {
+			PixelColorUtils.shiftLeft(1);
+			newPixelPos = RemoteLightCore.getLedNum() -  1;
+		} else if(direction.equalsIgnoreCase(DIRECTIONS[1])) {
+			PixelColorUtils.shiftCenter(1);
+			newPixelPos = RemoteLightCore.getLedNum() / 2 - 1;
+		} else {
+			PixelColorUtils.shiftRight(1);
+			newPixelPos = 0;
+		}
+		
+		// switch color when the counter reaches the group size
+		if(++colorCounter >= groupSize) {
 			colorCounter = 0;
 			color1 = !color1;
 		}
 		
 		Color c;
 		if(color1) {
-			c =((SettingColor) getSetting("animation.twocolors.color1")).get();
+			c =getSetting(SettingColor.class, "animation.twocolors.color1").get();
 		} else {
-			c = ((SettingColor) getSetting("animation.twocolors.color2")).get();
+			c = getSetting(SettingColor.class, "animation.twocolors.color2").get();
 		}
 		
-		PixelColorUtils.setPixel(0, c);
+		PixelColorUtils.setPixel(newPixelPos, c);
+		if(direction.equalsIgnoreCase(DIRECTIONS[1])) 	// set both pixels in the middle of the strip
+			PixelColorUtils.setPixel(newPixelPos+1, c);	// if the direction is center
 		super.onLoop();
 	}
 

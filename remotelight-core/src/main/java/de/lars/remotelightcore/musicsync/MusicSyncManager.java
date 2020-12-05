@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.musicsync;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +44,7 @@ import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class MusicSyncManager extends EffectManager {
@@ -382,7 +382,7 @@ public class MusicSyncManager extends EffectManager {
 		effects.add(new RainbowNoise());
 		effects.add(new Lines());
 		effects.add(new Explosions());
-		effects.add(new Flickering());
+		/* effects.add(new Flickering()); work in progress */
 	}
 
 }
