@@ -35,6 +35,11 @@
 			<artifactId>remotelight-plugincore</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-restapi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- ColorPicker -->
 		<dependency>
 			<groupId>com.github.Drumber</groupId>

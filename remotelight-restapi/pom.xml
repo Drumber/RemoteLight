@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.lars</groupId>
+		<artifactId>remotelight</artifactId>
+		<version>0.2.5-beta</version>
+	</parent>
+
+	<artifactId>remotelight-restapi</artifactId>
+	<name>RemoteLight REST API</name>
+	<description>RESTful Webservice for RemoteLight</description>
+
+	<dependencies>
+		<!-- RemoteLightCore -->
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- NanoHttpd web server -->
+		<dependency>
+			<groupId>org.nanohttpd</groupId>
+			<artifactId>nanohttpd</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nanohttpd</groupId>
+			<artifactId>nanohttpd-nanolets</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+	</dependencies>
+
+</project>
