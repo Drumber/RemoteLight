@@ -22,7 +22,7 @@ import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.NanoHTTPD.Response.IStatus;
 import fi.iki.elonen.router.RouterNanoHTTPD.UriResource;
 
-public class HandlerOutputs extends RequestHandler {
+public class OutputsHandler extends RequestHandler {
 
 	@Override
 	public IStatus getStatus() {
@@ -32,23 +32,20 @@ public class HandlerOutputs extends RequestHandler {
 	@Override
 	public Response get(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
 		DeviceManager dm = RemoteLightCore.getInstance().getDeviceManager();
-		// uri parameters
-		String pOutput = urlParams.get("output");
-		if(pOutput != null) {
-			if(dm.isIdUsed(pOutput))
-				return json(dm.getDevice(pOutput));
-			return text("Invalid device id", Response.Status.BAD_REQUEST);
-		}
-
-		// query parameters
 		List<Device> listOutputs = dm.getDevices();
+		
+		// filter by id
+		List<String> listIds = session.getParameters().get("id");
+		if(listIds != null && listIds.size() > 0 && !listIds.get(0).isEmpty()) {
+			listOutputs = listOutputs.stream()
+					.filter(o -> listIds.contains(o.getId()))
+					.collect(Collectors.toList());
+		}
 		
 		// filter by output type
 		if(session.getParameters().containsKey("type")) {
-			List<String> listTypes = session.getParameters().get("type").stream()
-					.map(t -> t.toLowerCase())
-					.collect(Collectors.toList()); // convert every param to lowercase
-			if(listTypes != null && listTypes.size() > 0) {
+			List<String> listTypes = listToLowerCase(session.getParameters().get("type"));
+			if(listTypes.size() > 0) {
 				listOutputs = listOutputs.stream()
 						.filter(o -> listTypes.contains(OutputUtil.getOutputTypeAsString(o).toLowerCase()))
 						.collect(Collectors.toList());
@@ -65,7 +62,7 @@ public class HandlerOutputs extends RequestHandler {
 	}
 	
 	
-	public static class HandlerOutputActivate extends RequestHandler {
+	public static class OutputActivateHandler extends RequestHandler {
 
 		@Override
 		public IStatus getStatus() {
@@ -115,6 +112,7 @@ public class HandlerOutputs extends RequestHandler {
 					exception = e.getMessage();
 				}
 			}
+			
 			if(exception != null) {
 				Response response = json(exception);
 				response.setStatus(Response.Status.BAD_REQUEST);

@@ -1,7 +1,9 @@
 package de.lars.remotelightrestapi.handlers;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.lars.remotelightrestapi.RestAPI;
 import fi.iki.elonen.NanoHTTPD;
@@ -41,6 +43,15 @@ public abstract class RequestHandler extends DefaultStreamHandler {
 	@Override
 	public InputStream getData() {
 		throw new IllegalStateException("Operation is not supported by this handler.");
+	}
+	
+	/**
+	 * Convert every entry in list to lower case.
+	 */
+	protected List<String> listToLowerCase(List<String> list) {
+		return list.stream()
+			.map(t -> t.toLowerCase())
+			.collect(Collectors.toList());
 	}
 
 }

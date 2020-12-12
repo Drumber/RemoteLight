@@ -22,32 +22,15 @@
 
 package de.lars.remotelightcore.scene;
 
-public class Scene {
+import de.lars.remotelightcore.AbstractEffect;
+
+public class Scene extends AbstractEffect {
 	
-	private String name;
-	private String displayname;
 	private int delay;
 	
 	public Scene(String name, int delay) {
-		this.name = name;
-		this.displayname = name; //TODO Language system
+		super(name);
 		this.delay = delay;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDisplayname() {
-		return displayname;
-	}
-
-	public void setDisplayname(String displayname) {
-		this.displayname = displayname;
 	}
 	
 	public int getDelay() {
@@ -57,9 +40,5 @@ public class Scene {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
-	
-	public void onEnable() {}
-	public void onDisable() {}
-	public void onLoop() {}
 
 }

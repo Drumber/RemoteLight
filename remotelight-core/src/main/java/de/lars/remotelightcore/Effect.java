@@ -27,32 +27,13 @@ import java.util.List;
 
 import de.lars.remotelightcore.settings.Setting;
 
-public abstract class Effect {
+public abstract class Effect extends AbstractEffect {
 	
-	private String name;
-	private String displayname;
 	private List<String> options;
 	
 	public Effect(String name) {
-		this.name = name;
-		this.displayname = name;
+		super(name);
 		this.options = new ArrayList<String>();
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDisplayname() {
-		return displayname;
-	}
-
-	public void setDisplayname(String displayname) {
-		this.displayname = displayname;
 	}
 	
 	/**
@@ -127,15 +108,7 @@ public abstract class Effect {
 			setting.removeFlag(Setting.HIDDEN);
 	}
 	
-	/**
-	 * Get the amount of LEDs/pixels
-	 * 
-	 * @return	the amount of LEDs
-	 */
-	public int getLeds() {
-		return RemoteLightCore.getLedNum();
-	}
-	
+	@Override
 	public void onEnable() {
 		// update settings (e.g. for hiding options)
 		onSettingUpdate();
@@ -146,7 +119,5 @@ public abstract class Effect {
 	}
 	
 	public void updateEffectOptions() {}
-	public void onDisable() {}
-	public void onLoop() {}
 
 }

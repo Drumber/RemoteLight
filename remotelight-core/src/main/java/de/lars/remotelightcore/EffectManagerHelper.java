@@ -185,6 +185,42 @@ public class EffectManagerHelper {
 	}
 	
 	/**
+	 * Get all effects/animations
+	 * @param em corresponding manager (only animation, musicsync, scene manager)
+	 * @return a list of all effects or null if manager is not supported
+	 */
+	public List<? extends AbstractEffect> getEffects(EffectManager manager) {
+		if(manager instanceof AnimationManager) {
+			AnimationManager m = (AnimationManager) manager;
+			return m.getAnimations();
+		} else if(manager instanceof MusicSyncManager) {
+			MusicSyncManager m = (MusicSyncManager) manager;
+			return m.getMusicEffects();
+		} else if(manager instanceof SceneManager) {
+			SceneManager m = (SceneManager) manager;
+			return m.getScenes();
+		}
+		return null;
+	}
+	
+	/**
+	 * Get all effect by name
+	 * @param em corresponding manager (only animation, musicsync, scene manager)
+	 * @return	the effect with the specified name or null if manager is not supported
+	 * 			the effect was not found
+	 */
+	public <T extends EffectManager> AbstractEffect getEffect(T manager, String effectName) {
+		List<? extends AbstractEffect> effects = getEffects(manager);
+		if(effects != null) {
+			for(AbstractEffect e : effects) {
+				if(e.getName().equalsIgnoreCase(effectName))
+					return e;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Get active manager + effect as string
 	 * @return string array of length 2; first arg is manager, second is effect or null
 	 */
