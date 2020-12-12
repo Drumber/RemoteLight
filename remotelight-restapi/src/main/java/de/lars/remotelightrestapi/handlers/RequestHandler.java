@@ -28,6 +28,12 @@ public abstract class RequestHandler extends DefaultStreamHandler {
 		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text);
 	}
 	
+	protected Response text(String text, IStatus status) {
+		Response response = text(text);
+		response.setStatus(status);
+		return response;
+	}
+	
 	protected Response json(Object src) {
 		return text(RestAPI.getGson().toJson(src));
 	}

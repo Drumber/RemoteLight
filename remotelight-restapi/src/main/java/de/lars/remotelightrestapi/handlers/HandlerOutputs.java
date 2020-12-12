@@ -4,12 +4,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.tinylog.Logger;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.devices.DeviceManager;
+import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.utils.OutputUtil;
+import de.lars.remotelightrestapi.RestAPI;
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
+import fi.iki.elonen.NanoHTTPD.Method;
 import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.NanoHTTPD.Response.IStatus;
 import fi.iki.elonen.router.RouterNanoHTTPD.UriResource;
@@ -26,21 +34,25 @@ public class HandlerOutputs extends RequestHandler {
 		DeviceManager dm = RemoteLightCore.getInstance().getDeviceManager();
 		// uri parameters
 		String pOutput = urlParams.get("output");
-		if(pOutput != null && dm.isIdUsed(pOutput)) {
-			return json(dm.getDevice(pOutput));
+		if(pOutput != null) {
+			if(dm.isIdUsed(pOutput))
+				return json(dm.getDevice(pOutput));
+			return text("Invalid device id", Response.Status.BAD_REQUEST);
 		}
 
 		// query parameters
 		List<Device> listOutputs = dm.getDevices();
 		
 		// filter by output type
-		List<String> listTypes = session.getParameters().get("type").stream()
-				.map(t -> t.toLowerCase())
-				.collect(Collectors.toList()); // convert every param to lowercase
-		if(listTypes != null && listTypes.size() > 0) {
-			listOutputs = listOutputs.stream()
-					.filter(o -> listTypes.contains(OutputUtil.getOutputTypeAsString(o).toLowerCase()))
-					.collect(Collectors.toList());
+		if(session.getParameters().containsKey("type")) {
+			List<String> listTypes = session.getParameters().get("type").stream()
+					.map(t -> t.toLowerCase())
+					.collect(Collectors.toList()); // convert every param to lowercase
+			if(listTypes != null && listTypes.size() > 0) {
+				listOutputs = listOutputs.stream()
+						.filter(o -> listTypes.contains(OutputUtil.getOutputTypeAsString(o).toLowerCase()))
+						.collect(Collectors.toList());
+			}
 		}
 		
 		// filter by active outputs
@@ -50,6 +62,67 @@ public class HandlerOutputs extends RequestHandler {
 					.collect(Collectors.toList());
 		}
 		return json(listOutputs);
+	}
+	
+	
+	public static class HandlerOutputActivate extends RequestHandler {
+
+		@Override
+		public IStatus getStatus() {
+			return Response.Status.OK;
+		}
+
+		@Override
+		public Response get(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+			Output activeOutput = RemoteLightCore.getInstance().getOutputManager().getActiveOutput();
+			String id = activeOutput != null ? activeOutput.getId() : null;
+			JsonObject jsonObj = new JsonObject();
+			jsonObj.addProperty("active_output", id);
+			return json(jsonObj);
+		}
+		
+		@Override
+		public Response put(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+			String exception = null;
+			DeviceManager dm = RemoteLightCore.getInstance().getDeviceManager();
+			if(session.getMethod() == Method.PUT) {
+				try {
+					// get content of PUT request
+					int contentLength = Integer.parseInt(session.getHeaders().get("content-length"));
+					byte[] buffer = new byte[contentLength];
+					session.getInputStream().read(buffer, 0, contentLength);
+					
+					// parse content
+					String content = new String(buffer);
+					JsonElement jsonEl = RestAPI.getGson().fromJson(content, JsonElement.class);
+					JsonElement activeEl = jsonEl.getAsJsonObject().get("active_output");
+					if(activeEl == null)
+						throw new IllegalStateException("JSON object must have 'active_output' paramter.");
+					
+					if(activeEl.isJsonNull()) {
+						// deactivate current output
+						RemoteLightCore.getInstance().getOutputManager().setEnabled(false);
+					} else {
+						String outputId = activeEl.getAsString();
+						if(!dm.isIdUsed(outputId))
+							throw new IllegalArgumentException("Invalid device id! There is no device with id '" + outputId + "'.");
+						Device device = dm.getDevice(outputId);
+						// activate output
+						RemoteLightCore.getInstance().getOutputManager().setActiveOutput(device);
+					}
+				} catch (Exception e) {
+					if(RestAPI.shouldLog) Logger.error("Failed to parse body content from PUT request: " + e.getMessage());
+					exception = e.getMessage();
+				}
+			}
+			if(exception != null) {
+				Response response = json(exception);
+				response.setStatus(Response.Status.BAD_REQUEST);
+				return response;
+			}
+			return get(uriResource, urlParams, session);
+		}
+		
 	}
 
 }

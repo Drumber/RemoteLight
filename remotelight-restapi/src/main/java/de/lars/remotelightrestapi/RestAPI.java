@@ -10,12 +10,14 @@ import com.google.gson.GsonBuilder;
 
 import de.lars.remotelightrestapi.config.WebserverConfiguration;
 import de.lars.remotelightrestapi.handlers.HandlerOutputs;
+import de.lars.remotelightrestapi.handlers.HandlerOutputs.HandlerOutputActivate;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
 public class RestAPI extends RouterNanoHTTPD {
 
 	private static Gson gson;
+	public static boolean shouldLog = true;
 	
 	private WebserverConfiguration serverConfig;
 
@@ -32,7 +34,8 @@ public class RestAPI extends RouterNanoHTTPD {
 		setNotImplementedHandler(NotImplementedHandler.class);
         setNotFoundHandler(Error404UriHandler.class);
         addRoute("/outputs", HandlerOutputs.class);
-		addRoute("/outputs/:output", HandlerOutputs.class);
+		addRoute("/outputs/get/:output", HandlerOutputs.class);
+		addRoute("/outputs/active", HandlerOutputActivate.class);
 	}
 
 	
