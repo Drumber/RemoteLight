@@ -65,8 +65,57 @@ curl -X PUT -H 'Content-Type: application/json' -d '{"active_effect": "scanner"}
     ]}}
 ```
 
+## `/settings` GET | PUT
+**Description:** Get and edit setting values  
+**Query parameters:**  
+| Parameter | Value | Description | Sample
+| --------- | ----- | ----------- | ------
+| `id` | valid setting id (case sensitive) | Get the setting element with the given id | `id=ui.style`
+
+**Requests:**  
+To edit one or more settings, you must send the entire serialized settings array with the edited values. It is also possible to send only a single JSON object if you only want to edit a single setting.  
+**Change only `value` (or `selected` for SettingSelection), `name`, `description` parameters. Changing other parameters can lead to errors.**
+
+**Example:**
+```bash
+1. GET the setting element
+curl -X GET -H 'Content-Type: application/json' http://localhost:8080/settings?id=animations.speed
+[
+  {
+    "SETTING_TYPE": "SettingObject",
+    "OBJECT_TYPE": "java.lang.Integer",
+    "VALUES": {
+      "value": 20,
+      "name": "",
+      "id": "animations.speed",
+      "description": "",
+      "category": "Intern"
+    }
+  }
+]
+
+2. PUT the setting element with the updated value (100)
+curl -X PUT -H 'Content-Type: application/json' -d '[{"SETTING_TYPE":"SettingObject","OBJECT_TYPE":"java.lang.Integer","VALUES":{"value":100,"name":"","id":"animations.speed","description":"","category":"Intern"}}]' http://localhost:8080/settings
+[
+  {
+    "SETTING_TYPE": "SettingObject",
+    "OBJECT_TYPE": "java.lang.Integer",
+    "VALUES": {
+      "value": 100,
+      "name": "",
+      "id": "animations.speed",
+      "description": "",
+      "category": "Intern"
+    }
+  }
+]
+
+Alternatively as a single JSON object:
+curl -X PUT -H 'Content-Type: application/json' -d '{"SETTING_TYPE":"SettingObject","OBJECT_TYPE":"java.lang.Integer","VALUES":{"value":100,"name":"","id":"animations.speed","description":"","category":"Intern"}}' http://localhost:8080/settings
+```
+
 ## TO DO
-- [ ] get and set setting values
+- [x] get and set setting values
 - [ ] set color for all pixels and individual pixels
 - [ ] get general information (version, etc)
 - [ ] toggle lua scripts

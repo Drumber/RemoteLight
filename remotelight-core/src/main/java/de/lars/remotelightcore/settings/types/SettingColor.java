@@ -22,10 +22,9 @@
 
 package de.lars.remotelightcore.settings.types;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class SettingColor extends Setting {
 	
@@ -54,6 +53,14 @@ public class SettingColor extends Setting {
 	@Override
 	public Color get() {
 		return value;
+	}
+	
+	/**
+	 * @param o	must be {@link de.lars.remotelightcore.utils.color.Color}
+	 */
+	@Override
+	public void set(Object o) {
+		setValue((Color) o);
 	}
 
 	public void setValue(Color value) {

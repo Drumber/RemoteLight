@@ -58,6 +58,14 @@ public class SettingDouble extends Setting {
 		return value;
 	}
 
+	/**
+	 * @param o	must be double
+	 */
+	@Override
+	public void set(Object o) {
+		setValue((double) o);
+	}
+	
 	public void setValue(double value) {
 		boolean change = value != this.value;
 		this.value = value;

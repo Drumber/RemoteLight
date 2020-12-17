@@ -58,6 +58,14 @@ public class SettingInt extends Setting {
 		return value;
 	}
 
+	/**
+	 * @param o	must be int
+	 */
+	@Override
+	public void set(Object o) {
+		setValue((int) o);
+	}
+	
 	public void setValue(int value) {
 		boolean change = value != this.value;
 		this.value = value;

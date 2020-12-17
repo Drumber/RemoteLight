@@ -56,6 +56,11 @@ public class SettingObject extends Setting {
 	public Object get() {
 		return value;
 	}
+	
+	@Override
+	public void set(Object o) {
+		setValue(o);
+	}
 
 	public void setValue(Object value) {
 		this.value = value;

@@ -66,13 +66,11 @@ public class FileStorage {
 	public final String KEY_SETTINGS_LIST = "settings";
 	public final String KEY_DEVICES_LIST = "devices";
 	
-	public final Type TYPE_SETTINGS_LIST;
-	public final Type TYPE_DEVICES_LIST;
+	public static final Type TYPE_SETTINGS_LIST = new TypeToken<List<Setting>>() {}.getType();
+	public static final Type TYPE_DEVICES_LIST = new TypeToken<List<Device>>() {}.getType();
 	
 	public FileStorage(File file) {
 		this.file = file;
-		TYPE_SETTINGS_LIST = new TypeToken<List<Setting>>() {}.getType();
-		TYPE_DEVICES_LIST = new TypeToken<List<Device>>() {}.getType();
 		this.gson = new GsonBuilder()
 				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingSerializer())
 				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingDeserializer())

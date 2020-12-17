@@ -54,6 +54,14 @@ public class SettingBoolean extends Setting {
 		return value;
 	}
 	
+	/**
+	 * @param o	must be boolean
+	 */
+	@Override
+	public void set(Object o) {
+		setValue((boolean) o);
+	}
+	
 	public void setValue(boolean value) {
 		boolean change = value != this.value;
 		this.value = value;

@@ -13,6 +13,7 @@ import de.lars.remotelightrestapi.handlers.EffectsHandler;
 import de.lars.remotelightrestapi.handlers.EffectsHandler.EffectsActiveHandler;
 import de.lars.remotelightrestapi.handlers.OutputsHandler;
 import de.lars.remotelightrestapi.handlers.OutputsHandler.OutputActivateHandler;
+import de.lars.remotelightrestapi.handlers.SettingsHandler;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
@@ -42,6 +43,8 @@ public class RestAPI extends RouterNanoHTTPD {
 		addRoute("/effects", EffectsHandler.class);
 		addRoute("/effects/:type/active", EffectsActiveHandler.class);
 		addRoute("/effects/:type", EffectsHandler.class);
+		// settings
+		addRoute("/settings", SettingsHandler.class);
 	}
 
 	

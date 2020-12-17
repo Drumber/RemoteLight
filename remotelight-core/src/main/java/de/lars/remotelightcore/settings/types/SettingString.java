@@ -53,6 +53,14 @@ public class SettingString extends Setting {
 	public String get() {
 		return value;
 	}
+	
+	/**
+	 * @param o	must be {@link java.lang.String}
+	 */
+	@Override
+	public void set(Object o) {
+		setValue((String) o);
+	}
 
 	public void setValue(String value) {
 		boolean change = !value.equals(this.value);

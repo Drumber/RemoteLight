@@ -67,6 +67,14 @@ public class SettingSelection extends Setting {
 	public int getSelectedIndex() {
 		return Arrays.asList(values).indexOf(selected);
 	}
+	
+	/**
+	 * @param o	must be {@link java.lang.String}
+	 */
+	@Override
+	public void set(Object o) {
+		setSelected((String) o);
+	}
 
 	public void setSelected(String selected) {
 		boolean change = !selected.equals(this.selected);

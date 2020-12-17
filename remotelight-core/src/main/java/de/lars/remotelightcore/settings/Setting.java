@@ -94,6 +94,8 @@ public abstract class Setting implements Serializable {
 	 */
 	public abstract Object get();
 	
+	public abstract void set(Object o);
+	
 	/**
 	 * Add a setting flag
 	 * @param flag	the flag to add
