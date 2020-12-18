@@ -55,10 +55,13 @@ import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 import de.lars.remotelightplugins.PluginManager;
+import de.lars.remotelightrestapi.RestAPI;
+import fi.iki.elonen.NanoHTTPD;
 
 public class Main {
 	
@@ -277,6 +280,36 @@ public class Main {
 			}
 		}
 		return stack;
+	}
+	
+	
+	public void startRestApi() {
+		final int port = getSettingsManager().getSetting(SettingInt.class, "restapi.port").get();
+		try {
+			RestAPI restApi = RestAPI.newInstance(port);
+			restApi.start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
+			Logger.info("[REST API] Started web server on port " + port);
+		} catch (Exception e) {
+			Logger.error(e, "Error while starting the web server for REST API.");
+			showNotification(NotificationType.ERROR, "Could not enable REST API", e.getMessage());
+		}
+	}
+	
+	public void stopRestApi() {
+		RestAPI restApi = RestAPI.getInstance();
+		if(restApi != null) {
+			try {
+				restApi.stop();
+				Logger.info("[REST API] Stopped web server");
+			} catch(Exception e) {
+				Logger.error(e, "Error while stopping the web server for REST API.");
+				getCore().showErrorNotification(e, "Could not stop REST API");
+			}
+		}
+	}
+	
+	public boolean isRestApiRunning() {
+		return RestAPI.getInstance() != null && RestAPI.getInstance().isAlive();
 	}
 	
 	

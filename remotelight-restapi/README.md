@@ -1,7 +1,8 @@
 # RemoteLight REST API
 
 default port: `8080`  
-default context path: `/`
+Port can be changed in settings (requires a restart of the REST API web server).  
+The REST API web server can be enabled or disabled in the settings (enabled by default).
 
 ## URLs
 scheme: `<ip-address>:<port>/<context_path>/[url]`  

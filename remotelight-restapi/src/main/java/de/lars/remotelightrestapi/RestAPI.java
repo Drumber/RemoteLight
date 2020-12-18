@@ -1,6 +1,5 @@
 package de.lars.remotelightrestapi;
 
-import java.io.IOException;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -25,12 +24,11 @@ public class RestAPI extends RouterNanoHTTPD {
 	private static Gson gson;
 	public static boolean shouldLog = true;
 	
-	public RestAPI(final int port) throws IOException {
+	public RestAPI(final int port) {
 		super(port);
 		instance = this;
 		addNanoHttpdLogFilter();
 		addMappings();
-		start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
 	}
 
 	@Override
@@ -62,6 +60,13 @@ public class RestAPI extends RouterNanoHTTPD {
 				return !"Could not send response to the client".equals(record.getMessage());
 			}
 		});
+	}
+	
+	public static RestAPI newInstance(final int port) {
+		if(getInstance() != null) {
+			getInstance().stop();
+		}
+		return new RestAPI(port);
 	}
 	
 	public static RestAPI getInstance() {

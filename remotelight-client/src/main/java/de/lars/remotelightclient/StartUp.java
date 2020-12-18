@@ -47,7 +47,6 @@ import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.UpdateChecker;
-import de.lars.remotelightrestapi.RestAPI;
 
 public class StartUp {
 	
@@ -71,12 +70,18 @@ public class StartUp {
 			checkForUpdates(false);
 		}
 		
-		// start web server
-		try {
-			new RestAPI(8080);
-		} catch (IOException e) {
-			Logger.error(e, "Could not start web server for REST API");
+		// start REST API web server
+		SettingBoolean sRestApi = s.getSetting(SettingBoolean.class, "restapi.enable");
+		if(sRestApi.get()) {			
+			Main.getInstance().startRestApi();
 		}
+		// add REST API setting listener 
+		sRestApi.setValueListener(l -> {
+			if(sRestApi.get() && !Main.getInstance().isRestApiRunning())
+				Main.getInstance().startRestApi();
+			else if(!sRestApi.get() && Main.getInstance().isRestApiRunning())
+				Main.getInstance().stopRestApi();
+		});
 	}
 	
 	/**
@@ -146,6 +151,8 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("main.checkupdates", "Check for updates", SettingCategory.Others, "Shows a notification when a new version is available.", true));
 		s.addSetting(new SettingBoolean("main.checkupdates.prerelease", "Notification for pre-releases", SettingCategory.Others, "If activated, a notification is also shown for pre-releases.", true));
 		s.addSetting(new SettingBoolean("plugins.enable", "Enable plugins", SettingCategory.Others, "Option to enable or disable the plugin system. Requires a restart to take effect.", true));
+		s.addSetting(new SettingBoolean("restapi.enable", "Enable REST API", SettingCategory.Others, "Enable the web sever for the RemoteLight REST API", true));
+		s.addSetting(new SettingInt("restapi.port", "REST API Port", SettingCategory.Others, "Web server port for the REST API.", 8080, 0, Integer.MAX_VALUE, 1));
 		
 		//Intern
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));

@@ -23,7 +23,9 @@
 package de.lars.remotelightcore.settings;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.lars.remotelightcore.lang.i18n;
@@ -39,7 +41,7 @@ public abstract class Setting implements Serializable {
 	private String id;
 	private String description;
 	private SettingCategory category;
-	private transient SettingValueListener listener;
+	private transient List<SettingValueListener> listener;
 	private transient Set<String> flags;
 	
 	public Setting(String id, String name, String description, SettingCategory category) {
@@ -137,12 +139,28 @@ public abstract class Setting implements Serializable {
 	}
 	
 	public void setValueListener(SettingValueListener listener) {
-		this.listener = listener;
+		checkListenerList();
+		this.listener.add(listener);
+	}
+	
+	public void removeValueListener(SettingValueListener listener) {
+		checkListenerList();
+		this.listener.remove(listener);
 	}
 	
 	protected void fireChangeEvent() {
-		if(listener != null)
-			listener.onSettingValueChanged(this);
+		checkListenerList();
+		if(listener != null) {
+			for(SettingValueListener l : listener) {
+				if(l != null)					
+					l.onSettingValueChanged(this);
+			}
+		}
+	}
+	
+	private void checkListenerList() {
+		if(listener == null)
+			listener = new ArrayList<SettingValueListener>();
 	}
 
 }

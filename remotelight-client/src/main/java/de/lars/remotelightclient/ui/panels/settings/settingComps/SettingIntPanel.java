@@ -59,6 +59,8 @@ public class SettingIntPanel extends SettingPanel {
 		
 		spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(setting.get().intValue(), setting.getMin(), setting.getMax(), setting.getStepsize()));
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "#");
+		spinner.setEditor(editor); // set new spinner editor without thousands separation
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

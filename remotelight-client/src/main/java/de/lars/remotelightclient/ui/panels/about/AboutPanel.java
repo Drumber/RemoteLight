@@ -165,7 +165,6 @@ public class AboutPanel extends MenuPanel {
 		panelContent.add(verticalStrut_1);
 		
 		addLabel("jSerialComm", "https://fazecast.github.io/jSerialComm/");
-		addLabel("SimpleFileStorage", "https://github.com/DeBukkIt/SimpleFileStorage");
 		addLabel("TarsosDSP", "https://github.com/JorenSix/TarsosDSP");
 		addLabel("tinylog", "https://tinylog.org");
 		addLabel("Gson", "https://github.com/google/gson");
@@ -174,6 +173,7 @@ public class AboutPanel extends MenuPanel {
 		addLabel("FlatLaf", "https://github.com/JFormDesigner/FlatLaf");
 		addLabel("XT-Audio", "https://sjoerdvankreel.github.io/xt-audio/");
 		addLabel("jIconFont", "https://github.com/jIconFont/jiconfont-swing");
+		addLabel("NanoHTTPD", "https://github.com/NanoHttpd/nanohttpd");
 	}
 	
 	private void addLabel(String name, String url) {
