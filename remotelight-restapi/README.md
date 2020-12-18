@@ -18,7 +18,7 @@ sample: `localhost:8080/[url]`
 
 ## `/outputs/active` GET | PUT
 **Description:** Active output device  
-**Request Data:**  
+**Request:**  
 - Set active output device: `{"active_output": "<device id>"}`  
 - Deactivate output: `{"active_output": null}`
 
@@ -38,13 +38,13 @@ curl -X PUT -H 'Content-Type: application/json' -d '{"active_output":"My arduino
 
 ## `/effects/:type` GET
 **Description:** All effects for the specified type  
-**Value:** `animations`, `scenes`, `music`  
+**`:type` Parameter:** `animations`, `scenes` or `music`  
 **Query parameters:** [see `/effects`](#effects-get)
 
 ## `/effects/:type/active` GET | PUT
 **Description:** Active effect of the specified effect type  
 **`:type` Parameter:** `animations`, `scenes` or `music`  
-**Request Data:**  
+**Request:**  
 - Set active effect: `{"active_effect": "<effect name>"}`  
 - Disable effect: `{"active_effect": null}`
 
@@ -65,6 +65,75 @@ curl -X PUT -H 'Content-Type: application/json' -d '{"active_effect": "scanner"}
     ]}}
 ```
 
+## `/color` GET | PUT
+**Description:** Get and set the color for the whole strip  
+**Request:**  
+- R,G,B values: `{"red":<0..255>,"green":<0..255>,"blue":<0..255>}`
+- RGB integer value: `{"rgb":<RGB values as 4-byte Integer>}`
+- HEX value: `{"hex":"<HEX color>"}`
+
+**Example:**
+```bash
+curl -X PUT -H 'Content-Type: application/json' -d '{"red":255,"green":0,"blue":0}' http://localhost:8080/color
+{
+  "rgb": -65536,
+  "red": 255,
+  "green": 0,
+  "blue": 0
+}
+
+curl -X PUT -H 'Content-Type: application/json' -d '{"rgb":-16776961}' http://localhost:8080/color
+{
+  "rgb": -16776961,
+  "red": 0,
+  "green": 0,
+  "blue": 255
+}
+
+
+curl -X PUT -H 'Content-Type: application/json' -d '{"hex":"#00FF00"}' http://localhost:8080/color
+{
+  "rgb": -16711936,
+  "red": 0,
+  "green": 255,
+  "blue": 0
+}
+```
+
+## `/color/pixel` GET | PUT
+**Description:** Get and set the color for each pixel individually  
+**Request:**  
+A JSON array that contains for each pixel a JSON object. The JSON objects look like described in [`/color`](#color-get--put).  
+**Example:**
+```bash
+curl -X PUT -H 'Content-Type: application/json' -d '[{"hex":"#00FF00"},{"red":255,"green":0,"blue":0},{"rgb":-16777216}, ... ]' http://localhost:8080/color/pixel
+[
+  {
+    "rgb": -16711936,
+    "red": 0,
+    "green": 255,
+    "blue": 0,
+    "index": 0
+  },
+  {
+    "rgb": -65536,
+    "red": 255,
+    "green": 0,
+    "blue": 0,
+    "index": 1
+  },
+  {
+    "rgb": -16777216,
+    "red": 0,
+    "green": 0,
+    "blue": 0,
+    "index": 2
+  },
+  ...
+]
+
+```
+
 ## `/settings` GET | PUT
 **Description:** Get and edit setting values  
 **Query parameters:**  
@@ -72,7 +141,7 @@ curl -X PUT -H 'Content-Type: application/json' -d '{"active_effect": "scanner"}
 | --------- | ----- | ----------- | ------
 | `id` | valid setting id (case sensitive) | Get the setting element with the given id | `id=ui.style`
 
-**Requests:**  
+**Request:**  
 To edit one or more settings, you must send the entire serialized settings array with the edited values. It is also possible to send only a single JSON object if you only want to edit a single setting.  
 **Change only `value` (or `selected` for SettingSelection), `name`, `description` parameters. Changing other parameters can lead to errors.**
 
@@ -116,7 +185,7 @@ curl -X PUT -H 'Content-Type: application/json' -d '{"SETTING_TYPE":"SettingObje
 
 ## TO DO
 - [x] get and set setting values
-- [ ] set color for all pixels and individual pixels
-- [ ] get general information (version, etc)
+- [x] set color for all pixels and individual pixels
+- [x] get general information (version, etc)
 - [ ] toggle lua scripts
 - [ ] (edit device data)

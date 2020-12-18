@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import de.lars.remotelightrestapi.handlers.ColorHandler;
+import de.lars.remotelightrestapi.handlers.ColorHandler.ColorHandlerPixels;
 import de.lars.remotelightrestapi.handlers.EffectsHandler;
 import de.lars.remotelightrestapi.handlers.EffectsHandler.EffectsActiveHandler;
 import de.lars.remotelightrestapi.handlers.InformationHandler;
@@ -35,17 +37,20 @@ public class RestAPI extends RouterNanoHTTPD {
 	public void addMappings() {
 		setNotImplementedHandler(NotImplementedHandler.class);
         setNotFoundHandler(Error404UriHandler.class);
-        // outputs
+        // information
+     	addRoute("/", InformationHandler.class);
+     	// outputs
         addRoute("/outputs", OutputsHandler.class);
 		addRoute("/outputs/active", OutputActivateHandler.class);
 		// effects
 		addRoute("/effects", EffectsHandler.class);
 		addRoute("/effects/:type/active", EffectsActiveHandler.class);
 		addRoute("/effects/:type", EffectsHandler.class);
+		// color
+		addRoute("/color", ColorHandler.class);
+		addRoute("/color/pixel", ColorHandlerPixels.class);
 		// settings
 		addRoute("/settings", SettingsHandler.class);
-		// information
-		addRoute("/", InformationHandler.class);
 	}
 
 	
