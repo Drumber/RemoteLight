@@ -48,7 +48,6 @@ import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.UpdateChecker;
 import de.lars.remotelightrestapi.RestAPI;
-import de.lars.remotelightrestapi.config.WebserverConfiguration;
 
 public class StartUp {
 	
@@ -74,7 +73,7 @@ public class StartUp {
 		
 		// start web server
 		try {
-			new RestAPI(new WebserverConfiguration());
+			new RestAPI(8080);
 		} catch (IOException e) {
 			Logger.error(e, "Could not start web server for REST API");
 		}

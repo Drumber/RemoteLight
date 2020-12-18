@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.lars.remotelightrestapi.config.WebserverConfiguration;
 import de.lars.remotelightrestapi.handlers.EffectsHandler;
 import de.lars.remotelightrestapi.handlers.EffectsHandler.EffectsActiveHandler;
+import de.lars.remotelightrestapi.handlers.InformationHandler;
 import de.lars.remotelightrestapi.handlers.OutputsHandler;
 import de.lars.remotelightrestapi.handlers.OutputsHandler.OutputActivateHandler;
 import de.lars.remotelightrestapi.handlers.SettingsHandler;
@@ -19,14 +19,13 @@ import fi.iki.elonen.router.RouterNanoHTTPD;
 
 public class RestAPI extends RouterNanoHTTPD {
 
+	private static RestAPI instance;
 	private static Gson gson;
 	public static boolean shouldLog = true;
 	
-	private WebserverConfiguration serverConfig;
-
-	public RestAPI(WebserverConfiguration serverConfig) throws IOException {
-		super(serverConfig.getPort());
-		this.serverConfig = serverConfig;
+	public RestAPI(final int port) throws IOException {
+		super(port);
+		instance = this;
 		addNanoHttpdLogFilter();
 		addMappings();
 		start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
@@ -45,6 +44,8 @@ public class RestAPI extends RouterNanoHTTPD {
 		addRoute("/effects/:type", EffectsHandler.class);
 		// settings
 		addRoute("/settings", SettingsHandler.class);
+		// information
+		addRoute("/", InformationHandler.class);
 	}
 
 	
@@ -56,6 +57,10 @@ public class RestAPI extends RouterNanoHTTPD {
 				return !"Could not send response to the client".equals(record.getMessage());
 			}
 		});
+	}
+	
+	public static RestAPI getInstance() {
+		return instance;
 	}
 	
 	/**
