@@ -8,6 +8,36 @@ The REST API web server can be enabled or disabled in the settings (enabled by d
 scheme: `<ip-address>:<port>/<context_path>/[url]`  
 sample: `localhost:8080/[url]`
 
+## `/` GET | PUT
+**Description:** General information and values
+**Request:**  
+```bash
+Change brightness:
+curl -X PUT -H 'Content-Type: application/json' -d '{"brightness": <0..100>}' http://localhost:8080
+{
+  "version": "v0.2.5-beta",
+  "devbuild": true,
+  "github": "https://github.com/Drumber/RemoteLight",
+  "pixels": 2,
+  "brightness": "100",
+  "animations_speed": "40",
+  "active_output": null
+}
+
+Change animations speed:
+curl -X PUT -H 'Content-Type: application/json' -d '{"animations_speed": <20..200>}' http://localhost:8080
+{
+  "version": "v0.2.5-beta",
+  "devbuild": true,
+  "github": "https://github.com/Drumber/RemoteLight",
+  "pixels": 2,
+  "brightness": "100",
+  "animations_speed": "100",
+  "active_output": null
+}
+
+```
+
 ## `/outputs` GET
 **Description:** A list of all output devices  
 **Query parameters**:
