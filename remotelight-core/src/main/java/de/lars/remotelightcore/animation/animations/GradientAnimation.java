@@ -1,7 +1,5 @@
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.out.OutputManager;
@@ -9,6 +7,7 @@ import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
 import de.lars.remotelightcore.utils.color.palette.ColorGradient;

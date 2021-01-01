@@ -115,17 +115,17 @@ public class Color implements Serializable {
 	public Color(int rgb) {
 		value = 0xFF000000 | rgb;
 	}
-
+	
 	/**
-	 * Creates an RGB Color object using the specified HSB values.
-	 * 
-	 * @param hue        value in range 0.0-1.0
-	 * @param saturation value in range 0.0-1.0
-	 * @param brightness value in range 0.0-1.0
-	 * @see Color#HSBtoRGB
+	 * Creates a Color object using the specified red, green and blue values. The
+	 * values must be in the range 0.0..1.0.
+	 * @param r Red color value
+	 * @param g Green color value
+	 * @param b Blue color value
+	 * @throws IllegalArgumentException if one value is out of range.
 	 */
-	public Color(float hue, float saturation, float brightness) {
-		value = HSBtoRGB(hue, saturation, brightness);
+	public Color(float r, float g, float b) {
+		this((int) (r*255+0.5), (int) (g*255+0.5), (int) (b*255+0.5));
 	}
 
 	/**
