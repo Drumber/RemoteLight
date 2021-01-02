@@ -22,10 +22,10 @@
 
 package de.lars.remotelightcore;
 
-import de.lars.remotelightcore.utils.color.Color;
-
+import de.lars.remotelightcore.event.EventHandler;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public abstract class EffectManager {
@@ -39,6 +39,10 @@ public abstract class EffectManager {
 			// turn off leds when disabling effect
 			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		}
+	}
+	
+	protected EventHandler getEventHandler() {
+		return RemoteLightCore.getInstance().getEventHandler();
 	}
 	
 }

@@ -33,6 +33,8 @@ import org.tinylog.Logger;
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.Action;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.MusicSyncToggleEvent;
 import de.lars.remotelightcore.musicsync.modes.*;
 import de.lars.remotelightcore.musicsync.sound.Shared;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;
@@ -306,6 +308,8 @@ public class MusicSyncManager extends EffectManager {
 		}
 		activeEffect = effect;
 		this.loop();
+		// trigger event
+		getEventHandler().call(new MusicSyncToggleEvent(Action.ENABLE, effect));
 	}
 	
 	@Override
@@ -316,6 +320,8 @@ public class MusicSyncManager extends EffectManager {
 		activeEffect = null;
 		soundProcessor.stop();
 		turnOffLeds();
+		// trigger event
+		getEventHandler().call(new MusicSyncToggleEvent(Action.DISABLE, null));
 	}
 	
 	private void loop() {

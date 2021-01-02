@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.scene;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,8 @@ import org.tinylog.Logger;
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.Action;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.SceneToggleEvent;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.scenes.Fire;
 import de.lars.remotelightcore.scene.scenes.Jungle;
@@ -39,6 +40,7 @@ import de.lars.remotelightcore.scene.scenes.Ocean;
 import de.lars.remotelightcore.scene.scenes.SnowSparkle;
 import de.lars.remotelightcore.scene.scenes.Space;
 import de.lars.remotelightcore.scene.scenes.Sunset;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class SceneManager extends EffectManager {
@@ -81,6 +83,8 @@ public class SceneManager extends EffectManager {
 		}
 		activeScene = scene;
 		this.loop();
+		// trigger event
+		getEventHandler().call(new SceneToggleEvent(Action.ENABLE, scene));
 	}
 	
 	@Override
@@ -90,6 +94,8 @@ public class SceneManager extends EffectManager {
 		}
 		activeScene = null;
 		turnOffLeds();
+		// trigger event
+		getEventHandler().call(new SceneToggleEvent(Action.DISABLE, null));
 	}
 	
 	private void loop() {

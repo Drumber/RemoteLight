@@ -50,6 +50,7 @@ import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.AnimationToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -105,6 +106,7 @@ public class AnimationsPanel extends MenuPanel {
 		this.addAnimationPanels();
 		
 		Main.getInstance().getCore().getEventHandler().register(onAnimationOptionUpdate);
+		Main.getInstance().getCore().getEventHandler().register(onAnimationToggle);
 	}
 	
 	private void addAnimationPanels() {
@@ -137,7 +139,6 @@ public class AnimationsPanel extends MenuPanel {
 					}
 				}
 			}
-			addAnimationPanels();
 			optionsPanel.showOptions();
 		}
 	};
@@ -166,6 +167,14 @@ public class AnimationsPanel extends MenuPanel {
 			if(event.getType() == EffectType.Animation) {
 				optionsPanel.showOptions();
 			}
+		}
+	};
+	
+	private Listener<AnimationToggleEvent> onAnimationToggle = new Listener<AnimationToggleEvent>() {
+		@Override
+		public void onEvent(AnimationToggleEvent event) {
+			// update panels
+			addAnimationPanels();
 		}
 	};
 	

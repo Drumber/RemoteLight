@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.animation;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,12 @@ import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.animations.*;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.Action;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.AnimationToggleEvent;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class AnimationManager extends EffectManager {
@@ -103,6 +105,8 @@ public class AnimationManager extends EffectManager {
 		}
 		activeAnimation = animation;
 		this.loop();
+		// trigger event
+		getEventHandler().call(new AnimationToggleEvent(Action.ENABLE, animation));
 	}
 	
 	@Override
@@ -112,6 +116,8 @@ public class AnimationManager extends EffectManager {
 			activeAnimation = null;
 		}
 		turnOffLeds();
+		// trigger event
+		getEventHandler().call(new AnimationToggleEvent(Action.DISABLE, null));
 	}
 	
 	public void setDelay(int delay) {

@@ -47,6 +47,7 @@ import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.MusicSyncToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.musicsync.MusicSyncManager;
@@ -95,6 +96,7 @@ public class MusicSyncPanel extends MenuPanel {
 		
 		addMusicEffectPanels();
 		Main.getInstance().getCore().getEventHandler().register(onEffectOptionsUpdate);
+		Main.getInstance().getCore().getEventHandler().register(onMusicSyncToggle);
 	}
 	
 	public void addMusicEffectPanels() {
@@ -130,7 +132,6 @@ public class MusicSyncPanel extends MenuPanel {
 					}
 				}
 			}
-			addMusicEffectPanels();
 		}
 	};
 	
@@ -147,13 +148,21 @@ public class MusicSyncPanel extends MenuPanel {
 		}
 	}
 	
-	/** Triggered by MusicEffects (e.g. when a settings was hidden) */
+	/** Triggered by MusicEffects (e.g. when a setting was hidden) */
 	private Listener<EffectOptionsUpdateEvent> onEffectOptionsUpdate = new Listener<EffectOptionsUpdateEvent>() {
 		@Override
 		public void onEvent(EffectOptionsUpdateEvent event) {
 			if(event.getType() == EffectType.MusicSync) {
 				showMusicEffectOptions();
 			}
+		}
+	};
+	
+	/** Triggered when enabling or disabling MusicEffects */
+	private Listener<MusicSyncToggleEvent> onMusicSyncToggle = new Listener<MusicSyncToggleEvent>() {
+		@Override
+		public void onEvent(MusicSyncToggleEvent event) {
+			addMusicEffectPanels();
 		}
 	};
 	

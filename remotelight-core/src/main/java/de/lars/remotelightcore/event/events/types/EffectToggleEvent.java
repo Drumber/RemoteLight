@@ -32,10 +32,17 @@ public abstract class EffectToggleEvent implements Event {
 	}
 	
 	/**
-	 * Get the event effect.
-	 * @return		instance of the effect
+	 * Get the event effect. This could also return {@code null} if
+	 * the effect is not available (e.g. on disable)
+	 * @return		instance of the effect or {@code null}
 	 */
 	public abstract AbstractEffect getEffect();
+	
+	@Override
+	public String toString() {
+		return String.format("%s[action=%s,effect=%s]",
+				getClass().getCanonicalName(), String.valueOf(getAction()), String.valueOf(getEffect()));
+	}
 	
 	
 	/*---------------------------------

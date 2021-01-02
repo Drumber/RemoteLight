@@ -41,6 +41,8 @@ import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.SceneToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
@@ -86,6 +88,7 @@ public class ScenesPanel extends MenuPanel {
 		add(bgrSettings);
 		
 		this.addScenePanels();
+		Main.getInstance().getCore().getEventHandler().register(onSceneToggle);
 	}
 	
 	private void addScenePanels() {
@@ -118,7 +121,6 @@ public class ScenesPanel extends MenuPanel {
 					}
 				}
 			}
-			addScenePanels();
 		}
 	};
 	
@@ -126,6 +128,13 @@ public class ScenesPanel extends MenuPanel {
 		DefaultControlBar controlBar = new DefaultControlBar();
 		mainFrame.setControlBarPanel(controlBar);
 	}
+	
+	private Listener<SceneToggleEvent> onSceneToggle = new Listener<SceneToggleEvent>() {
+		@Override
+		public void onEvent(SceneToggleEvent event) {
+			addScenePanels();
+		}
+	};
 	
 	@Override
 	public String getName() {
