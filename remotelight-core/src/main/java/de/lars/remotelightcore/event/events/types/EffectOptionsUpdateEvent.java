@@ -25,9 +25,12 @@ package de.lars.remotelightcore.event.events.types;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.event.events.Event;
 
+/**
+ * EffectOptionsUpdateEvent called when updating options of an effect.
+ */
 public class EffectOptionsUpdateEvent implements Event {
 	
-	private EffectType type;
+	private final EffectType type;
 	
 	public EffectOptionsUpdateEvent(EffectType type) {
 		this.type = type;

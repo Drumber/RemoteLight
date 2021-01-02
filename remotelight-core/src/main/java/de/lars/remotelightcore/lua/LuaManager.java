@@ -50,8 +50,8 @@ import org.tinylog.Logger;
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.event.events.types.LuaScriptEvent;
-import de.lars.remotelightcore.event.events.types.LuaScriptEvent.Action;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.Action;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.LuaScriptToggleEvent;
 import de.lars.remotelightcore.lua.utils.LedStrip;
 import de.lars.remotelightcore.lua.utils.LuaColor;
 import de.lars.remotelightcore.lua.utils.LuaSettings;
@@ -171,7 +171,7 @@ public class LuaManager extends EffectManager {
 			// start instruction timer
 			timerTask = timerThread.scheduleAtFixedRate(instructionsTimer, 0, 1, TimeUnit.MILLISECONDS);
 			// call lua script start event
-			RemoteLightCore.getInstance().getEventHandler().call(new LuaScriptEvent(activeScript, Action.START));
+			RemoteLightCore.getInstance().getEventHandler().call(new LuaScriptToggleEvent(Action.ENABLE, activeScript));
 		} catch(LuaError e) {
 			Logger.error(e, "Error while executing lua script '" + luaFilePath + "'.");
 			onException(e);
@@ -204,7 +204,7 @@ public class LuaManager extends EffectManager {
 //			if(timerTask != null)
 //				timerTask.cancel(true);
 			
-			LuaScriptEvent event = new LuaScriptEvent(activeScript, Action.STOP);
+			LuaScriptToggleEvent event = new LuaScriptToggleEvent(Action.DISABLE, activeScript);
 			activeScript = null;
 			turnOffLeds();
 			// call lua script stop event

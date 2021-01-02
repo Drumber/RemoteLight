@@ -27,11 +27,12 @@ public abstract class AbstractEffect {
 	}
 	
 	/**
-	 * Get the amount of LEDs/pixels
+	 * Get the amount of LEDs/pixels. (Wrapper method
+	 * for {@link RemoteLightCore#getLedNum()})
 	 * 
 	 * @return	the amount of LEDs
 	 */
-	public int getLeds() {
+	protected int getLeds() {
 		return RemoteLightCore.getLedNum();
 	}
 	

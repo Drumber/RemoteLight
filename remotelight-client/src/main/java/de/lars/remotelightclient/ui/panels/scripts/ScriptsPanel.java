@@ -63,7 +63,7 @@ import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.Listener;
-import de.lars.remotelightcore.event.events.types.LuaScriptEvent;
+import de.lars.remotelightcore.event.events.types.EffectToggleEvent.LuaScriptToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.lua.LuaManager;
 import de.lars.remotelightcore.lua.LuaManager.LuaExceptionListener;
@@ -255,9 +255,9 @@ public class ScriptsPanel extends MenuPanel {
 		}
 	};
 	
-	private Listener<LuaScriptEvent> onLuaScriptEvent = new Listener<LuaScriptEvent>() {
+	private Listener<LuaScriptToggleEvent> onLuaScriptEvent = new Listener<LuaScriptToggleEvent>() {
 		@Override
-		public void onEvent(LuaScriptEvent event) {
+		public void onEvent(LuaScriptToggleEvent event) {
 			addScriptPanels();
 			addScriptSettings();
 		}

@@ -7,10 +7,11 @@ import java.util.List;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 
+import de.lars.remotelightcore.AbstractEffect;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.settings.Setting;
 
-public class LuaScript {
+public class LuaScript extends AbstractEffect {
 	
 	public final static String VAL_NAME = "SCRIPT_NAME";
 	public final static String FUNC_LOOP = "onLoop";
@@ -21,6 +22,7 @@ public class LuaScript {
 	private List<Setting> listSettings;
 	
 	public LuaScript(Globals globals, String filePath) {
+		super(getFileName(filePath));
 		this.globals = globals;
 		this.filePath = filePath;
 		listSettings = new ArrayList<Setting>();
@@ -68,17 +70,18 @@ public class LuaScript {
 	 * script name is not defined in lua.
 	 * @return			script name or path
 	 */
+	@Override
 	public String getName() {
 		if(isActive) {
 			LuaValue valName = globals.get(VAL_NAME);
 			if(valName.isstring()) {
-				return valName.optjstring(getFileName());
+				return valName.optjstring(getFileName(filePath));
 			}
 		}
-		return getFileName();
+		return getFileName(filePath);
 	}
 	
-	public String getFileName() {
+	public static String getFileName(String filePath) {
 		int slashIndex = filePath.lastIndexOf(File.separatorChar);
 		return filePath.substring(slashIndex != -1 ? slashIndex+1 : 0);
 	}
@@ -86,6 +89,7 @@ public class LuaScript {
 	/**
 	 * Calls the {@code onLoop()} lua function (if present)
 	 */
+	@Override
 	public void onLoop() {
 		if(isActive) {
 			LuaValue funcLoop = globals.get(FUNC_LOOP);
