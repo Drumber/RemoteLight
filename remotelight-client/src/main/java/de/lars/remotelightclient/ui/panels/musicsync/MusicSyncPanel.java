@@ -163,6 +163,7 @@ public class MusicSyncPanel extends MenuPanel {
 		@Override
 		public void onEvent(MusicSyncToggleEvent event) {
 			addMusicEffectPanels();
+			showMusicEffectOptions();
 		}
 	};
 	

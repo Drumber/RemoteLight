@@ -173,8 +173,9 @@ public class AnimationsPanel extends MenuPanel {
 	private Listener<AnimationToggleEvent> onAnimationToggle = new Listener<AnimationToggleEvent>() {
 		@Override
 		public void onEvent(AnimationToggleEvent event) {
-			// update panels
+			// update panels and options
 			addAnimationPanels();
+			optionsPanel.showOptions();
 		}
 	};
 	
