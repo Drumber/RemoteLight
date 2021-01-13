@@ -22,29 +22,28 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Rainbow extends MusicEffect {
 	
-	private Color[] strip;
 	private int pix;
-	private int half;
-	private int lastLeds = 0;
-	private Color[] rainbow;
-	private int step = 0;
+	private String mode = "centered"; // TODO: implement single bar mode
+	private Color[] strip;
+	private boolean isOddNumber;
+	private int currentHue = 0;
+	private int hueStepSize = 5;
 	
+	private int lastLeds = 0;
 	public boolean smoothRise = true;
 	public boolean smoothFall = true;
-	public int steps = 5;
 
 	public Rainbow() {
 		super("Rainbow");
@@ -56,7 +55,7 @@ public class Rainbow extends MusicEffect {
 	private void initOptions() {
 		smoothRise = ((SettingBoolean) getSetting("musicsync.rainbow.smoothrise")).get();
 		smoothFall= ((SettingBoolean) getSetting("musicsync.rainbow.smoothfall")).get();
-		steps = ((SettingInt) getSetting("musicsync.rainbow.steps")).get();
+		hueStepSize = ((SettingInt) getSetting("musicsync.rainbow.steps")).get();
 	}
 	
 	@Override
@@ -64,21 +63,8 @@ public class Rainbow extends MusicEffect {
 		this.initOptions();
 		
 		pix = getLeds();
-		half = pix / 2;
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
-		rainbow = new Color[pix];
-		
-		for(int i = 0; i < half; i++) {
-			step += 5;
-			if(step >= RainbowWheel.getRainbow().length)
-				step = 0;
-			
-			Color c = RainbowWheel.getRainbow()[step];
-			//half1
-			rainbow[(half - 1 - i)] = c;
-			//half2
-			rainbow[(half + i)] = c;
-		}
+		isOddNumber = (pix % 2) != 0;
 		super.onEnable();
 	}
 	
@@ -86,83 +72,115 @@ public class Rainbow extends MusicEffect {
 	public void onLoop() {
 		this.initOptions();
 		
-		double mul = 0.2 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
-		int[] amp = getSoundProcessor().getSimpleAmplitudes(); //6 bands
+		// multiplier depends on the gain value and the number of LEDs
+		double multiplier = 0.2 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60;
+		int[] amp = getSoundProcessor().getSimpleAmplitudes(); // simple amplitudes: 6 bands
 		
+		// get the average of all amplitudes
 		int x = 0;
 		for(int i = 0; i < amp.length; i++) {
 			x += amp[i];
 		}
-		int ampAv = x / amp.length; //average of all amp bands
+		int ampAv = x / amp.length; //average of all amplitudes
 		
-		int leds = (int) (ampAv * mul); //how many leds should glow
-		if(leds > half) leds = half;
+		int activeLEDs = (int) (ampAv * multiplier); // defines how many LEDs light
+		if(activeLEDs > getTotalLEDs()) activeLEDs = getTotalLEDs(); // bound the number of active LEDs
 		
-		//Smooth
+		// Smooth fall & rise
 		if(smoothRise && smoothFall) {
-			if(lastLeds > leds) {
-				leds = lastLeds;
+			if(lastLeds > activeLEDs) {
+				activeLEDs = lastLeds;
 				lastLeds--;
 			} else {
 				lastLeds += 2;
-				if(lastLeds > leds) lastLeds = leds;
-				leds = lastLeds;
+				if(lastLeds > activeLEDs) lastLeds = activeLEDs;
+				activeLEDs = lastLeds;
 			}
-			
 		} else if(smoothRise) {
-			if(lastLeds > leds) {
-				lastLeds = leds;
+			if(lastLeds > activeLEDs) {
+				lastLeds = activeLEDs;
 			} else {
 				lastLeds += 2;
-				if(lastLeds > leds) lastLeds = leds;
-				leds = lastLeds;
+				if(lastLeds > activeLEDs) lastLeds = activeLEDs;
+				activeLEDs = lastLeds;
 			}
-			
 		} else if(smoothFall) {
-			if(lastLeds > leds) {
-				leds = lastLeds;
+			if(lastLeds > activeLEDs) {
+				activeLEDs = lastLeds;
 				lastLeds--;
 			} else {
-				lastLeds = leds;
+				lastLeds = activeLEDs;
 			}
 		}
 		
-		
-		//Rainbow
-		for(int i = 0; i < pix; i++) {
-			strip[i] = rainbow[i];
-		}
-		
-		if(isBump())
-			step += steps + (steps / 2) + 20;
-		else
-			step += steps;
-
-		if(step >= RainbowWheel.getRainbow().length)
-			step = 0;
-		
-		//move
-		for(int i = 0; i < half; i++) {
-			Color c = RainbowWheel.getRainbow()[step];
-			
-			if(i == (half - 1)) {
-				rainbow[i] = c;	//half1
-				rainbow[half] = c;//half2
-				
-			} else {
-				rainbow[i] = rainbow[i + 1];
-				rainbow[pix - 1 - i] = rainbow[pix - 2 - i];
+		for(int i = 0; i < strip.length; i++) {
+			int deltaPos = getDistanceToCenter(i);
+			Color pixelColor = Color.BLACK;
+			// show color if pixel is within activeLEDs range
+			if(deltaPos < activeLEDs) {
+				int hue = getPreviousHue(deltaPos);
+				pixelColor = RainbowWheel.getRainbow()[hue];
 			}
+			// set color of the pixel
+			strip[i] = pixelColor;
 		}
 		
-		//effect
-		for(int i = 0; i < (half - leds); i++) {
-			strip[i] = Color.BLACK;
-			strip[pix - 1 - i] = Color.BLACK;
-		}
+		// increment hue value
+		if(isBump()) currentHue += hueStepSize + (hueStepSize / 2) + 20; // bigger step size on loudness peaks
+		else currentHue += hueStepSize;
+		if((currentHue += hueStepSize) >= RainbowWheel.getRainbow().length)
+			currentHue = currentHue % 360;
 		
 		OutputManager.addToOutput(strip);
 		super.onLoop();
+	}
+	
+	
+	/**
+	 * Get the effective number of LEDs.
+	 * @return	total number of LEDs depending on the mode
+	 */
+	private int getTotalLEDs() {
+		switch(mode) {
+		case "centered":
+			return (int) (pix / 2.0f + 0.5);
+		default: // single bar
+			return pix;
+		}
+	}
+	
+	/**
+	 * Get the distance between the given pixel position
+	 * and center position.
+	 * @param pixel	pixel position
+	 * @return		center pixel position
+	 */
+	private int getDistanceToCenter(int pixel) {
+		switch(mode) {
+		case "centered":
+			float center = pix / 2.0f;
+			if(!isOddNumber) {
+				if(pixel <= center - 1) {
+					return (int) (center - 1 - pixel);
+				}
+				return (int) Math.abs(center - pixel);
+			} else {
+				return Math.abs((int) center - pixel);
+			}
+		default: // single bar
+			return pix - 1 - pixel;
+		}
+	}
+	
+	/**
+	 * Get hue value for a pixel position.
+	 * @param deltaPos	distance to the center position
+	 * @return
+	 */
+	private int getPreviousHue(int deltaPos) {
+		int targetHue = currentHue - (deltaPos * hueStepSize);
+		if(targetHue < 0) targetHue += 360;
+		return targetHue % 360;
 	}
 
 }
