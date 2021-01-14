@@ -28,6 +28,8 @@ import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -35,7 +37,8 @@ import de.lars.remotelightcore.utils.color.RainbowWheel;
 public class Rainbow extends MusicEffect {
 	
 	private int pix;
-	private String mode = "centered"; // TODO: implement single bar mode
+	private final String[] MODES = {"Centered", "Left", "Right"};
+	private String mode = "centered";
 	private Color[] strip;
 	private boolean isOddNumber;
 	private int currentHue = 0;
@@ -47,15 +50,17 @@ public class Rainbow extends MusicEffect {
 
 	public Rainbow() {
 		super("Rainbow");
+		this.addSetting(new SettingSelection("musicsync.rainbow.mode", "Mode", SettingCategory.MusicEffect, "Position of the rainbow bar.", MODES, MODES[0], Model.ComboBox));
 		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "Smooth Rise", SettingCategory.MusicEffect, "", true));
 		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "Smooth Fall", SettingCategory.MusicEffect, "", true));
 		this.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
 	}
 	
 	private void initOptions() {
-		smoothRise = ((SettingBoolean) getSetting("musicsync.rainbow.smoothrise")).get();
-		smoothFall= ((SettingBoolean) getSetting("musicsync.rainbow.smoothfall")).get();
-		hueStepSize = ((SettingInt) getSetting("musicsync.rainbow.steps")).get();
+		smoothRise = getSetting(SettingBoolean.class, "musicsync.rainbow.smoothrise").get();
+		smoothFall= getSetting(SettingBoolean.class, "musicsync.rainbow.smoothfall").get();
+		hueStepSize = getSetting(SettingInt.class, "musicsync.rainbow.steps").get();
+		mode = getSetting(SettingSelection.class, "musicsync.rainbow.mode").get().toLowerCase();
 	}
 	
 	@Override
@@ -167,8 +172,10 @@ public class Rainbow extends MusicEffect {
 			} else {
 				return Math.abs((int) center - pixel);
 			}
-		default: // single bar
+		case "right": // right bar
 			return pix - 1 - pixel;
+		default: // left bar
+			return pixel;
 		}
 	}
 	
