@@ -45,8 +45,15 @@ public class Rainbow extends MusicEffect {
 	private int hueStepSize = 5;
 	
 	private int lastLeds = 0;
-	public boolean smoothRise = true;
-	public boolean smoothFall = true;
+	private boolean smoothRise = true;
+	private boolean smoothFall = true;
+	
+	private final String[] PEAKMARKER_MODES = {"Touched", "Cycle", "Cycle 2"};
+	private boolean showPeakMarker = true;
+	private String peakMarkerColorMode;
+	private float peakMarkerDeltaPos;
+	private int peakMarkerHue; // for Cycle and Touched color modes
+	private float peakMarkerDropSpeed = 0.2f;
 
 	public Rainbow() {
 		super("Rainbow");
@@ -54,6 +61,9 @@ public class Rainbow extends MusicEffect {
 		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothrise", "Smooth Rise", SettingCategory.MusicEffect, "", true));
 		this.addSetting(new SettingBoolean("musicsync.rainbow.smoothfall", "Smooth Fall", SettingCategory.MusicEffect, "", true));
 		this.addSetting(new SettingInt("musicsync.rainbow.steps", "Steps", SettingCategory.MusicEffect, "", 5, 1, 20, 1));
+		this.addSetting(new SettingBoolean("musicsync.rainbow.peakmarker", "Peak Marker", SettingCategory.MusicEffect, null, false));
+		this.addSetting(new SettingInt("musicsync.rainbow.peakmarker.dropspeed", "Peak Marker Speed", SettingCategory.MusicEffect, "Drop speed of the peak marker.", 2, 1, 10, 1));
+		this.addSetting(new SettingSelection("musicsync.rainbow.peakmarker.colormode", "Peak Marker Color Mode", SettingCategory.MusicEffect, null, PEAKMARKER_MODES, PEAKMARKER_MODES[0], Model.ComboBox));
 	}
 	
 	private void initOptions() {
@@ -61,6 +71,17 @@ public class Rainbow extends MusicEffect {
 		smoothFall= getSetting(SettingBoolean.class, "musicsync.rainbow.smoothfall").get();
 		hueStepSize = getSetting(SettingInt.class, "musicsync.rainbow.steps").get();
 		mode = getSetting(SettingSelection.class, "musicsync.rainbow.mode").get().toLowerCase();
+		boolean prevShowPeakMarker = showPeakMarker;
+		showPeakMarker = getSetting(SettingBoolean.class, "musicsync.rainbow.peakmarker").get();
+		peakMarkerDropSpeed = 0.1f * getSetting(SettingInt.class, "musicsync.rainbow.peakmarker.dropspeed").get();
+		peakMarkerColorMode = getSetting(SettingSelection.class, "musicsync.rainbow.peakmarker.colormode").get().toLowerCase();
+		if(prevShowPeakMarker != showPeakMarker) { // check if peak marker setting has changed
+			// hide peak marker related settings if peak marker is disabled
+			this.hideSetting("musicsync.rainbow.peakmarker.dropspeed", !showPeakMarker);
+			this.hideSetting("musicsync.rainbow.peakmarker.colormode", !showPeakMarker);
+			// update effect options panel
+			this.updateEffectOptions();
+		}
 	}
 	
 	@Override
@@ -70,6 +91,7 @@ public class Rainbow extends MusicEffect {
 		pix = getLeds();
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
 		isOddNumber = (pix % 2) != 0;
+		peakMarkerDeltaPos = -1;
 		super.onEnable();
 	}
 	
@@ -118,6 +140,13 @@ public class Rainbow extends MusicEffect {
 			}
 		}
 		
+		// set peak marker position
+		if(activeLEDs > peakMarkerDeltaPos && activeLEDs != 0) {
+			peakMarkerDeltaPos = activeLEDs;
+			// set hue of peak marker to hue of active LED
+			peakMarkerHue = getPreviousHue(activeLEDs);
+		}
+		
 		for(int i = 0; i < strip.length; i++) {
 			int deltaPos = getDistanceToCenter(i);
 			Color pixelColor = Color.BLACK;
@@ -126,8 +155,17 @@ public class Rainbow extends MusicEffect {
 				int hue = getPreviousHue(deltaPos);
 				pixelColor = RainbowWheel.getRainbow()[hue];
 			}
+			// check if peak marker is at position of the pixel
+			if(showPeakMarker && deltaPos == (int) peakMarkerDeltaPos) {
+				pixelColor = RainbowWheel.getRainbow()[peakMarkerHue];
+			}
 			// set color of the pixel
 			strip[i] = pixelColor;
+		}
+		
+		// decrement peak marker delta position
+		if(peakMarkerDeltaPos > -1.0f) {
+			peakMarkerDeltaPos -= peakMarkerDropSpeed;
 		}
 		
 		// increment hue value
@@ -135,6 +173,14 @@ public class Rainbow extends MusicEffect {
 		else currentHue += hueStepSize;
 		if((currentHue += hueStepSize) >= RainbowWheel.getRainbow().length)
 			currentHue = currentHue % 360;
+		
+		// increment peak marker hue
+		if(peakMarkerColorMode.equals("cycle")) {
+			if((peakMarkerHue += hueStepSize / 2) >= RainbowWheel.getRainbow().length)
+				peakMarkerHue = peakMarkerHue % 360;
+		} else if(peakMarkerColorMode.equals("cycle 2")) {
+			peakMarkerHue = currentHue;
+		}
 		
 		OutputManager.addToOutput(strip);
 		super.onLoop();
