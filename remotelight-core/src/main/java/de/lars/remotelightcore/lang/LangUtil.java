@@ -28,7 +28,7 @@ import java.util.Locale;
 
 public class LangUtil {
 	
-	public final static String[] LANGUAGES = {"en", "de"};
+	public final static String[] LANGUAGES = {"en", "de", "fr"};
 	
 	
 	public static String[] langCodeToName(String[] codes) {
