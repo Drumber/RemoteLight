@@ -33,6 +33,7 @@ RemoteLight is a Java based control software for WS2811/WS2812 (aka Neopixel) an
 * [Commands](#commands)
 * [Plugins](#plugins)
 * [Images](#images)
+* [Community support](#community-support)
 
 ## Hardware
 - Windows/Linux/MacOS computer (not required when using Raspberry Pi)
@@ -153,6 +154,11 @@ Supports a bunch of different theme combinations, thanks to the [FlatLaf LookAnd
 
 ## Video Demo
 <a href="https://www.youtube.com/watch?v=u8ptqaTGteg"><img src="https://img.youtube.com/vi/u8ptqaTGteg/0.jpg" width="280"></a>  <a href="https://www.youtube.com/watch?v=-5hKRAyPDT8"><img src="https://img.youtube.com/vi/-5hKRAyPDT8/0.jpg" width="280"></a>
+
+## Community support
+- French translation by Pat'o beurre
+
+If you want to support my project, you can do it directly on GitHub or you can contact met on the [RemoteLight discord](https://discord.com/invite/2MmxEsg).
 
 ## Changelog
 [Changelog of all versions since v0.1.1](./CHANGELOG.md)
