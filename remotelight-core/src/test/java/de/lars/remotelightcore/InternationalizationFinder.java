@@ -3,6 +3,7 @@ package de.lars.remotelightcore;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 
 public class InternationalizationFinder {
 	
@@ -20,6 +21,8 @@ public class InternationalizationFinder {
 		System.out.println("====================");
 		
 		for(Setting setting : s.getSettings()) {
+			if(setting.getCategory() == SettingCategory.Intern)
+				continue;
 			String id = setting.getId();
 			String name = setting.getName();
 			String description = setting.getDescription();
