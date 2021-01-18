@@ -158,7 +158,7 @@ Supports a bunch of different theme combinations, thanks to the [FlatLaf LookAnd
 ## Community support
 - French translation by Pat'o beurre
 
-If you want to support my project, you can do it directly on GitHub or you can contact met on the [RemoteLight discord](https://discord.com/invite/2MmxEsg).
+If you want to support my project, you can do it directly on GitHub or you can contact me on the [RemoteLight discord](https://discord.com/invite/2MmxEsg).
 
 ## Changelog
 [Changelog of all versions since v0.1.1](./CHANGELOG.md)
