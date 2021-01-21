@@ -22,16 +22,14 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Rainbow extends Animation {
@@ -51,21 +49,20 @@ public class Rainbow extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixel) {
 		step = new Random().nextFloat(); // random start point
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
 		// fill strip
 		for(int i = 0; i < strip.length; i++)
 			executeSelectedMode(); 
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		increment = settingResolution.get() * 0.001f;
 		executeSelectedMode();
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 	private void executeSelectedMode() {

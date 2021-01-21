@@ -55,6 +55,13 @@ public class PixelColorUtils {
 	 */
 	public static void shiftRight(int amount) {
 		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		OutputManager.addToOutput(shiftPixelsRight(strip, amount));
+	}
+	
+	/**
+	 * @param amount Number of places you want to move the LEDs
+	 */
+	public static Color[] shiftPixelsRight(Color[] strip, int amount) {
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = 1; i <= strip.length; i++) {
@@ -65,7 +72,7 @@ public class PixelColorUtils {
 				}
 			}
 		}
-		OutputManager.addToOutput(leds);
+		return leds;
 	}
 	
 	/**
@@ -73,6 +80,13 @@ public class PixelColorUtils {
 	 */
 	public static void shiftLeft(int amount) {
 		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		OutputManager.addToOutput(shiftPixelsLeft(strip, amount));
+	}
+	
+	/**
+	 * @param amount Number of places you want to move the LEDs
+	 */
+	public static Color[] shiftPixelsLeft(Color[] strip, int amount) {
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = 0; i < strip.length; i++) {
@@ -83,7 +97,7 @@ public class PixelColorUtils {
 				}
 			}
 		}
-		OutputManager.addToOutput(leds);
+		return leds;
 	}
 	
 	/**
@@ -92,6 +106,14 @@ public class PixelColorUtils {
 	 */
 	public static void shiftCenter(int amount) {
 		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		OutputManager.addToOutput(shiftPixelsCenter(strip, amount));
+	}
+	
+	/**
+	 * Shift pixels outwards from the center
+	 * @param amount Number of places you want to move the LEDs
+	 */
+	public static Color[] shiftPixelsCenter(Color[] strip, int amount) {
 		Color[] leds = strip;
 		for(int r = 0; r < amount; r++) {
 			for(int i = (strip.length - 1); i > (strip.length/2); i--) {	//shift to the right
@@ -102,6 +124,7 @@ public class PixelColorUtils {
 				leds[i] = strip[i + 1];
 			}
 		}
+		return leds;
 	}
 	
 	/**

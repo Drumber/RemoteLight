@@ -22,15 +22,13 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -49,8 +47,8 @@ public class Particles extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		
 		int amount = strip.length / 4;
 		particles = new Particle[amount];
@@ -59,13 +57,13 @@ public class Particles extends Animation {
 			particles[i] = new Particle(-10, strip.length+10);
 		}
 		
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		// clear strip
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, getPixel());
 		
 		for(int i = 0; i < particles.length; i++) {
 			Particle p = particles[i];
@@ -80,9 +78,7 @@ public class Particles extends Animation {
 			}
 		}
 		
-		OutputManager.addToOutput(strip);
-		
-		super.onLoop();
+		return strip;
 	}
 	
 	@Override

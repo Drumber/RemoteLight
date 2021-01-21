@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -34,6 +33,7 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 public class RunningLight extends Animation {
 	
 	private Color[] color;
+	private Color[] strip;
 	private int pass, counter;
 
 	public RunningLight() {
@@ -43,19 +43,20 @@ public class RunningLight extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 	    this.color = new Color[] {Color.RED, Color.ORANGE, Color.PINK, Color.MAGENTA,
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
 	    pass = 0; counter = 0;
 	    
-	    for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-	    	onLoop();
+	    for(int i = 0; i < pixels; i++) {
+	    	onEffect();
 	    }
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(counter >= color.length) {
 			counter = 0;
 		}
@@ -68,19 +69,19 @@ public class RunningLight extends Animation {
 		if(pass < 5) {
 			switch (pass) {
 			case 0:
-				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 70));
+				strip[0] = ColorUtil.dimColor(c, 70);
 				break;
 			case 1:
-				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 85));
+				strip[0] = ColorUtil.dimColor(c, 85);
 				break;
 			case 2:
-				PixelColorUtils.setPixel(0, c);
+				strip[0] = c;
 				break;
 			case 3:
-				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 85));
+				strip[0] = ColorUtil.dimColor(c, 85);
 				break;
 			case 4:
-				PixelColorUtils.setPixel(0, ColorUtil.dimColor(c, 70));
+				strip[0] = ColorUtil.dimColor(c, 70);
 				counter++;
 				break;
 			}
@@ -88,16 +89,15 @@ public class RunningLight extends Animation {
 			pass++;
 		} else if(pass < 10) {
 			pass++;
-			PixelColorUtils.setPixel(0, Color.BLACK);
+			strip[0] = Color.BLACK;
 		} else {
 			pass = 0;
-			PixelColorUtils.setPixel(0, Color.BLACK);
+			strip[0] = Color.BLACK;
 		}
 		
 		//shift pixels to right
-		PixelColorUtils.shiftRight(1);
-		
-		super.onLoop();
+		strip = PixelColorUtils.shiftPixelsRight(strip, 1);
+		return strip;
 	}
 	
 	@Override

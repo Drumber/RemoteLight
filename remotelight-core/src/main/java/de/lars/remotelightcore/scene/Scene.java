@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.scene;
 
-import de.lars.remotelightcore.AbstractEffect;
+import de.lars.remotelightcore.effect.AbstractEffect;
 
 public class Scene extends AbstractEffect {
 	

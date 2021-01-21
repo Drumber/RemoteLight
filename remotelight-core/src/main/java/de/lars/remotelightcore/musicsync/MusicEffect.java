@@ -22,8 +22,8 @@
 
 package de.lars.remotelightcore.musicsync;
 
-import de.lars.remotelightcore.Effect;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
+import de.lars.remotelightcore.effect.Effect;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.musicsync.sound.SoundProcessing;

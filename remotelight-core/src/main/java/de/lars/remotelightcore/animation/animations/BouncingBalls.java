@@ -22,13 +22,11 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
+import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class BouncingBalls extends Animation {
@@ -57,8 +55,8 @@ public class BouncingBalls extends Animation {
 	
 	
 	@Override
-	public void onEnable() {
-		this.numLEDs = RemoteLightCore.getLedNum();
+	public void onEnable(int pixel) {
+		this.numLEDs = pixel;
 		this.numBalls = ((SettingInt) getSetting("animation.bouncingballs.numballs")).get();
 		this.h = new float[numBalls];
 		this.vImpact0 = (float) Math.sqrt(-2 * GRAVITY * h0);
@@ -67,7 +65,7 @@ public class BouncingBalls extends Animation {
 		this.pos = new int[numBalls];
 		this.tLast = new long[numBalls];
 		this.COR = new float[numBalls];
-		this.strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		this.strip = PixelColorUtils.colorAllPixels(Color.BLACK, numLEDs);
 		
 		// SETUP
 		for(int i = 0; i < numBalls; i++) {
@@ -78,12 +76,17 @@ public class BouncingBalls extends Animation {
 			tCycle[i] = 0;
 			COR[i] = (float) (0.90 - i / Math.pow(numBalls, 2));
 		}
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
+		// set strip
+		for(int i = 0; i < numBalls; i++) {
+			strip[pos[i]] = Color.BLACK;
+		}
+		
 		for(int i = 0; i < numBalls; i++) {
 			tCycle[i] = System.currentTimeMillis() - tLast[i];	// Calculate the time since the last time the ball was on the ground
 			
@@ -108,12 +111,7 @@ public class BouncingBalls extends Animation {
 				color = RainbowWheel.getRainbow().length - 1;
 			strip[pos[i]] = RainbowWheel.getRainbow()[color];
 		}
-		OutputManager.addToOutput(strip);
-		
-		for(int i = 0; i < numBalls; i++) {
-			strip[pos[i]] = Color.BLACK;
-		}
-		super.onLoop();
+		return strip;
 	}
 
 }

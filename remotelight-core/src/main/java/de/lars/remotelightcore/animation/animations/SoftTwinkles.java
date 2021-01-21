@@ -22,14 +22,12 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class SoftTwinkles extends Animation {
@@ -47,13 +45,13 @@ public class SoftTwinkles extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		super.onEnable();
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		DENSITY = ((SettingInt) getSetting("animation.softtwinkles.density")).get();
 		
 		for(int i = 0; i < strip.length; i++) {
@@ -72,8 +70,7 @@ public class SoftTwinkles extends Animation {
 			}
 		}
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 	private boolean isBlack(Color c) {

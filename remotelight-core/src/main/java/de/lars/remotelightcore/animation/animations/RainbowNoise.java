@@ -22,14 +22,11 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingDouble;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -54,17 +51,17 @@ public class RainbowNoise extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		// initialize strip color array
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		// initialize noise
 		noiseBright = new OpenSimplexNoise();
 		noiseColor = new OpenSimplexNoise();
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		// get increment values from settings
 		float xincrement = ((SettingDouble) getSetting("animation.rainbownoise.xincrement")).get().floatValue();
 		float yincrement = ((SettingDouble) getSetting("animation.rainbownoise.yincrement")).get().floatValue();
@@ -99,9 +96,7 @@ public class RainbowNoise extends Animation {
 		}
 		
 		// show the strip
-		OutputManager.addToOutput(strip);
-		
-		super.onLoop();
+		return strip;
 	}
 
 }

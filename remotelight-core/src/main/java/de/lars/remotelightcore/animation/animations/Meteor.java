@@ -22,15 +22,15 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
+import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Meteor extends Animation {
@@ -48,14 +48,14 @@ public class Meteor extends Animation {
 	}
 	
 	@Override
-	public void onLoop() {
-		Color[] strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+	public Color[] onEffect() {
+		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, getPixel());
 		
 		if(!((SettingBoolean) getSetting("animation.meteor.randomcolor")).get()) {
 			color = ((SettingColor) getSetting("animation.meteor.color")).get();
 		}
 		
-		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
+		for(int i = 0; i < strip.length; i++) {
 			boolean sparkle = ((SettingBoolean) getSetting("animation.meteor.sparkletrail")).get();
 			if(!sparkle || new Random().nextInt(10) > 5) {
 				strip[i] = dim(strip[i]);
@@ -64,7 +64,7 @@ public class Meteor extends Animation {
 		strip[pos] = color;
 		
 		if(right) {
-			if(++pos == RemoteLightCore.getLedNum()) {
+			if(++pos == strip.length) {
 				pos = RemoteLightCore.getLedNum()-1;
 				right = false;
 			}
@@ -76,9 +76,7 @@ public class Meteor extends Animation {
 				color = RainbowWheel.getRandomColor();
 			}
 		}
-		OutputManager.addToOutput(strip);
-		
-		super.onLoop();
+		return strip;
 	}
 	
 	private Color dim(Color c) {

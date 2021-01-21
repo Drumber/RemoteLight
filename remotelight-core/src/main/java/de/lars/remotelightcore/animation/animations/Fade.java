@@ -22,14 +22,11 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -46,7 +43,7 @@ public class Fade extends Animation {
 	}
 
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if (dimVal <= 1) {
 			color = RainbowWheel.getRandomColor();
 			dimVal = 100;
@@ -58,9 +55,7 @@ public class Fade extends Animation {
 		}
 
 		Color c = ColorUtil.dimColor(color, dimVal);
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(c, RemoteLightCore.getLedNum()));
-
-		super.onLoop();
+		return PixelColorUtils.colorAllPixels(c, getPixel());
 	}
 	
 	@Override

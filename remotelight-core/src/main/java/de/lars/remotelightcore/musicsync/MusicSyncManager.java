@@ -302,7 +302,7 @@ public class MusicSyncManager extends EffectManager {
 		}
 		if(effect != null) {
 			effect.setSoundProcessor(soundProcessor);
-			effect.onEnable();
+			effect.onEnable(RemoteLightCore.getLedNum());
 		} else {
 			soundProcessor.stop();
 		}

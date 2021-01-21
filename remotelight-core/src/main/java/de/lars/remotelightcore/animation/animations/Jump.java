@@ -22,11 +22,9 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 import de.lars.remotelightcore.utils.maths.TimeUtil;
@@ -34,6 +32,7 @@ import de.lars.remotelightcore.utils.maths.TimeUtil;
 public class Jump extends Animation {
 	
 	private TimeUtil time;
+	private Color color;
 
 	public Jump() {
 		super("Jump");
@@ -42,18 +41,18 @@ public class Jump extends Animation {
 	@Override
 	public void onEnable() {
 		time = new TimeUtil(RemoteLightCore.getInstance().getAnimationManager().getDelay()*3);
+		color = RainbowWheel.getRandomColor();
 		super.onEnable();
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		time.setInterval(RemoteLightCore.getInstance().getAnimationManager().getDelay()*3);
 		
 		if(time.hasReached()) {
-			Color color = RainbowWheel.getRandomColor();
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(color, RemoteLightCore.getLedNum()));
+			color = RainbowWheel.getRandomColor();
 		}
-		super.onLoop();
+		return PixelColorUtils.colorAllPixels(color, getPixel());
 	}
 
 }

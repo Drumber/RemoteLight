@@ -22,13 +22,10 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 import de.lars.remotelightcore.utils.maths.MathHelper;
@@ -43,13 +40,13 @@ public class Juggle extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		super.onEnable();
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		int dotsNum = ((SettingInt) getSetting("animation.juggle.dotsnumber")).get();
 		
 		dim();
@@ -64,8 +61,7 @@ public class Juggle extends Animation {
 				dotHue = 0;
 		}
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 	private void dim() {

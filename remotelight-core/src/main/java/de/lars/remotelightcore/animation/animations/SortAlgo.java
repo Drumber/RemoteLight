@@ -22,17 +22,15 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class SortAlgo extends Animation {
@@ -69,10 +67,10 @@ public class SortAlgo extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		random = new Random();
 		
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		values = new int[strip.length];
 		markedIndexes = new ArrayList<>();
 		
@@ -80,7 +78,7 @@ public class SortAlgo extends Animation {
 		SHUFFLE_PER_LOOP = MAX_SHUFFLE_COUNT / 20;
 		
 		reset();
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
@@ -110,7 +108,7 @@ public class SortAlgo extends Animation {
 	
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		// double speed
 		for(int t = 0; t < 4; t++) {
 		
@@ -143,17 +141,15 @@ public class SortAlgo extends Animation {
 				doSort();
 			}
 			
-			show();
-		
 		}
-		super.onLoop();
+		return show();
 	}
 
 	
 	/**
 	 * show the strip
 	 */
-	private void show() {		
+	private Color[] show() {		
 		Color[] out = Arrays.copyOf(strip, strip.length);
 		
 		boolean showMarker = ((SettingBoolean)getSetting("animation.sortalgo.marker")).get();
@@ -162,7 +158,7 @@ public class SortAlgo extends Animation {
 				out[index] = Color.WHITE;
 			}
 		}
-		OutputManager.addToOutput(out);
+		return out;
 	}	
 	
 	

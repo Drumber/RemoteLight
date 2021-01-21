@@ -22,12 +22,10 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -43,15 +41,15 @@ public class Spread extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		random = new Random();
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		hueStep = 0;
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		float ranPos = (float) random.nextGaussian();
 		int pos = (int) Math.round(ranPos * (strip.length / 6) + (strip.length / 2));	// average 'length / 2' and deviation 'length / 6'
 		
@@ -72,8 +70,7 @@ public class Spread extends Animation {
 		// fade all to black
 		strip = ColorUtil.dimColorSimple(strip, 1);
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 
 }

@@ -12,11 +12,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.lars.remotelightcore.AbstractEffect;
-import de.lars.remotelightcore.Effect;
 import de.lars.remotelightcore.EffectManagerHelper;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
+import de.lars.remotelightcore.effect.AbstractEffect;
+import de.lars.remotelightcore.effect.Effect;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightrestapi.RestAPI;

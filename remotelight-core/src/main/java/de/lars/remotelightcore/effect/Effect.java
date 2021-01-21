@@ -20,11 +20,12 @@
  * <===license-end
  */
 
-package de.lars.remotelightcore;
+package de.lars.remotelightcore.effect;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.settings.Setting;
 
 public abstract class Effect extends AbstractEffect {

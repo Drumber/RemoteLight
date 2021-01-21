@@ -7,8 +7,8 @@ import java.util.List;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 
-import de.lars.remotelightcore.AbstractEffect;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.effect.AbstractEffect;
 import de.lars.remotelightcore.settings.Setting;
 
 public class LuaScript extends AbstractEffect {

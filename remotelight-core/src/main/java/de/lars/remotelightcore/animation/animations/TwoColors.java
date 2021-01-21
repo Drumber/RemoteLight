@@ -33,6 +33,7 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class TwoColors extends Animation {
 	
+	private Color[] strip;
 	private final String[] DIRECTIONS = {"Left", "Center", "Right"};
 	private int colorCounter = 0;
 	private boolean color1 = true;
@@ -46,29 +47,30 @@ public class TwoColors extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		// this fills the strip when activating the animation
-		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-			onLoop();
+		for(int i = 0; i < pixels; i++) {
+			onEffect();
 		}
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		final int groupSize = getSetting(SettingInt.class, "animation.twocolors.groupsize").get();
 		final String direction = getSetting(SettingSelection.class, "animation.twocolors.direction").get();
 		int newPixelPos = 0;
 		
 		// shift the pixels depending on the direction
 		if(direction.equalsIgnoreCase(DIRECTIONS[0])) {
-			PixelColorUtils.shiftLeft(1);
+			strip = PixelColorUtils.shiftPixelsLeft(strip, 1);
 			newPixelPos = RemoteLightCore.getLedNum() -  1;
 		} else if(direction.equalsIgnoreCase(DIRECTIONS[1])) {
-			PixelColorUtils.shiftCenter(1);
+			strip = PixelColorUtils.shiftPixelsCenter(strip, 1);
 			newPixelPos = RemoteLightCore.getLedNum() / 2 - 1;
 		} else {
-			PixelColorUtils.shiftRight(1);
+			strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 			newPixelPos = 0;
 		}
 		
@@ -80,15 +82,15 @@ public class TwoColors extends Animation {
 		
 		Color c;
 		if(color1) {
-			c =getSetting(SettingColor.class, "animation.twocolors.color1").get();
+			c = getSetting(SettingColor.class, "animation.twocolors.color1").get();
 		} else {
 			c = getSetting(SettingColor.class, "animation.twocolors.color2").get();
 		}
 		
-		PixelColorUtils.setPixel(newPixelPos, c);
+		strip[newPixelPos] = c;
 		if(direction.equalsIgnoreCase(DIRECTIONS[1])) 	// set both pixels in the middle of the strip
-			PixelColorUtils.setPixel(newPixelPos+1, c);	// if the direction is center
-		super.onLoop();
+			strip[newPixelPos+1] = c;	// if the direction is center
+		return strip;
 	}
 
 }

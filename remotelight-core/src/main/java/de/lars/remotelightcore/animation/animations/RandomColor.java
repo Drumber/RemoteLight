@@ -24,15 +24,16 @@ package de.lars.remotelightcore.animation.animations;
 
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class RandomColor extends Animation {
 	
+	private Color[] strip;
 	private int pos;
 	private String lastMode;
 
@@ -44,10 +45,16 @@ public class RandomColor extends Animation {
 	}
 	
 	@Override
-	public void onLoop() {
+	public void onEnable(int pixel) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
+		super.onEnable(pixel);
+	}
+	
+	@Override
+	public Color[] onEffect() {
 		String mode = ((SettingSelection) this.getSetting("animation.randomcolor.mode")).getSelected();
 		if(!mode.equals(lastMode)) {
-			PixelColorUtils.setAllPixelsBlack();
+			strip = PixelColorUtils.colorAllPixels(Color.BLACK, strip.length);
 			lastMode = mode;
 			pos = 0;
 		}
@@ -57,20 +64,20 @@ public class RandomColor extends Animation {
 		} else if(mode.equals("Mode 2")) {
 			mode2();
 		}
-		super.onLoop();
+		return strip;
 	}
 	
 	private void mode1() {
-		PixelColorUtils.setPixel(pos, RainbowWheel.getRandomColor());
-		if(++pos >= RemoteLightCore.getLedNum()) {
+		strip[pos] = RainbowWheel.getRandomColor();
+		if(++pos >= strip.length) {
 			pos = 0;
 		}
 	}
 	
 	private void mode2() {
-		int rnd = new Random().nextInt(RemoteLightCore.getLedNum());
+		int rnd = new Random().nextInt(strip.length);
 		
-		PixelColorUtils.setPixel(rnd, RainbowWheel.getRandomColor());
+		strip[rnd] = RainbowWheel.getRandomColor();
 	}
 
 }

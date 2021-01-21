@@ -22,11 +22,8 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
@@ -42,16 +39,16 @@ public class TheaterChase extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		for(int i = 0; i < strip.length * 2; i++) {
-			onLoop();
+			onEffect();
 		}
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(swtch) {
 			
 			for(int i = strip.length-1; i > 0; i--) {
@@ -69,12 +66,9 @@ public class TheaterChase extends Animation {
 			if(hsv >= RainbowWheel.getRainbow().length) {
 				hsv = 0;
 			}
-			
-			OutputManager.addToOutput(strip);
 		}
 		swtch = !swtch;
-		
-		super.onLoop();
+		return strip;
 	}
 	
 }

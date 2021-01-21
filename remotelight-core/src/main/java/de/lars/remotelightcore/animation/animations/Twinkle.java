@@ -22,21 +22,21 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.animation.AnimationManager;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.maths.TimeUtil;
 
 public class Twinkle extends Animation {
 	
 	private AnimationManager am;
+	private Color[] strip;
 	private int max;
 	private Color color;
 	private TimeUtil time;
@@ -47,30 +47,31 @@ public class Twinkle extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		am = RemoteLightCore.getInstance().getAnimationManager();
-		max = RemoteLightCore.getLedNum() / 10;
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
+		max = pixels / 10;
 		time = new TimeUtil(am.getDelay());
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(time.hasReached()) {
-			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+			strip = PixelColorUtils.colorAllPixels(Color.BLACK, getPixel());
 			color = ((SettingColor) getSetting("animation.twinkle.color")).get();
 			
 			for(int i = 0; i <= max; i++) {
 				if(new Random().nextInt(3) == 0) {
-					PixelColorUtils.setPixel(new Random().nextInt(RemoteLightCore.getLedNum()), color);
+					int pos = new Random().nextInt(strip.length);
+					strip[pos] = color;
 				}
 			}
 			
 			int rnd = (am.getDelay() * 2) + new Random().nextInt(50);
 			time.setInterval(rnd);
 		}
-		
-		super.onLoop();
+		return strip;
 	}
 
 }

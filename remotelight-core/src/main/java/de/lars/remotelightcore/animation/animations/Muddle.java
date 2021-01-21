@@ -22,14 +22,12 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -50,8 +48,8 @@ public class Muddle extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		amount = strip.length / 15;
 		y = new double[amount];
 		x = new double[amount];
@@ -66,7 +64,8 @@ public class Muddle extends Animation {
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
+		strip = ColorUtil.dimColorSimple(strip, 20);
 		for(int i = 0; i < amount; i++) {
 		
 			double noise = SimplexNoise.noise(x[i], y[i]);
@@ -90,9 +89,7 @@ public class Muddle extends Animation {
 			strip[pos] = color;
 		}
 		
-		OutputManager.addToOutput(strip);
-		strip = ColorUtil.dimColorSimple(strip, 20);
-		super.onLoop();
+		return strip;
 	}
 
 }

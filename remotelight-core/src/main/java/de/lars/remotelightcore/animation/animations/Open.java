@@ -22,14 +22,11 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
@@ -49,16 +46,16 @@ public class Open extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		fadeOut = false;
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		pos = strip.length / 2;
 		color = RainbowWheel.getRandomColor();
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		int half = strip.length / 2;
 		
 		if(!((SettingBoolean) getSetting("animation.open.randomcolor")).get()) {
@@ -94,8 +91,7 @@ public class Open extends Animation {
 		
 		strip = PixelColorUtils.centered(strip, false);
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 	@Override

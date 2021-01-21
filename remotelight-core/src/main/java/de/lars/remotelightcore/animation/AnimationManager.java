@@ -101,7 +101,7 @@ public class AnimationManager extends EffectManager {
 		}
 		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		if(animation != null) {
-			animation.onEnable();
+			animation.onEnable(RemoteLightCore.getLedNum());
 		}
 		activeAnimation = animation;
 		this.loop();

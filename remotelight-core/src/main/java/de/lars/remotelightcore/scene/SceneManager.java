@@ -79,7 +79,7 @@ public class SceneManager extends EffectManager {
 			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
 		}
 		if(scene != null) {
-			scene.onEnable();
+			scene.onEnable(RemoteLightCore.getLedNum());
 		}
 		activeScene = scene;
 		this.loop();

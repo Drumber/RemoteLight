@@ -22,16 +22,15 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Scanner extends Animation {
@@ -54,21 +53,21 @@ public class Scanner extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
 		colors = new Color[] {Color.RED, Color.ORANGE, Color.YELLOW, Color.PINK, Color.MAGENTA,
 	    		Color.BLUE, Color.CYAN, Color.GREEN};
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		pos = 0;
 		color = getRandomColor();
 		color2 = getRandomColor();
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		String mode = ((SettingSelection) this.getSetting("animation.scanner.mode")).getSelected();
 		if(!mode.equals(lastMode)) {
-			strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+			strip = PixelColorUtils.colorAllPixels(Color.BLACK, getPixel());
 			lastMode = mode;
 			pos = 0;
 		}
@@ -87,12 +86,15 @@ public class Scanner extends Animation {
 		} else if(mode.equals("Knight Rider")) {
 			knightRider();
 		}
-		super.onLoop();
+		return strip;
 	}
 	
 	private void single() {
+		// reset previous
+		strip[pos] = Color.BLACK;
+		
 		if(!reverse) {
-			if(++pos >= RemoteLightCore.getLedNum() - 1) {
+			if(++pos >= strip.length - 1) {
 				reverse = true;
 			}
 		} else {
@@ -106,14 +108,16 @@ public class Scanner extends Animation {
 			color = ((SettingColor) getSetting("animation.scanner.color")).get();
 		}
 		strip[pos] = color;
-		OutputManager.addToOutput(strip);
-		strip[pos] = Color.BLACK;
 	}
 	
 	
 	private void dual() {
+		// reset previous
+		strip[pos] = Color.BLACK;
+		strip[strip.length - 1 - pos] = Color.BLACK;
+		
 		if(!reverse) {
-			if(++pos >= RemoteLightCore.getLedNum() - 1) {
+			if(++pos >= strip.length - 1) {
 				reverse = true;
 			}
 		} else {
@@ -130,13 +134,13 @@ public class Scanner extends Animation {
 		}
 		strip[pos] = color;
 		strip[strip.length - 1 - pos] = color2;
-		OutputManager.addToOutput(strip);
-		strip[pos] = Color.BLACK;
-		strip[strip.length - 1 - pos] = Color.BLACK;
 	}
 	
 	
 	private void knightRider() {
+		// dim previous
+		dimAll(strip);
+		
 		Color c = new Color(255, 10, 0);
 		if(!reverse) {
 			if(++pos >= RemoteLightCore.getLedNum() - 1) {
@@ -149,8 +153,6 @@ public class Scanner extends Animation {
 			}
 		}
 		strip[pos] = c;
-		OutputManager.addToOutput(strip);
-		dimAll(strip);
 	}
 	
 	private void dimAll(Color[] pixels) {

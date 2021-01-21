@@ -22,19 +22,18 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
-
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class Wipe extends Animation {
 	
+	private Color[] strip;
 	private int pos;
 	private Color color;
 
@@ -45,20 +44,21 @@ public class Wipe extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		pos = 0;
 		color = RainbowWheel.getRandomColor();
 		if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).get()) {
 			color = ((SettingColor) getSetting("animation.wipe.color")).get();
 		}
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
-		PixelColorUtils.setPixel(pos, color);
+	public Color[] onEffect() {
+		strip[pos] = color;
 		
-		if(++pos == RemoteLightCore.getLedNum()) {
+		if(++pos >= strip.length - 1) {
 			pos = 0;
 			
 			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).get()) {
@@ -71,7 +71,7 @@ public class Wipe extends Animation {
 				color = getRandomColor();
 			}
 		}
-		super.onLoop();
+		return strip;
 	}
 	
 	private Color getRandomColor() {

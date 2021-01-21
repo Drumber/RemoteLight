@@ -22,20 +22,20 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.math.BigDecimal;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
 public class ColorWave extends Animation {
 
+	private Color[] strip;
 	private Color color, oldColor, newColor;
 	private double step = 1.0;
 	private BigDecimal fade = new BigDecimal("0.0");
@@ -52,16 +52,17 @@ public class ColorWave extends Animation {
 	
 	
 	@Override
-	public void onEnable() {
-		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-			onLoop();
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
+		for(int i = 0; i < pixels; i++) {
+			onEffect();
 		}
-		super.onEnable();
+		super.onEnable(pixels);
 	}
 	
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(!((SettingBoolean) getSetting("animation.colorwave.randomcolor")).get()) {
 			color = ((SettingColor) getSetting("animation.colorwave.color")).get();
 		}
@@ -70,8 +71,8 @@ public class ColorWave extends Animation {
 			color = ((SettingColor) getSetting("animation.colorwave.color")).get();
 		}
 		
-		PixelColorUtils.shiftRight(1);
-		PixelColorUtils.setPixel(0, calcWave(step, color));
+		strip = PixelColorUtils.shiftPixelsRight(strip, 1);
+		strip[0] = calcWave(step, color);
 		
 		step += 0.01;
 		if(step >= 2.0) {
@@ -87,7 +88,7 @@ public class ColorWave extends Animation {
 			oldColor = newColor;
 			newColor = RainbowWheel.getRandomColor();
 		}
-		super.onLoop();
+		return strip;
 	}
 	
 	private Color calcWave(double stepping, Color c) {

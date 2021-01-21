@@ -1,8 +1,6 @@
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingSelection;
@@ -28,12 +26,13 @@ public class GradientAnimation extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
+	public void onEnable(int pixels) {
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
+		super.onEnable(pixels);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		palette = Palettes.getPalette(sGradient.getSelected());
 		
 		if(palette instanceof ColorGradient) {
@@ -49,8 +48,7 @@ public class GradientAnimation extends Animation {
 		
 		strip[0] = palette.getNext();
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 	@Override

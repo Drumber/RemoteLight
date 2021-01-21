@@ -1,7 +1,7 @@
 package de.lars.remotelightcore.event.events.types;
 
-import de.lars.remotelightcore.AbstractEffect;
 import de.lars.remotelightcore.animation.Animation;
+import de.lars.remotelightcore.effect.AbstractEffect;
 import de.lars.remotelightcore.event.events.Event;
 import de.lars.remotelightcore.lua.LuaScript;
 import de.lars.remotelightcore.musicsync.MusicEffect;

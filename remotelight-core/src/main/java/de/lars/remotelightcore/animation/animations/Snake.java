@@ -22,18 +22,16 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
@@ -58,7 +56,8 @@ public class Snake extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixels) {
+		super.onEnable(pixels);
 		snakePos = new ArrayList<>();
 		snakeColor = new ArrayList<>();
 		snakeDirection = new ArrayList<>();
@@ -73,11 +72,11 @@ public class Snake extends Animation {
 			colorFruit = Color.RED;
 		}
 		
-		int startPoint = new Random().nextInt(RemoteLightCore.getLedNum());
+		int startPoint = new Random().nextInt(pixels);
 		snakePos.add(startPoint);
 		snakeColor.add(colorHead);
 		
-		fruitPos = new Random().nextInt(RemoteLightCore.getLedNum());
+		fruitPos = new Random().nextInt(pixels);
 		if(fruitPos > startPoint) {
 			direction = 1;
 		} else {
@@ -86,11 +85,10 @@ public class Snake extends Animation {
 		snakeDirection.add(direction);
 		
 		paintSnake();
-		super.onEnable();
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(!((SettingBoolean) getSetting("animation.snake.randomcolor")).get() && !((SettingBoolean) getSetting("animation.snake.rainbow")).get()) {
 			colorTale = ((SettingColor) getSetting("animation.snake.colortale")).get();
 			colorHead = ((SettingColor) getSetting("animation.snake.colorhead")).get();
@@ -113,7 +111,7 @@ public class Snake extends Animation {
 		if(snakePos.get(0) == fruitPos) {
 			
 			// set new fruit position
-			fruitPos = new Random().nextInt(RemoteLightCore.getLedNum());
+			fruitPos = new Random().nextInt(getPixel());
 			if(fruitPos > snakePos.get(0)) {
 				direction = 1;
 			} else {
@@ -129,14 +127,12 @@ public class Snake extends Animation {
 				rainbowPos = 0;
 			}
 		}
-		paintSnake();
-		super.onLoop();
+		return paintSnake();
 	}
 	
 	
-	private void paintSnake() {
-		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		
+	private Color[] paintSnake() {
+		Color[] strip = PixelColorUtils.colorAllPixels(Color.BLACK, getPixel());
 		// paint fruit
 		strip[fruitPos] = colorFruit;
 		// paint snake
@@ -144,7 +140,7 @@ public class Snake extends Animation {
 			int pos = snakePos.get(i);
 			strip[pos] = snakeColor.get(i);
 		}
-		OutputManager.addToOutput(strip);
+		return strip;
 	}
 	
 	
@@ -152,11 +148,11 @@ public class Snake extends Animation {
 		for(int i = 0; i < snakePos.size(); i++) {
 			int newPos = snakePos.get(i) + snakeDirection.get(i);
 			
-			if(newPos >= RemoteLightCore.getLedNum()) {
+			if(newPos >= getPixel()) {
 				newPos = 0;
 			}
 			if(newPos < 0) {
-				newPos = RemoteLightCore.getLedNum() - 1;
+				newPos = getPixel() - 1;
 			}
 			
 			snakePos.set(i, newPos);
@@ -177,11 +173,11 @@ public class Snake extends Animation {
 		byte lastDir = snakeDirection.get(snakeDirection.size() - 1);
 		int pos = lastPos - lastDir;
 		
-		if(pos >= RemoteLightCore.getLedNum()) {
+		if(pos >= getPixel()) {
 			pos = 0;
 		}
 		if(pos < 0) {
-			pos = RemoteLightCore.getLedNum() - 1;
+			pos = getPixel() - 1;
 		}
 		
 		snakePos.add(pos);

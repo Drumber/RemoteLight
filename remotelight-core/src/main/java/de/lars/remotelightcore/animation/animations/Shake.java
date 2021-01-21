@@ -22,12 +22,11 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.color.Color;
+import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 import de.lars.remotelightcore.utils.maths.TimeUtil;
 
@@ -49,18 +48,18 @@ public class Shake extends Animation {
 	}
 	
 	@Override
-	public void onEnable() {
-		space = RemoteLightCore.getLedNum() / 10;
+	public void onEnable(int pixels) {
+		space = pixels / 10;
 		timeMode = new TimeUtil(TIME_PER_MODE);
-		strip = RemoteLightCore.getInstance().getOutputManager().getLastColors();
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
 		
 		Color c = singleColors[new Random().nextInt(singleColors.length)];
 		int counter = 0;
-		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
+		for(int i = 0; i < strip.length; i++) {
 			if(counter == space && strip[0] == Color.BLACK) {
 				strip[i] = c;
 				
-				if(i < RemoteLightCore.getLedNum() - 1) {
+				if(i < strip.length - 1) {
 					strip[++i] = c;
 				}
 			} else {
@@ -77,7 +76,7 @@ public class Shake extends Animation {
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(timeMode.hasReached()) {
 			if(++modeChangeCounter >= 10) {
 				if(++mode > 1) {
@@ -110,8 +109,7 @@ public class Shake extends Animation {
 		}
 		
 		this.move(directionRight);
-		
-		super.onLoop();
+		return strip;
 	}
 	
 	private void move(boolean right) {
@@ -128,8 +126,6 @@ public class Shake extends Animation {
 			}
 			strip[strip.length-1] = tmp;
 		}
-		
-		OutputManager.addToOutput(strip);
 	}
 	
 	
