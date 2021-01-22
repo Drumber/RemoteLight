@@ -16,13 +16,15 @@ public class GlowButton extends BigTextButton implements ActionListener {
 	
 	private final Class<? extends AbstractEffect> clazz;
 	private AbstractEffect effect;
+	private final GlowBorder border;
 	private final Timer timer;
 	private int renderDelay = 30;
 	
 	public GlowButton(String title, String text, int glowSize, Class<? extends AbstractEffect> effectClass) {
 		super(title, text);
 		this.clazz = effectClass;
-		this.setBorder(new GlowBorder(this, null, glowSize));
+		border = new GlowBorder(this, null, glowSize);
+		this.setOpaque(false);
 		this.addMouseListener(mouseAdapter);
 		timer = new Timer(0, this);
 		timer.setDelay(renderDelay);
@@ -31,6 +33,9 @@ public class GlowButton extends BigTextButton implements ActionListener {
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			if(getBorder() == null) { // set border if current border is empty
+				setBorder(border);
+			}
 			try { // initialize effect
 				effect = clazz.newInstance();
 			} catch(Exception ex) {}
@@ -47,6 +52,9 @@ public class GlowButton extends BigTextButton implements ActionListener {
 		
 		@Override
 		public void mouseExited(MouseEvent e) {
+			if(getBorder() instanceof GlowBorder) { // check if set border is GlowBorder
+				setBorder(null); // hide border
+			}
 			// disable effect and set it to null causing the timer to stop
 			if(effect != null) {
 				try {

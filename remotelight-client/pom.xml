@@ -63,6 +63,12 @@
 			<artifactId>jiconfont-swing</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+		<!-- JHLabs Filters -->
+		<dependency>
+			<groupId>com.jhlabs</groupId>
+			<artifactId>filters</artifactId>
+			<version>2.0.235-1</version>
+		</dependency>
 	</dependencies>
 
 	<!-- External non standard repositories -->
