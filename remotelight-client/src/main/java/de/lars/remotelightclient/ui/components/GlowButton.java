@@ -19,6 +19,7 @@ public class GlowButton extends BigTextButton implements ActionListener {
 	private final GlowBorder border;
 	private final Timer timer;
 	private int renderDelay = 30;
+	private boolean isGlowEnabled = true;
 	
 	public GlowButton(String title, String text, int glowSize, Class<? extends AbstractEffect> effectClass) {
 		super(title, text);
@@ -33,6 +34,7 @@ public class GlowButton extends BigTextButton implements ActionListener {
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			if(!isGlowEnabled) return;
 			if(getBorder() == null) { // set border if current border is empty
 				setBorder(border);
 			}
@@ -52,6 +54,7 @@ public class GlowButton extends BigTextButton implements ActionListener {
 		
 		@Override
 		public void mouseExited(MouseEvent e) {
+			if(!isGlowEnabled) return;
 			if(getBorder() instanceof GlowBorder) { // check if set border is GlowBorder
 				setBorder(null); // hide border
 			}
@@ -67,9 +70,33 @@ public class GlowButton extends BigTextButton implements ActionListener {
 		};
 	};
 	
+	/**
+	 * Set the delay in milliseconds for the render timer.
+	 * @param renderDelay	delay between repainting the border
+	 */
 	public void setRenderDelay(int renderDelay) {
 		this.renderDelay = renderDelay;
 		timer.setDelay(renderDelay);
+	}
+	
+	/**
+	 * Whether the glowing border effect is enabled or disabled.
+	 * @return true if enabled, false otherwise
+	 */
+	public boolean isGlowEnabled() {
+		return isGlowEnabled;
+	}
+	
+	/**
+	 * Toggle the glowing border effect.
+	 * @param isGlowEnabled	true if the glowing border should be enabled
+	 */
+	public void setGlowEnabled(boolean isGlowEnabled) {
+		this.isGlowEnabled = isGlowEnabled;
+		// removed GlowBorder if set to disable
+		if(!isGlowEnabled && getBorder() instanceof GlowBorder) { // check if set border is GlowBorder
+			setBorder(null); // hide border
+		}
 	}
 
 	/**

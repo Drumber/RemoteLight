@@ -143,6 +143,7 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("ui.windowdecorations", "Custom window decorations", SettingCategory.General, "Only available on Windows 10 and in combination with FlatLaf Look and Feels", false));
 		s.addSetting(new SettingSelection("ui.font", "UI Font", SettingCategory.General, "Set a custom UI font", FontManager.getAllFontNames().toArray(new String[0]), "Muli", Model.ComboBox));
 		s.addSetting(new SettingInt("ui.fontsize", "UI Font size", SettingCategory.General, "Default UI font size", 11, 9, 20, 1));
+		s.addSetting(new SettingBoolean("ui.glow.button", "Glowing Effect Buttons", SettingCategory.General, "Enable glow effect for buttons.", true));
 		// update style setting if already set
 		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
 		

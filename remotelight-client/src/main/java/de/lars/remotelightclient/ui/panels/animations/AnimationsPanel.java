@@ -54,6 +54,7 @@ import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.event.events.types.EffectToggleEvent.AnimationToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class AnimationsPanel extends MenuPanel {
@@ -114,6 +115,7 @@ public class AnimationsPanel extends MenuPanel {
 		bgrAnimations.removeAll();
 		for(Animation a : am.getAnimations()) {
 			GlowButton btn = new GlowButton(a.getDisplayname(), "", 4, a.getClass());
+			btn.setGlowEnabled(sm.getSetting(SettingBoolean.class, "ui.glow.button").get());
 			btn.setName(a.getName());
 			btn.addMouseListener(btnAniListener);
 			
