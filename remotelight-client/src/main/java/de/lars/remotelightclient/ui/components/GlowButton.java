@@ -34,7 +34,9 @@ public class GlowButton extends BigTextButton implements ActionListener {
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			if(!isGlowEnabled) return;
+			if(!isGlowEnabled || effect != null) // return if glow is disabled or effect is already running
+				return;
+			
 			if(getBorder() == null) { // set border if current border is empty
 				setBorder(border);
 			}
@@ -60,12 +62,14 @@ public class GlowButton extends BigTextButton implements ActionListener {
 			}
 			// disable effect and set it to null causing the timer to stop
 			if(effect != null) {
+				timer.stop();
 				try {
 					effect.onDisable();
 				} catch(Exception ex) {
 					Logger.error(ex);
+				} finally {
+					effect = null;
 				}
-				effect = null;
 			}
 		};
 	};
@@ -107,8 +111,9 @@ public class GlowButton extends BigTextButton implements ActionListener {
 		if(!(getBorder() instanceof GlowBorder))
 			return;
 		GlowBorder border = (GlowBorder) getBorder();
-		if(effect == null) { // stop timer when effect is null
+		if(effect == null || !isDisplayable()) { // stop timer when effect is null or component was removed
 			border.updateColor(null);
+			effect = null;
 			timer.stop();
 			return;
 		}
