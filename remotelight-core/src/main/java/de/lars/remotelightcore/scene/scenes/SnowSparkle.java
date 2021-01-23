@@ -22,12 +22,10 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class SnowSparkle extends Scene {
@@ -41,16 +39,16 @@ public class SnowSparkle extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
-		strip = PixelColorUtils.colorAllPixels(new Color(10, 10, 10), RemoteLightCore.getLedNum());
+	public void onEnable(int pixel) {
+		strip = PixelColorUtils.colorAllPixels(new Color(10, 10, 10), pixel);
 		sparklesAmount = strip.length / 60;
 		if(sparklesAmount <= 0) sparklesAmount = 1;
 		positions = new int[sparklesAmount];
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		
 		if(positions[0] == -1) {
 			// new sparkle
@@ -73,8 +71,7 @@ public class SnowSparkle extends Scene {
 			super.setDelay(delay);
 		}
 		
-		OutputManager.addToOutput(strip);
-		super.onLoop();
+		return strip;
 	}
 	
 }

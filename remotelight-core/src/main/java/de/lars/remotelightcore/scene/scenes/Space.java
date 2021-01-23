@@ -22,17 +22,16 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Space extends Scene {
 	
+	private Color[] strip;
 	private int pix;
 	private HashMap<Integer, Integer> stars;  //ledNum, Brightness
 	private Random r;
@@ -42,16 +41,16 @@ public class Space extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
-		pix = RemoteLightCore.getLedNum();
+	public void onEnable(int pixel) {
+		pix = pixel;
 		stars = new HashMap<>();
 		r = new Random();
-		OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, pix));
-		super.onEnable();
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pix);
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		if(stars.size() < ((pix / 4) + r.nextInt(10))) {
 			int led = r.nextInt(pix);
 			int brightness = r.nextInt(200) + 56;
@@ -63,18 +62,18 @@ public class Space extends Scene {
 			if(stars.containsKey(i)) {
 				
 				int b = stars.get(i);
-				PixelColorUtils.setPixel(i, new Color(b, b , (b / 2)));
+				strip[i] = new Color(b, b , (b / 2));
 				
 				b -= 5;
 				if(b <= 0) {
-					PixelColorUtils.setPixel(i, Color.BLACK);
+					strip[i] = Color.BLACK;
 					stars.remove(i);
 				} else {
 					stars.put(i, b);
 				}
 			}
 		}
-		super.onLoop();
+		return strip;
 	}
 
 }

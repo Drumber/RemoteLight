@@ -22,20 +22,18 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Jungle extends Scene {
 	
 	private Random r;
 	private int pix, counter, lastGreenNum;
-	private HashMap<Integer, Color> backgrnd;
+	private Color[] backgrnd;
 	private HashMap<Integer, Color> points;
 	private HashMap<Integer, Integer> pointsFade; //led, fade cycles
 	private Color[] colors;
@@ -45,14 +43,14 @@ public class Jungle extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixel) {
 		r = new Random();
-		pix = RemoteLightCore.getLedNum();
-		backgrnd = new HashMap<>();
+		this.pix = pixel;
+		backgrnd = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
 		Color[] greens = {new Color(0, 255, 0), new Color(150, 200, 0), new Color(110, 190, 5), new Color(0, 100, 5)};
 		Color[] colors = {new Color(203, 255, 0), new Color(254, 102, 0), new Color(0, 50, 0), new Color(255, 255, 0)};
 		this.colors = colors;
-		points = new HashMap<>();
+		points = new HashMap<Integer, Color>();
 		pointsFade = new HashMap<>();
 		/*
 		 * SETUP
@@ -71,17 +69,18 @@ public class Jungle extends Scene {
 			lastGreenNum = greenNum;
 			
 			for(int i = counter; i <= (counter + amount); i++) {
-				backgrnd.put(i, greens[greenNum]);
+				backgrnd[i] = greens[greenNum];
 			}
 			
 			counter += amount;
 		}
-		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(backgrnd));
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
+		Color[] strip = backgrnd.clone();
+		
 		if(points.size() < ((pix / 20) + r.nextInt(4))) {
 			int led = r.nextInt(pix);
 			Color c = colors[r.nextInt(colors.length)];
@@ -101,7 +100,7 @@ public class Jungle extends Scene {
 					int green = c.getGreen() / dim;
 					int blue = c.getBlue() / dim;
 					
-					PixelColorUtils.setPixel(i, new Color(red, green, blue));
+					strip[i] = new Color(red, green, blue);
 					
 					dim--;
 					
@@ -114,16 +113,16 @@ public class Jungle extends Scene {
 				} else {
 					
 					Color c = points.get(i);
-					PixelColorUtils.setPixel(i, c);
+					strip[i] = c;
 					
 					int red = c.getRed() - (c.getRed() / 6);
 					int green = c.getGreen() - (c.getGreen() / 6);
 					int blue = c.getBlue() - (c.getBlue() / 6);
 					
 					if(red < 10 && green < 10 && blue < 10) {
-						Color bg = backgrnd.get(i);
+						Color bg = backgrnd[i];
 						
-						PixelColorUtils.setPixel(i, bg);
+						strip[i] = bg;
 						points.remove(i);
 						
 					} else {
@@ -132,7 +131,7 @@ public class Jungle extends Scene {
 				}
 			}
 		}
-		super.onLoop();
+		return strip;
 	}
 
 }

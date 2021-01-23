@@ -22,16 +22,16 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Sunset extends Scene {
 	
+	private Color[] strip;
 	private Color[] sun;
 	private int count;
 
@@ -40,32 +40,32 @@ public class Sunset extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixel) {
 		count = 0;
 		initSun();
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
 		
-		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-			PixelColorUtils.shiftRight(1);
+		for(int i = 0; i < strip.length; i++) {
+			strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 			count++;
 			if(count >= sun.length)
 				count = 0;
 			
-			PixelColorUtils.setPixel(0, sun[count]);
+			strip[0] = sun[count];
 		}
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
-		PixelColorUtils.shiftRight(1);
+	public Color[] onEffect() {
+		strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 		
 		count++;
 		if(count >= sun.length)
 			count = 0;
 		
-		PixelColorUtils.setPixel(0, sun[count]);
-		
-		super.onLoop();
+		strip[0] = sun[count];
+		return strip;
 	}
 	
 	

@@ -22,14 +22,10 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
-import java.util.HashMap;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
-import de.lars.remotelightcore.utils.color.PixelColorUtils;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class Fire extends Scene {
 	
@@ -40,14 +36,14 @@ public class Fire extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
-		pixels = RemoteLightCore.getLedNum();
-		super.onEnable();
+	public void onEnable(int pixel) {
+		this.pixels = pixel;
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
-		HashMap<Integer, Color> pixelHash = new HashMap<>();
+	public Color[] onEffect() {
+		Color[] strip = new Color[getPixel()];
 		int r = 255, g = 95, b = 12;
 		
 		for(int i = 0; i < pixels; i++) {
@@ -61,15 +57,13 @@ public class Fire extends Scene {
 			if(g1 < 0) g1 = 0;
 			if(b1 < 0) b1 = 0;
 			
-			pixelHash.put(i, new Color(r1, g1, b1));
+			strip[i] = new Color(r1, g1, b1);
 		}
-		
-		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
 		
 		int delay = new Random().nextInt(100) + 50;
 		super.setDelay(delay);
 		
-		super.onLoop();
+		return strip;
 	}
 
 }

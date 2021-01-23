@@ -39,7 +39,6 @@ import javax.swing.event.ChangeListener;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.components.BigTextButton;
 import de.lars.remotelightclient.ui.components.GlowButton;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
@@ -130,7 +129,7 @@ public class AnimationsPanel extends MenuPanel {
 	private MouseAdapter btnAniListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			BigTextButton btn = (BigTextButton) e.getSource();
+			GlowButton btn = (GlowButton) e.getSource();
 			
 			if(am.getActiveAnimation() != null && am.getActiveAnimation().getName().equals(btn.getName())) {
 				am.stop();

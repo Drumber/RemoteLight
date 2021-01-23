@@ -22,16 +22,16 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.scene.Scene;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class Ocean extends Scene {
 	
+	private Color[] strip;
 	private Color[] ocean;
 	private boolean right;
 	private int count, loops, pixels;
@@ -41,24 +41,25 @@ public class Ocean extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
-		count = 0; loops = 0; pixels = RemoteLightCore.getLedNum();
+	public void onEnable(int pixel) {
+		count = 0; loops = 0; pixels = pixel;
 		right = true;
 		initOcean();
+		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixel);
 		
 		for(int i = 0; i < pixels; i++) {
-			PixelColorUtils.shiftRight(1);
+			strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 			count++;
 			if(count >= ocean.length)
 				count = 0;
 			
-			PixelColorUtils.setPixel(0, ocean[count]);
+			strip[0] = ocean[count];
 		}
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		count++;
 		if(count >= ocean.length) {
 			count = 0;
@@ -72,17 +73,17 @@ public class Ocean extends Scene {
 		
 		if(right) {
 			
-			PixelColorUtils.shiftRight(1);
+			strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 			
-			PixelColorUtils.setPixel(0, ocean[count]);
+			strip[0] = ocean[count];
 			
 		} else {
 			
-			PixelColorUtils.shiftLeft(1);
+			strip = PixelColorUtils.shiftPixelsLeft(strip, 1);
 			
-			PixelColorUtils.setPixel(pixels - 1, ocean[count]);
+			strip[pixels - 1] = ocean[count];
 		}
-		super.onLoop();
+		return strip;
 	}
 	
 	

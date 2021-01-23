@@ -22,16 +22,13 @@
 
 package de.lars.remotelightcore.scene.scenes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.scene.Scene;
-import de.lars.remotelightcore.utils.color.PixelColorUtils;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class NorthernLights extends Scene {
 	
@@ -48,11 +45,11 @@ public class NorthernLights extends Scene {
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable(int pixel) {
 		Color[] colors = {new Color(0, 207, 82), new Color(3, 46, 62), new Color(25, 100, 106), new Color(0, 198, 144),
 				new Color(0, 223, 150), new Color(142, 0, 251)};
 		this.colors = colors;
-		pix = RemoteLightCore.getLedNum();
+		this.pix = pixel;
 		count = 0;
 		
 		strip = new Color[pix];
@@ -62,11 +59,11 @@ public class NorthernLights extends Scene {
 		newColor = true;
 		lights = new HashMap<>();
 		
-		super.onEnable();
+		super.onEnable(pixel);
 	}
 	
 	@Override
-	public void onLoop() {
+	public Color[] onEffect() {
 		count = lights.size();
 		
 		if(count < (pix / 20))
@@ -101,7 +98,6 @@ public class NorthernLights extends Scene {
 		}
 		
 		//set pixel color
-		HashMap<Integer, Color> pixelHash = new HashMap<>();
 		List<Integer> alreadyPut = new ArrayList<>();
 		
 		for(int i = 0; i < pix; i++) {
@@ -110,7 +106,6 @@ public class NorthernLights extends Scene {
 				
 				NorthernLightTrail led = lights.get(i);
 				
-				pixelHash.put(i, led.color);
 				strip[i] = led.color;
 				
 				if(led.right) {
@@ -133,13 +128,10 @@ public class NorthernLights extends Scene {
 					
 					lights.remove(i);
 				}
-			} else {
-				pixelHash.put(i, strip[i]);
 			}
 		}
 		
-		OutputManager.addToOutput(PixelColorUtils.pixelHashToColorArray(pixelHash));
-		super.onLoop();
+		return strip;
 	}
 	
 	

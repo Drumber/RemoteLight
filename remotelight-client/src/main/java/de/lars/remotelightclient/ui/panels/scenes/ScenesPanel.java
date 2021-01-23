@@ -36,7 +36,7 @@ import javax.swing.ScrollPaneConstants;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.components.BigTextButton;
+import de.lars.remotelightclient.ui.components.GlowButton;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
@@ -46,6 +46,7 @@ import de.lars.remotelightcore.event.events.types.EffectToggleEvent.SceneToggleE
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.scene.Scene;
 import de.lars.remotelightcore.scene.SceneManager;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
 
 public class ScenesPanel extends MenuPanel {
 	private static final long serialVersionUID = 4955214837008536168L;
@@ -94,7 +95,9 @@ public class ScenesPanel extends MenuPanel {
 	private void addScenePanels() {
 		bgrScenes.removeAll();
 		for(Scene s : scm.getScenes()) {
-			BigTextButton btn = new BigTextButton(s.getDisplayname(), "");
+			GlowButton btn = new GlowButton(s.getDisplayname(), "", 4, s.getClass());
+			boolean glowEnabled = Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "ui.glow.button").get();
+			btn.setGlowEnabled(glowEnabled);
 			btn.setName(s.getName());
 			btn.addMouseListener(btnSceneListener);
 			
@@ -109,7 +112,7 @@ public class ScenesPanel extends MenuPanel {
 	private MouseAdapter btnSceneListener = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			BigTextButton btn = (BigTextButton) e.getSource();
+			GlowButton btn = (GlowButton) e.getSource();
 			
 			if(scm.getActiveScene() != null && scm.getActiveScene().getName().equals(btn.getName())) {
 				scm.stop();
