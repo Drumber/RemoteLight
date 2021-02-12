@@ -29,6 +29,7 @@ import java.io.IOException;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.dialogs.UpdateDialog;
 import de.lars.remotelightclient.ui.font.FontManager;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -69,6 +70,14 @@ public class StartUp {
 		if(((SettingBoolean) s.getSettingFromId("main.checkupdates")).get() || startParameter.updateChecker) {
 			checkForUpdates(false);
 		}
+		
+		// add Touch-Scroll setting listeners
+		s.getSetting(SettingBoolean.class, "ui.touchscroll").setValueListener(l -> {
+			TScrollPane.setDefaultDragScrolling((boolean) l.get());
+		});
+		s.getSetting(SettingBoolean.class, "ui.touchscroll.invert").setValueListener(l -> {
+			TScrollPane.setDefaultScrollingInverted((boolean) l.get());
+		});
 		
 		// start REST API web server
 		SettingBoolean sRestApi = s.getSetting(SettingBoolean.class, "restapi.enable");
@@ -154,6 +163,8 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("plugins.enable", "Enable plugins", SettingCategory.Others, "Option to enable or disable the plugin system. Requires a restart to take effect.", true));
 		s.addSetting(new SettingBoolean("restapi.enable", "Enable REST API", SettingCategory.Others, "Enable the web sever for the RemoteLight REST API", true));
 		s.addSetting(new SettingInt("restapi.port", "REST API Port", SettingCategory.Others, "Web server port for the REST API.", 8080, 0, Integer.MAX_VALUE, 1));
+		s.addSetting(new SettingBoolean("ui.touchscroll", "Touch Scroll support", SettingCategory.Others, "Enable scroll-on-drag feature.", true));
+		s.addSetting(new SettingBoolean("ui.touchscroll.invert", "Invert Touch Scroll", SettingCategory.Others, "Invert the scroll direction.", true));
 		
 		//Intern
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));
