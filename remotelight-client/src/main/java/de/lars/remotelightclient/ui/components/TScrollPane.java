@@ -17,6 +17,7 @@ public class TScrollPane extends JScrollPane {
 	
 	private static boolean defaultEnableDragScrolling = true;
 	private static boolean defaultInvertScrolling = true;
+	private static float scrollSpeed = 0.1f;
 	
 	private boolean invertScrolling = defaultInvertScrolling;
 
@@ -76,8 +77,8 @@ public class TScrollPane extends JScrollPane {
 				
 				Rectangle view = viewPort.getViewRect();
 				
-				view.x = deltaX;
-				view.y = deltaY;
+				view.x = (int) (deltaX * scrollSpeed);
+				view.y = (int) (deltaY * scrollSpeed);
 				viewPort.scrollRectToVisible(view);
 			}
 		}
