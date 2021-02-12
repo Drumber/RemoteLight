@@ -39,6 +39,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.BigImageButton;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.output.outputComps.ArduinoSettingsPanel;
@@ -103,7 +104,7 @@ public class OutputPanel extends MenuPanel {
 		add(bgrDevices);
 		bgrDevices.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		TScrollPane scrollPane = new TScrollPane();
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -213,7 +214,7 @@ public class OutputPanel extends MenuPanel {
 		bgrDeviceSettings.setLayout(new BorderLayout(0, 0));
 		bgrDeviceSettings.setPreferredSize(bgrMenu.getSize());
 		
-		JScrollPane scrollPane = new JScrollPane();
+		TScrollPane scrollPane = new TScrollPane();
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

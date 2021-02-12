@@ -35,7 +35,6 @@ public abstract class SettingPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 2743868556642656374L;
-	private int width = 2000;
 	private int height = 40;
 	private SettingChangedListener listener;
 	private Setting setting;
@@ -43,8 +42,7 @@ public abstract class SettingPanel extends JPanel {
 	public SettingPanel(Setting setting) {
 		this.setting = setting;
 		
-		setPreferredSize(new Dimension(width, height));
-		setMaximumSize(new Dimension(width, height));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, height));
 		FlowLayout flowLayout = (FlowLayout) getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 	}

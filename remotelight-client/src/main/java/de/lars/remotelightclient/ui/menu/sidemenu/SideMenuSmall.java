@@ -36,12 +36,12 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.menu.MenuItem;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
@@ -65,7 +65,7 @@ public class SideMenuSmall extends SideMenu {
 		root.setBackground(getBackground());
 		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
 		
-		JScrollPane scrollPane = new JScrollPane(root);
+		TScrollPane scrollPane = new TScrollPane(root);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

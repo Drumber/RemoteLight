@@ -38,11 +38,11 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.SettingsUtil;
@@ -61,7 +61,7 @@ public class AnimationOptionsPanel extends JPanel {
 	private static final long serialVersionUID = -9051769253598831077L;
 	private JPanel parentPanel;
 	private JPanel panelMain, panelBackground, panelTitel, bgrScroll;
-	private JScrollPane scrollPane;
+	private TScrollPane scrollPane;
 	private List<SettingPanel> settingPanels;
 	private boolean hidden = true;
 	private Dimension expandedSize = new Dimension(Integer.MAX_VALUE, 120);
@@ -100,7 +100,7 @@ public class AnimationOptionsPanel extends JPanel {
 		bgrScroll.setLayout(new BorderLayout(0, 0));
 		bgrScroll.add(panelBackground);
 		
-		scrollPane = new JScrollPane();
+		scrollPane = new TScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());

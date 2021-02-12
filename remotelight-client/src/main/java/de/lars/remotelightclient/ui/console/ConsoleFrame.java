@@ -77,7 +77,7 @@ public class ConsoleFrame extends BasicFrame {
 		textPane.setEditable(false);
 		
 		JScrollPane scrollPane = new JScrollPane(textPane);
-		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(4, getHeight()));
+		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(6, getHeight()));
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		

@@ -53,6 +53,7 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.BigTextButton;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.dialogs.ErrorDialog;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
@@ -137,7 +138,7 @@ public class ScriptsPanel extends MenuPanel {
 		add(bgrScroll);
 		bgrScroll.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		TScrollPane scrollPane = new TScrollPane();
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -154,7 +155,7 @@ public class ScriptsPanel extends MenuPanel {
 		bgrSettings.setLayout(new BoxLayout(bgrSettings, BoxLayout.Y_AXIS));
 		bgrSettings.setBackground(Style.panelDarkBackground);
 		
-		JScrollPane scrollSettings = new JScrollPane(bgrSettings);
+		TScrollPane scrollSettings = new TScrollPane(bgrSettings);
 		scrollSettings.getVerticalScrollBar().setUnitIncrement(16);
 		scrollSettings.setViewportBorder(null);
 		scrollSettings.setBorder(BorderFactory.createEmptyBorder());

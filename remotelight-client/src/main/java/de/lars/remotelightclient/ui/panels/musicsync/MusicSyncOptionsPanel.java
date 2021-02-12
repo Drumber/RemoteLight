@@ -40,6 +40,7 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.musicsync.nativesound.NativeSoundConfigPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
@@ -70,7 +71,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 	private JLabel lblAdjustment;
 	private JSlider sliderAdjustment;
 	private JPanel panelInput;
-	private JScrollPane scrollPaneOpt;
+	private TScrollPane scrollPaneOpt;
 	private JPanel bgrOptions;
 	private JLabel lblInput;
 	private JRadioButton rbuttonNativeSound;
@@ -98,7 +99,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrScrollOptions.setBackground(Style.panelDarkBackground);
 		add(bgrScrollOptions);
 		
-		scrollPaneOpt = new JScrollPane();
+		scrollPaneOpt = new TScrollPane();
 		scrollPaneOpt.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneOpt.setViewportBorder(null);
 		scrollPaneOpt.setBorder(BorderFactory.createEmptyBorder());
@@ -189,7 +190,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		add(bgrEffectOptionsScroll);
 		bgrEffectOptionsScroll.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		TScrollPane scrollPane = new TScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());

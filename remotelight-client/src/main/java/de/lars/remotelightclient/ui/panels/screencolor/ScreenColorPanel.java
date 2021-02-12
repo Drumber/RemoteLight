@@ -57,6 +57,7 @@ import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.ImagePanel;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
@@ -131,7 +132,7 @@ public class ScreenColorPanel extends MenuPanel {
 		panelOptions.setBackground(Style.panelBackground);
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
 		
-		JScrollPane scrollPane = new JScrollPane(panelOptions);
+		TScrollPane scrollPane = new TScrollPane(panelOptions);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());

@@ -39,7 +39,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
@@ -48,6 +47,7 @@ import javax.swing.border.LineBorder;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.ConsoleEntryPanel;
@@ -87,7 +87,7 @@ public class ToolsPanel extends MenuPanel {
 		panelContent.setBackground(Style.panelBackground);
 		panelContent.setLayout(new BorderLayout());
 		
-		JScrollPane scrollContent = new JScrollPane(panelContent);
+		TScrollPane scrollContent = new TScrollPane(panelContent);
 		scrollContent.setViewportBorder(null);
 		scrollContent.setBorder(BorderFactory.createEmptyBorder());
 		scrollContent.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
