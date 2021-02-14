@@ -37,6 +37,7 @@ import javax.swing.SwingConstants;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
+import de.lars.remotelightclient.ui.panels.colors.gradients.GradientsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;

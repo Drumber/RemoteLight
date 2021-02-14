@@ -1,7 +1,10 @@
 package de.lars.remotelightcore.utils.color.palette;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class Palettes {
@@ -18,6 +21,14 @@ public class Palettes {
 
 	public static AbstractPalette getPalette(String name) {
 		return getAll().get(name);
+	}
+	
+	public static List<PaletteData> getPaletteDataItems() {
+		List<PaletteData> list = new ArrayList<PaletteData>();
+		for(Entry<String, AbstractPalette> entry : getAll().entrySet()) {
+			list.add(new PaletteData(entry.getKey(), entry.getValue()));
+		}
+		return list;
 	}
 
 	/**
