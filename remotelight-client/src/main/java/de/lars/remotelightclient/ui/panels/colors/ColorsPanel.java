@@ -23,29 +23,31 @@
 package de.lars.remotelightclient.ui.panels.colors;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import de.lars.colorpicker.ColorPicker;
-import de.lars.colorpicker.listener.ColorListener;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.utils.ColorTool;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
-import de.lars.remotelightcore.settings.SettingsManager;
-import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class ColorsPanel extends MenuPanel {
 	private static final long serialVersionUID = 2572544853394733969L;
 	
-	private Color[] defaultColors = {Color.ORANGE, Color.RED, Color.MAGENTA, Color.GREEN, Color.BLUE, Color.CYAN, Color.WHITE, Color.BLACK};
-	private List<Color> colors;
-	private SettingsManager sm = Main.getInstance().getSettingsManager();
+	private ColorPickerPanel colorPickerPanel;
+	private GradientsPanel gradientsPanel;
+	private JPanel btnColorPicker;
+	private JPanel btnGradients;
 
 	/**
 	 * Create the panel.
@@ -53,34 +55,78 @@ public class ColorsPanel extends MenuPanel {
 	public ColorsPanel() {
 		Main.getInstance().getMainFrame().showControlBar(true);
 		Main.getInstance().getMainFrame().setControlBarPanel(new DefaultControlBar());
-		colors = new ArrayList<>();
 		
-		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors)); //register setting if not already registered //$NON-NLS-1$
-		colors = new LinkedList<>(Arrays.asList((Color[]) sm.getSettingObject("colorspanel.colors").get())); //$NON-NLS-1$
+		colorPickerPanel = new ColorPickerPanel();
+		gradientsPanel = new GradientsPanel();
 		
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
-		ColorPicker.paletteColors = colors.toArray(new Color[colors.size()]);
+		JPanel panelHeader = new JPanel();
+		panelHeader.setBackground(Style.panelBackground);
+		panelHeader.setLayout(new GridLayout(1, 2));
 		
-		ColorPicker colorPicker =  new ColorPicker(colors.size() > 0 ? colors.get(0) : Color.RED);
-		colorPicker.setMaxPaletteItems(30);
-		colorPicker.addColorListener(colorChangeListener);
-		add(colorPicker, BorderLayout.CENTER);
+		btnColorPicker = createHeaderButton("ColorPicker");
+		btnColorPicker.setName("colorpicker");
+		panelHeader.add(btnColorPicker);
+		
+		btnGradients = createHeaderButton("Gradients");
+		btnGradients.setName("gradients");
+		panelHeader.add(btnGradients);
+		
+		add(panelHeader, BorderLayout.NORTH);
+		
+		// ColorPicker is default panel
+		selectMenu("colorpicker");
 	}
 	
-	
-	private ColorListener colorChangeListener = new ColorListener() {
-		@Override
-		public void onColorChanged(Color color) {
-			Main.getInstance().getCore().getColorManager().showColor(ColorTool.convert(color));
+	protected void selectMenu(String menuName) {
+		Component centerComp = ((BorderLayout) getLayout()).getLayoutComponent(BorderLayout.CENTER);
+		
+		if("colorpicker".equalsIgnoreCase(menuName)) {
+			btnColorPicker.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent));
+			btnGradients.setBorder(null);
+			if(centerComp != null) {
+				remove(centerComp);
+			}
+			add(colorPickerPanel, BorderLayout.CENTER);
+		} else if("gradients".equalsIgnoreCase(menuName)) {
+			btnGradients.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent));
+			btnColorPicker.setBorder(null);
+			if(centerComp != null) {
+				remove(centerComp);
+			}
+			add(gradientsPanel, BorderLayout.CENTER);
 		}
+		
+		updateUI();
+	}
+	
+	private MouseAdapter onMenuButtonClicked = new MouseAdapter() {
+		public void mouseClicked(MouseEvent e) {
+			selectMenu(e.getComponent().getName());
+		};
 	};
 	
+	private JPanel createHeaderButton(String title) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBackground(Style.panelBackground);
+		panel.setPreferredSize(new Dimension(0, 30));
+		panel.addMouseListener(onMenuButtonClicked);
+		UiUtils.addHoverColor(panel, panel.getBackground(), Style.hoverBackground);
+		
+		JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
+		lblTitle.setForeground(Style.textColor);
+		lblTitle.setFont(Style.getFontRegualar(14));
+		panel.add(lblTitle, BorderLayout.CENTER);
+		return panel;
+	}
 	
 	@Override
 	public void onEnd(MenuPanel newPanel) {
-		sm.getSettingObject("colorspanel.colors").setValue(ColorPicker.paletteColors); //$NON-NLS-1$
+		colorPickerPanel.onEnd();
+		gradientsPanel.onEnd();
 		super.onEnd(newPanel);
 	}
 	
