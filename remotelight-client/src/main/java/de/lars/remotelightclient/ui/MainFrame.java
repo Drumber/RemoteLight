@@ -24,7 +24,6 @@ package de.lars.remotelightclient.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -36,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -73,8 +71,6 @@ public class MainFrame extends JFrame {
 	private JPanel bgrSideMenu;
 	private JPanel bgrContentPanel;
 	private JPanel bgrControlBar;
-	private JPanel panelNotification;
-	private JLabel lblNotification;
 	private JPanel contentArea;
 	
 	private SideMenu sideMenu;
@@ -151,16 +147,7 @@ public class MainFrame extends JFrame {
 		bgrContentPanel.setBackground(Style.panelBackground);
 		contentPane.add(bgrContentPanel, BorderLayout.CENTER);
 		bgrContentPanel.setLayout(new BorderLayout(0, 0));
-		
-		panelNotification = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelNotification.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		panelNotification.setBackground(Style.panelBackground);
-		bgrContentPanel.add(panelNotification, BorderLayout.NORTH);
-		
-		lblNotification = new JLabel("");
-		panelNotification.add(lblNotification);
-		
+
 		contentArea = new JPanel();
 		contentArea.setBackground(Style.panelBackground);
 		bgrContentPanel.add(contentArea, BorderLayout.CENTER);
