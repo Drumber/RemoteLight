@@ -50,6 +50,7 @@ public class GradientEditPanel extends JPanel {
 		gradientBar = new GradientBar(null);
 		gradientBar.setMinimumSize(new Dimension(100, 20));
 		gradientBar.setPreferredSize(new Dimension(0, 30));
+		gradientBar.setShowMarkers(true);
 		gradientBar.setCornerRadius(5);
 		gradientBar.setPaddingHorizontal(5);
 		panelHeader.add(Box.createVerticalStrut(20)); // add spacer
@@ -91,6 +92,7 @@ public class GradientEditPanel extends JPanel {
 		if(palette != null) {
 			fieldName.setText(palette.getName());
 			gradientBar.setColorPalette(palette.getPalette());
+			gradientBar.resetMarkerSelection();
 			gradientBar.repaint();
 		}
 	}
