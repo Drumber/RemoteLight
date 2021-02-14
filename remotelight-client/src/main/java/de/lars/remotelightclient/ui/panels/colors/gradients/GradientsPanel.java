@@ -27,6 +27,7 @@ public class GradientsPanel extends ColorsSubPanel {
 		add(gradientsList, BorderLayout.WEST);
 		
 		gradientEditPanel = new GradientEditPanel();
+		gradientEditPanel.setVisible(false);
 		add(gradientEditPanel, BorderLayout.CENTER);
 	}
 
@@ -35,6 +36,9 @@ public class GradientsPanel extends ColorsSubPanel {
 		public void valueChanged(ListSelectionEvent e) {
 			if(!e.getValueIsAdjusting()) {
 				PaletteData selectedPalette = gradientsList.getJListComponent().getSelectedValue();
+				gradientEditPanel.setPalette(selectedPalette);
+				gradientEditPanel.updateValues();
+				gradientEditPanel.setVisible(true);
 			}
 		}
 	};

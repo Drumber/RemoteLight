@@ -23,6 +23,8 @@ public class GradientBar extends JPanel {
 	
 	private AbstractPalette colorPalette;
 	private int cornerRadius = 0;
+	private int paddingHorizontal = 0;
+	private int paddingVertical = 0;
 	
 	public GradientBar(AbstractPalette colorPalette) {
 		this.colorPalette = colorPalette;
@@ -45,15 +47,31 @@ public class GradientBar extends JPanel {
 		this.cornerRadius = cornerRadius;
 	}
 
+	public int getPaddingHorizontal() {
+		return paddingHorizontal;
+	}
+
+	public void setPaddingHorizontal(int paddingHorizontal) {
+		this.paddingHorizontal = paddingHorizontal;
+	}
+
+	public int getPaddingVertical() {
+		return paddingVertical;
+	}
+
+	public void setPaddingVertical(int paddingVertical) {
+		this.paddingVertical = paddingVertical;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if(colorPalette == null) return;
 		Rectangle bounds = getBounds();
-		final int width = bounds.width;
-		final int height = bounds.height;
-		final int x = 0;
-		final int y = 0;
+		final int width = bounds.width - paddingHorizontal*2;
+		final int height = bounds.height - paddingVertical*2;
+		final int x = paddingHorizontal;
+		final int y = paddingVertical;
 		
 		float[] fractions = new float[colorPalette.size()];
 		Color[] colors = new Color[colorPalette.size()];
@@ -81,21 +99,22 @@ public class GradientBar extends JPanel {
 		// draw rounded corners
 		if(cornerRadius > 0) {
 			g2.setComposite(AlphaComposite.Clear);
-			g2.fillRect(x, y, width, height);
+			g2.fillRect(0, 0, width, height);
 			
 			g2.setComposite(AlphaComposite.Src);
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setColor(Color.WHITE);
-			g2.fill(new RoundRectangle2D.Float(x, x, width, height, cornerRadius, cornerRadius));
+			g2.fill(new RoundRectangle2D.Float(0, 0, width, height, cornerRadius, cornerRadius));
 			g2.setComposite(AlphaComposite.SrcAtop);
 		}
 		
-		LinearGradientPaint gradientPaint = new LinearGradientPaint(x, y, x + width, y, fractions, colors);
+		LinearGradientPaint gradientPaint = new LinearGradientPaint(0, 0, width, 0, fractions, colors);
 		g2.setPaint(gradientPaint);
-		g2.fillRect(x, y, width, height);
+		g2.fillRect(0, 0, width, height);
 		g2.dispose();
 		
 		g.drawImage(img, x, y, null);
+		g.dispose();
 	}
 	
 }

@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -47,7 +48,11 @@ public class GradientEditPanel extends JPanel {
 		panelHeader.add(fieldName);
 		
 		gradientBar = new GradientBar(null);
-		gradientBar.setMinimumSize(new Dimension(100, 30));
+		gradientBar.setMinimumSize(new Dimension(100, 20));
+		gradientBar.setPreferredSize(new Dimension(0, 30));
+		gradientBar.setCornerRadius(5);
+		gradientBar.setPaddingHorizontal(5);
+		panelHeader.add(Box.createVerticalStrut(20)); // add spacer
 		panelHeader.add(gradientBar);
 		
 		JPanel panelSetup = new JPanel();
