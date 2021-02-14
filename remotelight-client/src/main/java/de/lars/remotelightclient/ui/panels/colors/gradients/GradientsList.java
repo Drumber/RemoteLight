@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
@@ -22,6 +23,8 @@ import de.lars.remotelightcore.utils.color.palette.PaletteData;
 public class GradientsList extends JPanel {
 	private static final long serialVersionUID = -5638567248623585698L;
 	
+	private JList<PaletteData> list;
+	
 	public GradientsList(List<PaletteData> listPalettes) {
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
@@ -29,8 +32,9 @@ public class GradientsList extends JPanel {
 		DefaultListModel<PaletteData> listModel = new DefaultListModel<PaletteData>();
 		listPalettes.forEach(p -> listModel.addElement(p));
 		
-		JList<PaletteData> list = new JList<PaletteData>(listModel);
+		list = new JList<PaletteData>(listModel);
 		list.setCellRenderer(new GradientListElement());
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectionBackground(Style.accent);
 		list.setSelectionForeground(Style.textColor);
 		list.setForeground(Style.textColor);
@@ -42,6 +46,10 @@ public class GradientsList extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
+	}
+	
+	public JList<PaletteData> getJListComponent() {
+		return list;
 	}
 	
 	
