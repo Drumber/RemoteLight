@@ -49,6 +49,7 @@ public class GradientBar extends JPanel {
 		this.colorPalette = colorPalette;
 		listMarkers = new ArrayList<GradientBar.Marker>();
 		setOpaque(false);
+		setToolTipText("");
 		
 		addMouseListener(markerMouseAdapter);
 		addMouseMotionListener(markerMouseAdapter);
@@ -219,13 +220,33 @@ public class GradientBar extends JPanel {
 			}
 			
 			int center = Math.round(pos);
+			Color colorPrimary = Marker.selectedIndex == i ? Style.accent : Color.WHITE;
 			// draw primary rectangle
-			g.setColor(Marker.selectedIndex == i ? Style.accent : Color.WHITE);
+			g.setColor(colorPrimary);
 			g.fillRect(center - 1, offsetY, 3, height);
 			// draw stroke on top
 			g.setColor(new Color(50, 50, 50));
 			g.drawRect(center - 1, offsetY, 3, height);
+						
+			// draw primary circle
+			g.setColor(colorPrimary);
+			g.fillOval(center - 3, offsetY + height, 7, 7);
+			// draw color preview circle
+			g.setColor(colors[i]);
+			g.fillOval(center - 2, offsetY + height + 1, 5, 5);
 		}
+	}
+	
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		if(isShowMarkers()) {
+			Marker marker = getMarkerAtPoint(event.getPoint());
+			if(marker != null) {
+				de.lars.remotelightcore.utils.color.Color color = colorPalette.getColorAtIndex(marker.index);
+				return String.format("Marker #%d [r=%d;g=%d;b=%d]", marker.index, color.getRed(), color.getGreen(), color.getBlue());
+			}
+		}
+		return null;
 	}
 	
 	private MouseAdapter markerMouseAdapter = new MouseAdapter() {

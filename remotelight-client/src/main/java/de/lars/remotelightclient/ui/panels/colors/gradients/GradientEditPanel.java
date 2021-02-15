@@ -17,6 +17,7 @@ import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
 
 public class GradientEditPanel extends JPanel {
@@ -25,6 +26,7 @@ public class GradientEditPanel extends JPanel {
 	private GradientBar gradientBar;
 	private PaletteData palette;
 	private JTextField fieldName;
+	private ColorPicker colorPicker;
 	
 	public GradientEditPanel() {
 		setBackground(Style.panelBackground);
@@ -75,7 +77,7 @@ public class GradientEditPanel extends JPanel {
 		gbc.gridy = 0;
 		gbc.ipady = 200;
 		
-		ColorPicker colorPicker =  new ColorPicker(Color.RED, 0, true, true, false, false);
+		colorPicker =  new ColorPicker(Color.RED, 0, true, true, false, false);
 		colorPicker.addColorListener(colorChangeListener);
 		colorPicker.setPreferredSize(new Dimension(100, 100));
 		panelSetup.add(colorPicker, gbc);
@@ -85,18 +87,22 @@ public class GradientEditPanel extends JPanel {
 	private ColorListener colorChangeListener = new ColorListener() {
 		@Override
 		public void onColorChanged(Color color) {
-			// TODO
+			int selectedIndex = gradientBar.getSelectedMarkerIndex();
+			if(palette != null && selectedIndex > 0 && selectedIndex < palette.getPalette().size()) {
+				palette.getPalette().setColorAtIndex(selectedIndex, ColorTool.convert(color));
+				updateGradientBar();
+			}
 		}
 	};
 	
 	private MarkerListener onGradientMarkerChange = new MarkerListener() {
 		@Override
 		public void onMarkerSelected(int index) {
-			
+			Color color = ColorTool.convert(palette.getPalette().getColorAtIndex(index));
+			colorPicker.setSelectedColor(color);
 		}
 		@Override
 		public void onMarkerDragged(int index, float newFraction) {
-			
 		}
 	};
 	
@@ -106,6 +112,11 @@ public class GradientEditPanel extends JPanel {
 			gradientBar.setColorPalette(palette.getPalette());
 			gradientBar.resetMarkerSelection();
 			gradientBar.repaint();
+			if(palette.getPalette().size() > 0) {
+				// select first marker and display its color in the color picker
+				gradientBar.setSelectedMarker(0);
+				colorPicker.setSelectedColor(ColorTool.convert(palette.getPalette().getColorAtIndex(0)));
+			}
 		}
 	}
 	
