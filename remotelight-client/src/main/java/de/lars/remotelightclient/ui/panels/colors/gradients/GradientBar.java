@@ -120,7 +120,8 @@ public class GradientBar extends JPanel {
 	/**
 	 * Show selection markers,
 	 * this will automatically set vertical padding to {@code 10}.
-	 * @param showMarkers
+	 * @param showMarkers		whether markers indicating the position
+	 * 							of gradient segments should be visible
 	 */
 	public void setShowMarkers(boolean showMarkers) {
 		this.showMarkers = showMarkers;
@@ -218,12 +219,17 @@ public class GradientBar extends JPanel {
 			}
 			
 			int center = Math.round(pos);
+			// draw primary rectangle
 			g.setColor(Marker.selectedIndex == i ? Style.accent : Color.WHITE);
-			g.fillRect(center-1, offsetY, 3, height);
+			g.fillRect(center - 1, offsetY, 3, height);
+			// draw stroke on top
+			g.setColor(new Color(50, 50, 50));
+			g.drawRect(center - 1, offsetY, 3, height);
 		}
 	}
 	
 	private MouseAdapter markerMouseAdapter = new MouseAdapter() {
+		/** marker at which the mouse where pressed */
 		private int pressedMarker = -1;
 		
 		public void mousePressed(MouseEvent e) {
@@ -274,7 +280,15 @@ public class GradientBar extends JPanel {
 		};
 	};
 	
-	
+	/**
+	 * Change the position of the marker to the given x-position of the mouse.
+	 * The x-position will be mapped to a fraction value between 0 and 1.
+	 * The ColorPalette position of the color that corresponds to the marker will
+	 * be modified to fit the target mouse position.
+	 * @param marker		selected marker
+	 * @param x				x-position of the mouse
+	 * @return				the new fraction value
+	 */
 	private float changeMarkerPosition(Marker marker, int x) {
 		Rectangle bounds = getBounds();
 		final int width = bounds.width - paddingHorizontal*2;
@@ -326,6 +340,12 @@ public class GradientBar extends JPanel {
 		return fraction;
 	}
 	
+	/**
+	 * Finds the marker relative to the specified point.
+	 * @param p			point to search at
+	 * @return			the marker at the specified point,
+	 * 					or null if there is no marker nearby
+	 */
 	protected Marker getMarkerAtPoint(Point p) {
 		Marker marker = null;
 		for(Marker m : listMarkers) {
@@ -343,6 +363,12 @@ public class GradientBar extends JPanel {
 		return marker;
 	}
 	
+	/**
+	 * Get the marker that holds the specified index value.
+	 * @param index		index to search for
+	 * @return			the marker with the specified index,
+	 * 					or null if there is no marker with such index
+	 */
 	protected Marker getMarkerAtIndex(int index) {
 		if(index >= 0 && index < listMarkers.size()) {
 			for(Marker m : listMarkers) {
@@ -354,6 +380,10 @@ public class GradientBar extends JPanel {
 	}
 	
 	
+	/**
+	 * Small helper class that holds an index and component position value.
+	 * The index corresponds to a color in a ColorPalette.
+	 */
 	private static class Marker {
 		static int selectedIndex = -1;
 		int index;
