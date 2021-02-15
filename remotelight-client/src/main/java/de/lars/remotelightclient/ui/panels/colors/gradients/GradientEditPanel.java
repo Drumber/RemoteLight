@@ -3,8 +3,6 @@ package de.lars.remotelightclient.ui.panels.colors.gradients;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -22,6 +20,7 @@ import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.utils.ExceptionHandler;
+import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
 
 public class GradientEditPanel extends JPanel {
@@ -69,7 +68,7 @@ public class GradientEditPanel extends JPanel {
 		
 		JPanel panelSetup = new JPanel();
 		panelSetup.setBackground(Style.panelBackground);
-		panelSetup.setLayout(new GridBagLayout());
+		panelSetup.setLayout(new BoxLayout(panelSetup, BoxLayout.Y_AXIS));
 		
 		TScrollPane scrollPane = new TScrollPane(panelSetup);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -78,17 +77,11 @@ public class GradientEditPanel extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollPane, BorderLayout.CENTER);
 		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 0.5;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.ipady = 200;
-		
 		colorPicker =  new ColorPicker(Color.RED, 0, true, true, false, false);
 		colorPicker.addColorListener(colorChangeListener);
-		colorPicker.setPreferredSize(new Dimension(100, 100));
-		panelSetup.add(colorPicker, gbc);
+		colorPicker.setPreferredSize(new Dimension(300, 200));
+		colorPicker.setMinimumSize(new Dimension(100, 200));
+		panelSetup.add(colorPicker);
 		
 	}
 	
@@ -96,7 +89,7 @@ public class GradientEditPanel extends JPanel {
 		@Override
 		public void onColorChanged(Color color) {
 			int selectedIndex = gradientBar.getSelectedMarkerIndex();
-			if(palette != null && selectedIndex > 0 && selectedIndex < palette.getPalette().size()) {
+			if(palette != null && selectedIndex >= 0 && selectedIndex < palette.getPalette().size()) {
 				palette.getPalette().setColorAtIndex(selectedIndex, ColorTool.convert(color));
 				updateGradientBar();
 			}
@@ -126,7 +119,9 @@ public class GradientEditPanel extends JPanel {
 	protected void addMarker() {
 		if(palette != null) {
 			try {
-				palette.getPalette().addColor(de.lars.remotelightcore.utils.color.Color.RED);
+				AbstractPalette p = palette.getPalette();
+				de.lars.remotelightcore.utils.color.Color color = p.size() > 0 ? p.getColorAtIndex(p.size() - 1) : de.lars.remotelightcore.utils.color.Color.RED;
+				palette.getPalette().addColor(color);
 				gradientBar.setSelectedMarker(palette.getPalette().size() - 1);
 				updateGradientBar();
 			} catch(Exception e) {
