@@ -134,7 +134,8 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	 * Remove the color at the specified index.
 	 * @param index		index of the color
 	 */
-	public void remove(int index) {
+	@Override
+	public void removeColorAtIndex(int index) {
 		listColor.remove(index);
 	}
 	

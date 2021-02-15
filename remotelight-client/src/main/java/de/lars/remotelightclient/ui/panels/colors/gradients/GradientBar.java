@@ -126,8 +126,8 @@ public class GradientBar extends JPanel {
 	 */
 	public void setShowMarkers(boolean showMarkers) {
 		this.showMarkers = showMarkers;
-		if(paddingVertical < 10)
-			paddingVertical = 10;
+		if(paddingVertical < 8)
+			paddingVertical = 8;
 	}
 
 	@Override
@@ -256,7 +256,6 @@ public class GradientBar extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			Marker marker = getMarkerAtPoint(e.getPoint());
 			if(marker != null) {
-				System.out.println("selected: " + marker);
 				Marker.selectedIndex = marker.index;
 				pressedMarker = marker.index;
 				if(markerListener != null) {
@@ -283,7 +282,6 @@ public class GradientBar extends JPanel {
 			Marker marker = null;
 			if(pressedMarker != -1  && (marker = getMarkerAtIndex(pressedMarker)) != null) {
 				setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
-				System.out.println("dragged marker: " + marker);
 				
 				float newFraction = changeMarkerPosition(marker, e.getX());
 				
@@ -329,7 +327,7 @@ public class GradientBar extends JPanel {
 			
 			// remove color first and insert it at the new index
 			de.lars.remotelightcore.utils.color.Color color = cp.getColorAtIndex(marker.index);
-			cp.remove(marker.index);
+			cp.removeColorAtIndex(marker.index);
 			cp.add(newIndex, color);
 			
 			// set new marker position
@@ -346,7 +344,7 @@ public class GradientBar extends JPanel {
 			
 			// remove first and add new fraction
 			de.lars.remotelightcore.utils.color.Color color = gp.getColorAtIndex(marker.index);
-			gp.remove(marker.index);
+			gp.removeColorAtIndex(marker.index);
 			gp.add(fraction, color);
 			
 			// get new index

@@ -15,6 +15,8 @@ public abstract class AbstractPalette {
 	
 	public abstract void addColor(Color color);
 	
+	public abstract void removeColorAtIndex(int index);
+	
 	/**
 	 * Get the next color of the palette.
 	 * @return			next color in palette

@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
@@ -18,6 +19,9 @@ import de.lars.colorpicker.listener.ColorListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.utils.ColorTool;
+import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.utils.ExceptionHandler;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
 
 public class GradientEditPanel extends JPanel {
@@ -26,6 +30,7 @@ public class GradientEditPanel extends JPanel {
 	private GradientBar gradientBar;
 	private PaletteData palette;
 	private JTextField fieldName;
+	private MarkerEditPanel panelMarkerEdit;
 	private ColorPicker colorPicker;
 	
 	public GradientEditPanel() {
@@ -58,6 +63,9 @@ public class GradientEditPanel extends JPanel {
 		gradientBar.setMarkerListener(onGradientMarkerChange);
 		panelHeader.add(Box.createVerticalStrut(20)); // add spacer
 		panelHeader.add(gradientBar);
+		
+		panelMarkerEdit = new MarkerEditPanel();
+		panelHeader.add(panelMarkerEdit);
 		
 		JPanel panelSetup = new JPanel();
 		panelSetup.setBackground(Style.panelBackground);
@@ -106,6 +114,27 @@ public class GradientEditPanel extends JPanel {
 		}
 	};
 	
+	protected void removeSelectedMarker() {
+		int index = gradientBar.getSelectedMarkerIndex();
+		if(index != -1 && palette != null) {
+			palette.getPalette().removeColorAtIndex(index);
+			updateGradientBar();
+			gradientBar.setSelectedMarker(index - 1);
+		}
+	}
+	
+	protected void addMarker() {
+		if(palette != null) {
+			try {
+				palette.getPalette().addColor(de.lars.remotelightcore.utils.color.Color.RED);
+				gradientBar.setSelectedMarker(palette.getPalette().size() - 1);
+				updateGradientBar();
+			} catch(Exception e) {
+				ExceptionHandler.handle(new Exception("Could not add color to palette.", e));
+			}
+		}
+	}
+	
 	public void updateValues() {
 		if(palette != null) {
 			fieldName.setText(palette.getName());
@@ -133,6 +162,30 @@ public class GradientEditPanel extends JPanel {
 
 	public void setPalette(PaletteData palette) {
 		this.palette = palette;
+	}
+	
+	
+	private class MarkerEditPanel extends JPanel {
+		private static final long serialVersionUID = 3800579001431712108L;
+		
+		private JButton btnAddMarker;
+		private JButton btnRemoveMarker;
+		
+		public MarkerEditPanel() {
+			setBackground(Style.panelBackground);
+			setLayout(new WrapLayout(WrapLayout.LEFT));
+			
+			btnAddMarker = new JButton("Add marker");
+			UiUtils.configureButton(btnAddMarker);
+			btnAddMarker.addActionListener(l -> addMarker());
+			add(btnAddMarker);
+			
+			btnRemoveMarker = new JButton("Remove marker");
+			UiUtils.configureButton(btnRemoveMarker);
+			btnRemoveMarker.addActionListener(l -> removeSelectedMarker());
+			add(btnRemoveMarker);
+		}
+		
 	}
 
 }
