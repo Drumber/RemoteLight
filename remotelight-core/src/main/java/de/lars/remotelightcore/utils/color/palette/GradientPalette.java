@@ -57,9 +57,22 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	public GradientPalette add(float position, Color color) {
 		if(position < 0.0f || position > 1.0f)
 			throw new IllegalArgumentException("Position must be in range 0.0...1.0");
-		listColor.add(color);
-		listPosition.add(position);
+		if(listPosition.indexOf(position) != -1)
+			throw new IllegalArgumentException("Position '" + position + "' does already exist.");
+		int index = findIndexForPosition(position);
+		listColor.add(index, color);
+		listPosition.add(index, position);
 		return this;
+	}
+	
+	private int findIndexForPosition(float position) {
+		int index = 0;
+		for(int i = 0; i < listPosition.size(); i++) {
+			if(listPosition.get(i) < position) {
+				index = i + 1;
+			}
+		}
+		return index;
 	}
 	
 	/**
@@ -110,6 +123,17 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 			listColor.remove(index);
 			listPosition.remove(index);
 		}
+		return this;
+	}
+	
+	/**
+	 * Remove the color at the specified index.
+	 * @param index			index to be removed
+	 * @return				the instance ({@code this})
+	 */
+	public GradientPalette remove(int index) {
+		listColor.remove(index);
+		listPosition.remove(index);
 		return this;
 	}
 	

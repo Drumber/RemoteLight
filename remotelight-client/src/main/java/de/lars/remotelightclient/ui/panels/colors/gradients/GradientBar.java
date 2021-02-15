@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.tinylog.Logger;
+
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.GlowBorder;
 import de.lars.remotelightclient.utils.ColorTool;
@@ -281,6 +283,7 @@ public class GradientBar extends JPanel {
 		x = Math.max(x, offsetX);
 		x = Math.min(x, offsetX + width);
 		
+		// map the x value in range of the gradient bar width to a fraction value
 		float fraction = MathHelper.map(x, offsetX, offsetX + width, 0.0f, 1.0f);
 		
 		if(colorPalette instanceof ColorPalette) {
@@ -297,7 +300,27 @@ public class GradientBar extends JPanel {
 			// set new marker position
 			Marker.selectedIndex = newIndex;
 		} else if(colorPalette instanceof GradientPalette) {
-			// TODO
+			GradientPalette gp = (GradientPalette) colorPalette;
+			
+			List<Float> positionsCopy = gp.getPositions();
+			int indexExisting = positionsCopy.indexOf(fraction);
+			if(indexExisting != marker.index && indexExisting != -1) {
+				// do not move further and return previous fraction value
+				return positionsCopy.get(marker.index);
+			}
+			
+			// remove first and add new fraction
+			de.lars.remotelightcore.utils.color.Color color = gp.getColorAtIndex(marker.index);
+			gp.remove(marker.index);
+			gp.add(fraction, color);
+			
+			// get new index
+			int newIndex = gp.getPositions().indexOf(fraction);
+			
+			// set new marker position
+			Marker.selectedIndex = newIndex;
+		} else {
+			Logger.warn("Trying to move marker of unsupported color palette type: " + (colorPalette == null ? null : colorPalette.getClass().getSimpleName()));
 		}
 		
 		return fraction;
@@ -334,7 +357,7 @@ public class GradientBar extends JPanel {
 	private static class Marker {
 		static int selectedIndex = -1;
 		int index;
-		float position;
+		float position; // relative screen position
 		public Marker(int index, float position) {
 			super();
 			this.index = index;
