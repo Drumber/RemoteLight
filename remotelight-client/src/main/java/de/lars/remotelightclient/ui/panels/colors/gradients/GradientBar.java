@@ -141,13 +141,13 @@ public class GradientBar extends JPanel {
 			// convert position and color ArrayList
 			for(int i = 0; i < palette.size(); i++) {
 				fractions[i] = palette.getPositions().get(i);
-				colors[i] = ColorTool.convert(palette.getColors().get(i));
+				colors[i] = ColorTool.convert(palette.getColorAtIndex(i));
 			}
 		} else if(colorPalette instanceof ColorPalette) {
 			ColorPalette palette = (ColorPalette) colorPalette;
 			for(int i = 0; i< palette.size(); i++) {
 				fractions[i] = 1.0f / (palette.size() - 1) * i;
-				colors[i] = ColorTool.convert(palette.get(i));
+				colors[i] = ColorTool.convert(palette.getColorAtIndex(i));
 			}
 		} else {
 			throw new IllegalStateException("Color palette '" + colorPalette.getClass().getSimpleName() + "' is not supported.");
@@ -258,6 +258,13 @@ public class GradientBar extends JPanel {
 				
 				float newFraction = changeMarkerPosition(marker, e.getX());
 				
+				// update pressed marker index
+				pressedMarker = Marker.selectedIndex;
+				
+				// repaint gradient bar
+				shouldRenderGradient = true;
+				repaint();
+				
 				if(markerListener != null) {
 					markerListener.onMarkerDragged(marker.index, newFraction);
 				}
@@ -275,8 +282,23 @@ public class GradientBar extends JPanel {
 		x = Math.min(x, offsetX + width);
 		
 		float fraction = MathHelper.map(x, offsetX, offsetX + width, 0.0f, 1.0f);
-		System.out.println("new fraction: " + fraction);
-		// TODO: handle gradient marker repositioning
+		
+		if(colorPalette instanceof ColorPalette) {
+			ColorPalette cp = (ColorPalette) colorPalette;
+			// get the closest index
+			float fPos = MathHelper.map(fraction, 0.0f, 1.0f, 0, cp.size() - 1);
+			int newIndex = Math.round(fPos);
+			
+			// remove color first and insert it at the new index
+			de.lars.remotelightcore.utils.color.Color color = cp.getColorAtIndex(marker.index);
+			cp.remove(marker.index);
+			cp.add(newIndex, color);
+			
+			// set new marker position
+			Marker.selectedIndex = newIndex;
+		} else if(colorPalette instanceof GradientPalette) {
+			// TODO
+		}
 		
 		return fraction;
 	}
@@ -299,9 +321,11 @@ public class GradientBar extends JPanel {
 	}
 	
 	protected Marker getMarkerAtIndex(int index) {
-		for(Marker m : listMarkers) {
-			if(m.index == index)
-				return m;
+		if(index >= 0 && index < listMarkers.size()) {
+			for(Marker m : listMarkers) {
+				if(m.index == index)
+					return m;
+			}
 		}
 		return null;
 	}

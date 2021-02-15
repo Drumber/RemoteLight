@@ -1,11 +1,12 @@
 package de.lars.remotelightcore.utils.color.palette;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import de.lars.remotelightcore.utils.color.Color;
 
 public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	
@@ -22,8 +23,19 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	 * @param index		index of the color
 	 * @return			the color at the specified index in the list
 	 */
-	public Color get(int index) {
+	@Override
+	public Color getColorAtIndex(int index) {
 		return listColor.get(index);
+	}
+	
+	/**
+	 * Set the color at the specified index.
+	 * @param index		index of the color
+	 * @param color		the color that should be set at the index
+	 */
+	@Override
+	public void setColorAtIndex(int index, Color color) {
+		listColor.set(index, color);
 	}
 	
 	/**
@@ -33,6 +45,7 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	 * @throws IllegalStateException
 	 * 					if the color palette is empty
 	 */
+	@Override
 	public Color getNext() {
 		if(listColor.size() == 0)
 			throw new IllegalStateException("Could not return next item. The list is empty!");
@@ -50,7 +63,7 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 		if(listColor.size() == 0)
 			throw new IllegalStateException("Could not return next item. The list is empty!");
 		int index = new Random().nextInt(size());
-		return get(index);
+		return getColorAtIndex(index);
 	}
 	
 	/**
@@ -69,6 +82,22 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	
 	public int size() {
 		return listColor.size();
+	}
+	
+	@Override
+	public void addColor(Color color) {
+		this.add(color);
+	}
+	
+	/**
+	 * Add the specified color at the given index.
+	 * @param index		index at which the color is added
+	 * @param color		color to add
+	 * @return			the instance ({@code this})
+	 */
+	public ColorPalette add(int index, Color color) {
+		listColor.add(index, color);
+		return this;
 	}
 	
 	/**

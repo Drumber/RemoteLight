@@ -1,8 +1,8 @@
 package de.lars.remotelightcore.utils.color.palette;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Arrays;
 
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
 public class EvenGradientPalette extends ColorPalette implements ColorGradient {
@@ -29,7 +29,7 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 			throw new IllegalStateException("Could not return next item. The list is empty!");
 		if(curIndex == targetIndex && size() > 1)
 			increaseTargetIndex(1);
-		Color c = ColorUtil.fadeToColor(get(curIndex), get(targetIndex), currentStep);
+		Color c = ColorUtil.fadeToColor(getColorAtIndex(curIndex), getColorAtIndex(targetIndex), currentStep);
 		currentStep += stepSize; // increase step position by stepSize
 		if(currentStep > 1.0f) {
 			currentStep = 0.0f;

@@ -53,6 +53,7 @@ public class GradientEditPanel extends JPanel {
 		gradientBar.setShowMarkers(true);
 		gradientBar.setCornerRadius(5);
 		gradientBar.setPaddingHorizontal(5);
+		gradientBar.setMarkerListener(onGradientMarkerChange);
 		panelHeader.add(Box.createVerticalStrut(20)); // add spacer
 		panelHeader.add(gradientBar);
 		
@@ -88,11 +89,29 @@ public class GradientEditPanel extends JPanel {
 		}
 	};
 	
+	private MarkerListener onGradientMarkerChange = new MarkerListener() {
+		@Override
+		public void onMarkerSelected(int index) {
+			
+		}
+		@Override
+		public void onMarkerDragged(int index, float newFraction) {
+			
+		}
+	};
+	
 	public void updateValues() {
 		if(palette != null) {
 			fieldName.setText(palette.getName());
 			gradientBar.setColorPalette(palette.getPalette());
 			gradientBar.resetMarkerSelection();
+			gradientBar.repaint();
+		}
+	}
+	
+	public void updateGradientBar() {
+		if(palette != null) {
+			gradientBar.setColorPalette(palette.getPalette());
 			gradientBar.repaint();
 		}
 	}

@@ -1,9 +1,10 @@
 package de.lars.remotelightcore.utils.color.palette;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 
 public class GradientPalette extends AbstractPalette implements ColorGradient {
@@ -26,6 +27,25 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	
 	public GradientPalette() {
 		this(0.005f);
+	}
+	
+	@Override
+	public void addColor(Color color) {
+		float pos = listPosition.stream().max(Comparator.naturalOrder()).get();
+		for(float f = 0.1f; f > 0.0001f; f /= 2.0f) {
+			if((pos + f) <= 1.0f) {
+				pos += f;
+				listColor.add(color);
+				listPosition.add(pos);
+				return;
+			}
+		}
+		throw new IllegalStateException("Color could not be added because the maximum gradient position has been reached.");
+	}
+	
+	@Override
+	public void setColorAtIndex(int index, Color color) {
+		listColor.set(index, color);
 	}
 	
 	/**
@@ -91,6 +111,11 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 			listPosition.remove(index);
 		}
 		return this;
+	}
+	
+	@Override
+	public Color getColorAtIndex(int index) {
+		return listColor.get(index);
 	}
 	
 	@Override

@@ -9,6 +9,12 @@ public abstract class AbstractPalette {
 	 */
 	public abstract void clear();
 	
+	public abstract Color getColorAtIndex(int index);
+	
+	public abstract void setColorAtIndex(int index, Color color);
+	
+	public abstract void addColor(Color color);
+	
 	/**
 	 * Get the next color of the palette.
 	 * @return			next color in palette
