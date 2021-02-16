@@ -24,22 +24,15 @@ package de.lars.remotelightclient.ui.panels.colors;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.TabButtons;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.colors.gradients.GradientsPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
-import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
 
 public class ColorsPanel extends MenuPanel {
@@ -47,8 +40,6 @@ public class ColorsPanel extends MenuPanel {
 	
 	private ColorPickerPanel colorPickerPanel;
 	private GradientsPanel gradientsPanel;
-	private JPanel btnColorPicker;
-	private JPanel btnGradients;
 
 	/**
 	 * Create the panel.
@@ -63,37 +54,27 @@ public class ColorsPanel extends MenuPanel {
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
-		JPanel panelHeader = new JPanel();
-		panelHeader.setBackground(Style.panelBackground);
-		panelHeader.setLayout(new GridLayout(1, 2));
-		
-		btnColorPicker = createHeaderButton("ColorPicker");
-		btnColorPicker.setName("colorpicker");
-		panelHeader.add(btnColorPicker);
-		
-		btnGradients = createHeaderButton("Gradients");
-		btnGradients.setName("gradients");
-		panelHeader.add(btnGradients);
-		
-		add(panelHeader, BorderLayout.NORTH);
+		TabButtons tabBtns = new TabButtons();
+		tabBtns.setBackground(Style.panelBackground);
+		tabBtns.setFont(Style.getFontRegualar(14));
+		tabBtns.addButton("ColorPicker");
+		tabBtns.addButton("Gradients");
+		tabBtns.setActionListener(onMenuButtonClicked);
+		add(tabBtns, BorderLayout.NORTH);
 		
 		// ColorPicker is default panel
-		selectMenu("colorpicker");
+		tabBtns.selectButton("ColorPicker");
 	}
 	
 	protected void selectMenu(String menuName) {
 		Component centerComp = ((BorderLayout) getLayout()).getLayoutComponent(BorderLayout.CENTER);
 		
 		if("colorpicker".equalsIgnoreCase(menuName)) {
-			btnColorPicker.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent));
-			btnGradients.setBorder(null);
 			if(centerComp != null) {
 				remove(centerComp);
 			}
 			add(colorPickerPanel, BorderLayout.CENTER);
 		} else if("gradients".equalsIgnoreCase(menuName)) {
-			btnGradients.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent));
-			btnColorPicker.setBorder(null);
 			if(centerComp != null) {
 				remove(centerComp);
 			}
@@ -103,26 +84,12 @@ public class ColorsPanel extends MenuPanel {
 		updateUI();
 	}
 	
-	private MouseAdapter onMenuButtonClicked = new MouseAdapter() {
-		public void mouseClicked(MouseEvent e) {
-			selectMenu(e.getComponent().getName());
-		};
+	private ActionListener onMenuButtonClicked = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			selectMenu(e.getActionCommand());
+		}
 	};
-	
-	private JPanel createHeaderButton(String title) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBackground(Style.panelBackground);
-		panel.setPreferredSize(new Dimension(0, 30));
-		panel.addMouseListener(onMenuButtonClicked);
-		UiUtils.addHoverColor(panel, panel.getBackground(), Style.hoverBackground);
-		
-		JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
-		lblTitle.setForeground(Style.textColor);
-		lblTitle.setFont(Style.getFontRegualar(14));
-		panel.add(lblTitle, BorderLayout.CENTER);
-		return panel;
-	}
 	
 	@Override
 	public void onEnd(MenuPanel newPanel) {

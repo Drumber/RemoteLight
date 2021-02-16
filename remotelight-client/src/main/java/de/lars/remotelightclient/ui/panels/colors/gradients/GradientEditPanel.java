@@ -2,6 +2,7 @@ package de.lars.remotelightclient.ui.panels.colors.gradients;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -9,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
@@ -16,6 +18,7 @@ import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
+import de.lars.remotelightclient.ui.components.TabButtons;
 import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
@@ -68,7 +71,7 @@ public class GradientEditPanel extends JPanel {
 		
 		JPanel panelSetup = new JPanel();
 		panelSetup.setBackground(Style.panelBackground);
-		panelSetup.setLayout(new BoxLayout(panelSetup, BoxLayout.Y_AXIS));
+		panelSetup.setLayout(new BorderLayout());
 		
 		TScrollPane scrollPane = new TScrollPane(panelSetup);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -78,10 +81,37 @@ public class GradientEditPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 		
 		colorPicker =  new ColorPicker(Color.RED, 0, true, true, false, false);
+		colorPicker.setBackground(Style.panelBackground);
 		colorPicker.addColorListener(colorChangeListener);
 		colorPicker.setPreferredSize(new Dimension(300, 200));
 		colorPicker.setMinimumSize(new Dimension(100, 200));
-		panelSetup.add(colorPicker);
+		
+		JPanel panelCodeEditor = new JPanel();
+		panelCodeEditor.setLayout(new BorderLayout());
+		panelCodeEditor.setBackground(Style.panelBackground);
+		
+		JTextArea textArea = new JTextArea();
+		panelCodeEditor.add(textArea, BorderLayout.CENTER);
+		
+		TabButtons tabBtns = new TabButtons();
+		tabBtns.setBackground(Style.panelBackground);
+		tabBtns.setHeight(25);
+		tabBtns.addButton("ColorPicker");
+		tabBtns.addButton("Code Editor");
+		tabBtns.setActionListener(l -> {
+			Component centerComp = ((BorderLayout) panelSetup.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+			if(centerComp != null) {
+				panelSetup.remove(centerComp);
+			}
+			if("ColorPicker".equals(l.getActionCommand())) {
+				panelSetup.add(colorPicker, BorderLayout.CENTER);
+			} else {
+				panelSetup.add(panelCodeEditor, BorderLayout.CENTER);
+			}
+			panelSetup.updateUI();
+		});
+		panelSetup.add(tabBtns, BorderLayout.NORTH);
+		tabBtns.selectButton("ColorPicker");
 		
 	}
 	
