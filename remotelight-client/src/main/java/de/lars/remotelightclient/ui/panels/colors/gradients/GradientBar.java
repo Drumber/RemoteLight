@@ -266,6 +266,9 @@ public class GradientBar extends JPanel {
 		};
 		
 		public void mouseReleased(MouseEvent e) {
+			if(pressedMarker != -1 && markerListener != null) {
+				markerListener.onMarkerDragged(pressedMarker, true);
+			}
 			pressedMarker = -1;
 			setCursor(null);
 		};
@@ -283,7 +286,7 @@ public class GradientBar extends JPanel {
 			if(pressedMarker != -1  && (marker = getMarkerAtIndex(pressedMarker)) != null) {
 				setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
 				
-				float newFraction = changeMarkerPosition(marker, e.getX());
+				changeMarkerPosition(marker, e.getX());
 				
 				// update pressed marker index
 				pressedMarker = Marker.selectedIndex;
@@ -293,7 +296,7 @@ public class GradientBar extends JPanel {
 				repaint();
 				
 				if(markerListener != null) {
-					markerListener.onMarkerDragged(marker.index, newFraction);
+					markerListener.onMarkerDragged(marker.index, false);
 				}
 			}
 		};

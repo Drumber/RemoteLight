@@ -80,6 +80,37 @@ public class PaletteParser {
 	}
 	
 	
+	public static String parseToString(PaletteData paletteData) throws PaletteParseException {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(paletteData.getName() + " {");
+		
+		if(paletteData.getPalette() instanceof GradientPalette) {
+			GradientPalette gp = (GradientPalette) paletteData.getPalette();
+			List<Float> fractions = gp.getPositions();
+			List<Color> colors = gp.getColors();
+			for(int i = 0; i < fractions.size(); i++) {
+				Color color = colors.get(i);
+				sb.append(String.format("\n%s: %d,%d,%d",
+						fractions.get(i).floatValue(),
+						color.getRed(), color.getGreen(), color.getBlue()));
+			}
+		} else if(paletteData.getPalette() instanceof ColorPalette) {
+			ColorPalette cp = (ColorPalette) paletteData.getPalette();
+			for(int i = 0; i < cp.size(); i++) {
+				Color color = cp.getColorAtIndex(i);
+				sb.append(String.format("\n%d,%d,%d",
+						color.getRed(), color.getGreen(), color.getBlue()));
+			}
+		} else {
+			throw new PaletteParseException("Unsupported color palette type.");
+		}
+		
+		sb.append("\n}");
+		return sb.toString();
+	}
+	
+	
 	public static class PaletteParseException extends Exception {
 		private static final long serialVersionUID = -5733743671547489903L;
 		

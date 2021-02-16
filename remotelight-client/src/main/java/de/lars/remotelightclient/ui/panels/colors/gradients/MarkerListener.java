@@ -4,6 +4,6 @@ public interface MarkerListener {
 	
 	public void onMarkerSelected(int index);
 	
-	public void onMarkerDragged(int index, float newFraction);
+	public void onMarkerDragged(int index, boolean eventEnd);
 
 }

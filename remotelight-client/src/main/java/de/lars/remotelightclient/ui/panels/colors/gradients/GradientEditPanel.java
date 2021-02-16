@@ -39,6 +39,8 @@ public class GradientEditPanel extends JPanel {
 	private JTextField fieldName;
 	private MarkerEditPanel panelMarkerEdit;
 	private ColorPicker colorPicker;
+	private JTextPane editor;
+	private boolean editorTextReplaceMode; // cancel events when replacing the text programmatically
 	
 	public GradientEditPanel() {
 		setBackground(Style.panelBackground);
@@ -95,7 +97,7 @@ public class GradientEditPanel extends JPanel {
 		panelCodeEditor.setLayout(new BorderLayout());
 		panelCodeEditor.setBackground(Style.panelBackground);
 		
-		JTextPane editor = new JTextPane();
+		editor = new JTextPane();
 		editor.setBackground(Style.panelDarkBackground);
 		editor.setForeground(Style.textColor);
 		editor.setCaretColor(Style.accent);
@@ -132,6 +134,7 @@ public class GradientEditPanel extends JPanel {
 			if(palette != null && selectedIndex >= 0 && selectedIndex < palette.getPalette().size()) {
 				palette.getPalette().setColorAtIndex(selectedIndex, ColorTool.convert(color));
 				updateGradientBar();
+				//showPaletteInEditor(palette); //TODO: does end up in an infinity call loop
 			}
 		}
 	};
@@ -143,7 +146,10 @@ public class GradientEditPanel extends JPanel {
 			colorPicker.setSelectedColor(color);
 		}
 		@Override
-		public void onMarkerDragged(int index, float newFraction) {
+		public void onMarkerDragged(int index, boolean eventEnd) {
+			if(eventEnd) { // update editor only when dragging stopped
+				showPaletteInEditor(palette);
+			}
 		}
 	};
 	
@@ -170,7 +176,7 @@ public class GradientEditPanel extends JPanel {
 		}
 	}
 	
-	public void updateValues() {
+	public void updateValues(boolean updateEditor) {
 		if(palette != null) {
 			fieldName.setText(palette.getName());
 			gradientBar.setColorPalette(palette.getPalette());
@@ -181,7 +187,14 @@ public class GradientEditPanel extends JPanel {
 				gradientBar.setSelectedMarker(0);
 				colorPicker.setSelectedColor(ColorTool.convert(palette.getPalette().getColorAtIndex(0)));
 			}
+			if(updateEditor) {
+				showPaletteInEditor(palette);
+			}
 		}
+	}
+	
+	public void updateValues() {
+		updateValues(true);
 	}
 	
 	public void updateGradientBar() {
@@ -203,12 +216,19 @@ public class GradientEditPanel extends JPanel {
 	private DocumentListener onCodeEditorChange = new DocumentListener() {
 		@Override
 		public void removeUpdate(DocumentEvent e) {
+			if(editorTextReplaceMode) {
+				return;
+			}
 			try {
 				parsePaletteFromEditor(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {}
 		}
 		@Override
 		public void insertUpdate(DocumentEvent e) {
+			if(editorTextReplaceMode) {
+				editorTextReplaceMode = false;
+				return;
+			}
 			try {
 				parsePaletteFromEditor(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {}
@@ -220,11 +240,21 @@ public class GradientEditPanel extends JPanel {
 	public void parsePaletteFromEditor(String text) {
 		try {
 			PaletteData pd = PaletteParser.parseFromString(text);
-			System.out.println(pd.getPalette().getClass().getSimpleName() + " " + pd.getName());
-			for(int i = 0; i < pd.getPalette().size(); i++)
-				System.out.println(pd.getPalette().getColorAtIndex(i));
+			setPalette(pd);
+			updateValues(false);
 		} catch (PaletteParseException e) {
+			// TODO: display error message in UI
 			System.err.println(e.getMessage());
+		}
+	}
+	
+	public void showPaletteInEditor(PaletteData paletteData) {
+		try {
+			String code = PaletteParser.parseToString(paletteData);
+			editorTextReplaceMode = true;
+			editor.setText(code);
+		} catch (PaletteParseException e) {
+			ExceptionHandler.handle(new PaletteParseException("Error while parsing color palette to String.", e));
 		}
 	}
 	
@@ -232,9 +262,9 @@ public class GradientEditPanel extends JPanel {
 		CustomStyledDocument doc = new CustomStyledDocument();
 		doc
 			.addRegEx("[{}]", doc.brackets) // brackets
-			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
-			.addRegEx("\\d*\\.?\\d+", doc.value) // any (decimal) number
+			.addRegEx("\\b\\d*\\.?\\d+\\b", doc.value) // any (decimal) number
 			.addRegEx("\\d*\\.?\\d+\\[ \\t]*(?=([:]))", doc.key) // any (decimal) number before ':'
+			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
 			.addRegEx("/\\*(?:.|[\\n\\r])*?\\*/", doc.comment); // comments
 		return doc;
 	}
