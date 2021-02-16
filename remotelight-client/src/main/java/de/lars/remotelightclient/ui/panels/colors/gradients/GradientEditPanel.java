@@ -10,9 +10,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextPane;
 
 import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
@@ -20,6 +19,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.TabButtons;
 import de.lars.remotelightclient.utils.ColorTool;
+import de.lars.remotelightclient.utils.ui.CustomStyledDocument;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -74,7 +74,7 @@ public class GradientEditPanel extends JPanel {
 		panelSetup.setLayout(new BorderLayout());
 		
 		TScrollPane scrollPane = new TScrollPane(panelSetup);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		//scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -90,8 +90,12 @@ public class GradientEditPanel extends JPanel {
 		panelCodeEditor.setLayout(new BorderLayout());
 		panelCodeEditor.setBackground(Style.panelBackground);
 		
-		JTextArea textArea = new JTextArea();
-		panelCodeEditor.add(textArea, BorderLayout.CENTER);
+		JTextPane editor = new JTextPane();
+		editor.setBackground(Style.panelDarkBackground);
+		editor.setForeground(Style.textColor);
+		editor.setCaretColor(Style.accent);
+		editor.setStyledDocument(createStyledDocument());
+		panelCodeEditor.add(editor, BorderLayout.CENTER);
 		
 		TabButtons tabBtns = new TabButtons();
 		tabBtns.setBackground(Style.panelBackground);
@@ -187,6 +191,15 @@ public class GradientEditPanel extends JPanel {
 
 	public void setPalette(PaletteData palette) {
 		this.palette = palette;
+	}
+	
+	private CustomStyledDocument createStyledDocument() {
+		CustomStyledDocument doc = new CustomStyledDocument();
+		doc
+			.addRegEx("[{}]", doc.brackets) // brackets
+			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
+			.addRegEx("/\\*(?:.|[\\n\\r])*?\\*/", doc.comment); // comments
+		return doc;
 	}
 	
 	
