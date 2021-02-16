@@ -12,6 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 
 import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
@@ -25,6 +28,8 @@ import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
+import de.lars.remotelightcore.utils.color.palette.PaletteParser;
+import de.lars.remotelightcore.utils.color.palette.PaletteParser.PaletteParseException;
 
 public class GradientEditPanel extends JPanel {
 	private static final long serialVersionUID = 7638664136509067917L;
@@ -95,6 +100,7 @@ public class GradientEditPanel extends JPanel {
 		editor.setForeground(Style.textColor);
 		editor.setCaretColor(Style.accent);
 		editor.setStyledDocument(createStyledDocument());
+		editor.getDocument().addDocumentListener(onCodeEditorChange);
 		panelCodeEditor.add(editor, BorderLayout.CENTER);
 		
 		TabButtons tabBtns = new TabButtons();
@@ -193,13 +199,42 @@ public class GradientEditPanel extends JPanel {
 		this.palette = palette;
 	}
 	
+	
+	private DocumentListener onCodeEditorChange = new DocumentListener() {
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			try {
+				parsePaletteFromEditor(e.getDocument().getText(0, e.getDocument().getLength()));
+			} catch (BadLocationException e1) {}
+		}
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			try {
+				parsePaletteFromEditor(e.getDocument().getText(0, e.getDocument().getLength()));
+			} catch (BadLocationException e1) {}
+		}
+		@Override
+		public void changedUpdate(DocumentEvent e) {}
+	};
+	
+	public void parsePaletteFromEditor(String text) {
+		try {
+			PaletteData pd = PaletteParser.parseFromString(text);
+			System.out.println(pd.getPalette().getClass().getSimpleName() + " " + pd.getName());
+			for(int i = 0; i < pd.getPalette().size(); i++)
+				System.out.println(pd.getPalette().getColorAtIndex(i));
+		} catch (PaletteParseException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
 	private CustomStyledDocument createStyledDocument() {
 		CustomStyledDocument doc = new CustomStyledDocument();
 		doc
 			.addRegEx("[{}]", doc.brackets) // brackets
 			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
-			.addRegEx("(?<=([:]))\\W*\\d+\\W*\\d+\\W*\\d+", doc.value) // first 3 numbers after ':' (ignoring not words)
-			.addRegEx("\\d*\\.?\\d+\\s*(?=([:]))", doc.key) // any (decimal) numbers before ':'
+			.addRegEx("\\d*\\.?\\d+", doc.value) // any (decimal) number
+			.addRegEx("\\d*\\.?\\d+\\[ \\t]*(?=([:]))", doc.key) // any (decimal) number before ':'
 			.addRegEx("/\\*(?:.|[\\n\\r])*?\\*/", doc.comment); // comments
 		return doc;
 	}

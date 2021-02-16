@@ -1,0 +1,115 @@
+package de.lars.remotelightcore.utils.color.palette;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import de.lars.remotelightcore.utils.color.Color;
+
+public class PaletteParser {
+	
+	public static PaletteData parseFromString(String code) throws PaletteParseException {
+		// remove any comments first
+		code = code.replaceAll("/\\*(?:.|[\\n\\r])*?\\*/", "");
+		
+		// try to parse the name of the palette
+		Pattern pattern = Pattern.compile("^(.*)(?=(?:[{]))", Pattern.MULTILINE);
+		Matcher matcher = pattern.matcher(code);
+		String name = null;
+		if(matcher.find()) {
+			name = matcher.group(1);
+			name = name.trim();
+		}
+		
+		// try to parse the fractions
+		pattern = Pattern.compile("(\\d*\\.?\\d+)[ \\t]*(?=([:]))", Pattern.MULTILINE);
+		matcher = pattern.matcher(code);
+		List<Float> listFractions = new ArrayList<Float>();
+		while(matcher.find()) {
+			try {
+				listFractions.add(Float.parseFloat(matcher.group(1)));
+			} catch(NumberFormatException e) {
+				throw new PaletteParseException("Could not parse fraction number.", e);
+			}
+		}
+		
+		// try to parse the RGB values
+		if(listFractions.size() > 0) { // GradientPalette
+			pattern = Pattern.compile("(?<=(?:[:]))[ \\t]*(\\d+)[ \\t]*[,][ \\t]*(\\d+)[ \\t]*[,][ \\t]*(\\d+)", Pattern.MULTILINE);
+		} else { // EvenGradientPalette
+			pattern = Pattern.compile("^[ \\t]*(\\d+)[ \\t]*[,][ \\t]*(\\d+)[ \\t]*[,][ \\t]*(\\d+)", Pattern.MULTILINE);
+		}
+		matcher = pattern.matcher(code);
+		List<Color> listColors = new ArrayList<Color>();
+		while(matcher.find()) {
+			try {
+				int r = Integer.parseInt(matcher.group(1));
+				int g = Integer.parseInt(matcher.group(2));
+				int b = Integer.parseInt(matcher.group(3));
+				listColors.add(new Color(r, g, b));
+			} catch(IndexOutOfBoundsException | IllegalArgumentException e) {
+				throw new PaletteParseException("Could not parse color values.", matcher.group(), e);
+			}
+		}
+		
+		PaletteData paletteData = new PaletteData(name, null);
+		
+		// create the color palette
+		if(listFractions.size() > 0) { // GradientPalette
+			if(listFractions.size() != listColors.size()) {
+				throw new PaletteParseException("Number of colors and fractions does not match.");
+			}
+			GradientPalette gp = new GradientPalette();
+			for(int i = 0; i < listFractions.size(); i++) {
+				try {
+					gp.add(listFractions.get(i), listColors.get(i));
+				} catch(IllegalArgumentException e) {
+					throw new PaletteParseException("Could not create GradientPalette.", e);
+				}
+			}
+			paletteData.setPalette(gp);
+		} else if(listColors.size() > 0) { // EvenGradientPalette
+			EvenGradientPalette ep = new EvenGradientPalette(0.05f, listColors.toArray(new Color[0]));
+			paletteData.setPalette(ep);
+		} else {
+			throw new PaletteParseException("No color values found.", code);
+		}
+		
+		return paletteData;
+	}
+	
+	
+	public static class PaletteParseException extends Exception {
+		private static final long serialVersionUID = -5733743671547489903L;
+		
+		private String code;
+		
+		public PaletteParseException(String message, Throwable cause) {
+			super(message, cause);
+		}
+		
+		public PaletteParseException(String message, String code, Throwable cause) {
+			super(message, cause);
+			this.code = code;
+		}
+		
+		public PaletteParseException(String message, String code) {
+			super(message);
+			this.code = code;
+		}
+		
+		public PaletteParseException(String message) {
+			super(message);
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+	}
+
+}
