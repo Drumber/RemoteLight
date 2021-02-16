@@ -198,6 +198,8 @@ public class GradientEditPanel extends JPanel {
 		doc
 			.addRegEx("[{}]", doc.brackets) // brackets
 			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
+			.addRegEx("(?<=([:]))\\W*\\d+\\W*\\d+\\W*\\d+", doc.value) // first 3 numbers after ':' (ignoring not words)
+			.addRegEx("\\d*\\.?\\d+\\s*(?=([:]))", doc.key) // any (decimal) numbers before ':'
 			.addRegEx("/\\*(?:.|[\\n\\r])*?\\*/", doc.comment); // comments
 		return doc;
 	}

@@ -22,6 +22,7 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 	public final SimpleAttributeSet highlighted = new SimpleAttributeSet();
 	public final SimpleAttributeSet brackets = new SimpleAttributeSet();
 	public final SimpleAttributeSet value = new SimpleAttributeSet();
+	public final SimpleAttributeSet key = new SimpleAttributeSet();
 	public final SimpleAttributeSet comment = new SimpleAttributeSet();
 	
 	private final Map<String, SimpleAttributeSet> expressionsSet;
@@ -34,7 +35,8 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 		StyleConstants.setItalic(plain, false);
 		StyleConstants.setForeground(highlighted, Style.accent);
 		StyleConstants.setForeground(brackets, new Color(108, 205, 234));
-		StyleConstants.setForeground(value, new Color(248, 141, 101));
+		StyleConstants.setForeground(value, new Color(195, 202, 89));
+		StyleConstants.setForeground(key, new Color(248, 141, 101));
 		StyleConstants.setForeground(comment, new Color(185, 233, 136));
 		StyleConstants.setItalic(comment, true);
 	}
