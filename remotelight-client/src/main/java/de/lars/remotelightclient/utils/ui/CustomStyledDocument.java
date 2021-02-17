@@ -30,14 +30,16 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 	public CustomStyledDocument() {
 		expressionsSet = new LinkedHashMap<String, SimpleAttributeSet>();
 		
+		boolean dark = !Style.isBlackIcons();
+		
 		// set up attribute sets
 		StyleConstants.setForeground(plain, Style.textColor);
 		StyleConstants.setItalic(plain, false);
 		StyleConstants.setForeground(highlighted, Style.accent);
-		StyleConstants.setForeground(brackets, new Color(108, 205, 234));
-		StyleConstants.setForeground(value, new Color(195, 202, 89));
-		StyleConstants.setForeground(key, new Color(248, 141, 101));
-		StyleConstants.setForeground(comment, new Color(185, 233, 136));
+		StyleConstants.setForeground(brackets, dark ? new Color(108, 205, 234) : new Color(134, 214, 250));
+		StyleConstants.setForeground(value, dark ? new Color(195, 202, 89) : new Color(5, 134, 91));
+		StyleConstants.setForeground(key, dark ? new Color(248, 141, 101) : new Color(163, 23, 25));
+		StyleConstants.setForeground(comment, dark ? new Color(185, 233, 136) : new Color(0, 128, 28));
 		StyleConstants.setItalic(comment, true);
 	}
 	

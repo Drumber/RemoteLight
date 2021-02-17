@@ -95,6 +95,10 @@ public class Style {
 		return style;
 	}
 	
+	public static boolean isBlackIcons() {
+		return blackIcon;
+	}
+	
 	
 	public static Color panelBackground = new Color(40, 40, 40);
 	public static Color panelAccentBackground = new Color(60, 60, 60);
