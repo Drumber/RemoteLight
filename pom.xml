@@ -112,6 +112,7 @@
 					<excludes>
 						<exclude>**/WrapLayout.java</exclude>
 						<exclude>**/HSLColor.java</exclude>
+						<exclude>**/TextLineNumber.java</exclude>
 					</excludes>
 					<roots>
 						<root>src/main/java</root>

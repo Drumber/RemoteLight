@@ -85,8 +85,10 @@ public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	}
 	
 	@Override
-	public void addColor(Color color) {
+	public int addColor(Color color) {
 		this.add(color);
+		// return last index
+		return listColor.size() - 1;
 	}
 	
 	/**

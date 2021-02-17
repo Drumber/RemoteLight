@@ -29,7 +29,7 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	}
 	
 	@Override
-	public void addColor(Color color) {
+	public int addColor(Color color) {
 		float pos = 1.0f;
 		while(listPosition.indexOf(pos) != -1) {
 			pos -= Math.random() / 10;
@@ -42,6 +42,7 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 		int index = findIndexForPosition(pos);
 		listColor.add(index, color);
 		listPosition.add(index, pos);
+		return index;
 	}
 	
 	@Override

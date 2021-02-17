@@ -23,6 +23,7 @@ import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.TabButtons;
 import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.CustomStyledDocument;
+import de.lars.remotelightclient.utils.ui.TextLineNumber;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -101,9 +102,16 @@ public class GradientEditPanel extends JPanel {
 		editor.setBackground(Style.panelDarkBackground);
 		editor.setForeground(Style.textColor);
 		editor.setCaretColor(Style.accent);
+		editor.setFont(Style.getFontRegualar(14));
 		editor.setStyledDocument(createStyledDocument());
 		editor.getDocument().addDocumentListener(onCodeEditorChange);
 		panelCodeEditor.add(editor, BorderLayout.CENTER);
+		
+		TextLineNumber lineNumbers = new TextLineNumber(editor);
+		lineNumbers.setBackground(Style.panelAccentBackground);
+		lineNumbers.setForeground(Style.textColorDarker);
+		lineNumbers.setCurrentLineForeground(Style.accent);
+		panelCodeEditor.add(lineNumbers, BorderLayout.WEST);
 		
 		TabButtons tabBtns = new TabButtons();
 		tabBtns.setBackground(Style.panelBackground);
@@ -117,6 +125,8 @@ public class GradientEditPanel extends JPanel {
 			}
 			if("ColorPicker".equals(l.getActionCommand())) {
 				panelSetup.add(colorPicker, BorderLayout.CENTER);
+				// update color picker with color from last selected marker index
+				updateColorPicker(gradientBar.getSelectedMarkerIndex());
 			} else {
 				panelSetup.add(panelCodeEditor, BorderLayout.CENTER);
 			}
@@ -134,7 +144,7 @@ public class GradientEditPanel extends JPanel {
 			if(palette != null && selectedIndex >= 0 && selectedIndex < palette.getPalette().size()) {
 				palette.getPalette().setColorAtIndex(selectedIndex, ColorTool.convert(color));
 				updateGradientBar();
-				//showPaletteInEditor(palette); //TODO: does end up in an infinity call loop
+				showPaletteInEditor(palette);
 			}
 		}
 	};
@@ -142,8 +152,7 @@ public class GradientEditPanel extends JPanel {
 	private MarkerListener onGradientMarkerChange = new MarkerListener() {
 		@Override
 		public void onMarkerSelected(int index) {
-			Color color = ColorTool.convert(palette.getPalette().getColorAtIndex(index));
-			colorPicker.setSelectedColor(color);
+			updateColorPicker(index);
 		}
 		@Override
 		public void onMarkerDragged(int index, boolean eventEnd) {
@@ -159,6 +168,7 @@ public class GradientEditPanel extends JPanel {
 			palette.getPalette().removeColorAtIndex(index);
 			updateGradientBar();
 			gradientBar.setSelectedMarker(index - 1);
+			updateColorPicker(gradientBar.getSelectedMarkerIndex());
 		}
 	}
 	
@@ -167,9 +177,10 @@ public class GradientEditPanel extends JPanel {
 			try {
 				AbstractPalette p = palette.getPalette();
 				de.lars.remotelightcore.utils.color.Color color = p.size() > 0 ? p.getColorAtIndex(p.size() - 1) : de.lars.remotelightcore.utils.color.Color.RED;
-				palette.getPalette().addColor(color);
-				gradientBar.setSelectedMarker(palette.getPalette().size() - 1);
+				int index = palette.getPalette().addColor(color);
+				gradientBar.setSelectedMarker(index);
 				updateGradientBar();
+				updateColorPicker(index);
 			} catch(Exception e) {
 				ExceptionHandler.handle(new Exception("Could not add color to palette.", e));
 			}
@@ -201,6 +212,12 @@ public class GradientEditPanel extends JPanel {
 		if(palette != null) {
 			gradientBar.setColorPalette(palette.getPalette());
 			gradientBar.repaint();
+		}
+	}
+	
+	public void updateColorPicker(int index) {
+		if(palette != null && index >= 0 && index < palette.getPalette().size()) {
+			colorPicker.setSelectedColor(ColorTool.convert(palette.getPalette().getColorAtIndex(index)));
 		}
 	}
 
@@ -240,8 +257,11 @@ public class GradientEditPanel extends JPanel {
 	public void parsePaletteFromEditor(String text) {
 		try {
 			PaletteData pd = PaletteParser.parseFromString(text);
-			setPalette(pd);
-			updateValues(false);
+			if(!fieldName.getText().equals(text)) {
+				fieldName.setText(pd.getName());
+			}
+			palette.setPalette(pd.getPalette());
+			updateGradientBar();
 		} catch (PaletteParseException e) {
 			// TODO: display error message in UI
 			System.err.println(e.getMessage());
@@ -263,7 +283,7 @@ public class GradientEditPanel extends JPanel {
 		doc
 			.addRegEx("[{}]", doc.brackets) // brackets
 			.addRegEx("\\b\\d*\\.?\\d+\\b", doc.value) // any (decimal) number
-			.addRegEx("\\d*\\.?\\d+\\[ \\t]*(?=([:]))", doc.key) // any (decimal) number before ':'
+			.addRegEx("\\d*\\.?\\d+[ \\t]*(?=([:]))", doc.key) // any (decimal) number before ':'
 			.addRegEx("^.*(?=([{]))", doc.highlighted) // everything before '{'
 			.addRegEx("/\\*(?:.|[\\n\\r])*?\\*/", doc.comment); // comments
 		return doc;

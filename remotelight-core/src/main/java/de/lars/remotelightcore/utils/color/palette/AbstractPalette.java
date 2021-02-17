@@ -13,7 +13,7 @@ public abstract class AbstractPalette {
 	
 	public abstract void setColorAtIndex(int index, Color color);
 	
-	public abstract void addColor(Color color);
+	public abstract int addColor(Color color);
 	
 	public abstract void removeColorAtIndex(int index);
 	
