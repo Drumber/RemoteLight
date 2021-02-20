@@ -24,8 +24,10 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 	public final SimpleAttributeSet value = new SimpleAttributeSet();
 	public final SimpleAttributeSet key = new SimpleAttributeSet();
 	public final SimpleAttributeSet comment = new SimpleAttributeSet();
+	public final SimpleAttributeSet error = new SimpleAttributeSet();
 	
 	private final Map<String, SimpleAttributeSet> expressionsSet;
+	private int[][] arrErrorIndices;
 	
 	public CustomStyledDocument() {
 		expressionsSet = new LinkedHashMap<String, SimpleAttributeSet>();
@@ -35,12 +37,16 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 		// set up attribute sets
 		StyleConstants.setForeground(plain, Style.textColor);
 		StyleConstants.setItalic(plain, false);
+		StyleConstants.setBold(plain, false);
+		StyleConstants.setUnderline(plain, false);
 		StyleConstants.setForeground(highlighted, Style.accent);
 		StyleConstants.setForeground(brackets, dark ? new Color(108, 205, 234) : new Color(134, 214, 250));
 		StyleConstants.setForeground(value, dark ? new Color(195, 202, 89) : new Color(5, 134, 91));
 		StyleConstants.setForeground(key, dark ? new Color(248, 141, 101) : new Color(163, 23, 25));
 		StyleConstants.setForeground(comment, dark ? new Color(185, 233, 136) : new Color(0, 128, 28));
 		StyleConstants.setItalic(comment, true);
+		StyleConstants.setUnderline(error, true);
+		StyleConstants.setForeground(error, Style.error);
 	}
 	
 	public CustomStyledDocument addRegEx(String expression, SimpleAttributeSet attr) {
@@ -52,6 +58,29 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 		if(expressionsSet.containsKey(expression))
 			expressionsSet.remove(expression);
 		return this;
+	}
+	
+	/**
+	 * Set the indices of the character that to which the error style
+	 * should be applied.
+	 * @param arrErrorIndecies		2 dimensional array: <code>[[start, end], ... ]</code>
+	 * 								or set to {@code null} to clear/disable
+	 */
+	public void setErrorIndices(int[][] arrErrorIndices) {
+		this.arrErrorIndices = arrErrorIndices;
+	}
+	
+	public void addErrorIndices(int start, int end) {
+		if(this.arrErrorIndices == null || arrErrorIndices.length == 0) {
+			this.arrErrorIndices = new int[][] { {start, end} };
+		} else {
+			int[][] tmp = new int[arrErrorIndices.length][2];
+			for(int i = 0; i < arrErrorIndices.length - 1; i++) {
+				tmp[i] = new int[] {arrErrorIndices[i][0], arrErrorIndices[i][1]};
+			}
+			tmp[tmp.length - 1] = new int[] {start, end};
+			this.arrErrorIndices = tmp;
+		}
 	}
 	
 	@Override
@@ -72,13 +101,24 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 	
 	protected void updateHighlighting(String text) {
 		// reset the formatting for every characters
-		setCharacterAttributes(0, text.length(), plain, false);
+		setCharacterAttributes(0, text.length(), plain, true);
 		
 		for(Entry<String, SimpleAttributeSet> entry : expressionsSet.entrySet()) {
 			Pattern pattern = Pattern.compile(entry.getKey(), Pattern.MULTILINE);
 			Matcher matcher = pattern.matcher(text);
 			while(matcher.find()) {
 				setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), entry.getValue(), false);
+			}
+		}
+		
+		// apply error styles
+		if(arrErrorIndices != null && arrErrorIndices.length > 0) {
+			for(int i = 0; i < arrErrorIndices.length; i++) {
+				if(arrErrorIndices[i].length == 2) {
+					int start = arrErrorIndices[i][0];
+					int end = arrErrorIndices[i][1];
+					setCharacterAttributes(start, end - start, error, false);
+				}
 			}
 		}
 	}

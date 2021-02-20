@@ -313,7 +313,7 @@ public class Style {
 	 * @return new icon from IconCode with specified color
 	 */
 	public static Icon getFontIcon(IconCode iconCode, Color color) {
-		return IconFontSwing.buildIcon(iconCode, fontIconSize, Style.textColor);
+		return IconFontSwing.buildIcon(iconCode, fontIconSize, color);
 	}
 	
 	/**

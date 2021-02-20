@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -23,6 +24,7 @@ import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.TabButtons;
 import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.CustomStyledDocument;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.TextLineNumber;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
@@ -41,6 +43,7 @@ public class GradientEditPanel extends JPanel {
 	private MarkerEditPanel panelMarkerEdit;
 	private ColorPicker colorPicker;
 	private JTextPane editor;
+	private EditorErrorPanel editorErrPanel;
 	private boolean editorTextReplaceMode; // cancel events when replacing the text programmatically
 	
 	public GradientEditPanel() {
@@ -112,6 +115,10 @@ public class GradientEditPanel extends JPanel {
 		lineNumbers.setForeground(Style.textColorDarker);
 		lineNumbers.setCurrentLineForeground(Style.accent);
 		panelCodeEditor.add(lineNumbers, BorderLayout.WEST);
+		
+		editorErrPanel = new EditorErrorPanel();
+		editorErrPanel.setVisible(false);
+		panelCodeEditor.add(editorErrPanel, BorderLayout.SOUTH);
 		
 		TabButtons tabBtns = new TabButtons();
 		tabBtns.setBackground(Style.panelBackground);
@@ -233,6 +240,7 @@ public class GradientEditPanel extends JPanel {
 	private DocumentListener onCodeEditorChange = new DocumentListener() {
 		@Override
 		public void removeUpdate(DocumentEvent e) {
+			clearErrorHighlighting();
 			if(editorTextReplaceMode) {
 				return;
 			}
@@ -242,6 +250,7 @@ public class GradientEditPanel extends JPanel {
 		}
 		@Override
 		public void insertUpdate(DocumentEvent e) {
+			clearErrorHighlighting();
 			if(editorTextReplaceMode) {
 				editorTextReplaceMode = false;
 				return;
@@ -254,6 +263,12 @@ public class GradientEditPanel extends JPanel {
 		public void changedUpdate(DocumentEvent e) {}
 	};
 	
+	protected void clearErrorHighlighting() {
+		// clear previous error highlighting
+		((CustomStyledDocument) editor.getStyledDocument()).setErrorIndices(null);
+		editorErrPanel.setVisible(false);
+	}
+	
 	public void parsePaletteFromEditor(String text) {
 		try {
 			PaletteData pd = PaletteParser.parseFromString(text);
@@ -263,8 +278,7 @@ public class GradientEditPanel extends JPanel {
 			palette.setPalette(pd.getPalette());
 			updateGradientBar();
 		} catch (PaletteParseException e) {
-			// TODO: display error message in UI
-			System.err.println(e.getMessage());
+			showErrorInEditor(e);
 		}
 	}
 	
@@ -275,6 +289,25 @@ public class GradientEditPanel extends JPanel {
 			editor.setText(code);
 		} catch (PaletteParseException e) {
 			ExceptionHandler.handle(new PaletteParseException("Error while parsing color palette to String.", e));
+		}
+	}
+	
+	public void showErrorInEditor(PaletteParseException e) {
+		String errMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		while(cause != null) {
+			errMessage += String.format(": %s (%s)", cause.getMessage(), cause.getClass().getSimpleName());
+			cause = cause.getCause();
+		}
+		// show error label
+		editorErrPanel.setText(errMessage);
+		editorErrPanel.setVisible(true);
+		
+		CustomStyledDocument doc = (CustomStyledDocument) editor.getStyledDocument();
+		if(e.getStartChar() != -1 && e.getEndChar() != -1) {
+			doc.addErrorIndices(e.getStartChar(), e.getEndChar());
+		} else {
+			doc.setErrorIndices(null);
 		}
 	}
 	
@@ -311,6 +344,28 @@ public class GradientEditPanel extends JPanel {
 			add(btnRemoveMarker);
 		}
 		
+	}
+	
+	private class EditorErrorPanel extends JPanel {
+		private static final long serialVersionUID = -5052041045314284922L;
+		
+		private JLabel lblText;
+		
+		public EditorErrorPanel() {
+			setBackground(Style.panelBackground);
+			setLayout(new BorderLayout());
+			
+			JLabel lblIcon = new JLabel(Style.getFontIcon(MenuIcon.ERROR, Style.error));
+			add(lblIcon, BorderLayout.WEST);
+			
+			lblText = new JLabel("");
+			lblText.setForeground(Style.error);
+			add(lblText, BorderLayout.CENTER);
+		}
+		
+		public void setText(String text) {
+			lblText.setText(text);
+		}
 	}
 
 }

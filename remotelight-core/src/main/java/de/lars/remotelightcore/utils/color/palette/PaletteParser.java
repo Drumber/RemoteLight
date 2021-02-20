@@ -28,9 +28,13 @@ public class PaletteParser {
 		List<Float> listFractions = new ArrayList<Float>();
 		while(matcher.find()) {
 			try {
-				listFractions.add(Float.parseFloat(matcher.group(1)));
+				float fraction = Float.parseFloat(matcher.group(1));
+				if(fraction < 0.0f || fraction > 1.0f) {
+					throw new PaletteParseException("Fraction numbers must be in range 0..1", matcher.start(), matcher.end());
+				}
+				listFractions.add(fraction);
 			} catch(NumberFormatException e) {
-				throw new PaletteParseException("Could not parse fraction number.", e);
+				throw new PaletteParseException("Could not parse fraction number", matcher.start(), matcher.end(), e);
 			}
 		}
 		
@@ -49,7 +53,7 @@ public class PaletteParser {
 				int b = Integer.parseInt(matcher.group(3));
 				listColors.add(new Color(r, g, b));
 			} catch(IndexOutOfBoundsException | IllegalArgumentException e) {
-				throw new PaletteParseException("Could not parse color values.", matcher.group(), e);
+				throw new PaletteParseException("Could not parse color values", matcher.start(), matcher.end(), e);
 			}
 		}
 		
@@ -73,7 +77,7 @@ public class PaletteParser {
 			EvenGradientPalette ep = new EvenGradientPalette(0.05f, listColors.toArray(new Color[0]));
 			paletteData.setPalette(ep);
 		} else {
-			throw new PaletteParseException("No color values found.", code);
+			throw new PaletteParseException("No color values found.");
 		}
 		
 		return paletteData;
@@ -114,32 +118,45 @@ public class PaletteParser {
 	public static class PaletteParseException extends Exception {
 		private static final long serialVersionUID = -5733743671547489903L;
 		
-		private String code;
+		/** first character of the group that caused the error */
+		private int startChar = -1;
+		/** last character of the group that caused the error */
+		private int endChar = -1;
 		
 		public PaletteParseException(String message, Throwable cause) {
 			super(message, cause);
 		}
 		
-		public PaletteParseException(String message, String code, Throwable cause) {
+		public PaletteParseException(String message, int startChar, int endChar, Throwable cause) {
 			super(message, cause);
-			this.code = code;
+			this.startChar = startChar;
+			this.endChar = endChar;
 		}
 		
-		public PaletteParseException(String message, String code) {
+		public PaletteParseException(String message, int startChar, int endChar) {
 			super(message);
-			this.code = code;
+			this.startChar = startChar;
+			this.endChar = endChar;
 		}
 		
 		public PaletteParseException(String message) {
 			super(message);
 		}
 
-		public String getCode() {
-			return code;
+		public int getStartChar() {
+			return startChar;
 		}
 
-		public void setCode(String code) {
-			this.code = code;
+		public void setStartChar(int startChar) {
+			this.startChar = startChar;
+		}
+
+		public int getEndChar() {
+			return endChar;
+		}
+
+		public void setEndChar(int endChar) {
+			this.endChar = endChar;
 		}
 	}
 
