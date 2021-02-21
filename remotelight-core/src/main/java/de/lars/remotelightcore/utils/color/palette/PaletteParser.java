@@ -21,6 +21,9 @@ public class PaletteParser {
 			name = matcher.group(1);
 			name = name.trim();
 		}
+		if(name == null || name.isEmpty()) {
+			throw new PaletteParseException("No name defined.");
+		}
 		
 		// try to parse the fractions
 		pattern = Pattern.compile("(\\d*\\.?\\d+)[ \\t]*(?=([:]))", Pattern.MULTILINE);
@@ -55,6 +58,10 @@ public class PaletteParser {
 			} catch(IndexOutOfBoundsException | IllegalArgumentException e) {
 				throw new PaletteParseException("Could not parse color values", matcher.start(), matcher.end(), e);
 			}
+		}
+		
+		if(listColors.size() < 2) {
+			throw new PaletteParseException("You need to define at least 2 colors.");
 		}
 		
 		PaletteData paletteData = new PaletteData(name, null);

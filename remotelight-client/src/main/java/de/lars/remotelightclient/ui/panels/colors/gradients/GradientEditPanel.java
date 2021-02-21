@@ -171,7 +171,7 @@ public class GradientEditPanel extends JPanel {
 	
 	protected void removeSelectedMarker() {
 		int index = gradientBar.getSelectedMarkerIndex();
-		if(index != -1 && palette != null) {
+		if(index != -1 && palette != null && palette.getPalette().size() > 2) {
 			palette.getPalette().removeColorAtIndex(index);
 			updateGradientBar();
 			gradientBar.setSelectedMarker(index - 1);
