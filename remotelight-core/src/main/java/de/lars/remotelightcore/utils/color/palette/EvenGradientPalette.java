@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	
@@ -11,7 +12,6 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	
 	protected float stepSize;
 	protected float currentStep;
-	protected int targetIndex;
 	
 	public EvenGradientPalette(float stepSize, Color... colors) {
 		this.stepSize = stepSize;
@@ -27,22 +27,33 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	public Color getNext() {
 		if(listColor.size() == 0)
 			throw new IllegalStateException("Could not return next item. The list is empty!");
-		if(curIndex == targetIndex && size() > 1)
-			increaseTargetIndex(1);
-		Color c = ColorUtil.fadeToColor(getColorAtIndex(curIndex), getColorAtIndex(targetIndex), currentStep);
+		
+		final float indexStepSize = 1.0f / (listColor.size() - 1);
+		curIndex = findClosestIndex(currentStep, indexStepSize);
+		int targetIndex = curIndex + 1;
+		
+		// step position for fading from current color to target color
+		float regionStep = MathHelper.map(currentStep, curIndex*indexStepSize, targetIndex*indexStepSize, 0.0f, 1.0f);
+		
+		Color c = ColorUtil.fadeToColor(getColorAtIndex(curIndex), getColorAtIndex(targetIndex), regionStep);
+		
 		currentStep += stepSize; // increase step position by stepSize
 		if(currentStep > 1.0f) {
 			currentStep = 0.0f;
-			curIndex = targetIndex;
-			increaseTargetIndex(1);
 		}
 		return c;
 	}
 	
-	protected void increaseTargetIndex(int amount) {
-		targetIndex += amount;
-		if(targetIndex >= size())
-			targetIndex -= size();
+	protected int findClosestIndex(float step, float stepSize) {
+		int index = 0;
+		for(int i = 0; i < listColor.size() - 1; i++) {
+			if((i * stepSize) <= step) {
+				index = i;
+			} else {
+				return index;
+			}
+		}
+		return index;
 	}
 	
 	/**
@@ -76,9 +87,15 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	}
 	
 	@Override
+	public void resetStepPosition() {
+		currentStep = 0.0f;
+	}
+	
+	@Override
 	public void skip(int indices) {
 		super.skip(indices);
-		increaseTargetIndex(indices);
+		final float indexStepSize = 1.0f / (listColor.size() - 1);
+		currentStep = indexStepSize * curIndex;
 	}
 	
 	public static EvenGradientPalette fromColorPalette(ColorPalette palette, float stepSize) {

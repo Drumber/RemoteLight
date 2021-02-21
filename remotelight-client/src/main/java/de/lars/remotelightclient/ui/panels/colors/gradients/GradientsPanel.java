@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.colors.ColorsSubPanel;
+import de.lars.remotelightcore.utils.color.palette.ColorGradient;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
 import de.lars.remotelightcore.utils.color.palette.Palettes;
 
@@ -39,6 +41,10 @@ public class GradientsPanel extends ColorsSubPanel {
 				gradientEditPanel.setPalette(selectedPalette);
 				gradientEditPanel.updateValues();
 				gradientEditPanel.setVisible(true);
+				// TODO: only for testing, remove later
+				if(selectedPalette.getPalette() instanceof ColorGradient) {
+					Main.getInstance().getCore().getColorManager().showGradient(selectedPalette.getPalette());
+				}
 			}
 		}
 	};

@@ -22,13 +22,14 @@
 
 package de.lars.remotelightcore.colors;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
+import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
+import de.lars.remotelightcore.utils.color.palette.ColorGradient;
 
 public class ColorManager extends EffectManager {
 	
@@ -50,6 +51,21 @@ public class ColorManager extends EffectManager {
 			color = Color.BLACK;
 		lastColor = color;
 		Color[] strip = PixelColorUtils.colorAllPixels(color, RemoteLightCore.getLedNum());
+		OutputManager.addToOutput(strip);
+	}
+	
+	public void showGradient(AbstractPalette gradient) {
+		if(!(gradient instanceof ColorGradient)) {
+			throw new IllegalArgumentException("Supports only color palettes that implements the ColorGradient interface.");
+		}
+		int pixels = RemoteLightCore.getLedNum();
+		float stepSize = 1.0f / pixels;
+		((ColorGradient) gradient).setStepSize(stepSize);
+		((ColorGradient) gradient).resetStepPosition();
+		Color[] strip = new Color[pixels];
+		for(int i = 0; i < pixels; i++) {
+			strip[i] = gradient.getNext();
+		}
 		OutputManager.addToOutput(strip);
 	}
 	

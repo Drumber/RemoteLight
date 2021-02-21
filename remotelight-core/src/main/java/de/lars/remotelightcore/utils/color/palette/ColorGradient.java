@@ -11,5 +11,7 @@ public interface ColorGradient {
 	
 	public void setStepSize(float stepSize);
 	public float getStepSize();
+	
+	public void resetStepPosition();
 
 }

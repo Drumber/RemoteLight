@@ -229,6 +229,11 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	public void setStepSize(float stepSize) {
 		this.stepSize = stepSize;
 	}
+	
+	@Override
+	public void resetStepPosition() {
+		currentStep = 0.0f;
+	}
 
 	@Override
 	public int size() {
