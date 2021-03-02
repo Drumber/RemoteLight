@@ -22,8 +22,6 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
@@ -32,6 +30,7 @@ import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.ArrayUtil;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
@@ -44,6 +43,9 @@ public class Energy extends MusicEffect {
 	private int binHighMax;
 	private String mode;
 	
+	private final String[] POS_MODES = {"Centered", "Left", "Right"};
+	private String position = "centered";
+	
 	// settings
 	private SettingColor sColorStatic;
 	private SettingColor sColorLow;
@@ -52,6 +54,9 @@ public class Energy extends MusicEffect {
 	
 	public Energy() {
 		super("Energy");
+		// position
+		this.addSetting(new SettingSelection("musicsync.energy.position", "Position Mode", SettingCategory.MusicEffect, "Position of the energy bar.", POS_MODES, POS_MODES[0], Model.ComboBox));
+		// mode
 		String[] modes = new String[] {"Stacked", "Mix", "Frequency", "Static"};
 		this.addSetting(new SettingSelection("musicsync.energy.mode", "Mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
 		// static color
@@ -74,10 +79,18 @@ public class Energy extends MusicEffect {
 	@Override
 	public void onLoop() {
 		handleSettings();
+		
+		// prevent showing white dot in the center of the strip
+		if(getMaxSpl() == 0.0) {
+			// silent phase: show only black
+			OutputManager.addToOutput(PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum()));
+			return;
+		}
+		
 		float[] ampl = getSoundProcessor().getAmplitudes();
 		double mul = 0.01 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60; // multiplier for amount of pixels
 		
-		/* function: -a(x - ledNum/2)^2 + 255 */
+		/* function: -a(x)^2 + 255 */
 		
 		if(mode.equals("Stacked") || mode.equals("Mix")) {
 			// amplitude to b of each rgb channel
@@ -138,17 +151,19 @@ public class Energy extends MusicEffect {
 			return;
 		
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		int half = strip.length / 2;
+		int center = getCenterPixel();
 		
 		for(int aIndex = 0; aIndex < aArray.length; aIndex++) {
 			double a = aArray[aIndex];
 			Color c = colors[aIndex];
 			
-			for(int i = 0; i < strip.length; i++) {
+			for(int i = 0; i <= center; i++) {
 				
-				double brightness = -a * Math.pow(( i - half), 2) + 255;
+				double brightness = -a * Math.pow(i, 2) + 255;
 				if(brightness < 0 || a == 0) continue;
-				strip[i] = dim(c, brightness);
+				
+				Color color = dim(c, brightness);
+				setColorAtIndex(i, color, center);
 			}
 		}
 		
@@ -157,20 +172,64 @@ public class Energy extends MusicEffect {
 	
 	private void showMix(double aR, double aG, double aB) {
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, RemoteLightCore.getLedNum());
-		int half = strip.length / 2;
+		int center = getCenterPixel();
 		
-		for(int i = 0; i < strip.length; i++) {
+		for(int i = 0; i <= center; i++) {
 			
-			int red 	= (int) (-aR * Math.pow(( i - half), 2) + 255);
-			int green 	= (int) (-aG * Math.pow(( i - half), 2) + 255);
-			int blue 	= (int) (-aB * Math.pow(( i - half), 2) + 255);
+			int red 	= (int) (-aR * Math.pow(i, 2) + 255);
+			int green 	= (int) (-aG * Math.pow(i, 2) + 255);
+			int blue 	= (int) (-aB * Math.pow(i, 2) + 255);
 			if(red < 0) 	red = 0;
 			if(green < 0) 	green = 0;
 			if(blue < 0)	blue = 0;
-			strip[i] = new Color(red, green, blue);
+			setColorAtIndex(i, new Color(red, green, blue), center);
 		}
 		
 		OutputManager.addToOutput(strip);
+	}
+	
+	/**
+	 * Set the color at the specified index.
+	 * Handles the position mode.
+	 * @param i			index of the pixel (0..center)
+	 * @param color		color of the pixel
+	 * @param center	the center value, or largest bar index
+	 */
+	private void setColorAtIndex(int i, Color color, int center) {
+		switch(position.toLowerCase()) {
+		case "centered":
+			if(strip.length % 2 == 0) {
+				strip[center - i] = color;
+				strip[center + i + 1] = color;
+			} else { // odd pixel number
+				strip[center - i] = color;
+				strip[center + i] = color;
+			}
+			break;
+		case "right":
+			strip[center - i] = color;
+			break;
+		case "left":
+			strip[i] = color;
+		}
+	}
+	
+	/**
+	 * Get the center pixel index or the index of the last pixel in
+	 * Left/Right position mode.
+	 * @return		largest bar index
+	 */
+	private int getCenterPixel() {
+		if(!position.equalsIgnoreCase("centered"))
+			return strip.length - 1; // return full strip size on Left/Right position mode
+		
+		float half = strip.length / 2.0f;
+		boolean oddPixels = (strip.length % 2) != 0;
+		int center = strip.length - (int) half - 1;
+		if(oddPixels) {
+			center = (int) half;
+		}
+		return center;
 	}
 	
 	
@@ -182,6 +241,7 @@ public class Energy extends MusicEffect {
 	}
 	
 	private void handleSettings() {
+		position = getSetting(SettingSelection.class, "musicsync.energy.position").get();
 		String prevMode = mode;
 		mode = ((SettingSelection) getSetting("musicsync.energy.mode")).getSelected();
 		if(!mode.equals(prevMode)) { // mode changed
