@@ -68,7 +68,7 @@ First of all your Raspberry Pi must be prepared to control WS2811/WS2812 LEDs. T
 After everything works, you can move on.  
 Upload the [RemoteLight-Server.jar](https://github.com/Drumber/RemoteLightServer/releases) onto your Raspberry Pi and start it:
 1. Connect to your Raspberry Pi via SSH.
-2. Install Java: `sudo apt-get install oracle-java8-jdk`
+2. Install Java: `sudo apt-get install openjdk-8-jdk`
 3. Navigate to the directory where the RemoteLight-Server.jar is located, e.g.: `cd /home/pi/`
 4. Start the server: `sudo java -jar RemoteLightServer-pre0.2.0.8.jar`
 5. To stop the server: Type `end` or press `Ctrl + c`
