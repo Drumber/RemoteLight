@@ -249,5 +249,17 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	public boolean isReverseOnEnd() {
 		return reverseOnEnd;
 	}
+	
+	
+	/**
+	 * Construct a default gradient palette that fades from red to blue.
+	 * @return		default gradient palette
+	 */
+	public static GradientPalette createDefault() {
+		GradientPalette gp = new GradientPalette();
+		gp.add(0.0f, Color.RED);
+		gp.add(1.0f, Color.BLUE);
+		return gp;
+	}
 
 }

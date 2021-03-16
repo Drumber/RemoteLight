@@ -366,10 +366,7 @@ public class OutputPanel extends MenuPanel {
 	}
 	
 	private void configureAddPopup(JMenuItem item, String name) {
-		item.setBackground(Style.panelAccentBackground);
-		item.setContentAreaFilled(false);
-		item.setForeground(Style.textColor);
-		item.setOpaque(UiUtils.isThemingEnabled());
+		UiUtils.configureMenuItem(item);
 		item.setName(name);
 		item.addActionListener(menuItemListener);
 	}

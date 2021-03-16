@@ -13,6 +13,10 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	protected float stepSize;
 	protected float currentStep;
 	
+	public EvenGradientPalette(Color... colors) {
+		this(DEFAULT_STEPSIZE, colors);
+	}
+	
 	public EvenGradientPalette(float stepSize, Color... colors) {
 		this.stepSize = stepSize;
 		add(colors);
@@ -117,6 +121,14 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	@Override
 	public boolean isReverseOnEnd() {
 		return false;
+	}
+	
+	/**
+	 * Construct a default even gradient palette that fades from red to blue.
+	 * @return		default even gradient palette
+	 */
+	public static EvenGradientPalette createDefault() {
+		return new EvenGradientPalette(Color.RED, Color.BLUE);
 	}
 
 }

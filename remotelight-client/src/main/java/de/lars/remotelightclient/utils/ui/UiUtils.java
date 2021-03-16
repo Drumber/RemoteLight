@@ -165,7 +165,9 @@ public class UiUtils {
 		public void mouseEntered(MouseEvent e) {
 			if(disableTheming) return;
 			JButton btn = (JButton) e.getSource();
-			btn.setBackground(Style.hoverBackground);
+			if(btn.isEnabled()) {
+				btn.setBackground(Style.hoverBackground);
+			}
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
@@ -181,6 +183,13 @@ public class UiUtils {
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) editor).getTextField();
 		jftf.setColumns(4);
 		spinner.setEditor(editor);
+	}
+	
+	public static void configureMenuItem(JMenuItem item) {
+		item.setBackground(Style.panelAccentBackground);
+		item.setContentAreaFilled(false);
+		item.setForeground(Style.textColor);
+		item.setOpaque(UiUtils.isThemingEnabled());
 	}
 	
 	public static void addHoverColor(JComponent comp, Color main, Color hover) {
