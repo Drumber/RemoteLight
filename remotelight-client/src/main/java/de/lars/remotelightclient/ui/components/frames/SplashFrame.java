@@ -32,6 +32,7 @@ import de.lars.remotelightclient.Main;
 public class SplashFrame {
 	
 	private static SplashScreen splash;
+	public static boolean disable = false;
 	
 	/**
 	 * Show the {@link java.awt.SplashScreen} and draw the current version tag.
@@ -50,7 +51,11 @@ public class SplashFrame {
 		if(splash == null) {
 			System.out.println("SplashScreen is not available.");
 			return;
+		} else if(disable) {
+			splash.close();
+			return;
 		}
+		
 		Graphics2D g = splash.createGraphics();
 		if(g == null) {
 			System.out.println("SplashSCreen Graphics2D instance is null.");

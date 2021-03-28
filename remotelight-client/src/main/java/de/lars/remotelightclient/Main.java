@@ -26,6 +26,7 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,7 +80,10 @@ public class Main {
 	 * @param args	supports some start parameters (see {@link StartParameterHandler})
 	 */
 	public static void main(String[] args) {
-		// show splash screen
+		if(Arrays.stream(args).anyMatch(s -> s.equalsIgnoreCase("-tray") || s.equalsIgnoreCase("-t"))) {
+			SplashFrame.disable = true;
+		}
+		// show version number on splash screen
 		SplashFrame.showSplashScreen();
 		// initialize application
 		new Main(args, true);
