@@ -22,8 +22,6 @@
 
 package de.lars.remotelightcore.devices.artnet;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import org.tinylog.Logger;
 
 import ch.bildspur.artnet.ArtNetClient;
@@ -31,6 +29,7 @@ import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class Artnet extends Device {
 	
@@ -43,6 +42,7 @@ public class Artnet extends Device {
 	private String address;
 	private int subnet;
 	private int startUniverse;
+	private boolean continuousUniverseOverflow;
 	
 	public Artnet(String id) {
 		super(id, 0);
@@ -79,6 +79,14 @@ public class Artnet extends Device {
 	
 	public int getStartUniverse() {
 		return startUniverse;
+	}
+
+	public boolean isContinuousUniverseOverflow() {
+		return continuousUniverseOverflow;
+	}
+
+	public void setContinuousUniverseOverflow(boolean continuousUniverseOverflow) {
+		this.continuousUniverseOverflow = continuousUniverseOverflow;
 	}
 
 	@Override
@@ -134,20 +142,44 @@ public class Artnet extends Device {
 		for(int i = 0; i < pixels.length; i++) {
 			byte[] rgbColor = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
 			
-			for(int rgb = 0; rgb < rgbColor.length; rgb++) {
-				if(index + rgb >= dmxData.length) { // universe is full; output universe and use next one
+			if(continuousUniverseOverflow) {
+				// continuous universe overflow: split RGB values across multiple universes
+				// e.g.: [uni 0] ... 510(B), 511(R), 512(G), [uni 1] 001(B), 002(R) ...
+				
+				for(int rgb = 0; rgb < rgbColor.length; rgb++) {
+					if(index + rgb >= dmxData.length) { // universe is full; output universe and use next one
+						sendDmxData(dmxData, universe);
+						universe++;
+						
+						dataLength = 512;
+						if((pixels.length - i) * 3 <= 512) {
+							dataLength = (pixels.length - i) * 3 - rgb;
+						}
+						dmxData = new byte[dataLength];
+						index = 0 - rgb;
+					}
+					
+					dmxData[index + rgb] = rgbColor[rgb];
+				}
+			} else {
+				// do not split RGB values over multiple universes
+				
+				// universe is full, send universe and use next one
+				if(index + 3 >= dmxData.length) {
 					sendDmxData(dmxData, universe);
 					universe++;
 					
 					dataLength = 512;
 					if((pixels.length - i) * 3 <= 512) {
-						dataLength = (pixels.length - i) * 3 - rgb;
+						dataLength = (pixels.length - i) * 3;
 					}
 					dmxData = new byte[dataLength];
-					index = 0 - rgb;
+					index = 0;
 				}
 				
-				dmxData[index + rgb] = rgbColor[rgb];
+				dmxData[index + 0] = rgbColor[0];
+				dmxData[index + 1] = rgbColor[1];
+				dmxData[index + 2] = rgbColor[2];
 			}
 			index += 3;
 		}

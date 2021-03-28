@@ -54,6 +54,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private JLabel lblEndUniverse;
 	private JSpinner spinnerSubnet;
 	private JSpinner spinnerStartUniverse;
+	private JCheckBox checkboxContinuousUniverse;
 	private JSpinner spinnerShift;
 	private JSpinner spinnerClone;
 	private JCheckBox checkboxCloneMirrored;
@@ -152,6 +153,12 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		lblEndUniverse = new JLabel("0");
 		lblEndUniverse.setForeground(Style.textColor);
 		panelUniverse.add(lblEndUniverse);
+		
+		checkboxContinuousUniverse = new JCheckBox(i18n.getString("ArtnetSettingsPanel.checkboxContinuousUniverse.text"));
+		checkboxContinuousUniverse.setBackground(Style.panelBackground);
+		checkboxContinuousUniverse.setForeground(Style.textColor);
+		checkboxContinuousUniverse.setSelected(artnet.isContinuousUniverseOverflow());
+		add(checkboxContinuousUniverse);
 		
 		JPanel panelPixels = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) panelPixels.getLayout();
@@ -257,6 +264,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		spinnerSubnet.setValue(artnet.getSubnet());
 		spinnerStartUniverse.setValue(artnet.getStartUniverse());
 		lblEndUniverse.setText(artnet.getEndUniverse(artnet.getStartUniverse(), artnet.getPixels()) +"");
+		checkboxContinuousUniverse.setSelected(artnet.isContinuousUniverseOverflow());
 		
 		if(artnet.getRgbOrder() == null) {
 			artnet.setRgbOrder(RgbOrder.RGB);
@@ -295,6 +303,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		artnet.setBroadcast(chckbxBroadcast.isSelected());
 		artnet.setSubnet((int) spinnerSubnet.getValue());
 		artnet.setStartUniverse((int) spinnerStartUniverse.getValue());
+		artnet.setContinuousUniverseOverflow(checkboxContinuousUniverse.isSelected());
 		artnet.getOutputPatch().setShift((int) spinnerShift.getValue());
 		artnet.getOutputPatch().setClone((int) spinnerClone.getValue());
 		artnet.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());
