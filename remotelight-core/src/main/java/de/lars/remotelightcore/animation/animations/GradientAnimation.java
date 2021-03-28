@@ -33,7 +33,8 @@ public class GradientAnimation extends Animation {
 	
 	@Override
 	public Color[] onEffect() {
-		palette = Palettes.getPalette(sGradient.getSelected());
+		// TODO: could cause NullPointerException when selected palette gets removed while animation is running
+		palette = Palettes.getPalette(sGradient.getSelected()).getPalette();
 		
 		if(palette instanceof ColorGradient) {
 			((ColorGradient) palette).setStepSize(sStepSize.get().floatValue());

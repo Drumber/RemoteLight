@@ -23,6 +23,7 @@
 package de.lars.remotelightcore.utils;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class ArrayUtil {
 
@@ -105,6 +106,27 @@ public class ArrayUtil {
 	 */
 	public static float[] subArray(float[] ampl, int startIndex, int endIndex) {
 		return Arrays.copyOfRange(ampl, startIndex, endIndex + 1);
+	}
+	
+	
+	/**
+	 * Tries to generate a String that is not included in the specified collection.
+	 * This could return the given prefix string if it is not present in the collection.
+	 * Otherwise append a number (starting at 2) to the prefix.
+	 * <br>
+	 * The number can go up to {@link Integer#MAX_VALUE}. If the number reaches the limit,
+	 * the string is returned even if it is already present in the collection.
+	 * @param collection	collection containing the unique strings
+	 * @param prefix		prefix of the name (can be null)
+	 * @return				generated string in the pattern <code>prefix{NUMBER}</code>
+	 */
+	public static String generateUniqueString(Collection<String> collection, String prefix) {
+		String s = prefix;
+		int i = 1;
+		while(collection.contains(s) && i != Integer.MAX_VALUE) {
+			s = prefix + String.valueOf(++i);
+		}
+		return s;
 	}
 	
 }

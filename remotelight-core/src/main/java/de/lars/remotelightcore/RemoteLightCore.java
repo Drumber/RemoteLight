@@ -58,6 +58,7 @@ import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
+import de.lars.remotelightcore.utils.color.palette.PaletteStorage;
 
 public class RemoteLightCore {
 	
@@ -131,6 +132,8 @@ public class RemoteLightCore {
 		fileAutoSaver = new AutoSave(fileStorage);
 		
 		updateDataFile(); // backwards compatibility to versions < v0.2.2
+		
+		PaletteStorage.onLoad();
 		
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);

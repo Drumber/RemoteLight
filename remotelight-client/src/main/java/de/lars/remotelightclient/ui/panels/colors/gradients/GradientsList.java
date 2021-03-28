@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -25,7 +25,7 @@ public class GradientsList extends JPanel {
 	
 	private JList<PaletteData> list;
 	
-	public GradientsList(List<PaletteData> listPalettes) {
+	public GradientsList(Set<PaletteData> listPalettes) {
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		
@@ -50,6 +50,12 @@ public class GradientsList extends JPanel {
 	
 	public JList<PaletteData> getJListComponent() {
 		return list;
+	}
+	
+	public void updateListElements(Set<PaletteData> listPalettes) {
+		DefaultListModel<PaletteData> listModel = (DefaultListModel<PaletteData>) list.getModel();
+		listModel.clear();
+		listPalettes.forEach(p -> listModel.addElement(p));
 	}
 	
 	

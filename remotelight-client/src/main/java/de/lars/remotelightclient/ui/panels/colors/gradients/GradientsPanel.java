@@ -13,10 +13,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.tinylog.Logger;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.colors.ColorsSubPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.notification.NotificationType;
+import de.lars.remotelightcore.utils.ArrayUtil;
 import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
 import de.lars.remotelightcore.utils.color.palette.ColorGradient;
 import de.lars.remotelightcore.utils.color.palette.EvenGradientPalette;
@@ -35,7 +39,7 @@ public class GradientsPanel extends ColorsSubPanel {
 		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		
-		gradientsList = new GradientsList(Palettes.getPaletteDataItems());
+		gradientsList = new GradientsList(Palettes.getAll());
 		gradientsList.setPreferredSize(new Dimension(200, 0));
 		gradientsList.getJListComponent().addListSelectionListener(onGradientListSelection);
 		
@@ -51,7 +55,7 @@ public class GradientsPanel extends ColorsSubPanel {
 	private ListSelectionListener onGradientListSelection = new ListSelectionListener() {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			if(!e.getValueIsAdjusting()) {
+			if(!e.getValueIsAdjusting() && gradientsList.getJListComponent().getSelectedIndex() != -1) {
 				PaletteData selectedPalette = gradientsList.getJListComponent().getSelectedValue();
 				setSelectedPalette(selectedPalette);
 				// TODO: only for testing, remove later
@@ -64,24 +68,46 @@ public class GradientsPanel extends ColorsSubPanel {
 	
 	/**
 	 * Sets the palette that should be displayed in the {@link GradientEditPanel}.
-	 * @param palette		PaletteData that should be edited
+	 * @param palette		PaletteData that should be edited or {@code null} if
+	 * 						palette edit panel should be hidden.
 	 */
 	public void setSelectedPalette(PaletteData palette) {
 		gradientEditPanel.setPalette(palette);
 		gradientEditPanel.updateValues();
-		gradientEditPanel.setVisible(true);
-		gradientsListHolder.btnRemove.setEnabled(true);
+		boolean notNull = palette != null;
+		gradientEditPanel.setVisible(notNull);
+		gradientsListHolder.btnRemove.setEnabled(notNull);
 	}
 	
 	
 	public void addGradient(boolean simpleGradient) {
+		Logger.debug("Add gradient: simple? " + simpleGradient);
 		AbstractPalette palette = (simpleGradient ? EvenGradientPalette.createDefault() : GradientPalette.createDefault());
-		PaletteData newPalette = new PaletteData("New " + (simpleGradient ? "Simple Gradient" : "Gradient"), palette);
-		setSelectedPalette(newPalette);
+		String name = ArrayUtil.generateUniqueString(Palettes.getNames(), ("New " + (simpleGradient ? "Simple Gradient" : "Gradient")));
+		PaletteData newPalette = new PaletteData(name, palette);
+		Palettes.addPalette(newPalette);
+		
+		// update JList
+		gradientsList.updateListElements(Palettes.getAll());
+		// select element
+		gradientsList.getJListComponent().setSelectedValue(newPalette, true);
 	}
 	
 	public void removeSelectedGradient() {
-		// TODO: remove palette from JList and from Palettes class
+		if(Palettes.getAll().size() <= 1) {
+			Main.getInstance().showNotification(NotificationType.IMPORTANT, "Palette List", "Palette cannot be removed. There must be at least 1 palette.");
+			return;
+		}
+		
+		PaletteData selectedPalette = gradientsList.getJListComponent().getSelectedValue();
+		if(selectedPalette != null) {
+			boolean removed = Palettes.removePalette(selectedPalette);
+			if(removed) {
+				setSelectedPalette(null);
+				// update JList
+				gradientsList.updateListElements(Palettes.getAll());
+			}
+		}
 	}
 	
 	
@@ -105,7 +131,6 @@ public class GradientsPanel extends ColorsSubPanel {
 			
 			JButton btnAdd = new JButton("Add");
 			UiUtils.configureButton(btnAdd);
-			btnAdd.addActionListener(l -> addGradient(true));
 			panelWrapper.add(btnAdd);
 			
 			btnRemove = new JButton("Remove");
@@ -125,11 +150,12 @@ public class GradientsPanel extends ColorsSubPanel {
 			
 			JMenuItem mItemGradient = new JMenuItem("Gradient");
 			UiUtils.configureMenuItem(mItemGradient);
+			mItemGradient.addActionListener(l -> addGradient(false));
 			popupMenu.add(mItemGradient);
 			
 			btnAdd.addMouseListener(new MouseAdapter() {
 				public void mouseEntered(MouseEvent e) {
-					// show popup menu on top of the button on hover
+					// show popup menu above the button on hover
 					int popupHeight = popupMenu.getPreferredSize().height;
 					popupMenu.show(e.getComponent(), 0, -popupHeight);
 				};
