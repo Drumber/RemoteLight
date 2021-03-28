@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -33,6 +34,7 @@ import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
 import de.lars.remotelightcore.utils.color.palette.PaletteData;
 import de.lars.remotelightcore.utils.color.palette.PaletteParser;
 import de.lars.remotelightcore.utils.color.palette.PaletteParser.PaletteParseException;
+import de.lars.remotelightcore.utils.color.palette.Palettes;
 
 public class GradientEditPanel extends JPanel {
 	private static final long serialVersionUID = 7638664136509067917L;
@@ -40,11 +42,13 @@ public class GradientEditPanel extends JPanel {
 	private GradientBar gradientBar;
 	private PaletteData palette;
 	private JTextField fieldName;
+	private JLabel lblNameError;
 	private MarkerEditPanel panelMarkerEdit;
 	private ColorPicker colorPicker;
 	private JTextPane editor;
 	private EditorErrorPanel editorErrPanel;
 	private boolean editorTextReplaceMode; // cancel events when replacing the text programmatically
+	private boolean fieldNameTextReplaceMode;
 	
 	public GradientEditPanel() {
 		setBackground(Style.panelBackground);
@@ -56,8 +60,10 @@ public class GradientEditPanel extends JPanel {
 		add(panelHeader, BorderLayout.NORTH);
 		
 		fieldName = new JTextField();
+		fieldName.getDocument().addDocumentListener(onFieldNameChange);
 		fieldName.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		fieldName.setPreferredSize(new Dimension(0, 40));
+		fieldName.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fieldName.setBackground(Style.panelDarkBackground);
 		fieldName.setForeground(Style.textColor);
 		fieldName.setCaretColor(Style.accent);
@@ -67,9 +73,16 @@ public class GradientEditPanel extends JPanel {
 				BorderFactory.createEmptyBorder(5, 10, 0, 10)));
 		panelHeader.add(fieldName);
 		
+		lblNameError = new JLabel("Name does already exist.", SwingConstants.LEFT);
+		lblNameError.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblNameError.setForeground(Style.error);
+		lblNameError.setVisible(false);
+		panelHeader.add(lblNameError);
+		
 		gradientBar = new GradientBar(null);
 		gradientBar.setMinimumSize(new Dimension(100, 20));
 		gradientBar.setPreferredSize(new Dimension(0, 30));
+		gradientBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		gradientBar.setShowMarkers(true);
 		gradientBar.setCornerRadius(5);
 		gradientBar.setPaddingHorizontal(5);
@@ -78,6 +91,7 @@ public class GradientEditPanel extends JPanel {
 		panelHeader.add(gradientBar);
 		
 		panelMarkerEdit = new MarkerEditPanel();
+		panelMarkerEdit.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelHeader.add(panelMarkerEdit);
 		
 		JPanel panelSetup = new JPanel();
@@ -169,6 +183,43 @@ public class GradientEditPanel extends JPanel {
 		}
 	};
 	
+	private DocumentListener onFieldNameChange = new DocumentListener() {
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			onFieldNameChanged();
+		}
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			onFieldNameChanged();
+		}
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			onFieldNameChanged();
+		}
+	};
+	
+	
+	protected void onFieldNameChanged() {
+		if(fieldNameTextReplaceMode) return;
+		String name = fieldName.getText();
+		if(isNameValid(name)) {
+			palette.setName(name);
+			showPaletteInEditor(palette);
+		}
+	}
+	
+	protected boolean isNameValid(String name) {
+		name = name.trim();
+		PaletteData existing = Palettes.getPalette(name);
+		boolean isUsed = existing != null && existing != palette;
+		setNameErrorLabel(isUsed);
+		return !isUsed;
+	}
+	
+	protected void setNameErrorLabel(boolean visible) {
+		lblNameError.setVisible(visible);
+	}
+	
 	protected void removeSelectedMarker() {
 		int index = gradientBar.getSelectedMarkerIndex();
 		if(index != -1 && palette != null && palette.getPalette().size() > 2) {
@@ -242,6 +293,7 @@ public class GradientEditPanel extends JPanel {
 		public void removeUpdate(DocumentEvent e) {
 			clearErrorHighlighting();
 			if(editorTextReplaceMode) {
+				editorTextReplaceMode = false;
 				return;
 			}
 			try {
@@ -272,8 +324,16 @@ public class GradientEditPanel extends JPanel {
 	public void parsePaletteFromEditor(String text) {
 		try {
 			PaletteData pd = PaletteParser.parseFromString(text);
-			if(!fieldName.getText().equals(text)) {
-				fieldName.setText(pd.getName());
+			if(!fieldName.getText().equals(pd.getName())) {
+				if(isNameValid(pd.getName())) {
+					fieldNameTextReplaceMode = true;
+					fieldName.setText(pd.getName());
+					fieldNameTextReplaceMode = false;
+				} else {
+					pd.setName(fieldName.getName());
+				}
+			} else {
+				setNameErrorLabel(false);
 			}
 			palette.setPalette(pd.getPalette());
 			updateGradientBar();
