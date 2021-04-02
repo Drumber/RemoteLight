@@ -63,6 +63,7 @@ import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.event.events.types.EffectToggleEvent.LuaScriptToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
@@ -76,6 +77,7 @@ import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.utils.DirectoryUtil;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class ScriptsPanel extends MenuPanel {
 	private static final long serialVersionUID = 1750844483582377827L;
@@ -290,7 +292,6 @@ public class ScriptsPanel extends MenuPanel {
 		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);
 		speedSlider.getSlider().addChangeListener(sliderSpeedListener);
 		speedSlider.getSlider().setValue((int) sm.getSettingObject("scripts.speed").get());
-		luaManager.setDelay((int) sm.getSettingObject("scripts.speed").get());
 		controlBar.setActionPanel(speedSlider);
 		mainFrame.setControlBarPanel(controlBar);
 	}
@@ -298,8 +299,9 @@ public class ScriptsPanel extends MenuPanel {
 	private ChangeListener sliderSpeedListener = new ChangeListener() {
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			int speed = ((JSlider) e.getSource()).getValue();
-			sm.getSettingObject("scripts.speed").setValue(speed);
+			int value = ((JSlider) e.getSource()).getValue();
+			int speed = MathHelper.invertInRange(value, AnimationManager.MIN_SPEED, AnimationManager.MAX_SPEED);
+			sm.getSettingObject("scripts.speed").setValue(value); // we save the actual slider value
 			luaManager.setDelay(speed);
 		}
 	};

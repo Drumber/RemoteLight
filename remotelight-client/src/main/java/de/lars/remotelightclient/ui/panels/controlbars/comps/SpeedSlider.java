@@ -36,6 +36,8 @@ import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.animation.AnimationManager;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class SpeedSlider extends JPanel {
 
@@ -71,13 +73,14 @@ public class SpeedSlider extends JPanel {
 		bgrSlider.setLayout(new BoxLayout(bgrSlider, BoxLayout.X_AXIS));
 		
 		slider = new JSlider();
-		slider.setMaximum(200);
-		slider.setMinimum(20);
+		slider.setMaximum(AnimationManager.MAX_SPEED);
+		slider.setMinimum(AnimationManager.MIN_SPEED);
 		bgrSlider.add(slider);
 		slider.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				lblSpeed.setText(textSpeed + " " + slider.getValue() + "ms");
+				int speedPercent = Math.round(MathHelper.percentageInRange(slider.getValue(), AnimationManager.MIN_SPEED - 1, AnimationManager.MAX_SPEED));
+				lblSpeed.setText(textSpeed + " " + speedPercent + "%");
 			}
 		});
 		slider.setBackground(c);

@@ -124,5 +124,13 @@ public class MathHelper {
 			return min;
 		return value;
 	}
+	
+	public static float percentageInRange(float value, float min, float max) {
+		return ((value - min) * 100.0f) / (max - min);
+	}
+	
+	public static int invertInRange(int value, int min, int max) {
+		return (max + min) - value;
+	}
 
 }

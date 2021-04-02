@@ -55,6 +55,7 @@ import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class AnimationsPanel extends MenuPanel {
 	private static final long serialVersionUID = 5490750381498859042L;
@@ -157,8 +158,9 @@ public class AnimationsPanel extends MenuPanel {
 	private ChangeListener sliderSpeedListener = new ChangeListener() {
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			int speed = ((JSlider) e.getSource()).getValue();
-			sm.getSettingObject("animations.speed").setValue(speed);
+			int value = ((JSlider) e.getSource()).getValue();
+			int speed = MathHelper.invertInRange(value, AnimationManager.MIN_SPEED, AnimationManager.MAX_SPEED); // invert slider value (right = faster)
+			sm.getSettingObject("animations.speed").setValue(value); // we save the actual slider value
 			am.setDelay(speed);
 		}
 	};

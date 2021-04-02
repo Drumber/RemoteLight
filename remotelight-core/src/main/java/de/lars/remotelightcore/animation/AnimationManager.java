@@ -41,6 +41,11 @@ import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
 public class AnimationManager extends EffectManager {
 	
+	/** Minimum animation looop delay in ms */
+	public final static int MIN_SPEED = 10;
+	/** Maximum animation loop delay in ms */
+	public final static int MAX_SPEED = 200;
+	
 	private Animation activeAnimation;
 	private List<Animation> animations;
 	private boolean active;
