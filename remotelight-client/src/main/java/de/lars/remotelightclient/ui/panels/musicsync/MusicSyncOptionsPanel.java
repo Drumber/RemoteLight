@@ -55,6 +55,7 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class MusicSyncOptionsPanel extends JPanel {
 	private static final long serialVersionUID = -100112066309451958L;
@@ -220,7 +221,8 @@ public class MusicSyncOptionsPanel extends JPanel {
 			
 			if(slider.getName().equals("sensitivity")) { //$NON-NLS-1$
 				sm.getSettingObject("musicsync.sensitivity").setValue(slider.getValue()); //$NON-NLS-1$
-				msm.setSensitivity(slider.getValue() / 100.0);
+				int sensitivity = MathHelper.invertInRange(slider.getValue(), slider.getMinimum(), slider.getMaximum()); // invert slider value
+				msm.setSensitivity(sensitivity / 100.0);
 				
 			} else if(slider.getName().equals("adjustment")) { //$NON-NLS-1$
 				sm.getSettingObject("musicsync.adjustment").setValue(slider.getValue()); //$NON-NLS-1$
