@@ -1,10 +1,10 @@
 package de.lars.remotelightcore.devices.e131;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -12,18 +12,20 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightcore.devices.ConnectionState;
 import de.lars.remotelightcore.devices.Device;
+import de.lars.remotelightcore.utils.color.Color;
 
 public class E131 extends Device {
 	private static final long serialVersionUID = -4989081425851612020L;
 	
+	/* E1.31 Port is 5568 */
 	public final static int PORT = 5568;
 	
 	private transient int sequenceNumber;
 	private int startUniverse;
 	
 	private String unicastIP;
+	private InetAddress address;
 	private boolean multicast;
-	private transient DatagramPacket dPacket;
 	private transient DatagramSocket dSocket;
 	private transient E131Packet e131Packet;
 
@@ -56,12 +58,14 @@ public class E131 extends Device {
 	}
 	
 	protected void initializeSocket() {
-		InetAddress address;
 		try {
 			address = getAddress();
-			dPacket = new DatagramPacket(new byte[0], 0, address, PORT);
-			dSocket = new DatagramSocket();
+			dSocket = new DatagramSocket(null);
+			dSocket.setReuseAddress(true);
+			dSocket.setBroadcast(true);
+			dSocket.bind(new InetSocketAddress((InetAddress) null, PORT));
 		} catch (UnknownHostException | SocketException e) {
+			dSocket = null;
 			Logger.error(e, "Could not initialize E1.31 client!");
 		}
 	}
@@ -84,20 +88,19 @@ public class E131 extends Device {
 	public ConnectionState connect() {
 		if(e131Packet == null) onLoad();
 		initializeSocket();
-		return (dPacket != null && dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.FAILED;
+		return (dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.FAILED;
 	}
 
 	@Override
 	public ConnectionState disconnect() {
 		dSocket.close();
-		dPacket = null;
-		dPacket = null;
+		dSocket = null;
 		return ConnectionState.DISCONNECTED;
 	}
 
 	@Override
 	public ConnectionState getConnectionState() {
-		return (dPacket != null && dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.DISCONNECTED;
+		return (dSocket != null) ? ConnectionState.CONNECTED : ConnectionState.DISCONNECTED;
 	}
 
 	@Override
@@ -144,8 +147,8 @@ public class E131 extends Device {
 		incrementSequenceNumber();
 		
 		if(getConnectionState() == ConnectionState.CONNECTED) {
-			// set the new packet data
-			dPacket.setData(packetData);
+			// construct new DatagramPacket
+			DatagramPacket dPacket = new DatagramPacket(packetData, packetData.length, address, PORT);
 			// send the packet
 			try {
 				dSocket.send(dPacket);
