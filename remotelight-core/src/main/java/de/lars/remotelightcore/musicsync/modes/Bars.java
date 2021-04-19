@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.utils.color.Color;
 import java.util.Random;
 
 import de.lars.remotelightcore.RemoteLightCore;
@@ -33,6 +32,7 @@ import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -67,7 +67,7 @@ public class Bars extends MusicEffect {
 		barWidth = ((SettingInt) getSetting("musicsync.bars.barwidth")).get();	// get bar width from settings
 		
 		double vol = this.getSpl();
-		avgVol = (vol + getMaxSpl() * (0.8 + getSensitivity() / 10)) / 2;	// smooth max volume and calculate average
+		avgVol = (vol + getMaxSpl() * (0.8 + getSensitivity() / 20)) / 2;	// smooth max volume and calculate average
 		
 		boolean peak = (vol > avgVol) && !lastPeak;	// peak detection
 		lastPeak = peak;

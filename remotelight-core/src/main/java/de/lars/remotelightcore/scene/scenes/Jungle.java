@@ -57,7 +57,7 @@ public class Jungle extends Scene {
 		 */
 		counter = 0; lastGreenNum = 0;
 		while(counter != (pix - 1)) {
-			int amount = r.nextInt(pix / (pix / 15)) + 3;
+			int amount = r.nextInt(pix / 10 + 1) + 3;
 			
 			if((counter + amount) >= pix)
 				amount = (pix - counter) - 1;
