@@ -50,7 +50,7 @@ public class Muddle extends Animation {
 	@Override
 	public void onEnable(int pixels) {
 		strip = PixelColorUtils.colorAllPixels(Color.BLACK, pixels);
-		amount = strip.length / 15;
+		amount = Math.max(1, strip.length / 15);
 		y = new double[amount];
 		x = new double[amount];
 		colors = new Color[amount];

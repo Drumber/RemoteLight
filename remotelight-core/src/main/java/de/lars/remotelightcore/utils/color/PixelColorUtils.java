@@ -166,15 +166,19 @@ public class PixelColorUtils {
 	 */
 	public static Color[] centered(Color[] pixels, boolean right) {
 		int half = pixels.length / 2;
+		int max = half;
+		if(pixels.length % 2 != 0) {
+			half += 1;
+		}
 		Color[] strip = pixels;
 		
 		if(right) {
-			for(int i = 0; i < half; i++) {
+			for(int i = 0; i < max; i++) {
 				strip[i] = pixels[pixels.length - 1 - i];
 			}
 		}
 		else {
-			for(int i = 0; i < half; i++) {
+			for(int i = 0; i < max; i++) {
 				strip[half + i] = pixels[half - 1 - i];
 			}
 		}

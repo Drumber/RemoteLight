@@ -49,7 +49,7 @@ public class Bars extends MusicEffect {
 
 	public Bars() {
 		super("Bars");
-		this.addSetting(new SettingInt("musicsync.bars.barwidth", "Bar width", SettingCategory.MusicEffect, null, 5, 1, 20, 1));
+		this.addSetting(new SettingInt("musicsync.bars.barwidth", "Bar width", SettingCategory.MusicEffect, null, 5, 1, 50, 1));
 		String[] modes = new String[] {"Rainbow", "Frequency", "Random", "Static"};
 		this.addSetting(new SettingSelection("musicsync.bars.mode", "Color mode", SettingCategory.MusicEffect, null, modes, "Static", Model.ComboBox));
 		this.addSetting(new SettingColor("musicsync.bars.color", "Color", SettingCategory.MusicEffect, null, Color.RED));
@@ -76,7 +76,7 @@ public class Bars extends MusicEffect {
 			if(barWidth >= strip.length) barWidth = strip.length - 1; // prevent errors
 			
 			setColor();	// set color from chosen mode
-			int pos = new Random().nextInt(strip.length - barWidth); // random position
+			int pos = new Random().nextInt(strip.length - barWidth + 1); // random position
 			for(int i = 0; i < barWidth; i++) {
 				strip[pos + i] = color;
 			}

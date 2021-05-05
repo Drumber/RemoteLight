@@ -22,14 +22,13 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.utils.color.Color;
-
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
@@ -124,12 +123,16 @@ public class RunningLight extends MusicEffect {
 	
 	
 	private void center() {
-		int half = RemoteLightCore.getLedNum() / 2;
+		int half = strip.length / 2;
+		boolean isOdd = strip.length % 2 != 0;
+		if(isOdd) {
+			half += 1;
+		}
 		
 		for(int a = 0; a < groupSize; a++) {
 			for(int i = 0; i < half - 1; i++) {
-				strip[i] = strip[i + 1];
-				strip[RemoteLightCore.getLedNum() - 1 - i] = strip[RemoteLightCore.getLedNum() - 2 - i];
+				strip[i] = strip[i + 1]; // left side
+				strip[strip.length - 1 - i] = strip[strip.length - 2 - i]; // right side
 			}
 		}
 	}

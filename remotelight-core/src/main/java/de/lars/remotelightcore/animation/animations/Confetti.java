@@ -55,7 +55,7 @@ public class Confetti extends Animation {
 		dim();
 		Color c = RainbowWheel.getRainbow()[hue + new Random().nextInt(40)];
 		
-		int loopsAmount = strip.length / 60;
+		int loopsAmount = Math.max(1, strip.length / 60);
 		for(int i = 0; i < loopsAmount; i++) {
 			int pos = new Random().nextInt(strip.length);
 			strip[pos] = c;

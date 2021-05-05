@@ -66,7 +66,7 @@ public class NorthernLights extends Scene {
 	public Color[] onEffect() {
 		count = lights.size();
 		
-		if(count < (pix / 20))
+		if(count <= (pix / 20))
 			newColor = true;
 		else
 			newColor = false;

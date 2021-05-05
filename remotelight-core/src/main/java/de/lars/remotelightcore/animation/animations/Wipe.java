@@ -58,7 +58,7 @@ public class Wipe extends Animation {
 	public Color[] onEffect() {
 		strip[pos] = color;
 		
-		if(++pos >= strip.length - 1) {
+		if(++pos >= strip.length) {
 			pos = 0;
 			
 			if(!((SettingBoolean) getSetting("animation.wipe.randomcolor")).get()) {

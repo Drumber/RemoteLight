@@ -57,6 +57,9 @@ public class Open extends Animation {
 	@Override
 	public Color[] onEffect() {
 		int half = strip.length / 2;
+		if(strip.length % 2 != 0) {
+			half += 1;
+		}
 		
 		if(!((SettingBoolean) getSetting("animation.open.randomcolor")).get()) {
 			color = ((SettingColor) getSetting("animation.open.color")).get();
@@ -77,7 +80,7 @@ public class Open extends Animation {
 			}
 		}
 		
-		if(--pos == 0) {
+		if(pos-- == 0) {
 			pos = half;
 			if(((SettingBoolean) getSetting("animation.open.randomcolor")).get() && !fadeOut) {
 				color = RainbowWheel.getRandomColor();
