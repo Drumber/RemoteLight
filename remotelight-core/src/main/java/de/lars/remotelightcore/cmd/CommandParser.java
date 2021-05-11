@@ -35,6 +35,7 @@ import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.exceptions.CommandException;
 import de.lars.remotelightcore.colors.ColorManager;
+import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.utils.color.Color;
 
 public class CommandParser {
@@ -50,13 +51,14 @@ public class CommandParser {
 		if(args == null || args.length == 0 || args[0].isEmpty())
 			return;
 		if(args[0].equalsIgnoreCase(START.toString())) {
-			if(checkArgsLength(args, 3)) {
+			if((args.length >= 2 && args[1].equalsIgnoreCase("ScreenColorManager")) || checkArgsLength(args, 3)) {
 				EffectManager em = getEffectManager(args[1]);
 				if(em == null)
 					throw new CommandException("Invalid effect manager '" + args[1] + "'.");
 				
-				boolean success = remoteLightCore.getEffectManagerHelper().startEffect(em, args[2]);
-				print((success ? "Successfully enabled " : "Could not enable or find ") + args[2]);
+				String effect = (em instanceof AbstractScreenColorManager) ? "ScreenColor" : args[2];
+				boolean success = remoteLightCore.getEffectManagerHelper().startEffect(em, effect);
+				print((success ? "Successfully enabled " : "Could not enable or find ") + effect);
 			}
 		} else if(args[0].equalsIgnoreCase(STOP.toString())) {
 			if(checkArgsLength(args, 2)) {

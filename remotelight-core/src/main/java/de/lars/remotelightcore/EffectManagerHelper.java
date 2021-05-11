@@ -60,7 +60,11 @@ public class EffectManagerHelper {
 		sm = remoteLightCore.getSceneManager();
 		scm = remoteLightCore.getScreenColorManager();
 		lua = remoteLightCore.getLuaManager();
-		allManager = new EffectManager[] {am, msm, sm, scm, lua};
+		if(scm == null) {
+			allManager = new EffectManager[] {am, msm, sm, lua};
+		} else {
+			allManager = new EffectManager[] {am, msm, sm, lua, scm};
+		}
 	}
 	
 	public EffectManager[] getAllManagers() {
@@ -152,6 +156,10 @@ public class EffectManagerHelper {
 				m.runLuaScript(effect);
 				return true;
 			}
+		} else if(manager instanceof AbstractScreenColorManager) {
+			AbstractScreenColorManager scm = (AbstractScreenColorManager) manager;
+			scm.start();
+			return true;
 		}
 		return false;
 	}
@@ -248,6 +256,8 @@ public class EffectManagerHelper {
 			LuaManager m = (LuaManager) manager;
 			if(m.getActiveLuaScriptPath() != null)
 				out[1] = m.getActiveLuaScriptPath();
+		} else if(manager instanceof AbstractScreenColorManager) {
+			out[1] = "ScreenColor";
 		}
 		
 		return out;

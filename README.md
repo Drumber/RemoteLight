@@ -129,8 +129,8 @@ java -jar RemoteLight-pre0.2.0.x.jar [paramaters...]
 ## Commands
 Since RemoteLight v0.2.1 you can control animations/effects from the console.
 ```
-start <AnimationManager/MusicSyncManager/SceneManager/LuaManager> <animation/effect/script path>
-stop <all/AnimationManager/MusicSyncManager/SceneManager/LuaManager>
+start <AnimationManager/MusicSyncManager/SceneManager/LuaManager/ScreenColorManager> <animation/effect/script path>
+stop <all/AnimationManager/MusicSyncManager/SceneManager/LuaManager/ScreenColorManager>
 color <HEX> or color <r> <g> <b>
 list [<AnimationManager/MusicSyncManager/SceneManager>]
 close

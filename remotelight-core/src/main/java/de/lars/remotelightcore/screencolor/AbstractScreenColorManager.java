@@ -11,5 +11,9 @@ public abstract class AbstractScreenColorManager extends EffectManager {
 	public String getName() {
 		return "ScreenColorManager";
 	}
+	
+	public abstract void start();
+	
+	public abstract void stop();
 
 }
