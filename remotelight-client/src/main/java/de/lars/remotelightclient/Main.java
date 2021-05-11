@@ -34,21 +34,20 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
 import de.lars.remotelightclient.ui.MainFrame;
+import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.dialogs.NoFileAccessDialog;
 import de.lars.remotelightclient.ui.components.frames.SplashFrame;
 import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.ui.font.DefaultFonts;
-import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
@@ -190,24 +189,27 @@ public class Main {
 				setCustomWindowDecorations(false);
 				return true;
 			}
+			
 			String lafName = sLaF.getSelected();
 			
-			if(lafName.equalsIgnoreCase("Java default")) {
-				UIManager.setLookAndFeel(new MetalLookAndFeel());
-				setCustomWindowDecorations(false);
-				return true;
-			}
-			
-			for(FlatLaf laf : FlatLafThemesUtil.getAllThemes()) {
-				if(laf.getName().equalsIgnoreCase(lafName)) {
-					FlatLaf.install(laf);
-					UiUtils.setThemingEnabled(false);
-					boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get();
-					// enable FlatLaf custom window decorations
-					setCustomWindowDecorations(customWindow);
-					return true;
+			for(LookAndFeelInfo info : Style.getLookAndFeelInfo()) {
+				if(lafName.equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
 				}
 			}
+			
+			// check if current LaF is FlatLaf LaF
+			if(UIManager.getLookAndFeel().getID().startsWith("FlatLaf")) {
+				UiUtils.setThemingEnabled(false);
+				boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get();
+				// enable FlatLaf custom window decorations
+				UIManager.put( "TitlePane.unifiedBackground", true );
+				setCustomWindowDecorations(customWindow);
+			} else {
+				setCustomWindowDecorations(false);
+			}
+			
+			return true;
 		} catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

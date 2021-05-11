@@ -25,12 +25,15 @@ package de.lars.remotelightclient.ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
@@ -40,7 +43,6 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.font.FontManager;
 import de.lars.remotelightclient.ui.font.FontResource;
 import de.lars.remotelightclient.utils.ColorTool;
-import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.notification.NotificationType;
@@ -246,11 +248,20 @@ public class Style {
 	
 	
 	public static List<String> getLookAndFeels() {
-		List<String> laFs = new ArrayList<String>();
-		laFs.add("System default");
-		laFs.add("Java default");
-		laFs.addAll(FlatLafThemesUtil.getAllThemeNames());
-		return laFs;
+		List<String> names = new ArrayList<String>();
+		names.add("System default");
+		names.addAll(getLookAndFeelInfo()
+				.stream()
+				.map(info -> info.getName())
+				.collect(Collectors.toList()));
+		return names;
+	}
+	
+	/**
+	 * Get a list of all installed Look and Feels
+	 */
+	public static List<LookAndFeelInfo> getLookAndFeelInfo() {
+		return Arrays.asList(UIManager.getInstalledLookAndFeels());
 	}
 	
 	public static Color getNotificationColor(NotificationType type) {

@@ -249,6 +249,16 @@ public class UiUtils {
 	}
 	
 	
+	public static void configureSlider(JSlider slider) {
+		if(disableTheming) return;
+		Color background = Style.panelBackground;
+		if(slider.getParent() != null) {
+			background = slider.getParent().getBackground();
+		}
+		slider.setBackground(background);
+		slider.setForeground(Style.accent);
+	}
+	
 	public static void addSliderMouseWheelListener(JSlider slider) {
 		slider.addMouseWheelListener(sliderWheelListener);
 	}

@@ -133,7 +133,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderSensitivity.setMaximum(300);
 		sliderSensitivity.setFocusable(false);
 		sliderSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
-		sliderSensitivity.setBackground(Style.panelDarkBackground);
+		UiUtils.configureSlider(sliderSensitivity);
 		sliderSensitivity.setName("sensitivity"); //$NON-NLS-1$
 		sliderSensitivity.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderSensitivity);
@@ -159,7 +159,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setMaximumSize(size);
 		sliderAdjustment.setFocusable(false);
 		sliderAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
-		sliderAdjustment.setBackground(Style.panelDarkBackground);
+		UiUtils.configureSlider(sliderAdjustment);
 		sliderAdjustment.setName("adjustment"); //$NON-NLS-1$
 		sliderAdjustment.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);

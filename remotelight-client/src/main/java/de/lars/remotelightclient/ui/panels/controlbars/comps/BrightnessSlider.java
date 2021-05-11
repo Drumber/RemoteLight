@@ -83,12 +83,10 @@ public class BrightnessSlider extends JPanel {
 				lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		});
-		slider.setBackground(c);
-		slider.setForeground(Style.accent);
+		UiUtils.configureSlider(slider);
 		slider.setFocusable(false);
 		slider.setMajorTickSpacing(0);
 		slider.setPaintTicks(true);
-		slider.setPaintTrack(true);
 		lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 		UiUtils.addSliderMouseWheelListener(slider);
 	}

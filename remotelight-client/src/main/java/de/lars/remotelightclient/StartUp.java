@@ -32,6 +32,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.dialogs.UpdateDialog;
 import de.lars.remotelightclient.ui.font.FontManager;
+import de.lars.remotelightclient.utils.ui.FlatLafThemesUtil;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.lang.LangUtil;
@@ -54,6 +55,9 @@ public class StartUp {
 	private SettingsManager s = Main.getInstance().getSettingsManager();
 
 	public StartUp(StartParameterHandler startParameter) {
+		// install FlatLaf Look and Feels
+		FlatLafThemesUtil.installFlatLafThemes();
+		
 		//register default settings
 		registerSettings();
 		

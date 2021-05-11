@@ -83,12 +83,10 @@ public class SpeedSlider extends JPanel {
 				lblSpeed.setText(textSpeed + " " + speedPercent + "%");
 			}
 		});
-		slider.setBackground(c);
-		slider.setForeground(Style.accent);
+		UiUtils.configureSlider(slider);
 		slider.setFocusable(false);
 		slider.setMajorTickSpacing(0);
 		slider.setPaintTicks(true);
-		slider.setPaintTrack(true);
 		lblSpeed.setText(textSpeed + " " + slider.getValue() + "ms");
 		UiUtils.addSliderMouseWheelListener(slider);
 	}
