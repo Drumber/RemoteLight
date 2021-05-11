@@ -54,11 +54,8 @@ import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
 public class AnimationOptionsPanel extends JPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9051769253598831077L;
+	
 	private JPanel parentPanel;
 	private JPanel panelMain, panelBackground, panelTitel, bgrScroll;
 	private TScrollPane scrollPane;
@@ -196,9 +193,7 @@ public class AnimationOptionsPanel extends JPanel {
 	private SettingChangedListener optionsChangeListener = new SettingChangedListener() {
 		@Override
 		public void onSettingChanged(SettingPanel settingPanel) {
-			for(SettingPanel sp : settingPanels) {
-				sp.setValue();
-			}
+			settingPanel.setValue();
 			Main.getInstance().getCore().getAnimationManager().onEffectOptionChanged();
 		}
 	};

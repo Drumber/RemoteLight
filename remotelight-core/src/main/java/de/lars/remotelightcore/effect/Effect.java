@@ -85,6 +85,8 @@ public abstract class Effect extends AbstractEffect {
 	/**
 	 * Hidden settings will not be displayed.
 	 * The setting must be in the options list.
+	 * This will call {@link #updateEffectOptions()} if the hidden
+	 * state has changed.
 	 * 
 	 * @param id		the id of the setting
 	 * @param hidden	whether the setting should be hidden
@@ -98,15 +100,24 @@ public abstract class Effect extends AbstractEffect {
 	/**
 	 * Hidden settings will not be displayed.
 	 * The setting must be in the options list.
+	 * This will call {@link #updateEffectOptions()} if the hidden
+	 * state has changed.
 	 * 
 	 * @param setting	the setting to hide
 	 * @param hidden	whether the setting should be hidden
 	 */
 	public void hideSetting(Setting setting, boolean hidden) {
-		if(hidden)
+		if(setting.getFlags().contains(Setting.HIDDEN) && hidden ||
+				!setting.getFlags().contains(Setting.HIDDEN) && !hidden) {
+			// hidden state has not changed...
+			return;
+		}
+		if(hidden) {
 			setting.addFlag(Setting.HIDDEN);
-		else
+		} else {
 			setting.removeFlag(Setting.HIDDEN);
+		}
+		updateEffectOptions();
 	}
 	
 	@Override
@@ -115,9 +126,7 @@ public abstract class Effect extends AbstractEffect {
 		onSettingUpdate();
 	}
 	
-	public void onSettingUpdate() {
-		this.updateEffectOptions();
-	}
+	public void onSettingUpdate() {}
 	
 	public void updateEffectOptions() {}
 
