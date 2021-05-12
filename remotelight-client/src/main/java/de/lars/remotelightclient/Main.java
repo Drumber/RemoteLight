@@ -25,9 +25,11 @@ package de.lars.remotelightclient;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.JDialog;
@@ -67,6 +69,7 @@ public class Main {
 	
 	public final static String VERSION = RemoteLightCore.VERSION;
 	public final static String SCOPE = "swing";
+	private static String cachedCommitID;
 	
 	private static Main instance;
 	private RemoteLightCore remoteLightCore;
@@ -244,6 +247,25 @@ public class Main {
 		// MacOS menu bar application name
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.application.name", "RemoteLight");
+	}
+	
+	public static String getGitCommitID() {
+		if(cachedCommitID != null)
+			return cachedCommitID;
+		String commitID = null;
+		InputStream in = Main.class.getResourceAsStream("/git.properties");
+		if(in != null) {
+			Properties prop = new Properties();
+			try {
+				prop.load(in);
+				commitID = prop.getProperty("git.commit.id.abbrev");
+			} catch (IOException e) {}
+			try {
+				in.close();
+			} catch (IOException e) {}
+		}
+		cachedCommitID = commitID;
+		return commitID;
 	}
 	
 	/**
