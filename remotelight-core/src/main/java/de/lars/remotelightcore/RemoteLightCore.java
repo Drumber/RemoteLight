@@ -362,7 +362,7 @@ public class RemoteLightCore {
 			// copy log file and rename
 			DirectoryUtil.copyAndRenameLog(
 					new File(DirectoryUtil.getLogsPath() + "log.txt"),
-					new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date().getTime()) + ".txt");
+					new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date().getTime()) + ".txt");
 			
 			eventHandler.call(new ShutdownEvent(State.POST));
 			instance = null;
