@@ -47,7 +47,7 @@ public class CustomLuaDebugLib extends DebugLib {
 			throw new OrphanedThread();
 		} else {
 			synchronized (this) {
-				while(instructionsLeft.get() == 0) {	// force the thread to wait if no instructions left
+				while(instructionsLeft.get() == 0 && !globals.running.isMainThread()) {	// force the thread to wait if no instructions left
 					globals.yield(LuaValue.NIL);
 				}
 			}

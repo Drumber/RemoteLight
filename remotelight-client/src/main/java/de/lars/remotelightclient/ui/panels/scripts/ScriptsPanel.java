@@ -62,9 +62,11 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.event.Listener;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.event.events.types.EffectToggleEvent.LuaScriptToggleEvent;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.lua.LuaManager;
@@ -174,6 +176,7 @@ public class ScriptsPanel extends MenuPanel {
 		addScriptPanels();
 		// register lua script listener
 		Main.getInstance().getCore().getEventHandler().register(onLuaScriptEvent);
+		Main.getInstance().getCore().getEventHandler().register(onLuaOptionsUpdate);
 	}
 	
 	private void addOptionButtons() {
@@ -266,6 +269,15 @@ public class ScriptsPanel extends MenuPanel {
 		}
 	};
 	
+	private Listener<EffectOptionsUpdateEvent> onLuaOptionsUpdate = new Listener<EffectOptionsUpdateEvent>() {
+		@Override
+		public void onEvent(EffectOptionsUpdateEvent event) {
+			if(event.getType() == EffectType.Lua) {
+				addScriptSettings();
+			}
+		}
+	};
+	
 	
 	public void addScriptSettings() {
 		bgrSettings.removeAll();
@@ -340,6 +352,12 @@ public class ScriptsPanel extends MenuPanel {
 	@Override
 	public String getName() {
 		return i18n.getString("Basic.Scripts");
+	}
+	
+	@Override
+	public void onEnd(MenuPanel newPanel) {
+		Main.getInstance().getCore().getEventHandler().unregister(LuaScriptToggleEvent.class, onLuaScriptEvent);
+		Main.getInstance().getCore().getEventHandler().unregister(EffectOptionsUpdateEvent.class, onLuaOptionsUpdate);
 	}
 	
 }

@@ -7,8 +7,10 @@ import java.util.List;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 
+import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.effect.AbstractEffect;
+import de.lars.remotelightcore.event.events.types.EffectOptionsUpdateEvent;
 import de.lars.remotelightcore.settings.Setting;
 
 public class LuaScript extends AbstractEffect {
@@ -115,6 +117,8 @@ public class LuaScript extends AbstractEffect {
 		// add it to the settings manager
 		Setting s = RemoteLightCore.getInstance().getSettingsManager().addSetting(setting);
 		listSettings.add(s);
+		// trigger effect options update event
+		RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.Lua));
 	}
 	
 	/**
@@ -124,8 +128,11 @@ public class LuaScript extends AbstractEffect {
 	public void removeSetting(Setting setting) {
 		boolean contained = listSettings.remove(setting);
 		// remove it from settings manager only if previously added
-		if(contained)
+		if(contained) {
 			RemoteLightCore.getInstance().getSettingsManager().removeSetting(setting.getId());
+			// trigger effect options update event
+			RemoteLightCore.getInstance().getEventHandler().call(new EffectOptionsUpdateEvent(EffectType.Lua));
+		}
 	}
 	
 	/**
