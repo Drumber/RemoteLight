@@ -85,8 +85,6 @@ public class RLClient implements Serializable {
 		state = ConnectionState.DISCONNECTED;
 		Logger.info("(" + hostname + ") Disconnecting...");
 		try {
-			if(out != null)
-				out.close();
 			if(socket != null)
 				socket.close();
 		} catch (Exception e) {
