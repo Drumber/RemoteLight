@@ -29,11 +29,11 @@ import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.TextLineNumber;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
-import de.lars.remotelightcore.colors.palette.AbstractPalette;
-import de.lars.remotelightcore.colors.palette.PaletteData;
 import de.lars.remotelightcore.colors.palette.PaletteParser;
 import de.lars.remotelightcore.colors.palette.Palettes;
 import de.lars.remotelightcore.colors.palette.PaletteParser.PaletteParseException;
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.PaletteData;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 
 public class GradientEditPanel extends JPanel {

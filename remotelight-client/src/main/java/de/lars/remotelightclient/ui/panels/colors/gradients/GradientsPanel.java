@@ -19,12 +19,12 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.colors.ColorsSubPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
-import de.lars.remotelightcore.colors.palette.AbstractPalette;
-import de.lars.remotelightcore.colors.palette.ColorGradient;
-import de.lars.remotelightcore.colors.palette.EvenGradientPalette;
-import de.lars.remotelightcore.colors.palette.GradientPalette;
-import de.lars.remotelightcore.colors.palette.PaletteData;
 import de.lars.remotelightcore.colors.palette.Palettes;
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.ColorGradient;
+import de.lars.remotelightcore.colors.palette.model.EvenGradientPalette;
+import de.lars.remotelightcore.colors.palette.model.GradientPalette;
+import de.lars.remotelightcore.colors.palette.model.PaletteData;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.ArrayUtil;
 

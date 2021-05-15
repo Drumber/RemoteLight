@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.colors.palette;
+package de.lars.remotelightcore.colors.palette.model;
 
 import java.util.Arrays;
 
@@ -11,7 +11,7 @@ public class EvenGradientPalette extends ColorPalette implements ColorGradient {
 	public final static float DEFAULT_STEPSIZE = 0.1f;
 	
 	protected float stepSize;
-	protected float currentStep;
+	protected transient float currentStep;
 	
 	public EvenGradientPalette(Color... colors) {
 		this(DEFAULT_STEPSIZE, colors);

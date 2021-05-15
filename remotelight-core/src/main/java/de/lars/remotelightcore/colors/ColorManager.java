@@ -24,8 +24,8 @@ package de.lars.remotelightcore.colors;
 
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
-import de.lars.remotelightcore.colors.palette.AbstractPalette;
-import de.lars.remotelightcore.colors.palette.ColorGradient;
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.ColorGradient;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;

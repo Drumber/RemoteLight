@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.colors.palette;
+package de.lars.remotelightcore.colors.palette.model;
 
 import de.lars.remotelightcore.utils.color.Color;
 

@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.colors.palette;
+package de.lars.remotelightcore.colors.palette.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import de.lars.remotelightcore.utils.color.Color;
 public class ColorPalette extends AbstractPalette implements Iterable<Color> {
 	
 	protected List<Color> listColor;
-	protected int curIndex = 0;
+	protected transient int curIndex = 0;
 	
 	public ColorPalette(Color... colors) {
 		listColor = new ArrayList<Color>();

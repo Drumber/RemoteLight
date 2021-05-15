@@ -4,6 +4,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.EvenGradientPalette;
+import de.lars.remotelightcore.colors.palette.model.GradientPalette;
+import de.lars.remotelightcore.colors.palette.model.PaletteData;
+
 public class Palettes {
 
 	private static final Set<PaletteData> listDefaultPalette = new LinkedHashSet<PaletteData>();

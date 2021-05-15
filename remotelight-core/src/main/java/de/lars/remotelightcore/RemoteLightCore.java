@@ -40,7 +40,7 @@ import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.colors.ColorManager;
-import de.lars.remotelightcore.colors.palette.PaletteStorage;
+import de.lars.remotelightcore.colors.palette.PaletteLoader;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.event.EventHandler;
 import de.lars.remotelightcore.event.events.Stated.State;
@@ -133,7 +133,7 @@ public class RemoteLightCore {
 		
 		updateDataFile(); // backwards compatibility to versions < v0.2.2
 		
-		PaletteStorage.onLoad();
+		PaletteLoader.getInstance().load();
 		
 		settingsManager = new SettingsManager(fileStorage);
 		settingsManager.load(fileStorage.KEY_SETTINGS_LIST);
@@ -351,6 +351,9 @@ public class RemoteLightCore {
 			
 			this.getDeviceManager().saveDevices(fileStorage, fileStorage.KEY_DEVICES_LIST);	// Save device list
 			this.getSettingsManager().save(fileStorage.KEY_SETTINGS_LIST); // Save all settings
+			
+			// save color palettes
+			PaletteLoader.getInstance().store();
 			
 			try {
 				// save data file

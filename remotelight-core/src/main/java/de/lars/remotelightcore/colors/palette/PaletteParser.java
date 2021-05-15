@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.lars.remotelightcore.colors.palette.model.ColorPalette;
+import de.lars.remotelightcore.colors.palette.model.EvenGradientPalette;
+import de.lars.remotelightcore.colors.palette.model.GradientPalette;
+import de.lars.remotelightcore.colors.palette.model.PaletteData;
 import de.lars.remotelightcore.utils.color.Color;
 
 public class PaletteParser {

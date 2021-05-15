@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.colors.palette;
+package de.lars.remotelightcore.colors.palette.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,9 @@ public class GradientPalette extends AbstractPalette implements ColorGradient {
 	protected List<Float> listPosition;
 	
 	protected float stepSize;
-	protected float currentStep;
+	protected transient float currentStep;
 	protected boolean reverseOnEnd;
-	protected boolean directionReversed = false;
+	protected transient boolean directionReversed = false;
 	
 	public GradientPalette(float stepSize) {
 		listColor = new ArrayList<Color>();

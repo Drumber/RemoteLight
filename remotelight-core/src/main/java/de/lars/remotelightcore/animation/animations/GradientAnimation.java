@@ -1,9 +1,9 @@
 package de.lars.remotelightcore.animation.animations;
 
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.colors.palette.AbstractPalette;
-import de.lars.remotelightcore.colors.palette.ColorGradient;
 import de.lars.remotelightcore.colors.palette.Palettes;
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.ColorGradient;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingDouble;
 import de.lars.remotelightcore.settings.types.SettingSelection;
