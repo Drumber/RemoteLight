@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.utils.color.palette;
+package de.lars.remotelightcore.colors.palette;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

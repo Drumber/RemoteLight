@@ -25,9 +25,9 @@ import org.tinylog.Logger;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.GlowBorder;
 import de.lars.remotelightclient.utils.ColorTool;
-import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
-import de.lars.remotelightcore.utils.color.palette.ColorPalette;
-import de.lars.remotelightcore.utils.color.palette.GradientPalette;
+import de.lars.remotelightcore.colors.palette.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.ColorPalette;
+import de.lars.remotelightcore.colors.palette.GradientPalette;
 import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public class GradientBar extends JPanel {

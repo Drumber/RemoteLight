@@ -19,14 +19,14 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.colors.ColorsSubPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.colors.palette.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.ColorGradient;
+import de.lars.remotelightcore.colors.palette.EvenGradientPalette;
+import de.lars.remotelightcore.colors.palette.GradientPalette;
+import de.lars.remotelightcore.colors.palette.PaletteData;
+import de.lars.remotelightcore.colors.palette.Palettes;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.ArrayUtil;
-import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
-import de.lars.remotelightcore.utils.color.palette.ColorGradient;
-import de.lars.remotelightcore.utils.color.palette.EvenGradientPalette;
-import de.lars.remotelightcore.utils.color.palette.GradientPalette;
-import de.lars.remotelightcore.utils.color.palette.PaletteData;
-import de.lars.remotelightcore.utils.color.palette.Palettes;
 
 public class GradientsPanel extends ColorsSubPanel {
 	private static final long serialVersionUID = 5830817532795394338L;

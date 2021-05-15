@@ -40,6 +40,7 @@ import de.lars.remotelightcore.cmd.CommandParser;
 import de.lars.remotelightcore.cmd.ConsoleReader;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
 import de.lars.remotelightcore.colors.ColorManager;
+import de.lars.remotelightcore.colors.palette.PaletteStorage;
 import de.lars.remotelightcore.devices.DeviceManager;
 import de.lars.remotelightcore.event.EventHandler;
 import de.lars.remotelightcore.event.events.Stated.State;
@@ -58,7 +59,6 @@ import de.lars.remotelightcore.screencolor.AbstractScreenColorManager;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
-import de.lars.remotelightcore.utils.color.palette.PaletteStorage;
 
 public class RemoteLightCore {
 	

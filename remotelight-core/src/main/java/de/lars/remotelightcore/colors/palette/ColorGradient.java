@@ -1,4 +1,4 @@
-package de.lars.remotelightcore.utils.color.palette;
+package de.lars.remotelightcore.colors.palette;
 
 public interface ColorGradient {
 	

@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
-import de.lars.remotelightcore.utils.color.palette.PaletteData;
+import de.lars.remotelightcore.colors.palette.PaletteData;
 
 public class GradientsList extends JPanel {
 	private static final long serialVersionUID = -5638567248623585698L;

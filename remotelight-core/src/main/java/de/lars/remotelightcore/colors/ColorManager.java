@@ -24,12 +24,12 @@ package de.lars.remotelightcore.colors;
 
 import de.lars.remotelightcore.EffectManager;
 import de.lars.remotelightcore.RemoteLightCore;
+import de.lars.remotelightcore.colors.palette.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.ColorGradient;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
-import de.lars.remotelightcore.utils.color.palette.AbstractPalette;
-import de.lars.remotelightcore.utils.color.palette.ColorGradient;
 
 public class ColorManager extends EffectManager {
 	
