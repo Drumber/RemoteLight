@@ -5,15 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -30,8 +22,8 @@ import de.lars.remotelightclient.utils.ui.TextLineNumber;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.colors.palette.PaletteParser;
-import de.lars.remotelightcore.colors.palette.Palettes;
 import de.lars.remotelightcore.colors.palette.PaletteParser.PaletteParseException;
+import de.lars.remotelightcore.colors.palette.Palettes;
 import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
 import de.lars.remotelightcore.colors.palette.model.PaletteData;
 import de.lars.remotelightcore.utils.ExceptionHandler;
@@ -325,13 +317,15 @@ public class GradientEditPanel extends JPanel {
 		try {
 			PaletteData pd = PaletteParser.parseFromString(text);
 			if(!fieldName.getText().equals(pd.getName())) {
-				if(isNameValid(pd.getName())) {
-					fieldNameTextReplaceMode = true;
-					fieldName.setText(pd.getName());
-					fieldNameTextReplaceMode = false;
-				} else {
-					pd.setName(fieldName.getName());
-				}
+				SwingUtilities.invokeLater(() -> {
+					if(isNameValid(pd.getName())) {
+						fieldNameTextReplaceMode = true;
+						fieldName.setText(pd.getName());
+						fieldNameTextReplaceMode = false;
+					} else {
+						pd.setName(fieldName.getName());
+					}
+				});
 			} else {
 				setNameErrorLabel(false);
 			}
