@@ -58,6 +58,11 @@ public class GradientsList extends JPanel {
 		listPalettes.forEach(p -> listModel.addElement(p));
 	}
 	
+	public void updateSingleListElement(int index, PaletteData element) {
+		DefaultListModel<PaletteData> listModel = (DefaultListModel<PaletteData>) list.getModel();
+		listModel.setElementAt(element, index);
+	}
+	
 	
 	/**
 	 * Gradient list element holding the name and preview of the gradient.

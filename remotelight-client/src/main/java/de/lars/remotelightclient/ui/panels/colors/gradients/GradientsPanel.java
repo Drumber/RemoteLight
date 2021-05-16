@@ -49,6 +49,7 @@ public class GradientsPanel extends ColorsSubPanel {
 		
 		gradientEditPanel = new GradientEditPanel();
 		gradientEditPanel.setVisible(false);
+		gradientEditPanel.setPaletteChangeListener(onPaletteChange);
 		add(gradientEditPanel, BorderLayout.CENTER);
 	}
 
@@ -58,10 +59,19 @@ public class GradientsPanel extends ColorsSubPanel {
 			if(!e.getValueIsAdjusting() && gradientsList.getJListComponent().getSelectedIndex() != -1) {
 				PaletteData selectedPalette = gradientsList.getJListComponent().getSelectedValue();
 				setSelectedPalette(selectedPalette);
-				// TODO: only for testing, remove later
-				if(selectedPalette.getPalette() instanceof ColorGradient) {
-					Main.getInstance().getCore().getColorManager().showGradient(selectedPalette.getPalette());
-				}
+			}
+		}
+	};
+	
+	private PaletteChangeListener onPaletteChange = new PaletteChangeListener() {
+		@Override
+		public void onPaletteChange(PaletteData eventPalette, boolean nameOnly) {
+			int selectedIndex = gradientsList.getJListComponent().getSelectedIndex();
+			if(selectedIndex != -1) {
+				gradientsList.updateSingleListElement(selectedIndex, eventPalette);
+			}
+			if(!nameOnly && eventPalette.getPalette() instanceof ColorGradient) {
+				Main.getInstance().getCore().getColorManager().showGradient(eventPalette.getPalette());
 			}
 		}
 	};

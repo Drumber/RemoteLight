@@ -31,6 +31,7 @@ import de.lars.remotelightcore.utils.ExceptionHandler;
 public class GradientEditPanel extends JPanel {
 	private static final long serialVersionUID = 7638664136509067917L;
 	
+	private PaletteChangeListener changeListener;
 	private GradientBar gradientBar;
 	private PaletteData palette;
 	private JTextField fieldName;
@@ -150,6 +151,16 @@ public class GradientEditPanel extends JPanel {
 		
 	}
 	
+	public void setPaletteChangeListener(PaletteChangeListener listener) {
+		this.changeListener = listener;
+	}
+	
+	protected void firePaletteChangeEvent(boolean nameOnly) {
+		if(changeListener != null) {
+			changeListener.onPaletteChange(palette, nameOnly);
+		}
+	}
+	
 	private ColorListener colorChangeListener = new ColorListener() {
 		@Override
 		public void onColorChanged(Color color) {
@@ -197,6 +208,7 @@ public class GradientEditPanel extends JPanel {
 		if(isNameValid(name)) {
 			palette.setName(name);
 			showPaletteInEditor(palette);
+			firePaletteChangeEvent(true);
 		}
 	}
 	
@@ -325,12 +337,14 @@ public class GradientEditPanel extends JPanel {
 					} else {
 						pd.setName(fieldName.getName());
 					}
+					palette.setName(pd.getName());
 				});
 			} else {
 				setNameErrorLabel(false);
 			}
 			palette.setPalette(pd.getPalette());
 			updateGradientBar();
+			firePaletteChangeEvent(false);
 		} catch (PaletteParseException e) {
 			showErrorInEditor(e);
 		}
