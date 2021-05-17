@@ -148,7 +148,14 @@ public class DirectoryUtil {
 		} catch(URISyntaxException e) {
 			Logger.error(e);
 		}
-		ZipInputStream zis = new ZipInputStream(new FileInputStream(fullPath));
+		
+		InputStream fileInStream;
+		if(fullPath.getAbsolutePath().endsWith(".exe")) {
+			fileInStream = new WinZipInputStream(new FileInputStream(fullPath));
+		} else {
+			fileInStream = new FileInputStream(fullPath);
+		}
+		ZipInputStream zis = new ZipInputStream(fileInStream);
 		ZipEntry entry;
 		while((entry = zis.getNextEntry()) != null) {
 			if(!entry.getName().startsWith(folderName + '/')) {
