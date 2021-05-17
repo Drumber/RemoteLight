@@ -44,7 +44,7 @@ public class Strobe extends MusicEffect {
 
 	public Strobe() {
 		super("Strobe");
-		flashRatio = this.addSetting(new SettingInt("musicsync.strobe.flashratio", "Flash ratio (per second)", SettingCategory.MusicEffect, "Flashes per second", 4, 0, 100, 1)).get();
+		flashRatio = this.addSetting(new SettingInt("musicsync.strobe.flashratio", "Flash ratio (per second)", SettingCategory.MusicEffect, "Flashes per second", 4, 1, 100, 1)).get();
 		flashDuration = this.addSetting(new SettingInt("musicsync.strobe.flashduration", "Flash duration (in ms)", SettingCategory.MusicEffect, "", 1500, 100, 50000, 100)).get();
 		this.addSetting(new SettingColor("musicsync.strobe.color", "Color", SettingCategory.MusicEffect, "", Color.WHITE));
 		

@@ -29,6 +29,8 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import de.lars.remotelightcore.io.FileStorage;
+import de.lars.remotelightcore.settings.types.SettingDouble;
+import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 
@@ -194,6 +196,21 @@ public class SettingsManager {
 		// update selection values if both are from type SettingSelection
 		if(oldSetting instanceof SettingSelection && newSetting instanceof SettingSelection) {
 			updateSelectionValues((SettingSelection) oldSetting, (SettingSelection) newSetting);
+		}
+		// update min, max and step size values if both are from type SettingInt or SettingDouble
+		if(oldSetting instanceof SettingInt && newSetting instanceof SettingInt) {
+			SettingInt oldS = (SettingInt) oldSetting;
+			SettingInt newS = (SettingInt) newSetting;
+			oldS.setMin(newS.getMin());
+			oldS.setMax(newS.getMax());
+			oldS.setStepsize(newS.getStepsize());
+		}
+		if(oldSetting instanceof SettingDouble && newSetting instanceof SettingDouble) {
+			SettingDouble oldS = (SettingDouble) oldSetting;
+			SettingDouble newS = (SettingDouble) newSetting;
+			oldS.setMin(newS.getMin());
+			oldS.setMax(newS.getMax());
+			oldS.setStepsize(newS.getStepsize());
 		}
 	}
 	
