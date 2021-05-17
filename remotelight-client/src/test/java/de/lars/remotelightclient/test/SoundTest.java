@@ -69,6 +69,56 @@ public class SoundTest {
 			// draw raw data
 			//-----------------------
 			g.setColor(Color.black);
+			drawRawVisualizer(g, amplitudes, adjustment);
+			
+			//-----------------------
+			// draw processed data
+			//-----------------------
+			boolean enableProcessedViz = false;
+			if(enableProcessedViz) {
+				g.setColor(Color.red);
+				int barWidth = width / bars;
+				
+				for(int i = 0; i < bars; i++) {
+					int x = barWidth * i;
+					int barHeight = processed[i];
+					barHeight = Math.min(height, barHeight);
+					int y = height - barHeight;
+					g.drawRect(x, y, barWidth, barHeight);
+				}
+			}
+			
+			//-----------------------
+			// draw smoothed data
+			//-----------------------
+			int smoothValuesAmount = 20;
+			float[] smoothed = new float[amplitudes.length];
+			
+			for(int i = 0; i < smoothed.length; i++) {
+				int startIndex = Math.max(0, i - (smoothValuesAmount - 1));
+				int endIndex = Math.min(smoothed.length-1, i + (smoothValuesAmount - 1));
+				int currValuesAmount = endIndex - startIndex + 1;
+				float sum = 0.0f;
+				for(int j = 0; j < currValuesAmount; j++) {
+					int elementIndex = startIndex + j;
+					sum += amplitudes[elementIndex];
+				}
+				float avg = sum / currValuesAmount;
+				// apply filter (reduce low frequencies)
+				// this uses an exponential function: -e^(-a*(x+10))+1
+				// make a bigger to allow more low frequencies
+				float a = -0.01f;
+				double volPercent = -Math.exp(a * (i + 10)) + 1;
+				smoothed[i] = (float) (volPercent * avg);
+			}
+			
+			g.setColor(Color.GREEN);
+			drawRawVisualizer(g, smoothed, adjustment);
+			
+			g.dispose();
+		}
+		
+		void drawRawVisualizer(Graphics g, float[] amplitudes, double adjustment) {
 			int barWidth = 1;
 			int parts = amplitudes.length / width;
 			
@@ -89,22 +139,6 @@ public class SoundTest {
 				int y = height - barHeight;
 				g.fillRect(x, y, barWidth, barHeight);
 			}
-			
-			//-----------------------
-			// draw processed data
-			//-----------------------
-			g.setColor(Color.red);
-			barWidth = width / bars;
-			
-			for(int i = 0; i < bars; i++) {
-				int x = barWidth * i;
-				int barHeight = processed[i];
-				barHeight = Math.min(height, barHeight);
-				int y = height - barHeight;
-				g.drawRect(x, y, barWidth, barHeight);
-			}
-			
-			g.dispose();
 		}
 		
 	}
