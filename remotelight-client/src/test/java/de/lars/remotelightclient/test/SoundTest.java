@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -114,6 +115,19 @@ public class SoundTest {
 			
 			g.setColor(Color.GREEN);
 			drawRawVisualizer(g, smoothed, adjustment);
+			
+			//-----------------------
+			// draw average line
+			//-----------------------
+			double totalAvg = IntStream.range(0, smoothed.length)
+					.mapToDouble(i -> smoothed[i])
+					.average().orElse(0);
+			
+			int avgY = (int) (totalAvg * 10.0 * adjustment);
+			avgY = Math.min(height, avgY);
+			avgY = height - avgY; // invert/start at the bottom of the window
+			g.setColor(Color.RED);
+			g.drawLine(0, avgY, width, avgY);
 			
 			g.dispose();
 		}
