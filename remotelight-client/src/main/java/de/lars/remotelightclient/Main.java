@@ -171,7 +171,7 @@ public class Main {
 					mainFrame = new MainFrame();
 					mainFrame.setVisible(!RemoteLightCore.startParameter.tray);
 				} catch (Exception e) {
-					Logger.error(e);
+					ExceptionHandler.handle(e);
 				}
 			}
 		});

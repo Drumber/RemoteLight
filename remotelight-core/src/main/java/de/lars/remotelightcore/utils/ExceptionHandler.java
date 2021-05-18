@@ -108,10 +108,22 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 		return sw.toString();
 	}
 	
-	public static String getGitHubIssueURL(Throwable e) throws UnsupportedEncodingException {
+	/**
+	 * Create the error report text including
+	 * <li>RemoteLight version
+	 * <li>Commit ID (optional)
+	 * <li>Java version
+	 * <li>Operating system
+	 * <li>Stack trace
+	 * <li>Date and time
+	 * @param e			error object
+	 * @param commitId	commit id of the build or {@code null}
+	 */
+	public static String getReportText(Throwable e, String commitId) {
 		String issueText = String.format(""
 				+ "This issue was automatically created by the RemoteLight ExceptionHandler.\n"
 				+ "RemoteLightCore version: %s\n"
+				+ (commitId != null ? "Commit ID: " + commitId + "\n" : "")
 				+ "Java version: %s (%s)\n"
 				+ "OS: %s\n"
 				+ "StackTrace:\n```\n%s\n```"
@@ -121,6 +133,18 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 				System.getProperty("os.name"),
 				getStackTrace(e),
 				DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.US).format(new Date()));
+		return issueText;
+	}
+	
+	/**
+	 * Generate a GitHub issue URL that automatically creates an issue including the
+	 * error report from {@link ExceptionHandler#getReportText}
+	 * @param e			error object
+	 * @param commitId	commit id of the build or {@code null}
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String getGitHubIssueURL(Throwable e, String commitId) throws UnsupportedEncodingException {
+		String issueText = getReportText(e, commitId);
 		
 		String exceptionTitle = URLEncoder.encode(e.getClass().getCanonicalName(), "UTF-8");
 		String exceptionBody = URLEncoder.encode(issueText, "UTF-8");

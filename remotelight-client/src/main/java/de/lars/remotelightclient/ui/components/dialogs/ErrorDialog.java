@@ -25,6 +25,9 @@ package de.lars.remotelightclient.ui.components.dialogs;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -38,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 
@@ -77,17 +81,17 @@ public class ErrorDialog {
 		scroll.setPreferredSize(new Dimension(300, 150));
 		root.add(scroll);
 		
-		String[] options = {"Close", "Report"};
+		String[] options = {"Close", "Copy Report", "Report"};
 		
 		//JOptionPane.showMessageDialog(null, root, (title != null ? title : "Exception"), JOptionPane.ERROR_MESSAGE);
 		int selOption = JOptionPane.showOptionDialog(null, root, (title != null ? title : "Exception"),
 				JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
 				null, options, options[0]);
 		
-		if(selOption == 1) {
+		if(selOption == 2) {
 			try {
 				
-				String issueUrl = ExceptionHandler.getGitHubIssueURL(e);
+				String issueUrl = ExceptionHandler.getGitHubIssueURL(e, Main.getGitCommitID());
 				Desktop.getDesktop().browse(new URI(issueUrl));
 				
 			} catch (UnsupportedEncodingException e2) {
@@ -95,6 +99,10 @@ public class ErrorDialog {
 			} catch (IOException | URISyntaxException e1) {
 				System.err.println("Could not open issue url: " + e1.getMessage());
 			}
+		} else if(selOption == 1) {
+			String reportText = ExceptionHandler.getReportText(e, Main.getGitCommitID());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(new StringSelection(reportText), null);
 		}
 	}
 
