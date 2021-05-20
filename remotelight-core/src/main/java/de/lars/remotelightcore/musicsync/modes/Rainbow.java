@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
 import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -100,7 +99,7 @@ public class Rainbow extends MusicEffect {
 		this.initOptions();
 		
 		// multiplier depends on the gain value and the number of LEDs
-		double multiplier = 0.2 * this.getAdjustment() * RemoteLightCore.getLedNum() / 60;
+		double multiplier = 0.2 * this.getAdjustment() * strip.length / 60;
 		int[] amp = getSoundProcessor().getSimpleAmplitudes(); // simple amplitudes: 6 bands
 		
 		// get the average of all amplitudes
@@ -233,7 +232,7 @@ public class Rainbow extends MusicEffect {
 	private int getPreviousHue(int deltaPos) {
 		int targetHue = currentHue - (deltaPos * hueStepSize);
 		if(targetHue < 0) targetHue += 360;
-		return targetHue % 360;
+		return Math.abs(targetHue % 360);
 	}
 
 }
