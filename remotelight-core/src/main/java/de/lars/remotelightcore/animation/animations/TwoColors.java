@@ -22,7 +22,6 @@
 
 package de.lars.remotelightcore.animation.animations;
 
-import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.animation.Animation;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingColor;
@@ -65,10 +64,10 @@ public class TwoColors extends Animation {
 		// shift the pixels depending on the direction
 		if(direction.equalsIgnoreCase(DIRECTIONS[0])) {
 			strip = PixelColorUtils.shiftPixelsLeft(strip, 1);
-			newPixelPos = RemoteLightCore.getLedNum() -  1;
+			newPixelPos = strip.length -  1;
 		} else if(direction.equalsIgnoreCase(DIRECTIONS[1])) {
 			strip = PixelColorUtils.shiftPixelsCenter(strip, 1);
-			newPixelPos = RemoteLightCore.getLedNum() / 2 - 1;
+			newPixelPos = strip.length / 2 - 1;
 		} else {
 			strip = PixelColorUtils.shiftPixelsRight(strip, 1);
 			newPixelPos = 0;
