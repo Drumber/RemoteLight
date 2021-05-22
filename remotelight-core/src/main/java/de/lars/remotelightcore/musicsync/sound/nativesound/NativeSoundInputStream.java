@@ -117,19 +117,29 @@ public class NativeSoundInputStream implements XtStreamCallback, Runnable {
 		buffer.clear();
 		switch(formatInfo.getXtFormat().mix.sample) {
 			case UINT8:
-				buffer.put(((byte[][]) input)[0], 0, bufferSize);
+				byte[][] byteBuffer = (byte[][]) input;
+	        	bufferSize = Math.min(byteBuffer[0].length, bufferSize);
+				buffer.put(byteBuffer[0], 0, bufferSize);
 				break;
 	        case INT16:
-	        	buffer.asShortBuffer().put(((short[][]) input)[0], 0, bufferSize);
+	        	short[][] shortBuffer = (short[][]) input;
+	        	bufferSize = Math.min(shortBuffer[0].length, bufferSize);
+	        	buffer.asShortBuffer().put(shortBuffer[0], 0, bufferSize);
 	        	break;
 	        case INT24:
-	        	buffer.put(((byte[][]) input)[0], 0, bufferSize);
+	        	byteBuffer = (byte[][]) input;
+	        	bufferSize = Math.min(byteBuffer[0].length, bufferSize);
+	        	buffer.put(byteBuffer[0], 0, bufferSize);
 	        	break;
 	        case INT32:
-	        	buffer.asIntBuffer().put(((int[][]) input)[0], 0, bufferSize);
+	        	int[][] intBuffer = (int[][]) input;
+	        	bufferSize = Math.min(intBuffer[0].length, bufferSize);
+	        	buffer.asIntBuffer().put(intBuffer[0], 0, bufferSize);
 	        	break;
 	        case FLOAT32:
-	        	buffer.asFloatBuffer().put(((float[][]) input)[0], 0, bufferSize);
+	        	float[][] floatBuffer = (float[][]) input;
+	        	bufferSize = Math.min(floatBuffer[0].length, bufferSize);
+	        	buffer.asFloatBuffer().put(floatBuffer[0], 0, bufferSize);
 	        	break;
 	        default:
 	            throw new IllegalArgumentException();
