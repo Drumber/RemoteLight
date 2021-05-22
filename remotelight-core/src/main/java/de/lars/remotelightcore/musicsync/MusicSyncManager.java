@@ -103,7 +103,7 @@ public class MusicSyncManager extends EffectManager {
 		sm.addSetting(new SettingObject("nativesound.serviceindex", "Selected service index", -1));
 		sm.addSetting(new SettingObject("nativesound.deviceindex", "Selected device index", 0));
 		sm.addSetting(new SettingObject("nativesound.samplerate", "Samplerate", 48000));
-		sm.addSetting(new SettingObject("nativesound.bitrate", "Bitrate", 16));
+		sm.addSetting(new SettingObject("nativesound.bitdepth", "Bit Depth", 16));
 		sm.addSetting(new SettingObject("nativesound.channels", "Channels", 2));
 		
 		// load native sound device if configured
@@ -179,7 +179,7 @@ public class MusicSyncManager extends EffectManager {
 	private void configureSoundProcessorForNativeSound(NativeSoundDevice nativeSoundDevice) {
 		if(nativeSound.isInitialized()) {
 			soundProcessor.configureNativeSound(nativeSoundDevice.getServiceIndex(), nativeSoundDevice.getDeviceIndex(),
-					nativeSoundDevice.getSampleRate(), nativeSoundDevice.getBitrateXtSample(), nativeSoundDevice.getChannels());
+					nativeSoundDevice.getSampleRate(), nativeSoundDevice.getBitDepthXtSample(), nativeSoundDevice.getChannels());
 		}
 	}
 	
@@ -191,9 +191,9 @@ public class MusicSyncManager extends EffectManager {
 		int serviceIndex = (int) sm.getSettingObject("nativesound.serviceindex").get();
 		int deviceIndex = (int) sm.getSettingObject("nativesound.deviceindex").get();
 		int sampleRate = (int) sm.getSettingObject("nativesound.samplerate").get();
-		int bitrate = (int) sm.getSettingObject("nativesound.bitrate").get();
+		int bitDepth = (int) sm.getSettingObject("nativesound.bitdepth").get();
 		int channels = (int) sm.getSettingObject("nativesound.channels").get();
-		return new NativeSoundDevice(serviceIndex, deviceIndex, sampleRate, bitrate, channels);
+		return new NativeSoundDevice(serviceIndex, deviceIndex, sampleRate, bitDepth, channels);
 	}
 	
 	public NativeSoundDevice getNativeSoundDevice() {

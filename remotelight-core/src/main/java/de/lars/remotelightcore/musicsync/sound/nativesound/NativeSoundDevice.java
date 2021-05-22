@@ -24,7 +24,12 @@ package de.lars.remotelightcore.musicsync.sound.nativesound;
 
 import java.io.Serializable;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtDevice;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtMix;
+import com.xtaudio.xt.XtSample;
+import com.xtaudio.xt.XtService;
 
 public class NativeSoundDevice implements Serializable {
 	private static final long serialVersionUID = -8566436981838708790L;
@@ -35,20 +40,20 @@ public class NativeSoundDevice implements Serializable {
 	private int serviceIndex;
 	private int deviceIndex;
 	private int sampleRate;
-	private int bitrate;
+	private int bitDepth;
 	private int channels;
 	
 	private String name;
 	
-	public NativeSoundDevice(int serviceIndex, int deviceIndex, int samplerate, int bitrate, int channels) {
-		this(serviceIndex, deviceIndex, samplerate, bitrate, channels, false);
+	public NativeSoundDevice(int serviceIndex, int deviceIndex, int samplerate, int bitDepth, int channels) {
+		this(serviceIndex, deviceIndex, samplerate, bitDepth, channels, false);
 	}
 	
-	public NativeSoundDevice(int serviceIndex, int deviceIndex, int samplerate, int bitrate, int channels, boolean checkValidity) {
+	public NativeSoundDevice(int serviceIndex, int deviceIndex, int samplerate, int bitDepth, int channels, boolean checkValidity) {
 		this.serviceIndex = serviceIndex;
 		this.deviceIndex = deviceIndex;
 		this.sampleRate = samplerate;
-		this.bitrate = bitrate;
+		this.bitDepth = bitDepth;
 		this.channels = channels;
 		if(checkValidity)
 			this.checkValidity();
@@ -59,7 +64,7 @@ public class NativeSoundDevice implements Serializable {
 		NativeSound sound = new NativeSound(false);
 		try (XtAudio audio = new XtAudio(null, null, null, null)) {
 			XtService service = XtAudio.getServiceByIndex(serviceIndex);
-			XtFormat format = new XtFormat(new XtMix(sampleRate, NativeSoundFormat.bitrateToSample(bitrate)), channels, 0, 0, 0);
+			XtFormat format = new XtFormat(new XtMix(sampleRate, NativeSoundFormat.bitDepthToSample(bitDepth)), channels, 0, 0, 0);
 			valid = sound.isDeviceSupported(service, deviceIndex, format);
 			// set name
 			try(XtDevice device = service.openDevice(deviceIndex)) {
@@ -93,16 +98,16 @@ public class NativeSoundDevice implements Serializable {
 		this.sampleRate = sampleRate;
 	}
 
-	public int getBitrate() {
-		return bitrate;
+	public int getBitDepth() {
+		return bitDepth;
 	}
 	
-	public XtSample getBitrateXtSample() {
-		return NativeSoundFormat.bitrateToSample(bitrate);
+	public XtSample getBitDepthXtSample() {
+		return NativeSoundFormat.bitDepthToSample(bitDepth);
 	}
 
-	public void setBitrate(int bitrate) {
-		this.bitrate = bitrate;
+	public void setBitDepth(int bitDepth) {
+		this.bitDepth = bitDepth;
 	}
 
 	public int getChannels() {

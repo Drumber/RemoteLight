@@ -22,7 +22,12 @@
 
 package de.lars.remotelightclient.ui.panels.musicsync.nativesound;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -31,10 +36,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtDevice;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtMix;
+import com.xtaudio.xt.XtService;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
@@ -60,7 +77,7 @@ public class NativeSoundConfigPanel extends JPanel {
 	
 	private JComboBox<String> comboService;
 	private JComboBox<Integer> comboSampleRate;
-	private JComboBox<Integer> comboBitRate;
+	private JComboBox<Integer> comboBitDepth;
 	private JComboBox<Integer> comboChannels;
 	private JComboBox<String> comboDevice;
 	private JCheckBox chckbxShowSupportedOnly;
@@ -94,12 +111,12 @@ public class NativeSoundConfigPanel extends JPanel {
 			nsound.getServices().forEach(service -> listServiceNames.add(service.getName()));
 			
 			Integer[] sampleRates = Arrays.stream(NativeSound.SAMPLERATES).boxed().toArray(Integer[]::new);
-			Integer[] bitRates = {8, 16, 24, 32};
+			Integer[] bitDepths = {8, 16, 24, 32};
 			Integer[] channels = {1, 2, 3, 4};
 			
 			comboService.setModel(new DefaultComboBoxModel<>(listServiceNames.toArray(new String[0])));
 			comboSampleRate.setModel(new DefaultComboBoxModel<>(sampleRates));
-			comboBitRate.setModel(new DefaultComboBoxModel<>(bitRates));
+			comboBitDepth.setModel(new DefaultComboBoxModel<>(bitDepths));
 			comboChannels.setModel(new DefaultComboBoxModel<>(channels));
 		}
 		
@@ -107,8 +124,8 @@ public class NativeSoundConfigPanel extends JPanel {
 			comboService.setSelectedIndex(serviceIndex);
 			int samplerate = (int) sm.getSettingObject("nativesound.samplerate").get();
 			comboSampleRate.setSelectedItem(samplerate);
-			int bitrate = (int) sm.getSettingObject("nativesound.bitrate").get();
-			comboBitRate.setSelectedItem(bitrate);
+			int bitDepth = (int) sm.getSettingObject("nativesound.bitdepth").get();
+			comboBitDepth.setSelectedItem(bitDepth);
 			int channels = (int) sm.getSettingObject("nativesound.channels").get();
 			comboChannels.setSelectedItem(channels);
 			chckbxShowSupportedOnly.setSelected((boolean) sm.getSettingObject("nativesound.panel.showonlysupported").get());
@@ -130,7 +147,7 @@ public class NativeSoundConfigPanel extends JPanel {
 			if(chckbxShowSupportedOnly.isSelected()) {
 				
 				XtFormat format = new XtFormat(new XtMix((int) comboSampleRate.getSelectedItem(),
-						NativeSoundFormat.bitrateToSample((int) comboBitRate.getSelectedItem())),
+						NativeSoundFormat.bitDepthToSample((int) comboBitDepth.getSelectedItem())),
 						(int) comboChannels.getSelectedItem(), 0, 0, 0);
 				
 				for(int dIndex : nsound.getSupportedDevicesIndex(service, format)) {
@@ -183,7 +200,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		int deviceIndex = currentDeviceIndexes.get(comboDevice.getSelectedIndex());
 		sm.getSettingObject("nativesound.deviceindex").setValue(deviceIndex);
 		sm.getSettingObject("nativesound.samplerate").setValue(comboSampleRate.getSelectedItem());
-		sm.getSettingObject("nativesound.bitrate").setValue(comboBitRate.getSelectedItem());
+		sm.getSettingObject("nativesound.bitdepth").setValue(comboBitDepth.getSelectedItem());
 		sm.getSettingObject("nativesound.channels").setValue(comboChannels.getSelectedItem());
 		sm.getSettingObject("nativesound.panel.showonlysupported").setValue(chckbxShowSupportedOnly.isSelected());
 	}
@@ -192,7 +209,7 @@ public class NativeSoundConfigPanel extends JPanel {
 		try (XtAudio audio = new XtAudio(null, null, null, null)) {
 			XtService service = XtAudio.getServiceByIndex(comboService.getSelectedIndex());
 			XtFormat format = new XtFormat(new XtMix((int) comboSampleRate.getSelectedItem(),
-					NativeSoundFormat.bitrateToSample((int) comboBitRate.getSelectedItem())),
+					NativeSoundFormat.bitDepthToSample((int) comboBitDepth.getSelectedItem())),
 					(int) comboChannels.getSelectedItem(), 0, 0, 0);
 			int deviceIndex = currentDeviceIndexes.get(comboDevice.getSelectedIndex());
 			return nsound.isDeviceSupported(service, deviceIndex, format);
@@ -265,15 +282,15 @@ public class NativeSoundConfigPanel extends JPanel {
 			gbc_lblSamplerate.gridy = 0;
 			panelFormat.add(lblSamplerate, gbc_lblSamplerate);
 
-			JLabel lblBitrate = new JLabel("Bitrate");
-			lblBitrate.setForeground(Style.textColor);
-			GridBagConstraints gbc_lblBitrate = new GridBagConstraints();
-			gbc_lblBitrate.anchor = GridBagConstraints.LINE_START;
-			gbc_lblBitrate.weightx = 1.0;
-			gbc_lblBitrate.insets = new Insets(0, 0, 5, 5);
-			gbc_lblBitrate.gridx = 1;
-			gbc_lblBitrate.gridy = 0;
-			panelFormat.add(lblBitrate, gbc_lblBitrate);
+			JLabel lblBitDepth = new JLabel("Bit Depth");
+			lblBitDepth.setForeground(Style.textColor);
+			GridBagConstraints gbc_lblBitDepth = new GridBagConstraints();
+			gbc_lblBitDepth.anchor = GridBagConstraints.LINE_START;
+			gbc_lblBitDepth.weightx = 1.0;
+			gbc_lblBitDepth.insets = new Insets(0, 0, 5, 5);
+			gbc_lblBitDepth.gridx = 1;
+			gbc_lblBitDepth.gridy = 0;
+			panelFormat.add(lblBitDepth, gbc_lblBitDepth);
 
 			JLabel lblChannels = new JLabel("Channels");
 			lblChannels.setForeground(Style.textColor);
@@ -295,15 +312,15 @@ public class NativeSoundConfigPanel extends JPanel {
 			gbc_comboBoxSampleRate.gridy = 1;
 			panelFormat.add(comboSampleRate, gbc_comboBoxSampleRate);
 
-			comboBitRate = new JComboBox<Integer>();
-			comboBitRate.addItemListener(formatChangedListener);
-			GridBagConstraints gbc_comboBoxBitRate = new GridBagConstraints();
-			gbc_comboBoxBitRate.weightx = 1.0;
-			gbc_comboBoxBitRate.insets = new Insets(0, 0, 0, 5);
-			gbc_comboBoxBitRate.fill = GridBagConstraints.HORIZONTAL;
-			gbc_comboBoxBitRate.gridx = 1;
-			gbc_comboBoxBitRate.gridy = 1;
-			panelFormat.add(comboBitRate, gbc_comboBoxBitRate);
+			comboBitDepth = new JComboBox<Integer>();
+			comboBitDepth.addItemListener(formatChangedListener);
+			GridBagConstraints gbc_comboBoxBitDepth = new GridBagConstraints();
+			gbc_comboBoxBitDepth.weightx = 1.0;
+			gbc_comboBoxBitDepth.insets = new Insets(0, 0, 0, 5);
+			gbc_comboBoxBitDepth.fill = GridBagConstraints.HORIZONTAL;
+			gbc_comboBoxBitDepth.gridx = 1;
+			gbc_comboBoxBitDepth.gridy = 1;
+			panelFormat.add(comboBitDepth, gbc_comboBoxBitDepth);
 
 			comboChannels = new JComboBox<Integer>();
 			comboChannels.addItemListener(formatChangedListener);

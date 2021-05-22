@@ -67,8 +67,8 @@ public class NativeSoundFormat {
 		return e;
 	}
 	
-	public static XtSample bitrateToSample(int bitrate) {
-		switch (bitrate) {
+	public static XtSample bitDepthToSample(int bitDepth) {
+		switch (bitDepth) {
 			case 8:
 				return XtSample.UINT8;
 			case 16:

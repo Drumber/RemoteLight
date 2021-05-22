@@ -73,7 +73,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private int threshold = -100;
 	
 	private boolean useNativeSound = false;
-	private XtSample bitRate = XtSample.INT16;
+	private XtSample bitDepth = XtSample.INT16;
 	private int xtServiceIndex = -1;
 	private int xtDeviceIndex;
 	private int channels = 2;
@@ -126,7 +126,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 					NativeSound nsound = manager.getNativeSound();
 					XtService service = XtAudio.getServiceByIndex(xtServiceIndex);
 					
-					XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, bitRate), channels, 0, 0, 0);
+					XtFormat xformat = new XtFormat(new XtMix((int)sampleRate, bitDepth), channels, 0, 0, 0);
 					NativeSoundFormat nformat = new NativeSoundFormat(xformat);
 					NativeSoundInputStream nsis = new NativeSoundInputStream(nformat);
 					
@@ -186,11 +186,11 @@ public class SoundProcessing implements PitchDetectionHandler {
 		return useNativeSound;
 	}
 	
-	public void configureNativeSound(int serviceIndex, int deviceIndex, int sampleRate, XtSample bitrate, int channels) {
+	public void configureNativeSound(int serviceIndex, int deviceIndex, int sampleRate, XtSample bitDepth, int channels) {
 		this.xtServiceIndex = serviceIndex;
 		this.xtDeviceIndex = deviceIndex;
 		this.sampleRate = sampleRate;
-		this.bitRate = bitrate;
+		this.bitDepth = bitDepth;
 		this.channels = channels;
 	}
 	
