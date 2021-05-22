@@ -32,15 +32,15 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JRootPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
@@ -204,7 +204,9 @@ public class Main {
 			// check if current LaF is FlatLaf LaF
 			if(UIManager.getLookAndFeel().getID().startsWith("FlatLaf")) {
 				UiUtils.setThemingEnabled(false);
-				boolean customWindow = getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get();
+				boolean customWindow = FlatLaf.supportsNativeWindowDecorations()
+						&& getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get()
+						&& getSettingsManager().getSetting(SettingSelection.class, "ui.style").getSelected().equals("LookAndFeel");
 				// enable FlatLaf custom window decorations
 				UIManager.put( "TitlePane.unifiedBackground", true );
 				setCustomWindowDecorations(customWindow);
@@ -222,22 +224,10 @@ public class Main {
 	/**
 	 * Enable or disable FlatLaf custom window decorations. Works only if
 	 * a FlatLaf Look and Feel is enabled.
-	 * <p> Will refresh all registered frames.
 	 * @param enabled	whether to enable or disable window decorations
 	 */
 	public void setCustomWindowDecorations(boolean enabled) {
-		JFrame.setDefaultLookAndFeelDecorated(enabled);
-		JDialog.setDefaultLookAndFeelDecorated(enabled);
-		// loop through all registered frames
-		for(JFrame frame : frames) {
-			if(frame != null && frame.isUndecorated() != enabled) {
-				// refresh frame
-				frame.dispose();
-				frame.setUndecorated(enabled);
-				frame.getRootPane().setWindowDecorationStyle(enabled ? JRootPane.FRAME : JRootPane.NONE);
-				frame.setVisible(true);
-			}
-		}
+		FlatLaf.setUseNativeWindowDecorations(enabled);
 	}
 	
 	/**

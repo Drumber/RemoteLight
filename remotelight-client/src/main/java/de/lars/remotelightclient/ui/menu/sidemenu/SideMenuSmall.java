@@ -126,6 +126,7 @@ public class SideMenuSmall extends SideMenu {
 		btn.setMaximumSize(new Dimension(40, 30));
 		btn.addMouseListener(buttonHoverListener);
 		btn.addActionListener(buttonActionListener);
+		btn.setRolloverEnabled(false);
         if(mainFrame.getSelectedMenu().equals(btn.getName())) {
         	btn.setBackground(Style.accent);
         }

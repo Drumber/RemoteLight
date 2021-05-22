@@ -22,15 +22,19 @@
 
 package de.lars.remotelightclient.ui.components;
 
-import de.lars.remotelightclient.ui.Style;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import de.lars.remotelightclient.ui.Style;
 
 public class BigImageButton extends JPanel {
 
@@ -77,11 +81,13 @@ public class BigImageButton extends JPanel {
 		public void mouseEntered(MouseEvent e) {
 			bgrText.setBackground(Style.hoverBackground);
 			bgrImage.setBackground(Style.hoverBackground);
+			repaint();
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
 			bgrText.setBackground(bg);
 			bgrImage.setBackground(bg);
+			repaint();
 		}
 	};
 	

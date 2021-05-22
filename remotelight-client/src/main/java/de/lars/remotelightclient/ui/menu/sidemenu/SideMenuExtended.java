@@ -131,6 +131,7 @@ public class SideMenuExtended extends SideMenu {
         btn.setHorizontalAlignment(SwingConstants.LEFT);
         btn.addMouseListener(buttonHoverListener);
         btn.addActionListener(buttonActionListener);
+        btn.setRolloverEnabled(false);
         if(mainFrame.getSelectedMenu().equals(btn.getName())) {
         	btn.setBackground(Style.accent);
         }

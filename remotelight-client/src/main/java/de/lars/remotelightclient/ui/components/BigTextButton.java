@@ -80,11 +80,13 @@ public class BigTextButton extends JPanel {
 		public void mouseEntered(MouseEvent e) {
 			bgrText.setBackground(Style.hoverBackground);
 			bgrTitle.setBackground(Style.hoverBackground);
+			repaint();
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
 			bgrText.setBackground(bg);
 			bgrTitle.setBackground(bg);
+			repaint();
 		}
 	};
 	
