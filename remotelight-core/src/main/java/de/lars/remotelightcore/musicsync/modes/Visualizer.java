@@ -22,7 +22,7 @@
 
 package de.lars.remotelightcore.musicsync.modes;
 
-import de.lars.remotelightcore.utils.color.Color;
+import java.util.Arrays;
 
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.MusicEffect;
@@ -30,6 +30,8 @@ import de.lars.remotelightcore.out.OutputManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
 
@@ -39,11 +41,15 @@ public class Visualizer extends MusicEffect {
 	private boolean rainbow = false;
 	private SettingBoolean sRainbow;
 	private SettingColor sColor;
+	private SettingBoolean sSmooth;
+	private SettingInt sSmoothAmount;
 
 	public Visualizer() {
 		super("Visualizer");
 		sRainbow = this.addSetting(new SettingBoolean("musicsync.visualizer.rainbow", "Rainbow", SettingCategory.MusicEffect, "", false));
 		sColor = this.addSetting(new SettingColor("musicsync.visualizer.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		sSmooth = this.addSetting(new SettingBoolean("musicsync.visualizer.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
+		sSmoothAmount = this.addSetting(new SettingInt("musicsync.visualizer.smoothamount", "Smooth Amount", SettingCategory.MusicEffect, "", 5, 1, 50, 1));
 	}
 	
 	@Override
@@ -59,12 +65,27 @@ public class Visualizer extends MusicEffect {
 			this.hideSetting(sColor, rainbow);
 			this.updateEffectOptions();
 		}
+		this.hideSetting(sSmoothAmount, !sSmooth.get());
 		
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
-		int[] fftData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
+		int[] brightnessData;
+		
+		if(!sSmooth.get()) {
+			brightnessData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
+		} else {
+			float[] smoothAmpl = Arrays.copyOfRange(smoothData(ampl), getSoundProcessor().hzToBin(2000), getSoundProcessor().hzToBin(10000));
+			// resize array to LED length using linear interpolation
+			smoothAmpl = resizeData(smoothAmpl, getLeds());
+			brightnessData = new int[smoothAmpl.length];
+			for(int i = 0; i < smoothAmpl.length; i++) {
+				// map amplitudes to a brightness value between 0 and 255
+				int brightness = (int) (smoothAmpl[i] * 4f * getAdjustment());
+				brightnessData[i] = Math.min(255, brightness);
+			}
+		}
 		
 		for(int i = 0; i < RemoteLightCore.getLedNum(); i++) {
-			int brightness = fftData[i];
+			int brightness = brightnessData[i];
 			
 			Color c = ColorUtil.dimColor(getColor(i), brightness);
 			strip[i] = c;
@@ -83,4 +104,51 @@ public class Visualizer extends MusicEffect {
 		}
 	}
 
+	private float[] smoothData(float[] amplitudes) {
+		int smoothValuesAmount = sSmoothAmount.get();
+		float[] smoothed = new float[amplitudes.length];
+		
+		for(int i = 0; i < smoothed.length; i++) {
+			int startIndex = Math.max(0, i - (smoothValuesAmount - 1));
+			int endIndex = Math.min(smoothed.length-1, i + (smoothValuesAmount - 1));
+			int currValuesAmount = endIndex - startIndex + 1;
+			float sum = 0.0f;
+			for(int j = 0; j < currValuesAmount; j++) {
+				int elementIndex = startIndex + j;
+				sum += amplitudes[elementIndex];
+			}
+			float avg = sum / currValuesAmount;
+			avg = avg * avg;
+			// apply filter (reduce low frequencies)
+			// this uses an exponential function: -e^(-a*(x+10))+1
+			// make 'a' bigger to allow more low frequencies
+			float a = -0.01f;
+			double volPercent = -Math.exp(a * (i + 10)) + 1;
+			smoothed[i] = (float) (volPercent * avg);
+		}
+		return smoothed;
+	}
+	
+	private float[] resizeData(float[] amplitudes, int newSize) {
+		if(amplitudes.length == newSize) {
+			return amplitudes;
+		}
+		float[] out = new float[newSize];
+		float fraction = (1.0f * amplitudes.length) / newSize;
+		
+		for(int i = 0; i < newSize; i++) {
+			float position = i * fraction;
+			int nextPos = (int) Math.floor(position);
+			float difference = position - nextPos;
+			
+			if(nextPos >= amplitudes.length - 1) {
+				out[i] = amplitudes[amplitudes.length - 1];
+				continue;
+			}
+			
+			out[i] = (difference * amplitudes[nextPos + 1]) + ((1 - difference) * amplitudes[nextPos]);
+		}
+		return out;
+	}
+	
 }
