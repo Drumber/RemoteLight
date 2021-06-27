@@ -52,6 +52,7 @@ import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.ConsoleEntryPanel;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.NotificationEntryPanel;
+import de.lars.remotelightclient.ui.panels.tools.entrypanels.OutputPreviewEntryPanel;
 import de.lars.remotelightclient.ui.panels.tools.entrypanels.PluginsEntryPanel;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
@@ -73,6 +74,7 @@ public class ToolsPanel extends MenuPanel {
 		panelEntries.add(new ConsoleEntryPanel());
 		panelEntries.add(new PluginsEntryPanel());
 		panelEntries.add(new NotificationEntryPanel());
+		panelEntries.add(new OutputPreviewEntryPanel());
 	}
 	
 	public ToolsPanel() {
