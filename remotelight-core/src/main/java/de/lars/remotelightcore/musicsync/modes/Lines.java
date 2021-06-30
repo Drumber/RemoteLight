@@ -46,6 +46,7 @@ public class Lines extends MusicEffect {
 	private int rainbowAllHue = 0;
 	
 	private Color[] strip;
+	private int[] prevData;
 	private boolean rotate;
 	private TimeUtil rotateTimer;
 	private int rotateIndex;
@@ -56,6 +57,7 @@ public class Lines extends MusicEffect {
 	public Lines() {
 		super("Lines");
 		this.addSetting(new SettingBoolean("musicsync.lines.rotate", "Rotate", SettingCategory.MusicEffect, "Rotate strip", false));
+		this.addSetting(new SettingBoolean("musicsync.lines.smooth", "Smooth", SettingCategory.MusicEffect, null, false));
 		this.addSetting(new SettingSelection("musicsync.lines.colormode", "Color mode", SettingCategory.MusicEffect, null, colorModes, "Static", Model.ComboBox));
 		this.addSetting(new SettingColor("musicsync.lines.color", "Color", SettingCategory.MusicEffect, "Static color", Color.RED));
 		this.addSetting(new SettingInt("musicsync.lines.lines", "Lines", SettingCategory.MusicEffect, "Number of lines", 10, 2, 300, 1));
@@ -86,9 +88,20 @@ public class Lines extends MusicEffect {
 		float[] fft = getSoundProcessor().getAmplitudes();
 		int[] data = getSoundProcessor().computeFFT(fft, linesNum, getAdjustment());
 		
+		// for smooth mode: make sure prevData has the right length
+		if(prevData == null || prevData.length != data.length) {
+			prevData = data;
+		}
+		
 		for(int i = 0; i < linesNum; i++) {
+			if(data[i] >= prevData[i] || !getSetting(SettingBoolean.class, "musicsync.lines.smooth").get()) {
+				prevData[i] = data[i];
+			} else {
+				prevData[i] = Math.max(0, prevData[i] - linesNum);
+			}
+			
 			// calculate how many led should glows
-			int vol = data[i];
+			int vol = prevData[i];
 			int leds = (int) MathHelper.map(vol, 0, 255, 0, maxLineLength);
 						
 			int ledIndex = i * maxLineLength; // first led index
