@@ -31,15 +31,6 @@ import de.lars.remotelightcore.settings.types.SettingInt;
 
 public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 	
-	/**
-	 * TODO:
-	 * right-click menu with options:
-	 * - strip preview
-	 * - always on top
-	 * - black background
-	 * - FPS presets (15, 30, 60, 120)
-	 */
-	
 	private OutputPreviewFrame frame;
 
 	@Override
@@ -55,7 +46,9 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 		frame.setVisible(!frame.isVisible());
 	}
 	
-	
+	/**
+	 * A frame that displays the current output in a RGB graph and a optional strip preview.
+	 */
 	private class OutputPreviewFrame extends JFrame {
 		private static final long serialVersionUID = 1L;
 		private OutputManager om;
@@ -99,7 +92,7 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 				}
 			});
 			
-			// draw every 35 milliseconds (= 1000/35 = 29 FPS)
+			// draw every 35 milliseconds (= 1000/35 = 29 FPS) (will be overwritten by setSettingValues())
 			timer = new Timer(35, e -> {
 				if(isVisible()) {
 					panel.repaint();
@@ -110,20 +103,32 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 			setSettingValues();
 		}
 		
+		/**
+		 * Initialize the settings object.
+		 * Create the settings on the first run, or load previous values.
+		 */
 		private void initSettings() {
 			sStripPreview = sm.addSetting(new SettingBoolean("outputpreview.strippreview", "Show strip preview", SettingCategory.Intern, null, true));
 			sAlwaysTop = sm.addSetting(new SettingBoolean("outputpreview.alwaystop", "Window always on top", SettingCategory.Intern, null, false));
 			sBlackBackground = sm.addSetting(new SettingBoolean("outputpreview.blackbackground", "Black background", SettingCategory.Intern, null, false));
-			sFPS = sm.addSetting(new SettingInt("outputpreview,fps", "FPS", SettingCategory.Intern, null, 30, 15, 120, 1));
+			sFPS = sm.addSetting(new SettingInt("outputpreview,fps", "FPS", SettingCategory.Intern, null, 60, 15, 120, 1));
 		}
 		
+		/**
+		 * Apply the settings to the UI.
+		 */
 		private void setSettingValues() {
 			this.setAlwaysOnTop(sAlwaysTop.get());
 			timer.setDelay(1000 / sFPS.get());
 			panel.setBackground(sBlackBackground.get() ? Color.BLACK : null);
 		}
 		
+		/**
+		 * Create the menu items for the context menu.
+		 * @param menu	the {@link JPopupMenu} the menu items will be added to.
+		 */
 		private void addMenuItemsToContextMenu(JPopupMenu menu) {
+			// create menu items
 			JCheckBoxMenuItem itemStripPreview = new JCheckBoxMenuItem("Show strip preview", sStripPreview.get());
 			JCheckBoxMenuItem itemAlwaysTop = new JCheckBoxMenuItem("Show window always on top", sAlwaysTop.get());
 			JCheckBoxMenuItem itemBlackBgr = new JCheckBoxMenuItem("Black background", sBlackBackground.get());
@@ -133,6 +138,7 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 			JRadioButtonMenuItem itemFPS60 = new JRadioButtonMenuItem("60 FPS", sFPS.get() == 60);
 			JRadioButtonMenuItem itemFPS120 = new JRadioButtonMenuItem("120 FPS", sFPS.get() == 120);
 			
+			// add menu items to the menu
 			menu.add(itemStripPreview);
 			menu.add(itemAlwaysTop);
 			menu.add(itemBlackBgr);
@@ -142,12 +148,14 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 			menuFPS.add(itemFPS60);
 			menuFPS.add(itemFPS120);
 			
+			// button group for the FPS options
 			ButtonGroup groupFPS = new ButtonGroup();
 			groupFPS.add(itemFPS15);
 			groupFPS.add(itemFPS30);
 			groupFPS.add(itemFPS60);
 			groupFPS.add(itemFPS120);
 			
+			// add listeners to the menu items which updates the setting values
 			itemStripPreview.addActionListener(e -> sStripPreview.set(itemStripPreview.isSelected()));
 			itemAlwaysTop.addActionListener(e -> {
 				sAlwaysTop.set(itemAlwaysTop.isSelected());
@@ -168,6 +176,9 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 			setSettingValues();
 		}
 		
+		/**
+		 * {@link JPanel} that displays the RGB graph and the strip preview.
+		 */
 		private class Panel extends JPanel {
 			private static final long serialVersionUID = 1L;
 
@@ -181,6 +192,7 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 				int width = this.getBounds().width;
 				int height = this.getBounds().height;
 				
+				// if the strip preview is enabled: margin-bottom = strip height; otherwise = 0
 				final int stripHeight = 20;
 				int marginBottom = stripHeight;
 				if(!sStripPreview.get()) {
@@ -189,8 +201,11 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 				
 				int graphHeight = height - marginBottom;
 				
+				// calculate the fraction for a single LED
 				float fraction = 1.0f * width / strip.length;
+				// the length of the displayed LEDs
 				int length = strip.length;
+				// if there are more LEDs than pixels of the window width, set the length to the width
 				if(fraction <= 0) {
 					length = width;
 				}
@@ -213,6 +228,7 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 					 gColors[i] = ColorTool.convert(strip[i]);
 				}
 				
+				// draw the RGB graph using polylines
 				g2.setStroke(new BasicStroke(2));
 				g2.setColor(Color.RED);
 				g2.drawPolyline(x, yRed, length);
@@ -221,6 +237,7 @@ public class OutputPreviewEntryPanel extends ToolsPanelEntry {
 				g2.setColor(Color.BLUE);
 				g2.drawPolyline(x, yBlue, length);
 				
+				// draw the strip preview if enabled
 				if(sStripPreview.get()) {
 					Point2D gStart = new Point2D.Float(0, height - stripHeight);
 					Point2D gEnd = new Point2D.Float(width, height);
