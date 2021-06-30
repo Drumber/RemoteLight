@@ -69,7 +69,7 @@ public class Lines extends MusicEffect {
 		rotateIndex = 0;
 		rotateTimer = new TimeUtil(150);
 		
-		linesNum = strip.length / 10; // number of lines
+		linesNum = Math.max(1, strip.length / 10); // number of lines
 		maxLineLength = strip.length / linesNum; // maximum line length in pixel
 		super.onEnable();
 	}
@@ -78,7 +78,7 @@ public class Lines extends MusicEffect {
 	public void onLoop() {
 		handleSettings();
 		if(linesNum > strip.length / 2)
-			linesNum = strip.length / 2;
+			linesNum = Math.max(1, strip.length / 2);
 		maxLineLength = strip.length / linesNum;
 		
 		// for color mode Rainbow #1
