@@ -71,6 +71,7 @@ public class SoundProcessing implements PitchDetectionHandler {
 	private Mixer mixer;
 	private SilenceDetector silenceDetector;
 	private int threshold = -100;
+	private MelFilter melFilter;
 	
 	private boolean useNativeSound = false;
 	private XtSample bitDepth = XtSample.INT16;
@@ -144,6 +145,9 @@ public class SoundProcessing implements PitchDetectionHandler {
 			silenceDetector = new SilenceDetector(threshold, false);
 			dispatcher.addAudioProcessor(silenceDetector);
 			dispatcher.addAudioProcessor(fftProcessor);
+			//dispatcher.addAudioProcessor(new HighPass(400, sampleRate));
+			melFilter = new MelFilter(bufferSize, sampleRate);
+			dispatcher.addAudioProcessor(melFilter);
 
 			new Thread(dispatcher, "Audio dispatching").start();
 
@@ -223,6 +227,13 @@ public class SoundProcessing implements PitchDetectionHandler {
 			return (spl + (threshold * (-1)));
 		else
 			return 0;
+	}
+	
+	public float[] getMelFilter() {
+		if(melFilter != null) {
+			return melFilter.getFilterBank();
+		}
+		return null;
 	}
 
 	private int low1 = 0, low2 = 0, mid1 = 0, mid2 = 0, high1 = 0, high2 = 0;

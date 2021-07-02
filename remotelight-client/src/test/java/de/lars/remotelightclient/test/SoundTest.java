@@ -141,6 +141,15 @@ public class SoundTest {
 			g.setColor(Color.RED);
 			g.drawLine(0, avgY, width, avgY);
 			
+			//-----------------------
+			// Mel filter bank
+			//-----------------------
+			float[] melFilter = msm.getSoundProcessor().getMelFilter();
+			if(melFilter != null) {
+				g.setColor(Color.CYAN);
+				drawRawVisualizer(g, melFilter, adjustment * 0.05);
+			}
+			
 			g.dispose();
 		}
 		
