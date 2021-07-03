@@ -115,6 +115,14 @@ public class SettingsPanel extends MenuPanel {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane, BorderLayout.CENTER);
 		
+		JButton btnTest = new JButton("Test Themes");
+		btnTest.addActionListener(e -> {
+			this.removeAll();
+			this.add(new ThemeSettingsPanel(), BorderLayout.CENTER);
+			this.updateUI();
+		});
+		main.add(btnTest);
+		
 		this.updateUI();
 	}
 	

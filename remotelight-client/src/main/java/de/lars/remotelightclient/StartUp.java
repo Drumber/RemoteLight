@@ -28,6 +28,8 @@ import java.io.IOException;
 
 import org.tinylog.Logger;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.components.dialogs.UpdateDialog;
@@ -47,6 +49,7 @@ import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingObject;
 import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.settings.types.SettingString;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.UpdateChecker;
 
@@ -159,6 +162,9 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("ui.glow.button", "Glowing Effect Buttons", SettingCategory.General, "Enable glow effect for buttons.", true));
 		// update style setting if already set
 		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
+		
+		// UI Theme
+		s.addSetting(new SettingString("ui.theme", "Theme Class Name", SettingCategory.Intern, null, FlatDarkLaf.class.getName()));
 		
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));
