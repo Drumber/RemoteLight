@@ -31,6 +31,7 @@ import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.RainbowWheel;
@@ -42,19 +43,25 @@ public class Visualizer extends MusicEffect {
 	private SettingBoolean sRainbow;
 	private SettingColor sColor;
 	private SettingBoolean sSmooth;
-	private SettingInt sSmoothAmount;
+	private SettingInt sBlurAmount;
+	private SettingSelection sMode;
+	private final String[] MODES = {"Legacy", "Smooth", "Mel Filtered"};
+	
+	private float[] prevData;
 
 	public Visualizer() {
 		super("Visualizer");
 		sRainbow = this.addSetting(new SettingBoolean("musicsync.visualizer.rainbow", "Rainbow", SettingCategory.MusicEffect, "", false));
 		sColor = this.addSetting(new SettingColor("musicsync.visualizer.color", "Color", SettingCategory.MusicEffect, "", Color.RED));
+		sMode = this.addSetting(new SettingSelection("musicsync.visualizer.mode", "Mode", SettingCategory.MusicEffect, null, MODES, MODES[1], SettingSelection.Model.ComboBox));
+		sBlurAmount = this.addSetting(new SettingInt("musicsync.visualizer.bluramount", "Blur Amount", SettingCategory.MusicEffect, "", 5, 1, 50, 1));
 		sSmooth = this.addSetting(new SettingBoolean("musicsync.visualizer.smooth", "Smooth", SettingCategory.MusicEffect, "", false));
-		sSmoothAmount = this.addSetting(new SettingInt("musicsync.visualizer.smoothamount", "Smooth Amount", SettingCategory.MusicEffect, "", 5, 1, 50, 1));
 	}
 	
 	@Override
 	public void onEnable() {
 		strip = new Color[RemoteLightCore.getLedNum()];
+		prevData = null;
 		super.onEnable();
 	}
 	
@@ -65,21 +72,33 @@ public class Visualizer extends MusicEffect {
 			this.hideSetting(sColor, rainbow);
 			this.updateEffectOptions();
 		}
-		this.hideSetting(sSmoothAmount, !sSmooth.get());
+		this.hideSetting(sSmooth, sMode.get().equals(MODES[0]));
 		
 		float[] ampl = getSoundProcessor().getAmplitudes(); //amplitudes
 		int[] brightnessData;
 		
-		if(!sSmooth.get()) {
-			brightnessData = getSoundProcessor().computeFFT(ampl, strip.length, getAdjustment());
-		} else {
-			float[] smoothAmpl = Arrays.copyOfRange(smoothData(ampl), getSoundProcessor().hzToBin(2000), getSoundProcessor().hzToBin(10000));
+		if(sMode.get().equals(MODES[0])) {
+			brightnessData = getSoundProcessor().computeFFT(ampl, strip.length, 0.5f * getAdjustment());
+		} else if(sMode.get().equals(MODES[1])) {
+			float[] smoothAmpl = Arrays.copyOfRange(smoothData(ampl), getSoundProcessor().hzToBin(1000), getSoundProcessor().hzToBin(10000));
 			// resize array to LED length using linear interpolation
 			smoothAmpl = resizeData(smoothAmpl, getLeds());
 			brightnessData = new int[smoothAmpl.length];
 			for(int i = 0; i < smoothAmpl.length; i++) {
 				// map amplitudes to a brightness value between 0 and 255
-				int brightness = (int) (smoothAmpl[i] * 4f * getAdjustment());
+				int brightness = (int) (smoothAmpl[i] * 1f * getAdjustment());
+				brightnessData[i] = Math.min(255, brightness);
+			}
+		} else {
+			float[] melFilter = getSoundProcessor().getMelFilter();
+			if(melFilter == null) {
+				melFilter = new float[60];
+			}
+			float[] processedAmpl = resizeData(smoothData(melFilter), getLeds());
+			brightnessData = new int[processedAmpl.length];
+			for(int i = 0; i < processedAmpl.length; i++) {
+				// map amplitudes to a brightness value between 0 and 255
+				int brightness = (int) (processedAmpl[i] * 0.05f * getAdjustment());
 				brightnessData[i] = Math.min(255, brightness);
 			}
 		}
@@ -105,7 +124,7 @@ public class Visualizer extends MusicEffect {
 	}
 
 	private float[] smoothData(float[] amplitudes) {
-		int smoothValuesAmount = sSmoothAmount.get();
+		int smoothValuesAmount = sBlurAmount.get();
 		float[] smoothed = new float[amplitudes.length];
 		
 		for(int i = 0; i < smoothed.length; i++) {
@@ -126,6 +145,21 @@ public class Visualizer extends MusicEffect {
 			double volPercent = -Math.exp(a * (i + 10)) + 1;
 			smoothed[i] = (float) (volPercent * avg);
 		}
+		
+		// smoothing using simple exponential moving average
+		float alpha = 0.5f;
+		float alphaRise = 0.95f;
+		if(sSmooth.get() && prevData != null && prevData.length == smoothed.length) {
+			for(int i = 0; i < smoothed.length; i++) {
+				float a = alpha;
+				if(smoothed[i] > prevData[i]) {
+					a = alphaRise;
+				}
+				smoothed[i] = prevData[i] + a * (smoothed[i] - prevData[i]);
+			}
+		}
+		
+		prevData = smoothed.clone();
 		return smoothed;
 	}
 	
