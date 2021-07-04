@@ -41,6 +41,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import org.tinylog.Logger;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatInspector;
 
 import de.lars.remotelightclient.plugins.SwingPluginInterface;
 import de.lars.remotelightclient.screencolor.ScreenColorManager;
@@ -170,6 +171,10 @@ public class Main {
 					// initialize and show the main frame
 					mainFrame = new MainFrame();
 					mainFrame.setVisible(!RemoteLightCore.startParameter.tray);
+					
+					if(RemoteLightCore.DEVBUILD) {
+						FlatInspector.install("ctrl shift alt X");
+					}
 				} catch (Exception e) {
 					ExceptionHandler.handle(e);
 				}

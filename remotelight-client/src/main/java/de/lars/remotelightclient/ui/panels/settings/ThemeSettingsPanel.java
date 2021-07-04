@@ -1,9 +1,11 @@
 package de.lars.remotelightclient.ui.panels.settings;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +17,13 @@ import javax.swing.event.ListSelectionEvent;
 import org.tinylog.Logger;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
+import de.lars.remotelightclient.utils.ui.MenuIconFont;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
@@ -42,12 +46,24 @@ public class ThemeSettingsPanel extends JPanel {
 		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JLabel lblTitle = new JLabel("Application Theme");
+		JButton btnBack = new JButton(Style.getFontIcon(MenuIconFont.MenuIcon.BACK, 16));
+		btnBack.setBackground(new Color(0, 0, 0, 0));
+		btnBack.setOpaque(false);
+		// TODO: go back
+		btnBack.addActionListener(e -> System.out.println("on back pressed"));
+		
+		JLabel lblTitle = new JLabel("Appearance");
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		lblTitle.setFont(Style.getFontRegualar(14));
 		lblTitle.setForeground(Style.textColor);
 		lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		add(lblTitle);
+		
+		JPanel panelTopBar = new JPanel();
+		panelTopBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelTopBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelTopBar.add(btnBack);
+		panelTopBar.add(lblTitle);
+		add(panelTopBar);
 		
 		JComboBox<String> boxFilter = new JComboBox<>(new DefaultComboBoxModel<>(new String[] {"All", "Light", "Dark"}));
 		boxFilter.setSelectedItem(sThemeFilter.get());
@@ -63,7 +79,6 @@ public class ThemeSettingsPanel extends JPanel {
 		panelFilter.setMaximumSize(new Dimension(Integer.MAX_VALUE, boxFilter.getPreferredSize().height));
 		panelFilter.add(Box.createHorizontalGlue());
 		panelFilter.add(boxFilter);
-		add(panelFilter);
 		
 		listThemes = new JList<>();
 		listThemes.setCellRenderer(themeListCellRenderer);
@@ -80,6 +95,13 @@ public class ThemeSettingsPanel extends JPanel {
 		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		themeScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		
+		JPanel panelThemes = new JPanel();
+		panelThemes.setLayout(new BorderLayout());
+		panelThemes.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelThemes.add(panelFilter, BorderLayout.NORTH);
+		panelThemes.add(themeScrollPane, BorderLayout.CENTER);
+		add(panelThemes);
+		
 		PreviewPanel previewPanel = new PreviewPanel();
 		JPanel previewWrapper = new JPanel();
 		previewWrapper.setLayout(new BoxLayout(previewWrapper, BoxLayout.Y_AXIS));
@@ -89,7 +111,7 @@ public class ThemeSettingsPanel extends JPanel {
 		JPanel panelMiddle = new JPanel();
 		panelMiddle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelMiddle.setLayout(new BoxLayout(panelMiddle, BoxLayout.X_AXIS));
-		panelMiddle.add(themeScrollPane);
+		panelMiddle.add(panelThemes);
 		panelMiddle.add(previewWrapper);
 		add(panelMiddle);
 	}
@@ -105,9 +127,11 @@ public class ThemeSettingsPanel extends JPanel {
 		
 		EventQueue.invokeLater(() -> {
 			try {
+				FlatAnimatedLafChange.showSnapshot();
 				UIManager.setLookAndFeel(info.getClassName());
 				sSelectedTheme.set(info.getClassName());
 				FlatLaf.updateUI();
+				FlatAnimatedLafChange.hideSnapshotWithAnimation();
 			} catch (Exception e) {
 				Logger.error(e, "Failed to set LookAndFeel to class '" + info.getClassName() + "'.");
 			}
