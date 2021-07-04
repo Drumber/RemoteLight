@@ -48,6 +48,7 @@ import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import jiconfont.swing.IconFontSwing;
@@ -125,6 +126,29 @@ public class UiUtils {
 			}
 		}
 		return null;
+	}
+	
+	public static void bindElevation(Component comp, final int alpha) {
+		comp.addPropertyChangeListener("UI", event -> {
+			Component c = (Component) event.getSource();
+			setElevation(c, UIManager.getColor("Panel.background"), alpha);
+		});
+		setElevation(comp, UIManager.getColor("Panel.background"), alpha);
+	}
+	
+	/**
+	 * Set the elevation of a component by blending the background color with
+	 * a semi-transparent overlay.
+	 * @param comp			the target component
+	 * @param background	the background color that should be blended with the overlay
+	 * @param alpha			the alpha value of the overlay (0..255)
+	 */
+	public static void setElevation(Component comp, Color background, int alpha) {
+		boolean isDark = Style.isDarkLaF();
+		// on dark themes use WHITE overlay, on light themes use BLACK overlay
+		Color overlay = isDark ? new Color(255, 255, 255, alpha) : new Color(0, 0, 0, alpha);
+		Color c = ColorTool.alphaBlending(overlay, background);
+		comp.setBackground(c);
 	}
 	
 	public static void configureButton(JButton btn) {

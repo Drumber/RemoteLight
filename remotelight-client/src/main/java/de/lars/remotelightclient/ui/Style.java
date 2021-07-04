@@ -32,11 +32,14 @@ import java.util.stream.Collectors;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
@@ -264,6 +267,14 @@ public class Style {
 		return Arrays.asList(UIManager.getInstalledLookAndFeels());
 	}
 	
+	public static boolean isDarkLaF() {
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		if(laf instanceof FlatLaf) {
+			return ((FlatLaf) laf).isDark();
+		}
+		return false;
+	}
+		
 	public static Color getNotificationColor(NotificationType type) {
 		switch (type) {
 		case ERROR:

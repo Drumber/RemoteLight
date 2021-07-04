@@ -1,5 +1,6 @@
 package de.lars.remotelightclient.ui.panels.settings;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -19,6 +20,7 @@ import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingString;
@@ -71,12 +73,25 @@ public class ThemeSettingsPanel extends JPanel {
 		
 		TScrollPane themeScrollPane = new TScrollPane(listThemes);
 		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		themeScrollPane.setMinimumSize(new Dimension(200, 0));
 		themeScrollPane.setViewportBorder(null);
 		themeScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		themeScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		themeScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		add(themeScrollPane);
+		
+		PreviewPanel previewPanel = new PreviewPanel();
+		JPanel previewWrapper = new JPanel();
+		previewWrapper.setLayout(new BoxLayout(previewWrapper, BoxLayout.Y_AXIS));
+		previewWrapper.add(previewPanel);
+		previewWrapper.add(Box.createGlue());
+		
+		JPanel panelMiddle = new JPanel();
+		panelMiddle.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelMiddle.setLayout(new BoxLayout(panelMiddle, BoxLayout.X_AXIS));
+		panelMiddle.add(themeScrollPane);
+		panelMiddle.add(previewWrapper);
+		add(panelMiddle);
 	}
 	
 	private void onThemeSelected(ListSelectionEvent event) {
@@ -168,6 +183,64 @@ public class ThemeSettingsPanel extends JPanel {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 		}
 		return false;
+	}
+	
+	
+	private class PreviewPanel extends JPanel {
+		
+		public PreviewPanel() {
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			
+			JPanel panel = new JPanel();
+			UiUtils.bindElevation(panel, 10);
+			panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			//panel.setBackground(Style.panelDarkBackground);
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			add(panel, BorderLayout.CENTER);
+			
+			JLabel lblTitle = new JLabel("Preview");
+			lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+			lblTitle.setFont(Style.getFontBold(14));
+			panel.add(lblTitle);
+			panel.add(Box.createVerticalStrut(10));
+			
+			JButton button = new JButton("Button");
+			button.setAlignmentX(Component.LEFT_ALIGNMENT);
+			panel.add(button);
+			panel.add(Box.createVerticalStrut(10));
+			
+			JComboBox<String> comboBox = new JComboBox<>(new String[] {"Item 1", "Item 2", "Item 3"});
+			comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			comboBox.setMaximumSize(comboBox.getPreferredSize());
+			panel.add(comboBox);
+			panel.add(Box.createVerticalStrut(10));
+			
+			JCheckBox checkBox = new JCheckBox("Check box");
+			checkBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			checkBox.setSelected(true);
+			panel.add(checkBox);
+			panel.add(Box.createVerticalStrut(10));
+			
+			JRadioButton rbtn1 = new JRadioButton("Option 1");
+			rbtn1.setSelected(true);
+			JRadioButton rbtn2 = new JRadioButton("Option 2");
+			JRadioButton rbtn3 = new JRadioButton("Option 3");
+			ButtonGroup rbtnGroup = new ButtonGroup();
+			rbtnGroup.add(rbtn1);
+			rbtnGroup.add(rbtn2);
+			rbtnGroup.add(rbtn3);
+			
+			JPanel panelRbtn = new JPanel();
+			panelRbtn.setBackground(null);
+			panelRbtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+			panelRbtn.add(rbtn1);
+			panelRbtn.add(rbtn2);
+			panelRbtn.add(rbtn3);
+			panelRbtn.setMaximumSize(panelRbtn.getPreferredSize());
+			panel.add(panelRbtn);
+		}
+		
 	}
 
 }
