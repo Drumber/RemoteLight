@@ -24,9 +24,13 @@ import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.utils.ui.MenuIconFont;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.settings.types.SettingString;
 
 public class ThemeSettingsPanel extends JPanel {
@@ -49,8 +53,7 @@ public class ThemeSettingsPanel extends JPanel {
 		JButton btnBack = new JButton(Style.getFontIcon(MenuIconFont.MenuIcon.BACK, 16));
 		btnBack.setBackground(new Color(0, 0, 0, 0));
 		btnBack.setOpaque(false);
-		// TODO: go back
-		btnBack.addActionListener(e -> System.out.println("on back pressed"));
+		btnBack.addActionListener(e -> Main.getInstance().getMainFrame().showMenuPanel("settings"));
 		
 		JLabel lblTitle = new JLabel("Appearance");
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -73,26 +76,29 @@ public class ThemeSettingsPanel extends JPanel {
 			updateThemeList();
 		});
 		
+		JLabel lblTitleThemes = new JLabel("Themes");
+		
 		JPanel panelFilter = new JPanel();
 		panelFilter.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelFilter.setLayout(new BoxLayout(panelFilter, BoxLayout.X_AXIS));
 		panelFilter.setMaximumSize(new Dimension(Integer.MAX_VALUE, boxFilter.getPreferredSize().height));
+		panelFilter.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		panelFilter.add(lblTitleThemes);
 		panelFilter.add(Box.createHorizontalGlue());
 		panelFilter.add(boxFilter);
 		
 		listThemes = new JList<>();
 		listThemes.setCellRenderer(themeListCellRenderer);
 		listThemes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listThemes.addListSelectionListener(this::onThemeSelected);
 		updateThemeList();
+		listThemes.addListSelectionListener(this::onThemeSelected);
 		
 		TScrollPane themeScrollPane = new TScrollPane(listThemes);
 		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		themeScrollPane.setMinimumSize(new Dimension(200, 0));
 		themeScrollPane.setViewportBorder(null);
-		themeScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		themeScrollPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
 		themeScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		themeScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		
 		JPanel panelThemes = new JPanel();
@@ -103,16 +109,20 @@ public class ThemeSettingsPanel extends JPanel {
 		add(panelThemes);
 		
 		PreviewPanel previewPanel = new PreviewPanel();
-		JPanel previewWrapper = new JPanel();
-		previewWrapper.setLayout(new BoxLayout(previewWrapper, BoxLayout.Y_AXIS));
-		previewWrapper.add(previewPanel);
-		previewWrapper.add(Box.createGlue());
+		JPanel panelUiOptions = createUiOptionsPanel();
+		JPanel cardWrapper = new JPanel();
+		cardWrapper.setLayout(new BoxLayout(cardWrapper, BoxLayout.Y_AXIS));
+		cardWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		cardWrapper.add(panelUiOptions);
+		cardWrapper.add(Box.createVerticalStrut(5));
+		cardWrapper.add(previewPanel);
+		cardWrapper.add(Box.createGlue());
 		
 		JPanel panelMiddle = new JPanel();
 		panelMiddle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelMiddle.setLayout(new BoxLayout(panelMiddle, BoxLayout.X_AXIS));
 		panelMiddle.add(panelThemes);
-		panelMiddle.add(previewWrapper);
+		panelMiddle.add(cardWrapper);
 		add(panelMiddle);
 	}
 	
@@ -209,7 +219,119 @@ public class ThemeSettingsPanel extends JPanel {
 		return false;
 	}
 	
+	private JPanel createUiOptionsPanel() {
+		JPanel wrapper = new JPanel();
+		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+		wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		JPanel root = new JPanel();
+		UiUtils.bindElevation(root, 10);
+		root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+		wrapper.add(root);
+		
+		JLabel lblTitle = new JLabel("Options");
+		lblTitle.setFont(Style.getFontBold(14));
+		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+		root.add(lblTitle);
+		root.add(Box.createVerticalStrut(10));
+		
+		SettingBoolean sWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations");
+		SettingBoolean sUnifiedWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations.unified");
+		SettingSelection sFont = sm.getSetting(SettingSelection.class, "ui.font");
+		SettingInt sFontSize = sm.getSetting(SettingInt.class, "ui.fontsize");
+		SettingBoolean sGlowingEffectButton = sm.getSetting(SettingBoolean.class, "ui.glow.button");
+		
+		// Custom Window Decorations
+		JPanel panelWindowDecorations = new JPanel();
+		panelWindowDecorations.setLayout(new BoxLayout(panelWindowDecorations, BoxLayout.Y_AXIS));
+		
+		JCheckBox boxWindowDecorations = new JCheckBox("Custom window decorations", sWindowDecorations.get());
+		boxWindowDecorations.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxWindowDecorations.addActionListener(e -> {
+			boolean value = boxWindowDecorations.isSelected();
+			sWindowDecorations.set(value);
+			Main.getInstance().setCustomWindowDecorations(value);
+		});
+		panelWindowDecorations.add(boxWindowDecorations);
+		
+		JCheckBox boxUnifiedWindowDecorations = new JCheckBox("Unified background color", sUnifiedWindowDecorations.get());
+		boxUnifiedWindowDecorations.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxUnifiedWindowDecorations.addActionListener(e -> {
+			boolean value = boxUnifiedWindowDecorations.isSelected();
+			sUnifiedWindowDecorations.set(value);
+			UIManager.put("TitlePane.unifiedBackground", value);
+			FlatLaf.updateUILater();
+		});
+		panelWindowDecorations.add(boxUnifiedWindowDecorations);
+		
+		if(FlatLaf.supportsNativeWindowDecorations()) {
+			appendUiSettingSection(root, panelWindowDecorations, "Window Decorations");
+			root.add(Box.createVerticalStrut(10));
+		}
+		
+		// Font Family and Size
+		
+		JPanel panelFont = new JPanel();
+		panelFont.setLayout(new BoxLayout(panelFont, BoxLayout.X_AXIS));
+		
+		JComboBox<String> comboFont = new JComboBox<>(sFont.getValues());
+		comboFont.setSelectedItem(sFont.get());
+		comboFont.addActionListener(e -> {
+			sFont.setSelected((String) comboFont.getSelectedItem());
+			Style.setSelectedFont();
+			FlatLaf.updateUILater();
+		});
+		panelFont.add(comboFont);
+		
+		JSpinner spinnerFontSize = new JSpinner();
+		spinnerFontSize.setModel(new SpinnerNumberModel(sFontSize.get().intValue(), sFontSize.getMin(), sFontSize.getMax(), sFontSize.getStepsize()));
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinnerFontSize, "#");
+		spinnerFontSize.setEditor(editor); // set new spinner editor without thousands separation
+		spinnerFontSize.addChangeListener(e -> {
+			sFontSize.set(spinnerFontSize.getValue());
+			Style.setSelectedFont();
+			FlatLaf.updateUILater();
+		});
+		panelFont.setMaximumSize(new Dimension(Integer.MAX_VALUE, Math.max(comboFont.getPreferredSize().height, spinnerFontSize.getPreferredSize().height)));
+		panelFont.add(spinnerFontSize);
+		
+		appendUiSettingSection(root, panelFont, "Font");
+		root.add(Box.createVerticalStrut(10));
+		
+		// Effects
+		JCheckBox boxGlowingEffect = new JCheckBox("Glowing effect buttons", sGlowingEffectButton.get());
+		boxGlowingEffect.addActionListener(e -> {
+			sGlowingEffectButton.set(boxGlowingEffect.isSelected());
+		});
+		appendUiSettingSection(root, boxGlowingEffect, "Effects");
+		JLabel lblGlowEffectDesc = new JLabel("<html>Shows a preview of the animation when hovering over its button.</html>");
+		lblGlowEffectDesc.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblGlowEffectDesc.setIcon(Style.getFontIcon(MenuIcon.HELP, 12));
+		lblGlowEffectDesc.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 0));
+		root.add(lblGlowEffectDesc);
+		
+		return wrapper;
+	}
 	
+	private void appendUiSettingSection(JPanel root, JComponent comp, String title) {
+		if(title != null) {
+			JLabel lblTitle = new JLabel(title);
+			lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+			root.add(lblTitle);
+			root.add(Box.createVerticalStrut(5));
+		}
+		if(comp instanceof JPanel) {
+			comp.setBackground(null);
+		}
+		comp.setAlignmentX(Component.LEFT_ALIGNMENT);
+		root.add(comp);
+	}
+	
+	
+	/**
+	 * Panel that contains some UI elements to preview the selected theme.
+	 */
 	private class PreviewPanel extends JPanel {
 		
 		public PreviewPanel() {
@@ -219,9 +341,8 @@ public class ThemeSettingsPanel extends JPanel {
 			JPanel panel = new JPanel();
 			UiUtils.bindElevation(panel, 10);
 			panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-			//panel.setBackground(Style.panelDarkBackground);
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			add(panel, BorderLayout.CENTER);
+			add(panel);
 			
 			JLabel lblTitle = new JLabel("Preview");
 			lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);

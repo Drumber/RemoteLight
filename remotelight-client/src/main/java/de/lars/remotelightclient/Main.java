@@ -213,7 +213,7 @@ public class Main {
 						&& getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get()
 						&& getSettingsManager().getSetting(SettingSelection.class, "ui.style").getSelected().equals("LookAndFeel");
 				// enable FlatLaf custom window decorations
-				UIManager.put( "TitlePane.unifiedBackground", true );
+				UIManager.put("TitlePane.unifiedBackground", getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations.unified").get());
 				setCustomWindowDecorations(customWindow);
 			} else {
 				setCustomWindowDecorations(false);
