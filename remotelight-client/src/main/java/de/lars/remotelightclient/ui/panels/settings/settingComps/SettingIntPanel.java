@@ -46,11 +46,9 @@ public class SettingIntPanel extends SettingPanel {
 	public SettingIntPanel(SettingInt setting) {
 		super(setting);
 		this.setting = setting;
-		setBackground(Style.panelBackground);
 		
 		JLabel lblName = new JLabel("name");
 		lblName.setText(setting.getName());
-		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
 		if(setting.get() > setting.getMax()) {

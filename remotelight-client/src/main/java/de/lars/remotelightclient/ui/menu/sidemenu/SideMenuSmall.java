@@ -57,12 +57,12 @@ public class SideMenuSmall extends SideMenu {
 	 */
 	public SideMenuSmall(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		setBackground(Style.panelAccentBackground);
+		UiUtils.bindBackground(this, Style.panelAccentBackground());
 		setPreferredSize(new Dimension(40, 300));
 		setLayout(new BorderLayout());
 		
 		root = new JPanel();
-		root.setBackground(getBackground());
+		root.setBackground(null);
 		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
 		
 		TScrollPane scrollPane = new TScrollPane(root);
@@ -105,7 +105,7 @@ public class SideMenuSmall extends SideMenu {
 	 */
 	@Override
 	public void updateMenuItems() {
-		removeAll();
+		root.removeAll();
 		addMenuItems();
 	}
 	
@@ -119,16 +119,16 @@ public class SideMenuSmall extends SideMenu {
 	}
 	
 	private void configureButton(JButton btn) {
-		UiUtils.configureButton(btn, false);
 		btn.setBorderPainted(false);
 		btn.setFocusable(false);
 		btn.setBackground(null);
+		btn.setOpaque(false);
 		btn.setMaximumSize(new Dimension(40, 30));
 		btn.addMouseListener(buttonHoverListener);
 		btn.addActionListener(buttonActionListener);
 		btn.setRolloverEnabled(false);
         if(mainFrame.getSelectedMenu().equals(btn.getName())) {
-        	btn.setBackground(Style.accent);
+        	btn.setBackground(Style.accent().get());
         }
 	}
 	
@@ -137,7 +137,7 @@ public class SideMenuSmall extends SideMenu {
 		public void mouseEntered(MouseEvent e) {
 			JButton btn = (JButton) e.getSource();
 			if(!mainFrame.getSelectedMenu().equals(btn.getName())) {
-				btn.setBackground(Style.hoverBackground);
+				btn.setBackground(Style.hoverBackground().get());
 			}
 		}
 		@Override
@@ -157,7 +157,7 @@ public class SideMenuSmall extends SideMenu {
 			
 			if(!btn.getName().equals("extend")) {
 				UiUtils.getComponentByName(root, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
-				btn.setBackground(Style.accent);
+				btn.setBackground(Style.accent().get());
 				mainFrame.setSelectedMenu(btn.getName());
 			}
 			

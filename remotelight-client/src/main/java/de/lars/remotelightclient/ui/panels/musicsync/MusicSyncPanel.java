@@ -42,6 +42,7 @@ import de.lars.remotelightclient.ui.components.BigTextButton;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -67,7 +68,6 @@ public class MusicSyncPanel extends MenuPanel {
 		mainFrame.showControlBar(true);
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrScroll = new JPanel();
@@ -84,11 +84,10 @@ public class MusicSyncPanel extends MenuPanel {
 		bgrMusicEffects = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrMusicEffects.setLayout(wlayout);
-		bgrMusicEffects.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(bgrMusicEffects);
 		
 		JPanel bgrOptions = new JPanel();
-		bgrOptions.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrOptions, Style.panelDarkBackground());
 		bgrOptions.setLayout(new BoxLayout(bgrOptions, BoxLayout.X_AXIS));
 		muiscEffectOptions = new MusicSyncOptionsPanel();
 		bgrOptions.add(muiscEffectOptions);
@@ -107,7 +106,7 @@ public class MusicSyncPanel extends MenuPanel {
 			btn.addMouseListener(btnMusicEffectListener);
 			
 			if(msm.getActiveEffect() != null && msm.getActiveEffect().getName().equals(m.getName())) {
-				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 				showMusicEffectOptions();
 			}
 			bgrMusicEffects.add(btn);

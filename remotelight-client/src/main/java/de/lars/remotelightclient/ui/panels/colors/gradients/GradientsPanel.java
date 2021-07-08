@@ -36,7 +36,6 @@ public class GradientsPanel extends ColorsSubPanel {
 	private GradientListHolder gradientsListHolder;
 	
 	public GradientsPanel() {
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		
 		gradientsList = new GradientsList(Palettes.getAll());
@@ -132,7 +131,6 @@ public class GradientsPanel extends ColorsSubPanel {
 		
 		public GradientListHolder() {
 			setLayout(new BorderLayout());
-			setBackground(Style.panelBackground);
 			
 			JPanel panelWrapper = new JPanel();
 			panelWrapper.setLayout(new GridLayout(1, 2));
@@ -140,26 +138,22 @@ public class GradientsPanel extends ColorsSubPanel {
 			add(panelWrapper, BorderLayout.SOUTH);
 			
 			JButton btnAdd = new JButton("Add");
-			UiUtils.configureButton(btnAdd);
 			panelWrapper.add(btnAdd);
 			
 			btnRemove = new JButton("Remove");
-			UiUtils.configureButton(btnRemove);
 			btnRemove.setEnabled(false);
 			btnRemove.addActionListener(l -> removeSelectedGradient());
 			panelWrapper.add(btnRemove);
 			
 			JPopupMenu popupMenu = new JPopupMenu();
-			popupMenu.setBackground(Style.panelAccentBackground);
+			UiUtils.bindBackground(popupMenu, Style.panelAccentBackground());
 			add(popupMenu);
 			
 			JMenuItem mItemSimpleGradient = new JMenuItem("Simple Gradient");
-			UiUtils.configureMenuItem(mItemSimpleGradient);
 			mItemSimpleGradient.addActionListener(l -> addGradient(true));
 			popupMenu.add(mItemSimpleGradient);
 			
 			JMenuItem mItemGradient = new JMenuItem("Gradient");
-			UiUtils.configureMenuItem(mItemGradient);
 			mItemGradient.addActionListener(l -> addGradient(false));
 			popupMenu.add(mItemGradient);
 			

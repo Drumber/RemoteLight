@@ -54,7 +54,6 @@ public class ScenesPanel extends MenuPanel {
 	private MainFrame mainFrame;
 	private SceneManager scm = RemoteLightCore.getInstance().getSceneManager();
 	private JPanel bgrScenes;
-	private JPanel bgrSettings;
 
 	/**
 	 * Create the panel.
@@ -63,7 +62,6 @@ public class ScenesPanel extends MenuPanel {
 		mainFrame = Main.getInstance().getMainFrame();
 		mainFrame.showControlBar(true);
 		this.addControlBar();
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrScroll = new JPanel();
@@ -80,13 +78,7 @@ public class ScenesPanel extends MenuPanel {
 		bgrScenes = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrScenes.setLayout(wlayout);
-		bgrScenes.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(bgrScenes);
-		
-		bgrSettings = new JPanel();
-		bgrSettings.setBackground(Style.panelDarkBackground);
-		bgrSettings.setVisible(false);
-		add(bgrSettings);
 		
 		this.addScenePanels();
 		Main.getInstance().getCore().getEventHandler().register(onSceneToggle);
@@ -102,7 +94,7 @@ public class ScenesPanel extends MenuPanel {
 			btn.addMouseListener(btnSceneListener);
 			
 			if(scm.getActiveScene() != null && scm.getActiveScene().getName().equals(s.getName())) {
-				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 			}
 			bgrScenes.add(btn);
 		}

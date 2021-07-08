@@ -57,7 +57,6 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		super(virtual, setup);
 		this.virtual = virtual;
 		size = new Dimension(800, 40);
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -67,11 +66,9 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		panelId.setPreferredSize(size);
 		panelId.setMaximumSize(size);
 		panelId.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelId.setBackground(Style.panelBackground);
 		add(panelId);
 		
 		JLabel lblNameId = new JLabel(i18n.getString("OutputPanel.NameID")); //$NON-NLS-1$
-		lblNameId.setForeground(Style.textColor);
 		panelId.add(lblNameId);
 		
 		fieldId = new JTextField();
@@ -83,12 +80,10 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		panelPixels.setPreferredSize(size);
 		panelPixels.setMaximumSize(size);
-		panelPixels.setBackground(Style.panelBackground);
 		panelPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelPixels);
 		
 		JLabel lblPixels = new JLabel(i18n.getString("OutputPanel.Pixels")); //$NON-NLS-1$
-		lblPixels.setForeground(Style.textColor);
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
@@ -101,12 +96,10 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
 		panelOrder.setPreferredSize(size);
 		panelOrder.setMaximumSize(size);
-		panelOrder.setBackground(Style.panelBackground);
 		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelOrder);
 		
 		JLabel lblRgbOrder = new JLabel(i18n.getString("OutputPanel.RgbOrder"));
-		lblRgbOrder.setForeground(Style.textColor);
 		panelOrder.add(lblRgbOrder);
 		
 		comboOrder = new JComboBox<RgbOrder>();
@@ -115,7 +108,6 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		
 		JLabel lblOutputPatch = new JLabel(i18n.getString("OutputPanel.OutputPatch"), SwingConstants.LEFT);
 		lblOutputPatch.setFont(Style.getFontBold(11));
-		lblOutputPatch.setForeground(Style.textColor);
 		lblOutputPatch.setBorder(new EmptyBorder(5, 5, 0, 0));
 		add(lblOutputPatch);
 		
@@ -124,12 +116,10 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_4.setAlignment(FlowLayout.LEFT);
 		panelShift.setPreferredSize(new Dimension(800, 40));
 		panelShift.setMaximumSize(new Dimension(800, 40));
-		panelShift.setBackground(Style.panelBackground);
 		panelShift.setAlignmentX(0.0f);
 		add(panelShift);
 		
 		JLabel lblShift = new JLabel(i18n.getString("OutputPanel.ShiftPixels"));
-		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
@@ -144,7 +134,6 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerShift);
 		
 		JLabel lblClone = new JLabel(i18n.getString("OutputPanel.Clone"));
-		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
 		spinnerClone = new JSpinner();
@@ -158,8 +147,6 @@ public class VirtualOutputSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerClone);
 		
 		checkboxCloneMirrored = new JCheckBox(i18n.getString("OutputPanel.Mirror"));
-		checkboxCloneMirrored.setBackground(Style.panelBackground);
-		checkboxCloneMirrored.setForeground(Style.textColor);
 		checkboxCloneMirrored.setSelected(virtual.getOutputPatch().isCloneMirrored());
 		panelShift.add(checkboxCloneMirrored);
 		

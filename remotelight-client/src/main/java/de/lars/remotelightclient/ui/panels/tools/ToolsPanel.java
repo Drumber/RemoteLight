@@ -80,13 +80,11 @@ public class ToolsPanel extends MenuPanel {
 	public ToolsPanel() {
 		navHistory = new ArrayList<ToolsPanelNavItem>();
 		mainFrame = Main.getInstance().getMainFrame();
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		mainFrame.showControlBar(true);
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
 		panelContent = new JPanel();
-		panelContent.setBackground(Style.panelBackground);
 		panelContent.setLayout(new BorderLayout());
 		
 		TScrollPane scrollContent = new TScrollPane(panelContent);
@@ -106,7 +104,7 @@ public class ToolsPanel extends MenuPanel {
 		
 		panelEntryList = new JPanel();
 		panelEntryList.setLayout(new BoxLayout(panelEntryList, BoxLayout.Y_AXIS));
-		panelEntryList.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelEntryList, Style.panelDarkBackground());
 		panelEntryList.setBorder(new CompoundBorder(
 				BorderFactory.createLineBorder(panelContent.getBackground(), 10),
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -145,27 +143,24 @@ public class ToolsPanel extends MenuPanel {
 	
 	protected JPanel getEntryItemPanel(ToolsPanelEntry entry) {
 		JPanel panel = new JPanel();
-		panel.setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(panel, Style.buttonBackground());
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.setBorder(new LineBorder(Style.textColor));
-		UiUtils.addHoverColor(panel, Style.buttonBackground, Style.hoverBackground);
+		panel.setBorder(new LineBorder(Style.textColor().get()));
+		UiUtils.addHoverColor(panel, Style.buttonBackground().get(), Style.hoverBackground().get());
 		
 		JLabel lblIcon = new JLabel();
-		lblIcon.setForeground(Style.textColor);
 		lblIcon.setMaximumSize(new Dimension(30, 30));
 		if(entry.getIcon() != null)
 			lblIcon.setIcon(entry.getIcon());
 		panel.add(lblIcon);
 		
 		JLabel lblName = new JLabel(entry.getName());
-		lblName.setForeground(Style.textColor);
 		panel.add(lblName);
 		
 		if(entry.getActionButtons() != null) {
 			JPanel panelBtns = new JPanel();
 			panelBtns.setBackground(panel.getBackground());
 			for(JButton btn : entry.getActionButtons()) {
-				UiUtils.configureButton(btn);
 				panelBtns.add(btn);
 			}
 			
@@ -201,9 +196,7 @@ public class ToolsPanel extends MenuPanel {
 		panelNavigation.removeAll();
 		panelNavigation.setVisible(true);
 		JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
-		lblTitle.setForeground(Style.textColor);
 		JButton btnBack = new JButton("Back");
-		UiUtils.configureButton(btnBack);
 		btnBack.setPreferredSize(new Dimension(80, 25));
 		btnBack.addActionListener(e -> navigateDown());
 		

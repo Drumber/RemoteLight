@@ -43,6 +43,7 @@ import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.SpeedSlider;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.EffectManagerHelper.EffectType;
 import de.lars.remotelightcore.RemoteLightCore;
@@ -78,7 +79,6 @@ public class AnimationsPanel extends MenuPanel {
 		mainFrame = Main.getInstance().getMainFrame();
 		mainFrame.showControlBar(true);
 		this.addControlBar();
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrScroll = new JPanel();
@@ -95,11 +95,10 @@ public class AnimationsPanel extends MenuPanel {
 		bgrAnimations = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrAnimations.setLayout(wlayout);
-		bgrAnimations.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(bgrAnimations);
 		
 		bgrSettings = new JPanel();
-		bgrSettings.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrSettings, Style.panelDarkBackground());
 		bgrSettings.setLayout(new BorderLayout(0, 0));
 		add(bgrSettings);
 		
@@ -120,7 +119,7 @@ public class AnimationsPanel extends MenuPanel {
 			btn.addMouseListener(btnAniListener);
 			
 			if(am.getActiveAnimation() != null && am.getActiveAnimation().getName().equals(a.getName())) {
-				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 			}
 			bgrAnimations.add(btn);
 		}
@@ -148,7 +147,7 @@ public class AnimationsPanel extends MenuPanel {
 	
 	private void addControlBar() {
 		DefaultControlBar controlBar = new DefaultControlBar();
-		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);
+		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground());
 		speedSlider.getSlider().addChangeListener(sliderSpeedListener);
 		speedSlider.getSlider().setValue((int) sm.getSettingObject("animations.speed").get());
 		controlBar.setActionPanel(speedSlider);

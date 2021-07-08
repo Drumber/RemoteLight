@@ -47,6 +47,7 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel.SettingChangedListener;
 import de.lars.remotelightclient.utils.SettingsUtil;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.Setting;
@@ -57,7 +58,7 @@ public class AnimationOptionsPanel extends JPanel {
 	private static final long serialVersionUID = -9051769253598831077L;
 	
 	private JPanel parentPanel;
-	private JPanel panelMain, panelBackground, panelTitel, bgrScroll;
+	private JPanel panelMain, panelBackground, panelTitle, bgrScroll;
 	private TScrollPane scrollPane;
 	private List<SettingPanel> settingPanels;
 	private boolean hidden = true;
@@ -76,20 +77,20 @@ public class AnimationOptionsPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		panelMain = new JPanel();
-		panelMain.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelMain, Style.panelDarkBackground());
 		add(panelMain, BorderLayout.CENTER);
 		panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.Y_AXIS));
 		
-		panelTitel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelTitel.getLayout();
+		panelTitle = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelTitle.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
-		panelTitel.setBackground(Style.panelAccentBackground);
-		panelTitel.setPreferredSize(new Dimension(200, 25));
-		panelTitel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-		panelMain.add(panelTitel);
+		UiUtils.bindBackground(panelTitle, Style.panelAccentBackground());
+		panelTitle.setPreferredSize(new Dimension(200, 25));
+		panelTitle.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+		panelMain.add(panelTitle);
 		
 		panelBackground = new JPanel();
-		panelBackground.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelBackground, Style.panelDarkBackground());
 		panelBackground.setLayout(new BoxLayout(panelBackground, BoxLayout.Y_AXIS));
 		
 		bgrScroll = new JPanel();
@@ -115,15 +116,15 @@ public class AnimationOptionsPanel extends JPanel {
 	public void hide() {
 		hidden = true;
 		scrollPane.setVisible(false);
-		panelTitel.removeAll();
+		panelTitle.removeAll();
 		
 		JLabel lblExpand = new JLabel(i18n.getString("AnimationOptionsPanel.AnimationOptions")); //$NON-NLS-1$
 		lblExpand.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblExpand.setFont(Style.getFontBold(11));
-		lblExpand.setForeground(Style.accent);
+		UiUtils.bindForeground(lblExpand, Style.accent());
 		lblExpand.addMouseListener(expandListener);
-		lblExpand.setIcon(Style.getFontIcon(MenuIcon.SETTINGS, 11, Style.textColorDarker));
-		panelTitel.add(lblExpand);
+		lblExpand.setIcon(Style.getFontIcon(MenuIcon.SETTINGS, 11, Style.textColorDarker().get()));
+		panelTitle.add(lblExpand);
 		
 		parentPanel.setMaximumSize(hiddenSize);
 		
@@ -134,14 +135,14 @@ public class AnimationOptionsPanel extends JPanel {
 		hidden = false;
 		scrollPane.setVisible(true);
 		panelBackground.removeAll();
-		panelTitel.removeAll();
+		panelTitle.removeAll();
 		
 		JLabel lblHide = new JLabel(i18n.getString("AnimationOptionsPanel.Hide")); //$NON-NLS-1$
 		lblHide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblHide.setFont(Style.getFontBold(10));
-		lblHide.setForeground(Style.textColorDarker);
+		UiUtils.bindForeground(lblHide, Style.textColorDarker());
 		lblHide.addMouseListener(expandListener);
-		panelTitel.add(lblHide);
+		panelTitle.add(lblHide);
 		
 		parentPanel.setMaximumSize(expandedSize);
 		
@@ -152,7 +153,6 @@ public class AnimationOptionsPanel extends JPanel {
 		panelBackground.removeAll();
 		JLabel lblTitel = new JLabel(i18n.getString("AnimationOptionsPanel.Options")); //$NON-NLS-1$
 		lblTitel.setFont(Style.getFontBold(11));
-		lblTitel.setForeground(Style.textColor);
 		panelBackground.add(lblTitel);
 		
 		List<Setting> settings = RemoteLightCore.getInstance().getAnimationManager().getCurrentAnimationOptions()
@@ -167,7 +167,7 @@ public class AnimationOptionsPanel extends JPanel {
 				spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 				spanel.setSettingChangedListener(optionsChangeListener);
 				spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 27));
-				spanel.setBackground(Style.panelDarkBackground);
+				UiUtils.bindBackground(spanel, Style.panelDarkBackground());
 				panelBackground.add(spanel);
 				settingPanels.add(spanel);
 			}

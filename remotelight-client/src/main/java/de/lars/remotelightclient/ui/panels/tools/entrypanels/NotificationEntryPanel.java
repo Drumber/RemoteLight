@@ -44,6 +44,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.ListElement;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanel;
 import de.lars.remotelightclient.ui.panels.tools.ToolsPanelEntry;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationManager;
 
@@ -73,7 +74,6 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 		
 		public NotificationPanel() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			setBackground(Style.panelBackground);
 			setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 			
 			List<Notification> notis = manager.getNotificationHistory();
@@ -82,7 +82,6 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 				JLabel lblEmpty = new JLabel("There are no notifications", SwingConstants.CENTER);
 				lblEmpty.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 				lblEmpty.setFont(Style.getFontBold(14));
-				lblEmpty.setForeground(Style.textColor);
 				lblEmpty.setAlignmentY(Component.CENTER_ALIGNMENT);
 				add(lblEmpty);
 			} else {
@@ -95,12 +94,11 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 							BorderFactory.createEmptyBorder(2, 10, 2, 10)));
 					
 					JLabel lblTitle = new JLabel(noti.getTitle());
-					lblTitle.setForeground(Style.textColor);
 					el.add(lblTitle);
 					el.add(Box.createHorizontalStrut(10));
 					
 					JLabel lblMessage = new JLabel(noti.getMessage());
-					lblMessage.setForeground(Style.textColorDarker);
+					UiUtils.bindForeground(lblMessage, Style.textColorDarker());
 					lblMessage.setMinimumSize(new Dimension(50, lblMessage.getPreferredSize().height));
 					el.add(lblMessage);
 					el.add(Box.createHorizontalGlue());
@@ -108,7 +106,7 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 					long millis = noti.getCreationTime();
 					String creationTime = DateFormat.getTimeInstance().format(new Date(millis));
 					JLabel lblTime = new JLabel(creationTime);
-					lblTime.setForeground(Style.textColorDarker);
+					UiUtils.bindForeground(lblTime, Style.textColorDarker());
 					el.add(Box.createHorizontalGlue());
 					el.add(Box.createHorizontalStrut(10));
 					el.add(lblTime);
@@ -120,7 +118,6 @@ public class NotificationEntryPanel extends ToolsPanelEntry {
 					btnView.setFocusable(true);
 					btnView.setOpaque(true);
 					btnView.setBackground(null);
-					btnView.setForeground(Style.textColor);
 					btnView.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					btnView.addActionListener(e -> {
 						// TODO add details panel

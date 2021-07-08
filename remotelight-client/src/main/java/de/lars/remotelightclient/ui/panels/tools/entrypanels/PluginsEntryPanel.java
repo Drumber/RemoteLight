@@ -82,7 +82,6 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 		
 		public PluginsPanel() {
 			setLayout(new BorderLayout());
-			setBackground(Style.panelBackground);
 			setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 			
 			root = new JPanel();
@@ -93,35 +92,31 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			if(!Main.getInstance().getSettingsManager().getSetting(SettingBoolean.class, "plugins.enable").get()
 					&& pluginManager.getLoadedPlugins().size() == 0) {
 				JLabel lblDisabledPl = new JLabel("Plugins are disabled. Go to settings and enable plugins if you want to use this feature.");
-				lblDisabledPl.setForeground(Style.warn);
+				lblDisabledPl.setForeground(Style.warn().get());
 				lblDisabledPl.setAlignmentX(Component.LEFT_ALIGNMENT);
 				root.add(lblDisabledPl);
 				root.add(Box.createVerticalStrut(10));
 			}
 			
 			JLabel lblLoaded = new JLabel("Loaded Plugins (" + pluginManager.getLoadedPlugins().size() + ")");
-			lblLoaded.setForeground(Style.textColor);
 			lblLoaded.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(lblLoaded);
 			root.add(Box.createVerticalStrut(5));
 			
 			panelLoaded = new JPanel();
 			panelLoaded.setLayout(new BoxLayout(panelLoaded, BoxLayout.Y_AXIS));
-			panelLoaded.setBackground(Style.panelBackground);
 			panelLoaded.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(panelLoaded);
 			
 			root.add(Box.createVerticalStrut(20));
 			
 			JLabel lblFailed = new JLabel("Plugins with Errors (" + pluginManager.getErrorPlugins().size() + ")");
-			lblFailed.setForeground(Style.textColor);
 			lblFailed.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(lblFailed);
 			root.add(Box.createVerticalStrut(5));
 			
 			panelFailed = new JPanel();
 			panelFailed.setLayout(new BoxLayout(panelFailed, BoxLayout.Y_AXIS));
-			panelFailed.setBackground(Style.panelBackground);
 			panelFailed.setAlignmentX(Component.LEFT_ALIGNMENT);
 			root.add(panelFailed);
 			
@@ -133,7 +128,6 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			root.add(horizontalBox);
 			
 			JButton btnPluginsFolder = new JButton("Open plugins folder");
-			UiUtils.configureButton(btnPluginsFolder);
 			btnPluginsFolder.addActionListener(e -> {
 				try {
 					Desktop.getDesktop().open(pluginManager.getPluginDirectory());
@@ -144,7 +138,6 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 			horizontalBox.add(btnPluginsFolder);
 			
 			JButton btnLearnMore = new JButton("Learn more");
-			UiUtils.configureButton(btnLearnMore);
 			btnLearnMore.addActionListener(e -> {
 				// open plugins wiki page
 				try {
@@ -216,7 +209,6 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 				else if(plName == null)
 					plName = info.getFile().getName();
 				JLabel lblName = new JLabel(plName);
-				lblName.setForeground(Style.textColor);
 				lblName.setAlignmentX(Component.LEFT_ALIGNMENT);
 				add(lblName);
 				add(Box.createHorizontalStrut(5));
@@ -227,15 +219,15 @@ public class PluginsEntryPanel extends ToolsPanelEntry {
 							+ (!plugin.isEnabled() ? " (disabled)" : "");
 					
 					JLabel lblVersionAuthor = new JLabel(textVersionAuthor);
-					lblVersionAuthor.setForeground(Style.textColorDarker);
+					UiUtils.bindForeground(lblVersionAuthor, Style.textColorDarker());
 					add(lblVersionAuthor);
 				} else {
 					add(Box.createHorizontalStrut(5));
-					add(new JLabel(Style.getFontIcon(MenuIcon.ERROR, 14, Style.error)));
+					add(new JLabel(Style.getFontIcon(MenuIcon.ERROR, 14, Style.error().get())));
 					add(Box.createHorizontalStrut(2));
 					
 					JLabel lblError = new JLabel(errorMsg);
-					lblError.setForeground(Style.error);
+					lblError.setForeground(Style.error().get());
 					add(lblError);
 				}
 			}

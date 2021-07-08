@@ -34,8 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.Device;
@@ -57,7 +55,6 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 	public ChainSettingsPanel(Chain chain, boolean setup) {
 		super(chain, setup);
 		this.chain = chain;
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -65,11 +62,9 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		FlowLayout flowLayout = (FlowLayout) panelId.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelId.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelId.setBackground(Style.panelBackground);
 		add(panelId);
 		
 		JLabel lblNameId = new JLabel(i18n.getString("OutputPanel.NameID")); //$NON-NLS-1$
-		lblNameId.setForeground(Style.textColor);
 		panelId.add(lblNameId);
 		
 		fieldId = new JTextField();
@@ -82,14 +77,12 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		panelDevices = new JPanel();
 		panelDevices.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelDevices.setLayout(new WrapLayout(FlowLayout.LEFT));
-		panelDevices.setBackground(Style.panelBackground);
 		addDevicesToPanel();
 		add(panelDevices);
 		
 		panelAdd = new JPanel();
 		panelAdd.setLayout(new WrapLayout(FlowLayout.LEFT));
 		panelAdd.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelAdd.setBackground(Style.panelBackground);
 		addControlsToPanel();
 		add(panelAdd);
 	}
@@ -100,15 +93,12 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		for(Device d : chain.getDevices()) {
 			JPanel dPanel = new JPanel();
 			dPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 1));
-			dPanel.setBackground(Style.buttonBackground);
 			
 			JLabel name = new JLabel(d.getId());
-			name.setForeground(Style.textColor);
 			dPanel.add(name);
 			
 			JButton btnRemove = new JButton("X");
 			btnRemove.setForeground(Color.RED);
-			UiUtils.configureButton(btnRemove);
 			btnRemove.addActionListener(e -> {
 				chain.removeDevice(d);
 				addDevicesToPanel();
@@ -127,7 +117,6 @@ public class ChainSettingsPanel extends DeviceSettingsPanel {
 		panelAdd.add(boxOutputs);
 		
 		JButton btnAdd = new JButton(i18n.getString("Basic.Add"));
-		UiUtils.configureButton(btnAdd);
 		btnAdd.addActionListener(e -> {
 			if(boxOutputs.getSelectedItem() != null) {
 				

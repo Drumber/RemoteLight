@@ -51,11 +51,9 @@ public class ColorsPanel extends MenuPanel {
 		colorPickerPanel = new ColorPickerPanel();
 		gradientsPanel = new GradientsPanel();
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
 		TabButtons tabBtns = new TabButtons();
-		tabBtns.setBackground(Style.panelBackground);
 		tabBtns.setFont(Style.getFontRegualar(14));
 		tabBtns.addButton("ColorPicker");
 		tabBtns.addButton("Gradients");

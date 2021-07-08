@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class BigTextButton extends JPanel {
 
@@ -44,8 +45,6 @@ public class BigTextButton extends JPanel {
 	private JPanel bgrTitle;
 	private JLabel lblText;
 	private JLabel lblTitle;
-	
-	private Color bg = Style.buttonBackground;
 
 	/**
 	 * Create the panel.
@@ -55,20 +54,18 @@ public class BigTextButton extends JPanel {
 		setPreferredSize(new Dimension(100, 100));
 		
 		bgrText = new JPanel();
-		bgrText.setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(bgrText, Style.buttonBackground());
 		add(bgrText, BorderLayout.SOUTH);
 		
 		lblText = new JLabel(text);
-		lblText.setForeground(Style.textColorDarker);
 		bgrText.add(lblText);
 		
 		bgrTitle = new JPanel();
-		bgrTitle.setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(bgrTitle, Style.buttonBackground());
 		add(bgrTitle, BorderLayout.CENTER);
 		bgrTitle.setLayout(new BorderLayout(0, 0));
 		
 		lblTitle = new JLabel(title, SwingConstants.CENTER);
-		lblTitle.setForeground(Style.textColor);
 		lblTitle.setFont(Style.getFontBold(12));
 		bgrTitle.add(lblTitle);
 		
@@ -78,14 +75,14 @@ public class BigTextButton extends JPanel {
 	private MouseAdapter buttonHoverListener = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			bgrText.setBackground(Style.hoverBackground);
-			bgrTitle.setBackground(Style.hoverBackground);
+			bgrText.setBackground(Style.hoverBackground().get());
+			bgrTitle.setBackground(Style.hoverBackground().get());
 			repaint();
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
-			bgrText.setBackground(bg);
-			bgrTitle.setBackground(bg);
+			bgrText.setBackground(Style.buttonBackground().get());
+			bgrTitle.setBackground(Style.buttonBackground().get());
 			repaint();
 		}
 	};

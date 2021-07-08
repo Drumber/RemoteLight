@@ -22,17 +22,17 @@
 
 package de.lars.remotelightclient.ui.panels.controlbars;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.BrightnessSlider;
 import de.lars.remotelightclient.ui.panels.controlbars.comps.OutputInfo;
-
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.border.EmptyBorder;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class DefaultControlBar extends ControlBar {
 
@@ -48,25 +48,25 @@ public class DefaultControlBar extends ControlBar {
 	 */
 	public DefaultControlBar() {
 		setBorder(new EmptyBorder(0, 5, 0, 5));
-		setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(this, Style.panelDarkBackground());
 		setLayout(new GridLayout(0, 3, 2, 0));
 		setPreferredSize(size);
 		setMaximumSize(size);
 		
 		JPanel bgrBrightness = new JPanel();
-		bgrBrightness.setBackground(Style.panelDarkBackground);
+		bgrBrightness.setBackground(null);
 		add(bgrBrightness);
 		bgrBrightness.setLayout(new BorderLayout(0, 0));
-		bgrBrightness.add(new BrightnessSlider(Style.panelDarkBackground));
+		bgrBrightness.add(new BrightnessSlider(Style.panelDarkBackground()));
 		
 		JPanel bgrOutput = new JPanel();
-		bgrOutput.setBackground(Style.panelDarkBackground);
+		bgrOutput.setBackground(null);
 		add(bgrOutput);
 		bgrOutput.setLayout(new BorderLayout(0, 0));
-		bgrOutput.add(new OutputInfo(Style.panelDarkBackground));
+		bgrOutput.add(new OutputInfo(Style.panelDarkBackground().get()));
 		
 		bgrAction = new JPanel();
-		bgrAction.setBackground(Style.panelDarkBackground);
+		bgrAction.setBackground(null);
 		add(bgrAction);
 		bgrAction.setLayout(new BorderLayout(0, 0));
 	}

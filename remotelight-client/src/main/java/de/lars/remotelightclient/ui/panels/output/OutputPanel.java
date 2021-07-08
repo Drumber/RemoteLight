@@ -94,13 +94,11 @@ public class OutputPanel extends MenuPanel {
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		om.addOutputActionListener(outputActionListener);
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrDevices = new JPanel();
 		int space = 10;
 		bgrDevices.setBorder(new EmptyBorder(space, space, 0, space));
-		bgrDevices.setBackground(Style.panelBackground);
 		add(bgrDevices);
 		bgrDevices.setLayout(new BorderLayout(0, 0));
 		
@@ -116,7 +114,7 @@ public class OutputPanel extends MenuPanel {
 		panelDevices.setLayout(new WrapLayout());
 		WrapLayout fl_panelDevices = (WrapLayout) panelDevices.getLayout();
 		fl_panelDevices.setAlignment(FlowLayout.LEFT);
-		panelDevices.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelDevices, Style.panelDarkBackground());
 		panelDevices.setSize(new Dimension(200, 1));
 		addDeviceButtons(panelDevices);
 		scrollPane.setViewportView(panelDevices);
@@ -170,13 +168,12 @@ public class OutputPanel extends MenuPanel {
 		
 		JPanel panelTitle = new JPanel();
 		bgrDevices.add(panelTitle, BorderLayout.NORTH);
-		panelTitle.setBackground(Style.panelBackground);
 		panelTitle.setLayout(new BoxLayout(panelTitle, BoxLayout.X_AXIS));
 		
 		JLabel lblDevices = new JLabel(i18n.getString("OutputPanel.Outputs")); //$NON-NLS-1$
 		panelTitle.add(lblDevices);
 		lblDevices.setFont(Style.getFontBold(12));
-		lblDevices.setForeground(Style.accent);
+		UiUtils.bindForeground(lblDevices, Style.accent());
 		
 		Component glue = Box.createGlue();
 		panelTitle.add(glue);
@@ -194,11 +191,10 @@ public class OutputPanel extends MenuPanel {
 			}
 		});
 		lblEmulator.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblEmulator.setForeground(Style.accent);
+		UiUtils.bindForeground(lblEmulator, Style.accent());
 		panelTitle.add(lblEmulator);
 		
 		bgrMenu = new JPanel();
-		bgrMenu.setBackground(Style.panelBackground);
 		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 165));
 		bgrMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
 		add(bgrMenu);
@@ -210,7 +206,6 @@ public class OutputPanel extends MenuPanel {
 		Dimension btnSize = new Dimension(100, 25);
 		
 		JPanel bgrDeviceSettings = new JPanel();
-		bgrDeviceSettings.setBackground(Style.panelBackground);
 		bgrDeviceSettings.setLayout(new BorderLayout(0, 0));
 		bgrDeviceSettings.setPreferredSize(bgrMenu.getSize());
 		
@@ -223,7 +218,6 @@ public class OutputPanel extends MenuPanel {
 		bgrDeviceSettings.add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel panelDeviceSettings = new JPanel();
-		panelDeviceSettings.setBackground(Style.panelBackground);
 		panelDeviceSettings.setLayout(new BorderLayout(0, 0));
 		scrollPane.setViewportView(panelDeviceSettings);
 		
@@ -234,32 +228,27 @@ public class OutputPanel extends MenuPanel {
 		wlayout.setAlignment(FlowLayout.LEFT);
 		panelOptions.setLayout(wlayout);
 		bgrDeviceSettings.add(panelOptions, BorderLayout.SOUTH);
-		panelOptions.setBackground(Style.panelBackground);
 		
 		JButton btnCancel = new JButton(i18n.getString("Basic.Cancel")); //$NON-NLS-1$
 		btnCancel.setPreferredSize(btnSize);
-		UiUtils.configureButton(btnCancel);
 		btnCancel.setName("cancel"); //$NON-NLS-1$
 		btnCancel.addActionListener(optionsButtonListener);
 		panelOptions.add(btnCancel);
 		
 		JButton btnRemove = new JButton(i18n.getString("Basic.Remove")); //$NON-NLS-1$
 		btnRemove.setPreferredSize(btnSize);
-		UiUtils.configureButton(btnRemove);
 		btnRemove.setName("remove"); //$NON-NLS-1$
 		btnRemove.addActionListener(optionsButtonListener);
 		panelOptions.add(btnRemove);
 		
 		JButton btnSave = new JButton(i18n.getString("Basic.Save")); //$NON-NLS-1$
 		btnSave.setPreferredSize(btnSize);
-		UiUtils.configureButton(btnSave);
 		btnSave.setName("save"); //$NON-NLS-1$
 		btnSave.addActionListener(optionsButtonListener);
 		panelOptions.add(btnSave);
 		
 		btnActivate = new JButton(i18n.getString("Baisc.Activate")); //$NON-NLS-1$
 		btnActivate.setPreferredSize(btnSize);
-		UiUtils.configureButton(btnActivate);
 		btnActivate.setName("activate"); //$NON-NLS-1$
 		btnActivate.addActionListener(optionsButtonListener);
 		panelOptions.add(btnActivate);
@@ -296,7 +285,7 @@ public class OutputPanel extends MenuPanel {
 			btn.setName(d.getId());
 			btn.addMouseListener(deviceClicked);
 			if(om.getActiveOutput() != null && om.getActiveOutput() == d && d.getConnectionState() == ConnectionState.CONNECTED) {
-				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 			}
 			panel.add(btn);
 		}
@@ -366,7 +355,6 @@ public class OutputPanel extends MenuPanel {
 	}
 	
 	private void configureAddPopup(JMenuItem item, String name) {
-		UiUtils.configureMenuItem(item);
 		item.setName(name);
 		item.addActionListener(menuItemListener);
 	}

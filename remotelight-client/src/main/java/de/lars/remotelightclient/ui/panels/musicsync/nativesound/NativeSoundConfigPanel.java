@@ -55,9 +55,7 @@ import com.xtaudio.xt.XtService;
 
 import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.DisabledGlassPane;
-import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
@@ -91,7 +89,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		gridBagLayout.columnWidths = new int[] { 80, 1 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 3.0 };
 		setLayout(gridBagLayout);
-		setBackground(Style.panelBackground);
 		sm = Main.getInstance().getSettingsManager();
 		nsound = RemoteLightCore.getInstance().getMusicSyncManager().getNativeSound();
 		
@@ -227,7 +224,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		}
 		
 		JLabel lblService = new JLabel("Service");
-		lblService.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblService = new GridBagConstraints();
 		gbc_lblService.anchor = GridBagConstraints.WEST;
 		gbc_lblService.insets = new Insets(0, 0, 5, 5);
@@ -246,7 +242,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		add(comboService, gbc_comboBox);
 
 		JLabel lblFormat = new JLabel("Format");
-		lblFormat.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblFormat = new GridBagConstraints();
 		gbc_lblFormat.anchor = GridBagConstraints.WEST;
 		gbc_lblFormat.weightx = 1.0;
@@ -256,7 +251,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		add(lblFormat, gbc_lblFormat);
 
 		JPanel panelFormat = new JPanel();
-		panelFormat.setBackground(Style.panelBackground);
 		GridBagConstraints gbc_panelFormat = new GridBagConstraints();
 		gbc_panelFormat.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelFormat.insets = new Insets(0, 0, 5, 0);
@@ -273,7 +267,6 @@ public class NativeSoundConfigPanel extends JPanel {
 
 		{
 			JLabel lblSamplerate = new JLabel("Samplerate");
-			lblSamplerate.setForeground(Style.textColor);
 			GridBagConstraints gbc_lblSamplerate = new GridBagConstraints();
 			gbc_lblSamplerate.anchor = GridBagConstraints.LINE_START;
 			gbc_lblSamplerate.weightx = 1.0;
@@ -283,7 +276,6 @@ public class NativeSoundConfigPanel extends JPanel {
 			panelFormat.add(lblSamplerate, gbc_lblSamplerate);
 
 			JLabel lblBitDepth = new JLabel("Bit Depth");
-			lblBitDepth.setForeground(Style.textColor);
 			GridBagConstraints gbc_lblBitDepth = new GridBagConstraints();
 			gbc_lblBitDepth.anchor = GridBagConstraints.LINE_START;
 			gbc_lblBitDepth.weightx = 1.0;
@@ -293,7 +285,6 @@ public class NativeSoundConfigPanel extends JPanel {
 			panelFormat.add(lblBitDepth, gbc_lblBitDepth);
 
 			JLabel lblChannels = new JLabel("Channels");
-			lblChannels.setForeground(Style.textColor);
 			GridBagConstraints gbc_lblChannels = new GridBagConstraints();
 			gbc_lblChannels.anchor = GridBagConstraints.LINE_START;
 			gbc_lblChannels.insets = new Insets(0, 0, 5, 0);
@@ -334,7 +325,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		}
 
 		JLabel lblDevice = new JLabel("Device");
-		lblDevice.setForeground(Style.textColor);
 		GridBagConstraints gbc_lblDevice = new GridBagConstraints();
 		gbc_lblDevice.anchor = GridBagConstraints.WEST;
 		gbc_lblDevice.insets = new Insets(0, 0, 5, 5);
@@ -352,8 +342,6 @@ public class NativeSoundConfigPanel extends JPanel {
 
 		chckbxShowSupportedOnly = new JCheckBox("Show only supported devices");
 		chckbxShowSupportedOnly.addActionListener(showSupportedOnlyChanged);
-		chckbxShowSupportedOnly.setBackground(Style.panelBackground);
-		chckbxShowSupportedOnly.setForeground(Style.textColor);
 		GridBagConstraints gbc_chckbxShowSupportedOnly = new GridBagConstraints();
 		gbc_chckbxShowSupportedOnly.anchor = GridBagConstraints.LINE_START;
 		gbc_chckbxShowSupportedOnly.gridx = 1;
@@ -369,10 +357,8 @@ public class NativeSoundConfigPanel extends JPanel {
 		NativeSoundConfigPanel configPanel = new NativeSoundConfigPanel(dialog);
 		
 		JPanel panelButtons = new JPanel();
-		panelButtons.setBackground(Style.panelBackground);
 		
 		JButton btnOk = new JButton("Ok");
-		UiUtils.configureButton(btnOk);
 		panelButtons.add(btnOk);
 		btnOk.addActionListener(new ActionListener() {
 			@Override
@@ -388,7 +374,6 @@ public class NativeSoundConfigPanel extends JPanel {
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
-		UiUtils.configureButton(btnCancel);
 		panelButtons.add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override

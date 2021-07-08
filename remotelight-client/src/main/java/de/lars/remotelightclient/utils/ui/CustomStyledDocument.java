@@ -32,21 +32,21 @@ public class CustomStyledDocument extends DefaultStyledDocument {
 	public CustomStyledDocument() {
 		expressionsSet = new LinkedHashMap<String, SimpleAttributeSet>();
 		
-		boolean dark = !Style.isBlackIcons();
+		boolean dark = Style.isDarkLaF();
 		
 		// set up attribute sets
-		StyleConstants.setForeground(plain, Style.textColor);
+		StyleConstants.setForeground(plain, Style.textColor().get());
 		StyleConstants.setItalic(plain, false);
 		StyleConstants.setBold(plain, false);
 		StyleConstants.setUnderline(plain, false);
-		StyleConstants.setForeground(highlighted, Style.accent);
+		StyleConstants.setForeground(highlighted, Style.accent().get());
 		StyleConstants.setForeground(brackets, dark ? new Color(108, 205, 234) : new Color(134, 214, 250));
 		StyleConstants.setForeground(value, dark ? new Color(195, 202, 89) : new Color(5, 134, 91));
 		StyleConstants.setForeground(key, dark ? new Color(248, 141, 101) : new Color(163, 23, 25));
 		StyleConstants.setForeground(comment, dark ? new Color(185, 233, 136) : new Color(0, 128, 28));
 		StyleConstants.setItalic(comment, true);
 		StyleConstants.setUnderline(error, true);
-		StyleConstants.setForeground(error, Style.error);
+		StyleConstants.setForeground(error, Style.error().get());
 	}
 	
 	public CustomStyledDocument addRegEx(String expression, SimpleAttributeSet attr) {

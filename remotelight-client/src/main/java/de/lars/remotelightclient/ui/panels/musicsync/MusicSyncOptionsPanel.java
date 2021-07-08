@@ -88,7 +88,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sm.addSetting(new SettingObject("musicsync.adjustment", null, 200)); //$NON-NLS-1$
 		
 		Dimension size = new Dimension(Integer.MAX_VALUE, 150);
-		setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(this, Style.panelDarkBackground());
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		setLayout(new GridLayout(0, 2, 0, 0));
@@ -97,7 +97,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		bgrScrollOptions.setLayout(new BoxLayout(bgrScrollOptions, BoxLayout.Y_AXIS));
 		bgrScrollOptions.setAlignmentY(Component.TOP_ALIGNMENT);
 		bgrScrollOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
-		bgrScrollOptions.setBackground(Style.panelDarkBackground);
+		bgrScrollOptions.setBackground(null);
 		add(bgrScrollOptions);
 		
 		scrollPaneOpt = new TScrollPane();
@@ -109,19 +109,18 @@ public class MusicSyncOptionsPanel extends JPanel {
 		
 		bgrOptions = new JPanel();
 		bgrOptions.setLayout(new BoxLayout(bgrOptions, BoxLayout.Y_AXIS));
-		bgrOptions.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrOptions, Style.panelDarkBackground());
 		scrollPaneOpt.setViewportView(bgrOptions);
 		
 		panelSensitivity = new JPanel();
 		panelSensitivity.setLayout(new BoxLayout(panelSensitivity, BoxLayout.Y_AXIS));
 		panelSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelSensitivity.setAlignmentY(Component.TOP_ALIGNMENT);
-		panelSensitivity.setBackground(Style.panelDarkBackground);
+		panelSensitivity.setBackground(null);
 		bgrOptions.add(panelSensitivity);
 		
 		lblSensitivity = new JLabel(i18n.getString("MusicSync.Sensitivity")); //$NON-NLS-1$
 		lblSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblSensitivity.setForeground(Style.textColor);
 		panelSensitivity.add(lblSensitivity);
 		
 		size = new Dimension(180, 20);
@@ -133,7 +132,6 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderSensitivity.setMaximum(300);
 		sliderSensitivity.setFocusable(false);
 		sliderSensitivity.setAlignmentX(Component.LEFT_ALIGNMENT);
-		UiUtils.configureSlider(sliderSensitivity);
 		sliderSensitivity.setName("sensitivity"); //$NON-NLS-1$
 		sliderSensitivity.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderSensitivity);
@@ -144,12 +142,11 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelAdjustment.setLayout(new BoxLayout(panelAdjustment, BoxLayout.Y_AXIS));
 		panelAdjustment.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelAdjustment.setBackground(Style.panelDarkBackground);
+		panelAdjustment.setBackground(null);
 		bgrOptions.add(panelAdjustment);
 		
 		lblAdjustment = new JLabel(i18n.getString("MusicSync.Adjustment")); //$NON-NLS-1$
 		lblAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblAdjustment.setForeground(Style.textColor);
 		panelAdjustment.add(lblAdjustment);
 		
 		sliderAdjustment = new JSlider();
@@ -159,7 +156,6 @@ public class MusicSyncOptionsPanel extends JPanel {
 		sliderAdjustment.setMaximumSize(size);
 		sliderAdjustment.setFocusable(false);
 		sliderAdjustment.setAlignmentX(Component.LEFT_ALIGNMENT);
-		UiUtils.configureSlider(sliderAdjustment);
 		sliderAdjustment.setName("adjustment"); //$NON-NLS-1$
 		sliderAdjustment.addChangeListener(sliderListener);
 		UiUtils.addSliderMouseWheelListener(sliderAdjustment);
@@ -169,20 +165,19 @@ public class MusicSyncOptionsPanel extends JPanel {
 		JPanel panelNativeSoundConfig = new JPanel();
 		panelNativeSoundConfig.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelNativeSoundConfig.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelNativeSoundConfig.setBackground(Style.panelDarkBackground);
+		panelNativeSoundConfig.setBackground(null);
 		panelNativeSoundConfig.setLayout(new BoxLayout(panelNativeSoundConfig, BoxLayout.X_AXIS));
 		panelNativeSoundConfig.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
 		bgrOptions.add(panelNativeSoundConfig);
 		
 		JButton btnTest = new JButton(i18n.getString("MusicSync.ConfigureNativeSound"));
-		UiUtils.configureButton(btnTest);
 		btnTest.addActionListener(buttonNativeSoundConfigClicked);
 		panelNativeSoundConfig.add(btnTest);
 		
 		panelInput = new JPanel();
 		panelInput.setAlignmentY(Component.TOP_ALIGNMENT);
 		panelInput.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelInput.setBackground(Style.panelDarkBackground);
+		panelInput.setBackground(null);
 		bgrOptions.add(panelInput);
 		panelInput.setLayout(new BorderLayout(0, 0));
 		
@@ -200,7 +195,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		
 		bgrEffectOptions = new JPanel();
 		bgrEffectOptions.setBorder(new EmptyBorder(4, 4, 0, 0));
-		bgrEffectOptions.setBackground(Style.panelDarkBackground);
+		bgrEffectOptions.setBackground(null);
 		scrollPane.setViewportView(bgrEffectOptions);
 		bgrEffectOptions.setLayout(new BoxLayout(bgrEffectOptions, BoxLayout.Y_AXIS));
 		
@@ -238,7 +233,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		
 		JLabel lblTitle = new JLabel(i18n.getString("MusicSync.EffectOptions"), SwingConstants.LEFT); //$NON-NLS-1$
 		lblTitle.setFont(Style.getFontBold(11));
-		lblTitle.setForeground(Style.accent);
+		UiUtils.bindForeground(lblTitle, Style.accent());
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgrEffectOptions.add(lblTitle);
 		
@@ -247,7 +242,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			spanel.setSettingChangedListener(effectOptionsChangeListener);
 			spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 27));
-			spanel.setBackground(Style.panelDarkBackground);
+			spanel.setBackground(null);
 			bgrEffectOptions.add(spanel);
 			settingPanels.add(spanel);
 		}
@@ -276,13 +271,12 @@ public class MusicSyncOptionsPanel extends JPanel {
 		String input = (String) sm.getSettingObject("musicsync.input").get(); //$NON-NLS-1$
 		
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
-		buttonPanel.setBackground(Style.panelDarkBackground);
+		buttonPanel.setBackground(null);
 		ButtonGroup group = new ButtonGroup();
 		
 		// add native sound radio button
 		rbuttonNativeSound = new JRadioButton();
-		rbuttonNativeSound.setBackground(Style.panelDarkBackground);
-		rbuttonNativeSound.setForeground(Style.textColor);
+		rbuttonNativeSound.setBackground(null);
 		buttonPanel.add(rbuttonNativeSound);
 		group.add(rbuttonNativeSound);
 		rbuttonNativeSound.setActionCommand("_NativeSound_");
@@ -302,8 +296,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 
 			if(InputUtil.isLineSupported(mixer)) {
 				JRadioButton button = new JRadioButton();
-				button.setBackground(Style.panelDarkBackground);
-				button.setForeground(Style.textColor);
+				button.setBackground(null);
 				button.setText(Shared.toLocalString(info));
 				buttonPanel.add(button);
 				group.add(button);
@@ -319,7 +312,6 @@ public class MusicSyncOptionsPanel extends JPanel {
 		}
 		
 		lblInput = new JLabel(i18n.getString("MusicSync.SelectInput")); //$NON-NLS-1$
-		lblInput.setForeground(Style.textColor);
 		panelInput.add(lblInput, BorderLayout.NORTH);
 		panelInput.add(buttonPanel);
 	}

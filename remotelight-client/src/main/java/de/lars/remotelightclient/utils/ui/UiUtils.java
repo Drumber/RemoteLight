@@ -24,6 +24,7 @@ package de.lars.remotelightclient.utils.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Font;
@@ -40,8 +41,13 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
@@ -133,6 +139,11 @@ public class UiUtils {
 		return null;
 	}
 	
+	public static void bindBackground(Component comp, Supplier<Color> colorSupplier) {
+		comp.addPropertyChangeListener("UI", e -> comp.setBackground(colorSupplier.get()));
+		comp.setBackground(colorSupplier.get());
+	}
+	
 	public static void bindElevation(Component comp, final int alpha) {
 		comp.addPropertyChangeListener("UI", event -> {
 			Component c = (Component) event.getSource();
@@ -153,11 +164,22 @@ public class UiUtils {
 	 * @param alpha			the alpha value of the overlay (0..255)
 	 */
 	public static void setElevation(Component comp, Color background, int alpha) {
+		Color c = getElevationColor(background, alpha);
+		comp.setBackground(c);
+	}
+	
+	/**
+	 * Get the elevation color by blending the specified background color
+	 * with a semi-transparent overlay (white on dark themes, black otherwise).
+	 * @param background	the background color that should be blended with the overlay
+	 * @param alpha			the alpha value of the overlay (0..255)
+	 * @return	the resulting color
+	 */
+	public static Color getElevationColor(Color background, int alpha) {
 		boolean isDark = Style.isDarkLaF();
 		// on dark themes use WHITE overlay, on light themes use BLACK overlay
 		Color overlay = isDark ? new Color(255, 255, 255, alpha) : new Color(0, 0, 0, alpha);
-		Color c = ColorTool.alphaBlending(overlay, background);
-		comp.setBackground(c);
+		return ColorTool.alphaBlending(overlay, background);
 	}
 	
 	public static void bindFont(JComponent comp, Font font) {
@@ -192,69 +214,12 @@ public class UiUtils {
 		comp.setForeground(colorSupplier.get());
 	}
 	
-	public static void configureButton(JButton btn) {
-		configureButton(btn, true);
-	}
-	
-	public static void configureButton(JButton btn, boolean hoverListener) {
-		if(disableTheming) {
-			btn.setContentAreaFilled(true);
-			btn.setFocusable(false);
-			return;
-		}
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setFocusable(true);
-        btn.setOpaque(true);
-        btn.setBackground(Style.buttonBackground);
-        btn.setForeground(Style.textColor);
-        if(hoverListener)
-        	btn.addMouseListener(buttonHoverListener);
-	}
-	
-	public static void configureButtonWithBorder(JButton btn, Color border) {
-        btn.setBorderPainted(true);
-        btn.setBorder(BorderFactory.createLineBorder(border));
-		if(disableTheming) return;
-        btn.setContentAreaFilled(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(true);
-        btn.setBackground(Style.buttonBackground);
-        btn.setForeground(Style.textColor);
-        btn.addMouseListener(buttonHoverListener);
-	}
-	
-	private static MouseAdapter buttonHoverListener = new MouseAdapter() {
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			if(disableTheming) return;
-			JButton btn = (JButton) e.getSource();
-			if(btn.isEnabled()) {
-				btn.setBackground(Style.hoverBackground);
-			}
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			if(disableTheming) return;
-			JButton btn = (JButton) e.getSource();
-			btn.setBackground(Style.buttonBackground);
-		}
-	};
-	
 	public static void configureSpinner(JSpinner spinner) {
 		// set width (columns)
 		JComponent editor = spinner.getEditor();
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) editor).getTextField();
 		jftf.setColumns(4);
 		spinner.setEditor(editor);
-	}
-	
-	public static void configureMenuItem(JMenuItem item) {
-		item.setBackground(Style.panelAccentBackground);
-		item.setContentAreaFilled(false);
-		item.setForeground(Style.textColor);
-		item.setOpaque(UiUtils.isThemingEnabled());
 	}
 	
 	public static void addHoverColor(JComponent comp, Color main, Color hover) {
@@ -268,60 +233,6 @@ public class UiUtils {
 				((JComponent) e.getSource()).setBackground(main);
 			}
 		});
-	}
-	
-	public static void configureTabbedPane(JTabbedPane tp) {
-		if(disableTheming) return;
-		tp.setBackground(Style.panelBackground);
-		tp.setBorder(BorderFactory.createEmptyBorder());
-		tp.setOpaque(true);
-		tp.setFocusable(false);
-		for(int i = 0; i < tp.getTabCount(); i++) {
-			tp.getComponentAt(i).setBackground(Style.panelBackground);
-			tp.setBackgroundAt(i, Style.panelBackground);
-			if(tp.getComponentAt(i) instanceof JPanel) {
-				JPanel p = (JPanel) tp.getComponentAt(i);
-				p.setOpaque(true);
-				p.setBorder(BorderFactory.createEmptyBorder());
-				for(Component co : p.getComponents()) {
-					co.setBackground(Style.panelBackground);
-					if(co instanceof AbstractColorChooserPanel) {
-						AbstractColorChooserPanel ac = (AbstractColorChooserPanel) co;
-						ac.setBorder(BorderFactory.createEmptyBorder());
-						for(Component com : ac.getComponents()) {
-							if(com instanceof JComponent) {
-								JComponent jc = (JComponent) com;
-								jc.setBackground(Style.panelBackground);
-								jc.setOpaque(true);
-								jc.setBorder(BorderFactory.createEmptyBorder());
-								jc.setFocusable(false);
-								jc.setForeground(Style.textColor);
-								for(Component comp : jc.getComponents()) {
-									if(comp instanceof JComponent) {
-										JComponent jco = (JComponent) comp;
-										jco.setBackground(Style.panelBackground);
-										jco.setForeground(Style.textColor);
-										jco.setOpaque(true);
-										jco.setFocusable(false);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	
-	public static void configureSlider(JSlider slider) {
-		if(disableTheming) return;
-		Color background = Style.panelBackground;
-		if(slider.getParent() != null) {
-			background = slider.getParent().getBackground();
-		}
-		slider.setBackground(background);
-		slider.setForeground(Style.accent);
 	}
 	
 	public static void addSliderMouseWheelListener(JSlider slider) {
@@ -355,6 +266,23 @@ public class UiUtils {
 				}
 			}
 		});
+	}
+	
+	
+	public static Component findChildWithName(Container container, String name) {
+		if(container == null || name == null) return null;
+		for(Component comp : container.getComponents()) {
+			if(name.equals(comp.getName())) {
+				return comp;
+			}
+			if(comp instanceof Container) {
+				Component nestedFound = findChildWithName((Container) comp, name);
+				if(nestedFound != null) {
+					return nestedFound;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

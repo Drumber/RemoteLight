@@ -38,6 +38,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.listeners.NotificationOptionListener;
 
@@ -92,7 +93,6 @@ public class NotificationPane extends JPanel {
 		
 		lblClose = new JLabel("X"); // TODO replace with font icon
 		lblClose.setVisible(false);
-		lblClose.setForeground(Style.textColor);
 		lblClose.setToolTipText("Hide notification");
 		lblClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblClose.addMouseListener(closeClickListener);
@@ -113,9 +113,8 @@ public class NotificationPane extends JPanel {
 		}
 		
 		// set colors
-		setBackground(Style.panelAccentBackground);
-		lblTitle.setForeground(Style.textColor);
-		taMessage.setForeground(Style.textColorDarker);
+		UiUtils.bindBackground(this, Style.panelAccentBackground());
+		UiUtils.bindForeground(taMessage, Style.textColorDarker());
 		taMessage.setBackground(getBackground());
 	}
 	
@@ -165,7 +164,7 @@ public class NotificationPane extends JPanel {
 	protected MouseAdapter mouseListener = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			setBorder(new LineBorder(Style.accent));
+			setBorder(new LineBorder(Style.accent().get()));
 			lblClose.setVisible(true);
 			isFocussed = true;
 			if(handler != null && handler.timer != null) {

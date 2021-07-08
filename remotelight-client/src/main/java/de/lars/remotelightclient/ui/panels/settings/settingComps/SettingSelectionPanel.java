@@ -54,11 +54,9 @@ public class SettingSelectionPanel extends SettingPanel {
 	public SettingSelectionPanel(SettingSelection setting) {
 		super(setting);
 		this.setting = setting;
-		setBackground(Style.panelBackground);
 		
 		JLabel lblName = new JLabel("name");
 		lblName.setText(setting.getName());
-		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
 		if(setting.getModel() == Model.ComboBox) {
@@ -83,7 +81,6 @@ public class SettingSelectionPanel extends SettingPanel {
 			for(String s : setting.getValues()) {
 				
 				JRadioButton btn = new JRadioButton(s);
-				btn.setForeground(Style.textColor);
 				btn.setActionCommand(s);
 				if(setting.getSelected() != null && s.equals(setting.getSelected())) {
 					btn.setSelected(true);

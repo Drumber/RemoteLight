@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.colors.palette.model.PaletteData;
 
 public class GradientsList extends JPanel {
@@ -26,7 +27,6 @@ public class GradientsList extends JPanel {
 	private JList<PaletteData> list;
 	
 	public GradientsList(Set<PaletteData> listPalettes) {
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		
 		DefaultListModel<PaletteData> listModel = new DefaultListModel<PaletteData>();
@@ -35,10 +35,9 @@ public class GradientsList extends JPanel {
 		list = new JList<PaletteData>(listModel);
 		list.setCellRenderer(new GradientListElement());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setSelectionBackground(Style.accent);
-		list.setSelectionForeground(Style.textColor);
-		list.setForeground(Style.textColor);
-		list.setBackground(Style.panelDarkBackground);
+		list.setSelectionBackground(Style.accent().get());
+		list.setSelectionForeground(Style.textColor().get());
+		UiUtils.bindBackground(list, Style.panelDarkBackground());
 		
 		TScrollPane scrollPane = new TScrollPane(list);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -105,8 +104,8 @@ public class GradientsList extends JPanel {
 				setBackground(list.getSelectionBackground());
 				setForeground(list.getSelectionForeground());
 			} else if(cellHasFocus) {
-				setBackground(Style.hoverBackground);
-				setForeground(Style.textColor);
+				setBackground(Style.hoverBackground().get());
+				setForeground(Style.textColor().get());
 			} else {
 				setBackground(list.getBackground());
 				setForeground(list.getForeground());

@@ -44,11 +44,9 @@ public class GradientEditPanel extends JPanel {
 	private boolean fieldNameTextReplaceMode;
 	
 	public GradientEditPanel() {
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout());
 		
 		JPanel panelHeader = new JPanel();
-		panelHeader.setBackground(Style.panelBackground);
 		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
 		add(panelHeader, BorderLayout.NORTH);
 		
@@ -57,18 +55,17 @@ public class GradientEditPanel extends JPanel {
 		fieldName.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		fieldName.setPreferredSize(new Dimension(0, 40));
 		fieldName.setAlignmentX(Component.LEFT_ALIGNMENT);
-		fieldName.setBackground(Style.panelDarkBackground);
-		fieldName.setForeground(Style.textColor);
-		fieldName.setCaretColor(Style.accent);
+		UiUtils.bindBackground(fieldName, Style.panelDarkBackground());
+		fieldName.setCaretColor(Style.accent().get());
 		fieldName.setFont(Style.getFontRegualar(16));
 		fieldName.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, Style.textColorDarker), 
+				BorderFactory.createMatteBorder(0, 0, 1, 0, Style.textColorDarker().get()), 
 				BorderFactory.createEmptyBorder(5, 10, 0, 10)));
 		panelHeader.add(fieldName);
 		
 		lblNameError = new JLabel("Name does already exist.", SwingConstants.LEFT);
 		lblNameError.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblNameError.setForeground(Style.error);
+		lblNameError.setForeground(Style.error().get());
 		lblNameError.setVisible(false);
 		panelHeader.add(lblNameError);
 		
@@ -88,7 +85,6 @@ public class GradientEditPanel extends JPanel {
 		panelHeader.add(panelMarkerEdit);
 		
 		JPanel panelSetup = new JPanel();
-		panelSetup.setBackground(Style.panelBackground);
 		panelSetup.setLayout(new BorderLayout());
 		
 		TScrollPane scrollPane = new TScrollPane(panelSetup);
@@ -99,28 +95,25 @@ public class GradientEditPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 		
 		colorPicker =  new ColorPicker(Color.RED, 0, true, true, false, false);
-		colorPicker.setBackground(Style.panelBackground);
 		colorPicker.addColorListener(colorChangeListener);
 		colorPicker.setPreferredSize(new Dimension(300, 200));
 		colorPicker.setMinimumSize(new Dimension(100, 200));
 		
 		JPanel panelCodeEditor = new JPanel();
 		panelCodeEditor.setLayout(new BorderLayout());
-		panelCodeEditor.setBackground(Style.panelBackground);
 		
 		editor = new JTextPane();
-		editor.setBackground(Style.panelDarkBackground);
-		editor.setForeground(Style.textColor);
-		editor.setCaretColor(Style.accent);
+		UiUtils.bindBackground(editor, Style.panelDarkBackground());
+		editor.setCaretColor(Style.accent().get());
 		editor.setFont(Style.getFontRegualar(14));
 		editor.setStyledDocument(createStyledDocument());
 		editor.getDocument().addDocumentListener(onCodeEditorChange);
 		panelCodeEditor.add(editor, BorderLayout.CENTER);
 		
 		TextLineNumber lineNumbers = new TextLineNumber(editor);
-		lineNumbers.setBackground(Style.panelAccentBackground);
-		lineNumbers.setForeground(Style.textColorDarker);
-		lineNumbers.setCurrentLineForeground(Style.accent);
+		UiUtils.bindBackground(lineNumbers, Style.panelAccentBackground());
+		UiUtils.bindForeground(lineNumbers, Style.textColorDarker());
+		lineNumbers.setCurrentLineForeground(Style.accent().get());
 		panelCodeEditor.add(lineNumbers, BorderLayout.WEST);
 		
 		editorErrPanel = new EditorErrorPanel();
@@ -128,7 +121,6 @@ public class GradientEditPanel extends JPanel {
 		panelCodeEditor.add(editorErrPanel, BorderLayout.SOUTH);
 		
 		TabButtons tabBtns = new TabButtons();
-		tabBtns.setBackground(Style.panelBackground);
 		tabBtns.setHeight(25);
 		tabBtns.addButton("ColorPicker");
 		tabBtns.addButton("Code Editor");
@@ -398,16 +390,13 @@ public class GradientEditPanel extends JPanel {
 		private JButton btnRemoveMarker;
 		
 		public MarkerEditPanel() {
-			setBackground(Style.panelBackground);
 			setLayout(new WrapLayout(WrapLayout.LEFT));
 			
 			btnAddMarker = new JButton("Add marker");
-			UiUtils.configureButton(btnAddMarker);
 			btnAddMarker.addActionListener(l -> addMarker());
 			add(btnAddMarker);
 			
 			btnRemoveMarker = new JButton("Remove marker");
-			UiUtils.configureButton(btnRemoveMarker);
 			btnRemoveMarker.addActionListener(l -> removeSelectedMarker());
 			add(btnRemoveMarker);
 		}
@@ -420,14 +409,13 @@ public class GradientEditPanel extends JPanel {
 		private JLabel lblText;
 		
 		public EditorErrorPanel() {
-			setBackground(Style.panelBackground);
 			setLayout(new BorderLayout());
 			
-			JLabel lblIcon = new JLabel(Style.getFontIcon(MenuIcon.ERROR, Style.error));
+			JLabel lblIcon = new JLabel(Style.getFontIcon(MenuIcon.ERROR, Style.error().get()));
 			add(lblIcon, BorderLayout.WEST);
 			
 			lblText = new JLabel("");
-			lblText.setForeground(Style.error);
+			lblText.setForeground(Style.error().get());
 			add(lblText, BorderLayout.CENTER);
 		}
 		

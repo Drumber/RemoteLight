@@ -6,7 +6,6 @@ import java.awt.Color;
 import de.lars.colorpicker.ColorPicker;
 import de.lars.colorpicker.listener.ColorListener;
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
@@ -22,7 +21,6 @@ public class ColorPickerPanel extends ColorsSubPanel {
 		sm.addSetting(new SettingObject("colorspanel.colors", null, defaultColors));
 		colors = (Color[]) sm.getSettingObject("colorspanel.colors").get();
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
 		ColorPicker.paletteColors = colors;

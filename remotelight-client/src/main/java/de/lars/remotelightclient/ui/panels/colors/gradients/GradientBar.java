@@ -220,7 +220,7 @@ public class GradientBar extends JPanel {
 			}
 			
 			int center = Math.round(pos);
-			Color colorPrimary = Marker.selectedIndex == i ? Style.accent : Color.WHITE;
+			Color colorPrimary = Marker.selectedIndex == i ? Style.accent().get() : Color.WHITE;
 			// draw primary rectangle
 			g.setColor(colorPrimary);
 			g.fillRect(center - 1, offsetY, 3, height);

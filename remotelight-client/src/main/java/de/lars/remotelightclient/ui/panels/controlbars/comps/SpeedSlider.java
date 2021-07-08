@@ -25,6 +25,7 @@ package de.lars.remotelightclient.ui.panels.controlbars.comps;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.function.Supplier;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -34,7 +35,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.animation.AnimationManager;
 import de.lars.remotelightcore.utils.maths.MathHelper;
@@ -53,20 +53,19 @@ public class SpeedSlider extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public SpeedSlider(Color c) {
+	public SpeedSlider(Supplier<Color> c) {
 		setBorder(new EmptyBorder(5, 0, 0, 0));
-		setBackground(c);
+		UiUtils.bindBackground(this, c);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		size = new Dimension(180, 30);
 		
 		lblSpeed = new JLabel(textSpeed);
-		lblSpeed.setForeground(Style.textColor);
 		lblSpeed.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		add(lblSpeed);
 		
 		JPanel bgrSlider = new JPanel();
 		bgrSlider.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		bgrSlider.setBackground(c);
+		bgrSlider.setBackground(null);
 		bgrSlider.setPreferredSize(size);
 		bgrSlider.setMaximumSize(size);
 		add(bgrSlider);
@@ -83,7 +82,6 @@ public class SpeedSlider extends JPanel {
 				lblSpeed.setText(textSpeed + " " + speedPercent + "%");
 			}
 		});
-		UiUtils.configureSlider(slider);
 		slider.setFocusable(false);
 		slider.setMajorTickSpacing(0);
 		slider.setPaintTicks(true);

@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -25,13 +26,13 @@ public class TabButtons extends JPanel {
 	
 	private List<JPanel> listButtons;
 	private ActionListener listener;
-	protected Color colorSelected = Style.accent;
-	protected Color colorHover = Style.hoverBackground;
+	protected Supplier<Color> colorSelected = Style.accent();
+	protected Supplier<Color> colorHover = Style.hoverBackground();
 	protected int height = 30;
 	
 	public TabButtons() {
 		listButtons = new ArrayList<JPanel>();
-		setBackground(Style.panelBackground);
+		UiUtils.bindBackground(this, Style.panelBackground());
 		setLayout(new GridLayout(1, 0));
 	}
 	
@@ -57,13 +58,12 @@ public class TabButtons extends JPanel {
 	private JPanel createHeaderButton(String title) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setBackground(getBackground());
+		panel.setBackground(null);
 		panel.setPreferredSize(new Dimension(0, height));
 		panel.addMouseListener(onButtonClicked);
-		UiUtils.addHoverColor(panel, panel.getBackground(), colorHover);
+		UiUtils.addHoverColor(panel, null, colorHover.get());
 		
 		JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
-		lblTitle.setForeground(Style.textColor);
 		lblTitle.setFont(getFont());
 		panel.add(lblTitle, BorderLayout.CENTER);
 		return panel;
@@ -78,7 +78,7 @@ public class TabButtons extends JPanel {
 	public void selectButton(String name) {		
 		for(JPanel btn : listButtons) {
 			if(name.equals(btn.getName())) {
-				btn.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent));
+				btn.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Style.accent().get()));
 				if(listener != null) {
 					ActionEvent event = new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, name);
 					listener.actionPerformed(event);
@@ -94,19 +94,19 @@ public class TabButtons extends JPanel {
 		listener = l;
 	}
 
-	public Color getColorSelected() {
+	public Supplier<Color> getColorSelected() {
 		return colorSelected;
 	}
 
-	public void setColorSelected(Color colorSelected) {
+	public void setColorSelected(Supplier<Color> colorSelected) {
 		this.colorSelected = colorSelected;
 	}
 
-	public Color getColorHover() {
+	public Supplier<Color> getColorHover() {
 		return colorHover;
 	}
 
-	public void setColorHover(Color colorHover) {
+	public void setColorHover(Supplier<Color> colorHover) {
 		this.colorHover = colorHover;
 	}
 

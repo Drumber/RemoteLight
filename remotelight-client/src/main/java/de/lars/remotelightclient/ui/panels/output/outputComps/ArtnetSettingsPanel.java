@@ -64,7 +64,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		this.artnet = artnet;
 		
 		size = new Dimension(800, 40);
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -74,11 +73,9 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelId.setPreferredSize(size);
 		panelId.setMaximumSize(size);
 		panelId.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelId.setBackground(Style.panelBackground);
 		add(panelId);
 		
 		JLabel lblNameId = new JLabel(i18n.getString("OutputPanel.NameID")); //$NON-NLS-1$
-		lblNameId.setForeground(Style.textColor);
 		panelId.add(lblNameId);
 		
 		fieldId = new JTextField();
@@ -91,11 +88,9 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelIpAddress.setPreferredSize(size);
 		panelIpAddress.setMaximumSize(size);
 		panelIpAddress.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelIpAddress.setBackground(Style.panelBackground);
 		add(panelIpAddress);
 		
 		JLabel lblIpAddress = new JLabel("IP Address:"); //$NON-NLS-1$
-		lblIpAddress.setForeground(Style.textColor);
 		panelIpAddress.add(lblIpAddress);
 		
 		fieldIpAddress = new JTextField();
@@ -105,8 +100,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		
 		chckbxBroadcast = new JCheckBox(i18n.getString("ArtnetSettingsPanel.chckbxBroadcast.text")); //$NON-NLS-1$
 		chckbxBroadcast.addChangeListener(broadcastCheckboxListener);
-		chckbxBroadcast.setBackground(Style.panelBackground);
-		chckbxBroadcast.setForeground(Style.textColor);
 		panelIpAddress.add(chckbxBroadcast);
 		
 		JPanel panelSubnet = new JPanel();
@@ -115,11 +108,9 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelSubnet.setPreferredSize(size);
 		panelSubnet.setMaximumSize(size);
 		panelSubnet.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelSubnet.setBackground(Style.panelBackground);
 		add(panelSubnet);
 		
 		JLabel lblSubnet = new JLabel(i18n.getString("ArtnetSettingsPanel.lblSubnet.text")); //$NON-NLS-1$
-		lblSubnet.setForeground(Style.textColor);
 		panelSubnet.add(lblSubnet);
 		
 		spinnerSubnet = new JSpinner();
@@ -133,11 +124,9 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelUniverse.setPreferredSize(size);
 		panelUniverse.setMaximumSize(size);
 		panelUniverse.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelUniverse.setBackground(Style.panelBackground);
 		add(panelUniverse);
 		
 		JLabel lblStartUniverse = new JLabel(i18n.getString("ArtnetSettingsPanel.lblStartUniverse.text")); //$NON-NLS-1$
-		lblStartUniverse.setForeground(Style.textColor);
 		panelUniverse.add(lblStartUniverse);
 		
 		spinnerStartUniverse = new JSpinner();
@@ -147,16 +136,12 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelUniverse.add(spinnerStartUniverse);
 		
 		JLabel lblEndUniverseText = new JLabel(i18n.getString("ArtnetSettingsPanel.lblEndUniverse.text")); //$NON-NLS-1$
-		lblEndUniverseText.setForeground(Style.textColor);
 		panelUniverse.add(lblEndUniverseText);
 		
 		lblEndUniverse = new JLabel("0");
-		lblEndUniverse.setForeground(Style.textColor);
 		panelUniverse.add(lblEndUniverse);
 		
 		checkboxContinuousUniverse = new JCheckBox(i18n.getString("ArtnetSettingsPanel.checkboxContinuousUniverse.text"));
-		checkboxContinuousUniverse.setBackground(Style.panelBackground);
-		checkboxContinuousUniverse.setForeground(Style.textColor);
 		checkboxContinuousUniverse.setSelected(artnet.isContinuousUniverseOverflow());
 		add(checkboxContinuousUniverse);
 		
@@ -165,12 +150,10 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		panelPixels.setPreferredSize(size);
 		panelPixels.setMaximumSize(size);
-		panelPixels.setBackground(Style.panelBackground);
 		panelPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelPixels);
 		
 		JLabel lblPixels = new JLabel(i18n.getString("OutputPanel.Pixels")); //$NON-NLS-1$
-		lblPixels.setForeground(Style.textColor);
 		panelPixels.add(lblPixels);
 		
 		spinnerPixels = new JSpinner();
@@ -184,12 +167,10 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
 		panelOrder.setPreferredSize(size);
 		panelOrder.setMaximumSize(size);
-		panelOrder.setBackground(Style.panelBackground);
 		panelOrder.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(panelOrder);
 		
 		JLabel lblRgbOrder = new JLabel(i18n.getString("OutputPanel.RgbOrder"));
-		lblRgbOrder.setForeground(Style.textColor);
 		panelOrder.add(lblRgbOrder);
 		
 		comboOrder = new JComboBox<RgbOrder>();
@@ -198,7 +179,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		
 		JLabel lblOutputPatch = new JLabel(i18n.getString("OutputPanel.OutputPatch"), SwingConstants.LEFT);
 		lblOutputPatch.setFont(Style.getFontBold(11));
-		lblOutputPatch.setForeground(Style.textColor);
 		lblOutputPatch.setBorder(new EmptyBorder(5, 5, 0, 0));
 		add(lblOutputPatch);
 		
@@ -207,12 +187,10 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		flowLayout_Order.setAlignment(FlowLayout.LEFT);
 		panelShift.setPreferredSize(new Dimension(800, 40));
 		panelShift.setMaximumSize(new Dimension(800, 40));
-		panelShift.setBackground(Style.panelBackground);
 		panelShift.setAlignmentX(0.0f);
 		add(panelShift);
 		
 		JLabel lblShift = new JLabel(i18n.getString("OutputPanel.ShiftPixels"));
-		lblShift.setForeground(Style.textColor);
 		panelShift.add(lblShift);
 		
 		spinnerShift = new JSpinner();
@@ -227,7 +205,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerShift);
 		
 		JLabel lblClone = new JLabel(i18n.getString("OutputPanel.Clone"));
-		lblClone.setForeground(Style.textColor);
 		panelShift.add(lblClone);
 		
 		spinnerClone = new JSpinner();
@@ -241,8 +218,6 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		panelShift.add(spinnerClone);
 		
 		checkboxCloneMirrored = new JCheckBox(i18n.getString("OutputPanel.Mirror"));
-		checkboxCloneMirrored.setBackground(Style.panelBackground);
-		checkboxCloneMirrored.setForeground(Style.textColor);
 		checkboxCloneMirrored.setSelected(artnet.getOutputPatch().isCloneMirrored());
 		panelShift.add(checkboxCloneMirrored);
 		

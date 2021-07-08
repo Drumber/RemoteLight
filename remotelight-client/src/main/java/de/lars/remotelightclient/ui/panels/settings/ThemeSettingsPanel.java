@@ -22,6 +22,7 @@ import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.ui.components.ScrollablePanel;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.utils.ui.MenuIconFont;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
@@ -48,7 +49,6 @@ public class ThemeSettingsPanel extends JPanel {
 		sSelectedTheme = sm.getSetting(SettingString.class, "ui.theme");
 		sThemeFilter = sm.addSetting(new SettingString("settings.themes.filter", null, SettingCategory.Intern, null, "All"));
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JButton btnBack = new JButton(Style.getFontIcon(MenuIconFont.MenuIcon.BACK, 16));
@@ -66,6 +66,7 @@ public class ThemeSettingsPanel extends JPanel {
 		panelTopBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelTopBar.add(btnBack);
 		panelTopBar.add(lblTitle);
+		panelTopBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, panelTopBar.getPreferredSize().height));
 		add(panelTopBar);
 		
 		JComboBox<String> boxFilter = new JComboBox<>(new DefaultComboBoxModel<>(new String[] {"All", "Light", "Dark"}));
@@ -95,7 +96,7 @@ public class ThemeSettingsPanel extends JPanel {
 		
 		TScrollPane themeScrollPane = new TScrollPane(listThemes);
 		themeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		themeScrollPane.setMinimumSize(new Dimension(200, 0));
+		themeScrollPane.setMinimumSize(new Dimension(150, 0));
 		themeScrollPane.setViewportBorder(null);
 		themeScrollPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
 		themeScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -110,7 +111,7 @@ public class ThemeSettingsPanel extends JPanel {
 		
 		PreviewPanel previewPanel = new PreviewPanel();
 		JPanel panelUiOptions = createUiOptionsPanel();
-		JPanel cardWrapper = new JPanel();
+		ScrollablePanel cardWrapper = new ScrollablePanel();
 		cardWrapper.setLayout(new BoxLayout(cardWrapper, BoxLayout.Y_AXIS));
 		cardWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		cardWrapper.add(panelUiOptions);
@@ -118,17 +119,25 @@ public class ThemeSettingsPanel extends JPanel {
 		cardWrapper.add(previewPanel);
 		cardWrapper.add(Box.createGlue());
 		
+		TScrollPane cardScrollPane = new TScrollPane(cardWrapper);
+		cardScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cardScrollPane.setViewportBorder(null);
+		cardScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		cardScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		cardScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		
 		JPanel panelMiddle = new JPanel();
 		panelMiddle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelMiddle.setLayout(new BoxLayout(panelMiddle, BoxLayout.X_AXIS));
 		panelMiddle.add(panelThemes);
-		panelMiddle.add(cardWrapper);
+		panelMiddle.add(cardScrollPane);
 		add(panelMiddle);
 	}
 	
 	private void onThemeSelected(ListSelectionEvent event) {
 		LookAndFeelInfo info = listThemes.getSelectedValue();
 		if(event.getValueIsAdjusting()) return;
+		sSelectedTheme.set(info.getClassName());
 		applyTheme(info);
 	}
 	
@@ -139,7 +148,6 @@ public class ThemeSettingsPanel extends JPanel {
 			try {
 				FlatAnimatedLafChange.showSnapshot();
 				UIManager.setLookAndFeel(info.getClassName());
-				sSelectedTheme.set(info.getClassName());
 				FlatLaf.updateUI();
 				FlatAnimatedLafChange.hideSnapshotWithAnimation();
 			} catch (Exception e) {
@@ -306,6 +314,7 @@ public class ThemeSettingsPanel extends JPanel {
 			FlatLaf.updateUILater();
 		});
 		panelFont.add(comboFont);
+		panelFont.add(Box.createHorizontalStrut(5));
 		
 		JSpinner spinnerFontSize = new JSpinner();
 		spinnerFontSize.setModel(new SpinnerNumberModel(sFontSize.get().intValue(), sFontSize.getMin(), sFontSize.getMax(), sFontSize.getStepsize()));
@@ -316,8 +325,8 @@ public class ThemeSettingsPanel extends JPanel {
 			Style.setSelectedFont();
 			FlatLaf.updateUILater();
 		});
-		panelFont.setMaximumSize(new Dimension(Integer.MAX_VALUE, Math.max(comboFont.getPreferredSize().height, spinnerFontSize.getPreferredSize().height)));
 		panelFont.add(spinnerFontSize);
+		panelFont.setMaximumSize(new Dimension(Integer.MAX_VALUE, Math.max(comboFont.getPreferredSize().height, spinnerFontSize.getPreferredSize().height)));
 		
 		appendUiSettingSection(root, panelFont, "Font");
 		root.add(Box.createVerticalStrut(10));

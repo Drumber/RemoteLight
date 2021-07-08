@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class ImagePanel extends JPanel {
 	
@@ -60,7 +61,7 @@ public class ImagePanel extends JPanel {
 		lbl = new JLabel(text);
 		lbl.setHorizontalAlignment(JLabel.CENTER);
 		lbl.setFont(Style.getFontBold(14));
-		lbl.setForeground(Style.accent);
+		UiUtils.bindForeground(lbl, Style.accent());
 		add(lbl, BorderLayout.CENTER);
 		
 	}

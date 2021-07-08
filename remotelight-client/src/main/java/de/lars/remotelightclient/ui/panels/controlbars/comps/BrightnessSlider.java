@@ -25,6 +25,7 @@ package de.lars.remotelightclient.ui.panels.controlbars.comps;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.function.Supplier;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -35,7 +36,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.lars.remotelightclient.Main;
-import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.lang.i18n;
@@ -52,20 +52,19 @@ public class BrightnessSlider extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public BrightnessSlider(Color c) {
+	public BrightnessSlider(Supplier<Color> c) {
 		setBorder(new EmptyBorder(5, 0, 0, 0));
-		setBackground(c);
+		UiUtils.bindBackground(this, c);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		size = new Dimension(180, 30);
 		
 		JLabel lblBrightness = new JLabel(textBrightness);
-		lblBrightness.setForeground(Style.textColor);
 		lblBrightness.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(lblBrightness);
 		
 		JPanel bgrSlider = new JPanel();
 		bgrSlider.setAlignmentX(Component.LEFT_ALIGNMENT);
-		bgrSlider.setBackground(c);
+		bgrSlider.setBackground(null);
 		bgrSlider.setPreferredSize(size);
 		bgrSlider.setMaximumSize(size);
 		add(bgrSlider);
@@ -83,7 +82,6 @@ public class BrightnessSlider extends JPanel {
 				lblBrightness.setText(textBrightness + " " + slider.getValue() + "%"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		});
-		UiUtils.configureSlider(slider);
 		slider.setFocusable(false);
 		slider.setMajorTickSpacing(0);
 		slider.setPaintTicks(true);

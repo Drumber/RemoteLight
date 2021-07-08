@@ -40,6 +40,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.tinylog.Logger;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 
@@ -59,7 +60,7 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingInt;
-import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingString;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import de.lars.remotelightcore.utils.ExceptionHandler;
 import de.lars.remotelightplugins.PluginManager;
@@ -187,41 +188,34 @@ public class Main {
 	 * @return	false, if the operation fails
 	 */
 	public boolean setLookAndFeel() {
-		SettingSelection sLaF = (SettingSelection) remoteLightCore.getSettingsManager().getSettingFromId("ui.laf");
-		UiUtils.setThemingEnabled(true);
+		UiUtils.setThemingEnabled(false);
 		
 		try {
+			// enable FlatLaf custom window decorations
+			boolean customWindow = FlatLaf.supportsNativeWindowDecorations()
+					&& getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get();
+			UIManager.put("TitlePane.unifiedBackground", getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations.unified").get());
+			setCustomWindowDecorations(customWindow);
 			
-			if(sLaF == null || sLaF.getSelected().equalsIgnoreCase("System default")) {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				setCustomWindowDecorations(false);
-				return true;
-			}
-			
-			String lafName = sLaF.getSelected();
+			String lafClassName = getSettingsManager().getSetting(SettingString.class, "ui.theme").get();
+			boolean lafFound = false;
 			
 			for(LookAndFeelInfo info : Style.getLookAndFeelInfo()) {
-				if(lafName.equals(info.getName())) {
+				if(info.getClassName().equals(lafClassName)) {
 					UIManager.setLookAndFeel(info.getClassName());
+					lafFound = true;
+					break;
 				}
 			}
 			
-			// check if current LaF is FlatLaf LaF
-			if(UIManager.getLookAndFeel().getID().startsWith("FlatLaf")) {
-				UiUtils.setThemingEnabled(false);
-				boolean customWindow = FlatLaf.supportsNativeWindowDecorations()
-						&& getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations").get()
-						&& getSettingsManager().getSetting(SettingSelection.class, "ui.style").getSelected().equals("LookAndFeel");
-				// enable FlatLaf custom window decorations
-				UIManager.put("TitlePane.unifiedBackground", getSettingsManager().getSetting(SettingBoolean.class, "ui.windowdecorations.unified").get());
-				setCustomWindowDecorations(customWindow);
-			} else {
-				setCustomWindowDecorations(false);
+			if(!lafFound) {
+				// default Look And Feel if stored LaF is no longer available
+				FlatDarkLaf.setup();
 			}
-			
 			return true;
-		} catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			Logger.error(e, "Error while settings Look and Feel.");
 		}
 		return false;
 	}

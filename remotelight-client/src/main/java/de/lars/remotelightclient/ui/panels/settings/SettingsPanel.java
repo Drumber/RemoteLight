@@ -25,24 +25,22 @@ package de.lars.remotelightclient.ui.panels.settings;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
-import com.formdev.flatlaf.FlatLaf;
-
-import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
@@ -54,13 +52,11 @@ import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingIntPanel
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingSelectionPanel;
 import de.lars.remotelightclient.ui.panels.settings.settingComps.SettingStringPanel;
+import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.lang.i18n;
-import de.lars.remotelightcore.notification.Notification;
-import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.Setting;
 import de.lars.remotelightcore.settings.SettingsManager;
-import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
 import de.lars.remotelightcore.settings.types.SettingDouble;
@@ -72,40 +68,20 @@ public class SettingsPanel extends MenuPanel {
 	private static final long serialVersionUID = 3954953325346082615L;
 	
 	private SettingsManager sm;
-	private MainFrame mainFrame;
-	private List<SettingPanel> settingPanels;
-	
-	/** some settings that should be displayed in the right order */
-	private final String[] GENERAL_SETTING_ORDER = {"ui.language", "ui.style", "ui.laf", "ui.windowdecorations", "ui.font", "ui.fontsize", "%remains%"};
-	private final String[] OTHERS_SETTING_ORDER = {"main.checkupdates", "main.checkupdates.prerelease", "%remains%"};
 
 	/**
 	 * Create the panel.
 	 */
 	public SettingsPanel(MainFrame mainFrame , SettingsManager sm) {
-		this.mainFrame = mainFrame;
 		this.sm = sm;
 		mainFrame.showControlBar(false);
-		settingPanels = new ArrayList<SettingPanel>();
-		setBackground(Style.panelBackground);
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel main = new JPanel();
-		main.setBackground(Style.panelBackground);
 		main.setAlignmentX(Component.LEFT_ALIGNMENT);
 		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-		main.add(getSettingsBgr(SettingCategory.General, i18n.getString("SettingsPanel.General"), GENERAL_SETTING_ORDER)); //$NON-NLS-1$
-		main.add(getSettingsBgr(SettingCategory.Others, i18n.getString("SettingsPanel.Others"), OTHERS_SETTING_ORDER)); //$NON-NLS-1$
-		
-		JButton btnSave = new JButton(i18n.getString("SettingsPanel.Save")); //$NON-NLS-1$
-		UiUtils.configureButton(btnSave);
-        btnSave.setBorderPainted(false);
-        btnSave.setFocusPainted(false);
-        btnSave.setBackground(Style.buttonBackground);
-        btnSave.setForeground(Style.textColor);
-        btnSave.addActionListener(btnSaveListener);
-        btnSave.setPreferredSize(new Dimension(getWidth(), 30));
-		add(btnSave, BorderLayout.SOUTH);
+		main.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		addSettingEntries(main);
 		
 		TScrollPane scrollPane = new TScrollPane(main);
 		scrollPane.setViewportBorder(null);
@@ -115,54 +91,135 @@ public class SettingsPanel extends MenuPanel {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane, BorderLayout.CENTER);
 		
-		JButton btnTest = new JButton("Test Themes");
-		btnTest.addActionListener(e -> {
-			this.removeAll();
-			this.add(new ThemeSettingsPanel(), BorderLayout.CENTER);
-			this.updateUI();
-		});
-		main.add(btnTest);
-		
 		this.updateUI();
 	}
 	
-	private JPanel getSettingsBgr(SettingCategory category, String title, String[] order) {
-		JPanel bgr = new JPanel();
-		bgr.setBorder(new EmptyBorder(10, 10, 10, 0));
-		bgr.setBackground(Style.panelBackground);
-		bgr.setAlignmentX(Component.LEFT_ALIGNMENT);
-		bgr.setLayout(new BoxLayout(bgr, BoxLayout.Y_AXIS));
+	private void openSubPanel(JPanel panel) {
+		this.removeAll();
+		this.add(panel, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
+	}
+	
+	private void addSettingEntries(JPanel parent) {
+		appendSettingSection(parent, createRedirectPanel("UI Appearance", "Theme, Language and Tray Icon", e -> openSubPanel(new ThemeSettingsPanel())));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"out.delay", "out.autoconnect", "manager.lastactive.enabled", "out.effects.disableleds"}, "General"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"data.autosave","data.autosave.interval"}, "Auto Save"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"main.checkupdates", "main.checkupdates.prerelease"}, "Update Checker"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"plugins.enable"}, "Plugin Interface"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"lua.advanced", "lua.instructions"},  "Lua Script Interface"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"restapi.enable", "restapi.port"}, "REST API"));
+		appendSettingSection(parent, createSettingsPanel(new String[] {"logs.deletedays"}, "Logs"));
+	}
+	
+	private void appendSettingSection(JPanel parent, JPanel section) {
+		parent.add(section);
+		parent.add(Box.createVerticalStrut(10));
+	}
+	
+	private JPanel createEntryPanel() {
+		JPanel root = new JPanel();
+		UiUtils.bindElevation(root, 10);
+		root.setAlignmentX(Component.LEFT_ALIGNMENT);
+		root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		JLabel lblTitle = new JLabel(title, SwingConstants.LEFT);
-		lblTitle.setFont(Style.getFontBold(12));
-		lblTitle.setForeground(Style.accent);
-		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-		bgr.add(lblTitle);
-		
-		List<String> listOrder = Arrays.asList(order);
-		
-		for(String id : listOrder) {
-			if(id.equals("%remains%")) {
-				// add all settings of category except those in the list
-				for(Setting s : sm.getSettingsFromCategory(category)) {
-					if(listOrder.contains(s.getId()))
-						continue;
-					SettingPanel spanel = this.getSettingPanel(s);
-					spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-					bgr.add(spanel);
-					settingPanels.add(spanel);
+		root.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Component title = UiUtils.findChildWithName(root, "title");
+				if(title != null) {
+					UiUtils.bindForeground((JComponent) title, Style.accent());
 				}
-				continue;
 			}
-			// add setting panel for ordered ID
-			Setting s = sm.getSettingFromId(id);
-			if(s == null) continue;
-			SettingPanel spanel = this.getSettingPanel(s);
-			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			bgr.add(spanel);
-			settingPanels.add(spanel);
+			@Override
+			public void mouseExited(MouseEvent e) {
+				Component title = UiUtils.findChildWithName(root, "title");
+				Component child = root.getComponentAt(e.getX(), e.getY()); // check if mouse is over a child component
+				if(title != null && child == null) {
+					title.setForeground(Style.textColor().get());
+				}
+			}
+		});
+		
+		return root;
+	}
+	
+	private JPanel createRedirectPanel(String title, String description, ActionListener listener) {
+		JPanel root = createEntryPanel();
+		root.setLayout(new BorderLayout());
+		root.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				UiUtils.setElevation(root, 20);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				UiUtils.setElevation(root, 10);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(listener != null) {
+					listener.actionPerformed(new ActionEvent(e.getSource(), e.getID(), null));
+				}
+			}
+		});
+		
+		JPanel content = new JPanel();
+		content.setBackground(null);
+		content.setLayout(new GridLayout(description != null ? 2 : 1, 1));
+		root.add(content, BorderLayout.CENTER);
+		
+		JLabel lblTitle = new JLabel(title);
+		UiUtils.bindFont(lblTitle, Style.getFontBold(14));
+		lblTitle.setName("title");
+		content.add(lblTitle);
+		
+		if(description != null) {
+			JLabel lblDesc = new JLabel(description);
+			content.add(lblDesc);
 		}
-		return bgr;
+		
+		JLabel lblIcon = new JLabel(Style.getFontIcon(MenuIcon.BACK, 14, Style.textColor().get(), 180));
+		root.add(lblIcon, BorderLayout.EAST);
+		
+		root.setMaximumSize(new Dimension(Integer.MAX_VALUE, root.getPreferredSize().height));
+		return root;
+	}
+	
+	private JPanel createSettingsPanel(Setting[] settings, String title) {
+		JPanel root = createEntryPanel();
+		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+		
+		if(title != null) {
+			JLabel lblTitle = new JLabel(title);
+			lblTitle.setName("title");
+			UiUtils.bindFont(lblTitle, Style.getFontBold(14));
+			lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+			root.add(lblTitle);
+			root.add(Box.createVerticalStrut(10));
+		}
+		
+		for(Setting setting : settings) {
+			SettingPanel spanel = this.getSettingPanel(setting);
+			spanel.setBackground(null);
+			spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+			spanel.setSettingChangedListener(sp -> sp.setValue());
+			root.add(spanel);
+			root.add(Box.createVerticalStrut(5));
+		}
+		
+		return root;
+	}
+	
+	private JPanel createSettingsPanel(String[] settingIDs, String title) {
+		List<Setting> settings = new ArrayList<>();
+		for(String id : settingIDs) {
+			Setting s = sm.getSettingFromId(id);
+			if(s != null) {
+				settings.add(s);
+			}
+		}
+		return createSettingsPanel(settings.toArray(new Setting[0]), title);
 	}
 	
 	private SettingPanel getSettingPanel(Setting s) {
@@ -185,46 +242,6 @@ public class SettingsPanel extends MenuPanel {
 			return new SettingSelectionPanel((SettingSelection) s);
 		}
 		return null;
-	}
-	
-	private ActionListener btnSaveListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//save values
-			for(SettingPanel sp : settingPanels) {
-				sp.setValue();
-			}
-			
-			// set default locale
-			String langCode = ((SettingSelection) sm.getSettingFromId("ui.language")).getSelected();
-			i18n.setLocale(langCode);
-			
-			// set custom font
-			Style.setSelectedFont();
-			
-			// set Look And Feel
-			Main.getInstance().setLookAndFeel();
-			// set style
-			Style.setStyle();
-			FlatLaf.updateUILater();
-			
-			//repaint ui
-			mainFrame.updateFrame();
-			//display settings
-			mainFrame.displayPanel(new SettingsPanel(mainFrame, Main.getInstance().getSettingsManager()));
-			
-			Main.getInstance().showNotification(
-					new Notification(NotificationType.SUCCESS, i18n.getString("Basic.Settings"), i18n.getString("SettingsPanel.SavedSettings"), Notification.SHORT));
-		}
-	};
-	
-	@Override
-	public void onEnd(MenuPanel newPanel) {
-		//save values
-		for(SettingPanel sp : settingPanels) {
-			sp.setValue();
-		}
-		super.onEnd(newPanel);
 	}
 
 	@Override

@@ -57,13 +57,11 @@ public class AboutPanel extends MenuPanel {
 		MainFrame mainFrame = Main.getInstance().getMainFrame();
 		mainFrame.showControlBar(false);
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel bgrHeader = new JPanel();
 		WrapLayout wl_bgrHeader = new WrapLayout(FlowLayout.CENTER);
 		bgrHeader.setLayout(wl_bgrHeader);
-		bgrHeader.setBackground(Style.panelBackground);
 		add(bgrHeader);
 		
 		Box verticalBox = Box.createVerticalBox();
@@ -84,7 +82,7 @@ public class AboutPanel extends MenuPanel {
 		JLabel lblVersion = new JLabel(Main.VERSION);
 		lblVersion.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		lblVersion.setFont(Style.getFontRegualar(15));
-		lblVersion.setForeground(Style.textColorDarker);
+		UiUtils.bindForeground(lblVersion, Style.textColorDarker());
 		lblVersion.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		lblVersion.setToolTipText("Click to check for updates");
 		lblVersion.addMouseListener(new MouseAdapter() {
@@ -103,7 +101,7 @@ public class AboutPanel extends MenuPanel {
 		lblCopyright.setAlignmentX(Component.CENTER_ALIGNMENT);
 		verticalBox.add(lblCopyright);
 		lblCopyright.setFont(Style.getFontLight(13));
-		lblCopyright.setForeground(Style.textColorDarker);
+		UiUtils.bindForeground(lblCopyright, Style.textColorDarker());
 		
 		Component verticalStrut = Box.createVerticalStrut(8);
 		verticalBox.add(verticalStrut);
@@ -112,7 +110,7 @@ public class AboutPanel extends MenuPanel {
 		verticalBox.add(horizontalBox_1);
 		
 		JLabel lblWebsite = new JLabel(i18n.getString("AboutPanel.Website")); //$NON-NLS-1$
-		lblWebsite.setForeground(Style.accent);
+		UiUtils.bindForeground(lblWebsite, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblWebsite, RemoteLightCore.WEBSITE);
 		lblWebsite.setFont(Style.getFontRegualar(14));
 		horizontalBox_1.add(lblWebsite);
@@ -121,7 +119,7 @@ public class AboutPanel extends MenuPanel {
 		horizontalBox_1.add(horizontalStrut_2);
 		
 		JLabel lblWiki = new JLabel("Wiki"); //$NON-NLS-1$
-		lblWiki.setForeground(Style.accent);
+		UiUtils.bindForeground(lblWiki, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblWiki, RemoteLightCore.WIKI);
 		lblWiki.setFont(Style.getFontRegualar(14));
 		horizontalBox_1.add(lblWiki);
@@ -130,13 +128,12 @@ public class AboutPanel extends MenuPanel {
 		horizontalBox_1.add(horizontalStrut_3);
 		
 		JLabel lblGithub = new JLabel("GitHub"); //$NON-NLS-1$
-		lblGithub.setForeground(Style.accent);
+		UiUtils.bindForeground(lblGithub, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblGithub, RemoteLightCore.GITHUB);
 		lblGithub.setFont(Style.getFontRegualar(14));
 		horizontalBox_1.add(lblGithub);
 		
 		JPanel bgrContent = new JPanel();
-		bgrContent.setBackground(Style.panelBackground);
 		add(bgrContent);
 		bgrContent.setLayout(new BorderLayout(0, 0));
 		
@@ -148,7 +145,6 @@ public class AboutPanel extends MenuPanel {
 		bgrContent.add(scrollPane, BorderLayout.CENTER);
 		
 		panelContent = new JPanel();
-		panelContent.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(panelContent);
 		panelContent.setLayout(new BoxLayout(panelContent, BoxLayout.Y_AXIS));
 		
@@ -158,7 +154,7 @@ public class AboutPanel extends MenuPanel {
 		JLabel lblCredits = new JLabel(i18n.getString("AboutPanel.Credits")); //$NON-NLS-1$
 		lblCredits.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblCredits.setFont(Style.getFontBold(18));
-		lblCredits.setForeground(Style.accent);
+		UiUtils.bindForeground(lblCredits, Style.accent());
 		panelContent.add(lblCredits);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
@@ -179,7 +175,6 @@ public class AboutPanel extends MenuPanel {
 	private void addLabel(String name, String url) {
 		JLabel lbl = new JLabel(name); //$NON-NLS-1$
 		lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lbl.setForeground(Style.textColor);
 		UiUtils.addWebsiteHyperlink(lbl, url); //$NON-NLS-1$
 		lbl.setFont(Style.getFontRegualar(15));
 		panelContent.add(lbl);

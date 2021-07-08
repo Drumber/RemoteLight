@@ -152,20 +152,16 @@ public class StartUp {
 	}
 	
 	public void registerSettings() {
+		// UI Theme
+		s.addSetting(new SettingString("ui.theme", "Theme Class Name", SettingCategory.Intern, null, FlatDarkLaf.class.getName()));
+		
 		//General
 		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", LangUtil.langCodeToName(LangUtil.LANGUAGES), "English", Model.ComboBox));
-		s.addSetting(new SettingSelection("ui.style", "Style", SettingCategory.General, "Colors of the UI", Style.STYLES, "Dark", Model.ComboBox));
-		s.addSetting(new SettingSelection("ui.laf", "LookAndFeel", SettingCategory.General, "UI Components Look and Feel", Style.getLookAndFeels().toArray(new String[0]),  "System default", Model.ComboBox));
 		s.addSetting(new SettingBoolean("ui.windowdecorations", "Custom window decorations", SettingCategory.General, "Only available on Windows 10 and in combination with FlatLaf Look and Feels", false));
 		s.addSetting(new SettingBoolean("ui.windowdecorations.unified", "Unified Window Decorations", SettingCategory.General, null, true));
 		s.addSetting(new SettingSelection("ui.font", "UI Font", SettingCategory.General, "Set a custom UI font", FontManager.getAllFontNames().toArray(new String[0]), "Muli", Model.ComboBox));
 		s.addSetting(new SettingInt("ui.fontsize", "UI Font size", SettingCategory.General, "Default UI font size", 11, 9, 20, 1));
 		s.addSetting(new SettingBoolean("ui.glow.button", "Glowing Effect Buttons", SettingCategory.General, "Enable glow effect for buttons.", true));
-		// update style setting if already set
-		((SettingSelection) s.getSettingFromId("ui.style")).setValues(Style.STYLES);
-		
-		// UI Theme
-		s.addSetting(new SettingString("ui.theme", "Theme Class Name", SettingCategory.Intern, null, FlatDarkLaf.class.getName()));
 		
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));

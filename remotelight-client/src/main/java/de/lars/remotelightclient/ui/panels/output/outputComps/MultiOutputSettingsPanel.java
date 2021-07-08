@@ -36,8 +36,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.devices.Device;
@@ -60,7 +58,6 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 	public MultiOutputSettingsPanel(MultiOutput multi, boolean setup) {
 		super(multi, setup);
 		this.multi = multi;
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -68,11 +65,9 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		FlowLayout flowLayout = (FlowLayout) panelId.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelId.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelId.setBackground(Style.panelBackground);
 		add(panelId);
 		
 		JLabel lblNameId = new JLabel(i18n.getString("OutputPanel.NameID")); //$NON-NLS-1$
-		lblNameId.setForeground(Style.textColor);
 		panelId.add(lblNameId);
 		
 		fieldId = new JTextField();
@@ -84,7 +79,6 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		
 		lblPixels = new JLabel("Pixels: " + multi.getPixels());
 		lblPixels.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblPixels.setForeground(Style.textColor);
 		lblPixels.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 		add(lblPixels);
 		
@@ -92,12 +86,10 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		FlowLayout flowLayout2 = (FlowLayout) panelProcessing.getLayout();
 		flowLayout2.setAlignment(FlowLayout.LEFT);
 		panelProcessing.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelProcessing.setBackground(Style.panelBackground);
 		add(panelProcessing);
 		
 		JLabel lblProcessing = new JLabel("Dividing method: ");
 		lblProcessing.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblProcessing.setForeground(Style.textColor);
 		panelProcessing.add(lblProcessing);
 		
 		comboProcessing = new JComboBox<DividingMethod>();
@@ -107,8 +99,6 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		
 		JLabel lblDescription = new JLabel(multi.getProcessingMethod().getDescription());
 		lblDescription.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblDescription.setForeground(Style.textColor);
-		lblDescription.setBackground(Style.panelBackground);
 		lblDescription.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
 		add(lblDescription);
 		comboProcessing.addActionListener(e -> {
@@ -123,14 +113,12 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		panelDevices = new JPanel();
 		panelDevices.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelDevices.setLayout(new WrapLayout(FlowLayout.LEFT));
-		panelDevices.setBackground(Style.panelBackground);
 		addDevicesToPanel();
 		add(panelDevices);
 		
 		panelAdd = new JPanel();
 		panelAdd.setLayout(new WrapLayout(FlowLayout.LEFT));
 		panelAdd.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelAdd.setBackground(Style.panelBackground);
 		addControlsToPanel();
 		add(panelAdd);
 	}
@@ -145,15 +133,12 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		for(Device d : multi.getDevices()) {
 			JPanel dPanel = new JPanel();
 			dPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 1));
-			dPanel.setBackground(Style.buttonBackground);
 			
 			JLabel name = new JLabel(d.getId());
-			name.setForeground(Style.textColor);
 			dPanel.add(name);
 			
 			JButton btnRemove = new JButton("X");
 			btnRemove.setForeground(Color.RED);
-			UiUtils.configureButton(btnRemove);
 			btnRemove.addActionListener(e -> {
 				multi.removeDevice(d);
 				addDevicesToPanel();
@@ -173,7 +158,6 @@ public class MultiOutputSettingsPanel extends DeviceSettingsPanel {
 		panelAdd.add(boxOutputs);
 		
 		JButton btnAdd = new JButton(i18n.getString("Basic.Add"));
-		UiUtils.configureButton(btnAdd);
 		btnAdd.addActionListener(e -> {
 			if(boxOutputs.getSelectedItem() != null) {
 				

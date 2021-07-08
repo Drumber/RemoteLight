@@ -40,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.tinylog.Logger;
 
+import de.lars.colorpicker.utils.ColorPickerStyle;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.events.ControlBarEvent;
 import de.lars.remotelightclient.events.MenuEvent;
@@ -54,6 +55,7 @@ import de.lars.remotelightclient.ui.notification.NotificationDisplayHandler;
 import de.lars.remotelightclient.ui.panels.MenuPanel;
 import de.lars.remotelightclient.ui.panels.controlbars.ControlBar;
 import de.lars.remotelightclient.ui.panels.controlbars.DefaultControlBar;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
@@ -61,7 +63,6 @@ import de.lars.remotelightcore.notification.listeners.NotificationOptionListener
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingObject;
-import de.lars.remotelightcore.settings.types.SettingSelection;
 import de.lars.remotelightcore.utils.ExceptionHandler.ExceptionEvent;
 
 public class MainFrame extends JFrame {
@@ -126,14 +127,15 @@ public class MainFrame extends JFrame {
 		
 		// add notification display handler
 		notificationDisplayHandler = new NotificationDisplayHandler(this, core.getNotificationManager());
+		
+		contentPane.addPropertyChangeListener("UI", e -> {
+			updateColorPickerStyle();
+		});
+		updateColorPickerStyle();
 	}
 	
 	private void setFrameContetPane() {
-		SettingSelection style = (SettingSelection) sm.getSettingFromId("ui.style");
-		Style.setStyle(style.getSelected());
-		
 		contentPane = new JPanel();
-		contentPane.setBackground(Style.panelBackground);
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
@@ -149,21 +151,25 @@ public class MainFrame extends JFrame {
 		bgrSideMenu.add(sideMenu, BorderLayout.CENTER);
 		
 		bgrContentPanel = new JPanel();
-		bgrContentPanel.setBackground(Style.panelBackground);
 		contentPane.add(bgrContentPanel, BorderLayout.CENTER);
 		bgrContentPanel.setLayout(new BorderLayout(0, 0));
 
 		contentArea = new JPanel();
-		contentArea.setBackground(Style.panelBackground);
 		bgrContentPanel.add(contentArea, BorderLayout.CENTER);
 		contentArea.setLayout(new BorderLayout(0, 0));
 		
 		bgrControlBar = new JPanel();
 		bgrControlBar.setBorder(new EmptyBorder(2, 0, 0, 0));
 		bgrContentPanel.add(bgrControlBar, BorderLayout.SOUTH);
-		bgrControlBar.setBackground(Style.accent);
+        bgrControlBar.setBackground(Style.accent().get());
+		UiUtils.bindBackground(bgrControlBar, Style.accent());
 		bgrControlBar.setLayout(new BorderLayout(0, 0));
 		this.setControlBarPanel(new DefaultControlBar());
+	}
+	
+	public void updateColorPickerStyle() {
+		ColorPickerStyle.setBackgrounds(Style.panelBackground().get());
+		ColorPickerStyle.colorText = Style.textColor().get();
 	}
 	
 	

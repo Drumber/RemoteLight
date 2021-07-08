@@ -59,12 +59,11 @@ public class OutputInfo extends JPanel {
 		
 		lblOutput = new JLabel("", SwingConstants.CENTER);
 		lblOutput.setFont(Style.getFontRegualar(12));
-		lblOutput.setForeground(Style.textColor);
 		add(lblOutput);
 		
 		lblConnection = new JLabel("", SwingConstants.CENTER);
 		lblConnection.setFont(Style.getFontRegualar(11));
-		lblConnection.setForeground(Style.textColorDarker);
+		lblConnection.setEnabled(false);
 		add(lblConnection);
 		
 		setLabelInfo();

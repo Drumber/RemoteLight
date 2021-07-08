@@ -75,43 +75,38 @@ public class SimulatorFrame extends BasicFrame {
 		setCloseAction(() -> emulator.stop());
 		setFrameTitle(i18n.getString("EmulatorFrame.Disconnected")); //$NON-NLS-1$
 		setMinimumSize(new Dimension(300, 100));
-		setBackground(Style.panelBackground);
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
-		contentPane.setBackground(Style.panelBackground);
 		setContentPane(contentPane);
 		
 		JPanel panelToolbar = new JPanel();
-		panelToolbar.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelToolbar, Style.panelDarkBackground());
 		contentPane.add(panelToolbar, BorderLayout.NORTH);
 		panelToolbar.setLayout(new BoxLayout(panelToolbar, BoxLayout.X_AXIS));
 		
 		JPanel panelControl = new JPanel();
 		WrapLayout wl_panelControl = new WrapLayout(FlowLayout.LEFT);
 		panelControl.setLayout(wl_panelControl);
-		panelControl.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelControl, Style.panelDarkBackground());
 		panelToolbar.add(panelControl);
 		
 		JButton btnEnable = new JButton(i18n.getString("EmulatorFrame.Enable")); //$NON-NLS-1$
 		btnEnable.setName("enable"); //$NON-NLS-1$
 		btnEnable.addActionListener(btnListener);
-		UiUtils.configureButton(btnEnable);
 		panelControl.add(btnEnable);
 		
 		lblStatus = new JLabel();
-		lblStatus.setForeground(Style.textColor);
 		panelControl.add(lblStatus);
 		
 		JPanel panelScale = new JPanel();
-		panelScale.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelScale, Style.panelDarkBackground());
 		panelToolbar.add(panelScale);
 		panelScale.setLayout(new BoxLayout(panelScale, BoxLayout.X_AXIS));
 		
 		JCheckBox checkBoxAlwaysTop = new JCheckBox("always on top");
 		checkBoxAlwaysTop.setSelected(isAlwayTop());
-		checkBoxAlwaysTop.setBackground(Style.panelDarkBackground);
-		checkBoxAlwaysTop.setForeground(Style.textColor);
+		UiUtils.bindBackground(checkBoxAlwaysTop, Style.panelDarkBackground());
 		checkBoxAlwaysTop.setFocusable(false);
 		checkBoxAlwaysTop.addActionListener(checkBoxAlwaysTopListener);
 		panelScale.add(checkBoxAlwaysTop);
@@ -119,13 +114,11 @@ public class SimulatorFrame extends BasicFrame {
 		JButton btnMinus = new JButton("-"); //$NON-NLS-1$
 		btnMinus.setName("minus"); //$NON-NLS-1$
 		btnMinus.addActionListener(btnListener);
-		UiUtils.configureButton(btnMinus);
 		panelScale.add(btnMinus);
 		
 		JButton btnPlus = new JButton("+"); //$NON-NLS-1$
 		btnPlus.setName("plus"); //$NON-NLS-1$
 		btnPlus.addActionListener(btnListener);
-		UiUtils.configureButton(btnPlus);
 		panelScale.add(btnPlus);
 		
 		JPanel bgrPixel = new JPanel();
@@ -143,7 +136,6 @@ public class SimulatorFrame extends BasicFrame {
 		panelPixel = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		panelPixel.setLayout(wlayout);
-		panelPixel.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(panelPixel);
 	}
 	

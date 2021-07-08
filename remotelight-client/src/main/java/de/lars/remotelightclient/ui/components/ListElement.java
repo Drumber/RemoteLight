@@ -39,9 +39,9 @@ public class ListElement extends JPanel {
 	public ListElement(int height) {
 		this.height = height;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(this, Style.buttonBackground());
 		setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
-		UiUtils.addHoverColor(this, Style.buttonBackground, Style.hoverBackground);
+		UiUtils.addHoverColor(this, Style.buttonBackground().get(), Style.hoverBackground().get());
 	}
 	
 	public ListElement() {

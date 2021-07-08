@@ -47,13 +47,10 @@ public class SettingDoublePanel extends SettingPanel {
 	 */
 	public SettingDoublePanel(SettingDouble setting) {
 		super(setting);
-		setBackground(Style.panelBackground);
 		this.setting = setting;
-		setBackground(Style.panelBackground);
 		
 		JLabel lblName = new JLabel("name");
 		lblName.setText(setting.getName());
-		lblName.setForeground(Style.textColor);
 		add(lblName);
 		
 		if(setting.get() > setting.getMax()) {

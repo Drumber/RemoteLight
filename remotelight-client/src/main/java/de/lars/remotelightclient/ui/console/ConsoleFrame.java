@@ -303,7 +303,7 @@ public class ConsoleFrame extends BasicFrame {
 				s = s.replace(CustomOutputStream.ANSI_RED, "");
 			}
 			
-			Color c = error ? Color.RED : Style.textColor;
+			Color c = error ? Color.RED : Style.textColor().get();
 			StyleContext sc = StyleContext.getDefaultStyleContext();
 			AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 			aset = sc.addAttribute(aset, StyleConstants.FontFamily, font);
@@ -388,14 +388,11 @@ public class ConsoleFrame extends BasicFrame {
 	 * Update all background colors.
 	 */
 	protected void setBackgrounds() {
-		setBackground(Style.panelBackground);
 		panelContent.setBackground(getBackground());
 		textPane.setBackground(getBackground());
 		panelActions.setBackground(getBackground());
 		fieldCmd.setBackground(getBackground());
-		fieldCmd.setForeground(Style.textColor);
-		UiUtils.configureButton(btnSend);
-		UiUtils.configureButton(btnSettings);
+		fieldCmd.setForeground(Style.textColor().get());
 	}
 
 }

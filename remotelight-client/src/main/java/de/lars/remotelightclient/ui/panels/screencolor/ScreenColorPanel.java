@@ -95,7 +95,6 @@ public class ScreenColorPanel extends MenuPanel {
 		mainFrame.showControlBar(true);
 		mainFrame.setControlBarPanel(new DefaultControlBar());
 		
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		Dimension size = new Dimension(Integer.MAX_VALUE, 700);
@@ -103,16 +102,15 @@ public class ScreenColorPanel extends MenuPanel {
 		bgrMonitors.setBorder(new EmptyBorder(20, 20, 0, 20));
 		bgrMonitors.setPreferredSize(size);
 		bgrMonitors.setMaximumSize(size);
-		bgrMonitors.setBackground(Style.panelBackground);
 		add(bgrMonitors);
 		bgrMonitors.setLayout(new BorderLayout(0, 0));
 		
 		
 		panelMonitors = new JPanel();
-		panelMonitors.setBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), i18n.getString("ScreenColorPanel.SelectMonitor"), TitledBorder.LEADING, TitledBorder.TOP, null, Style.accent)); //$NON-NLS-1$
+		panelMonitors.setBorder(new TitledBorder(new EmptyBorder(0, 0, 0, 0), i18n.getString("ScreenColorPanel.SelectMonitor"), TitledBorder.LEADING, TitledBorder.TOP, null, Style.accent().get())); //$NON-NLS-1$
 		WrapLayout wlayout = new WrapLayout(FlowLayout.CENTER);
 		panelMonitors.setLayout(wlayout);
-		panelMonitors.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(panelMonitors, Style.panelDarkBackground());
 		
 		JScrollPane scrollPaneMonitors = new JScrollPane(panelMonitors);
 		scrollPaneMonitors.setViewportBorder(null);
@@ -123,13 +121,11 @@ public class ScreenColorPanel extends MenuPanel {
 		size = new Dimension(Integer.MAX_VALUE, 1000);
 		JPanel bgrOptions = new JPanel();
 		bgrOptions.setPreferredSize(size);
-		bgrOptions.setBackground(Style.panelBackground);
 		add(bgrOptions);
 		bgrOptions.setLayout(new BorderLayout(0, 0));
 		
 		panelOptions = new JPanel();
 		panelOptions.setBorder(new EmptyBorder(5, 20, 0, 0));
-		panelOptions.setBackground(Style.panelBackground);
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
 		
 		TScrollPane scrollPane = new TScrollPane(panelOptions);
@@ -192,7 +188,7 @@ public class ScreenColorPanel extends MenuPanel {
 	private void markMonitorPanel(ImagePanel panel, boolean selected) {
 		if(selected) {
 			panel.setBlur(false);
-			panel.setBorder(BorderFactory.createLineBorder(Style.accent));
+			panel.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 			selectedMonitorPanel = panel;
 			drawOverlayRect();
 		} else {
@@ -245,7 +241,6 @@ public class ScreenColorPanel extends MenuPanel {
 		settingPanels.add(spInvert);
 		
 		btnEnable = new JButton();
-		UiUtils.configureButtonWithBorder(btnEnable, Style.accent);
 		Dimension size = new Dimension(100, 25);
 		btnEnable.setPreferredSize(size);
 		btnEnable.setMinimumSize(size);
@@ -265,7 +260,6 @@ public class ScreenColorPanel extends MenuPanel {
 		});
 		
 		JLabel lblAdvanced = new JLabel("Advanced options");
-		lblAdvanced.setForeground(Style.textColor);
 		panel.add(Box.createVerticalStrut(20));
 		panel.add(lblAdvanced);
 		
@@ -281,7 +275,6 @@ public class ScreenColorPanel extends MenuPanel {
 		spanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		spanel.setSettingChangedListener(settingChangeListener);
 		spanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
-		spanel.setBackground(Style.panelBackground);
 		return spanel;
 	}
 	

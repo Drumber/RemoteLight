@@ -99,11 +99,10 @@ public class ScriptsPanel extends MenuPanel {
 		sm.addSetting(new SettingObject("scripts.speed", null, 50));
 		mainFrame.showControlBar(true);
 		addControlBar();
-		setBackground(Style.panelBackground);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		bgrNotification = new JPanel();
-		bgrNotification.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrNotification, Style.panelDarkBackground());
 		bgrNotification.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		bgrNotification.setVisible(false);
 		bgrNotification.setLayout(new BorderLayout());
@@ -119,7 +118,7 @@ public class ScriptsPanel extends MenuPanel {
 		textNotification = new JTextArea();
 		textNotification.setRows(2);
 		textNotification.setForeground(new Color(255, 60, 60));
-		textNotification.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(textNotification, Style.panelDarkBackground());
 		textNotification.setWrapStyleWord(true);
 		textNotification.setLineWrap(true);
 		textNotification.setEditable(false);
@@ -152,12 +151,11 @@ public class ScriptsPanel extends MenuPanel {
 		bgrScripts = new JPanel();
 		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
 		bgrScripts.setLayout(wlayout);
-		bgrScripts.setBackground(Style.panelBackground);
 		scrollPane.setViewportView(bgrScripts);
 		
 		bgrSettings = new JPanel();
 		bgrSettings.setLayout(new BoxLayout(bgrSettings, BoxLayout.Y_AXIS));
-		bgrSettings.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrSettings, Style.panelDarkBackground());
 		
 		TScrollPane scrollSettings = new TScrollPane(bgrSettings);
 		scrollSettings.getVerticalScrollBar().setUnitIncrement(16);
@@ -167,7 +165,7 @@ public class ScriptsPanel extends MenuPanel {
 		bgrScroll.add(scrollSettings, BorderLayout.SOUTH);
 		
 		bgrOptions = new JPanel();
-		bgrOptions.setBackground(Style.panelDarkBackground);
+		UiUtils.bindBackground(bgrOptions, Style.panelDarkBackground());
 		WrapLayout wlayout2 = new WrapLayout(FlowLayout.LEFT);
 		bgrOptions.setLayout(wlayout2);
 		add(bgrOptions);
@@ -183,13 +181,11 @@ public class ScriptsPanel extends MenuPanel {
 		bgrOptions.removeAll();
 		
 		JButton btnScriptDir = new JButton(i18n.getString("ScriptsPanel.openScriptsFolder"));
-		UiUtils.configureButton(btnScriptDir);
 		btnScriptDir.setName("scriptdir");
 		btnScriptDir.addActionListener(optionButtonsListener);
 		bgrOptions.add(btnScriptDir);
 		
 		JButton btnScan = new JButton(i18n.getString("ScriptsPanel.scan"));
-		UiUtils.configureButton(btnScan);
 		btnScan.setName("scan");
 		btnScan.addActionListener(optionButtonsListener);
 		bgrOptions.add(btnScan);
@@ -234,7 +230,7 @@ public class ScriptsPanel extends MenuPanel {
 			btn.addMouseListener(scriptPanelsListener);
 			
 			if(luaManager.getActiveLuaScriptPath() != null && luaManager.getActiveLuaScriptPath().equals(script.getAbsolutePath())) {
-				btn.setBorder(BorderFactory.createLineBorder(Style.accent));
+				btn.setBorder(BorderFactory.createLineBorder(Style.accent().get()));
 			}
 			bgrScripts.add(btn);
 		}
@@ -301,7 +297,7 @@ public class ScriptsPanel extends MenuPanel {
 	 */
 	private void addControlBar() {
 		DefaultControlBar controlBar = new DefaultControlBar();
-		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground);
+		SpeedSlider speedSlider = new SpeedSlider(Style.panelDarkBackground());
 		speedSlider.getSlider().addChangeListener(sliderSpeedListener);
 		speedSlider.getSlider().setValue((int) sm.getSettingObject("scripts.speed").get());
 		controlBar.setActionPanel(speedSlider);

@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import de.lars.remotelightclient.ui.Style;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class BigImageButton extends JPanel {
 
@@ -46,8 +47,6 @@ public class BigImageButton extends JPanel {
 	private JPanel bgrImage;
 	private JLabel lblText;
 	private JLabel lblImage;
-	
-	private Color bg = Style.buttonBackground;
 
 	/**
 	 * Create the panel.
@@ -57,15 +56,14 @@ public class BigImageButton extends JPanel {
 		setPreferredSize(new Dimension(100, 100));
 		
 		bgrText = new JPanel();
-		bgrText.setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(bgrText, Style.buttonBackground());
 		add(bgrText, BorderLayout.SOUTH);
 		
 		lblText = new JLabel(text);
-		lblText.setForeground(Style.textColor);
 		bgrText.add(lblText);
 		
 		bgrImage = new JPanel();
-		bgrImage.setBackground(Style.buttonBackground);
+		UiUtils.bindBackground(bgrImage, Style.buttonBackground());
 		add(bgrImage, BorderLayout.CENTER);
 		bgrImage.setLayout(new BorderLayout(0, 0));
 		
@@ -79,14 +77,14 @@ public class BigImageButton extends JPanel {
 	private MouseAdapter buttonHoverListener = new MouseAdapter() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			bgrText.setBackground(Style.hoverBackground);
-			bgrImage.setBackground(Style.hoverBackground);
+			bgrText.setBackground(Style.hoverBackground().get());
+			bgrImage.setBackground(Style.hoverBackground().get());
 			repaint();
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
-			bgrText.setBackground(bg);
-			bgrImage.setBackground(bg);
+			bgrText.setBackground(Style.buttonBackground().get());
+			bgrImage.setBackground(Style.buttonBackground().get());
 			repaint();
 		}
 	};
