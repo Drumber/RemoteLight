@@ -26,6 +26,7 @@ import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.utils.ui.MenuIconFont;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
+import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
@@ -56,9 +57,8 @@ public class ThemeSettingsPanel extends JPanel {
 		btnBack.addActionListener(e -> Main.getInstance().getMainFrame().showMenuPanel("settings"));
 		
 		JLabel lblTitle = new JLabel("Appearance");
+		UiUtils.bindFont(lblTitle, Style.getFontRegualar(14));
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblTitle.setFont(Style.getFontRegualar(14));
-		lblTitle.setForeground(Style.textColor);
 		lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		JPanel panelTopBar = new JPanel();
@@ -231,16 +231,40 @@ public class ThemeSettingsPanel extends JPanel {
 		wrapper.add(root);
 		
 		JLabel lblTitle = new JLabel("Options");
-		lblTitle.setFont(Style.getFontBold(14));
+		UiUtils.bindFont(lblTitle, Style.getFontBold(14));
+		UiUtils.bindForeground(lblTitle, Style.accent());
 		lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		root.add(lblTitle);
 		root.add(Box.createVerticalStrut(10));
 		
+		SettingSelection sLanguage = sm.getSetting(SettingSelection.class, "ui.language");
+		SettingBoolean sHideInTray = sm.getSetting(SettingBoolean.class, "ui.hideintray");
 		SettingBoolean sWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations");
 		SettingBoolean sUnifiedWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations.unified");
 		SettingSelection sFont = sm.getSetting(SettingSelection.class, "ui.font");
 		SettingInt sFontSize = sm.getSetting(SettingInt.class, "ui.fontsize");
 		SettingBoolean sGlowingEffectButton = sm.getSetting(SettingBoolean.class, "ui.glow.button");
+		SettingBoolean sTouchScroll = sm.getSetting(SettingBoolean.class, "ui.touchscroll");
+		SettingBoolean sTouchScrollInvert = sm.getSetting(SettingBoolean.class, "ui.touchscroll.invert");
+		
+		// Language
+		JComboBox<String> comboLanguage = new JComboBox<>(sLanguage.getValues());
+		comboLanguage.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboLanguage.setSelectedItem(sLanguage.getSelected());
+		comboLanguage.setMaximumSize(new Dimension(Integer.MAX_VALUE, comboLanguage.getPreferredSize().height));
+		comboLanguage.addActionListener(e -> {
+			sLanguage.set(comboLanguage.getSelectedItem());
+			i18n.setLocale(sLanguage.get());
+		});
+		appendUiSettingSection(root, comboLanguage, "Language");
+		root.add(Box.createVerticalStrut(10));
+		
+		// Hide in System Tray
+		JCheckBox boxHideInTray = new JCheckBox("Hide in system tray", sHideInTray.get());
+		boxHideInTray.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxHideInTray.addActionListener(e -> sHideInTray.set(boxHideInTray.isSelected()));
+		appendUiSettingSection(root, boxHideInTray, "System Tray Icon");
+		root.add(Box.createVerticalStrut(10));
 		
 		// Custom Window Decorations
 		JPanel panelWindowDecorations = new JPanel();
@@ -271,7 +295,6 @@ public class ThemeSettingsPanel extends JPanel {
 		}
 		
 		// Font Family and Size
-		
 		JPanel panelFont = new JPanel();
 		panelFont.setLayout(new BoxLayout(panelFont, BoxLayout.X_AXIS));
 		
@@ -307,9 +330,31 @@ public class ThemeSettingsPanel extends JPanel {
 		appendUiSettingSection(root, boxGlowingEffect, "Effects");
 		JLabel lblGlowEffectDesc = new JLabel("<html>Shows a preview of the animation when hovering over its button.</html>");
 		lblGlowEffectDesc.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblGlowEffectDesc.setEnabled(false);
 		lblGlowEffectDesc.setIcon(Style.getFontIcon(MenuIcon.HELP, 12));
 		lblGlowEffectDesc.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 0));
 		root.add(lblGlowEffectDesc);
+		root.add(Box.createVerticalStrut(10));
+		
+		// Touch Scroll
+		JCheckBox boxTouchScrollInvert = new JCheckBox("Invert scroll direction", sTouchScrollInvert.get());
+		boxTouchScrollInvert.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxTouchScrollInvert.setVisible(sTouchScroll.get());
+		boxTouchScrollInvert.addActionListener(e -> {
+			sTouchScrollInvert.set(boxTouchScrollInvert.isSelected());
+			
+		});
+		
+		JCheckBox boxTouchScroll = new JCheckBox("Touch scroll support", sTouchScrollInvert.get());
+		boxTouchScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxTouchScroll.addActionListener(e -> {
+			sTouchScroll.set(boxTouchScroll.isSelected());
+			boxTouchScrollInvert.setVisible(sTouchScroll.get());
+			root.revalidate();
+			root.repaint();
+		});
+		appendUiSettingSection(root, boxTouchScroll, "Touch Scroll (Experimental)");
+		appendUiSettingSection(root, boxTouchScrollInvert, null);
 		
 		return wrapper;
 	}
@@ -345,8 +390,9 @@ public class ThemeSettingsPanel extends JPanel {
 			add(panel);
 			
 			JLabel lblTitle = new JLabel("Preview");
+			UiUtils.bindFont(lblTitle, Style.getFontBold(14));
+			UiUtils.bindForeground(lblTitle, Style.accent());
 			lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-			lblTitle.setFont(Style.getFontBold(14));
 			panel.add(lblTitle);
 			panel.add(Box.createVerticalStrut(10));
 			

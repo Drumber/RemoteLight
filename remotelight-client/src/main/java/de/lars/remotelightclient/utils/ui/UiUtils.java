@@ -37,8 +37,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
@@ -47,16 +47,19 @@ import javax.swing.plaf.FontUIResource;
 import org.tinylog.Logger;
 
 import de.lars.remotelightclient.Main;
+import de.lars.remotelightclient.events.FontSizeEvent;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ColorTool;
+import de.lars.remotelightcore.event.Listener;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 import jiconfont.swing.IconFontSwing;
 
 public class UiUtils {
 	
+	public static final int NORMAL_FONT_SIZE = 11;
+	
 	private static boolean disableTheming = true;
-	private static int defaultFontSize = 11;
 	
 	public static void setThemingEnabled(boolean themingEnabled) {
 		disableTheming = !themingEnabled;
@@ -72,39 +75,41 @@ public class UiUtils {
 		Font out = null;
 		try {
 			Font font = Font.createFont(Font.TRUETYPE_FONT, is);
-			out = font.deriveFont(style, defaultFontSize);
+			out = font.deriveFont(style, getFontSize());
 		} catch (FontFormatException | IOException e) {
 			Logger.error(e, "Could not load font: " + fName);
 		}
 		return out;
 	}
 	
-	//https://stackoverflow.com/a/7434935
+	/**
+	 * Set the default font family for the UI. Does not update the font size.
+	 * @param f		the new font resource
+	 */
 	public static void setUIFont(FontUIResource f) {
-		Enumeration<?> keys = UIManager.getDefaults().keys();
-		while (keys.hasMoreElements()) {
-			Object key = keys.nextElement();
-			Object value = UIManager.get(key);
-			if (value instanceof FontUIResource) {
-				UIManager.put(key, f);
-			}
-		}
+		Font newFont = f.deriveFont((float) getFontSize());
+		UIManager.put("defaultFont", newFont);
 	}
 	
 	/**
-	 * Set the default font size used for initializing fonts.
-	 * @param size		font size
+	 * Set the default font size.
+	 * @param size	font size
 	 */
-	public static void setDefaultFontSize(int size) {
-		defaultFontSize = size;
+	public static void setFontSize(int size) {
+		Font font = UIManager.getFont("defaultFont");
+		if(font == null) return;
+		Font newFont = font.deriveFont((float) size);
+		UIManager.put("defaultFont", newFont);
+		Main.getInstance().getCore().getEventHandler().call(new FontSizeEvent(size));
 	}
 	
 	/**
-	 * Get the default font size used for initializing fonts.
-	 * @return			font size
+	 * Get the used default font size.
+	 * @return	the default font size
 	 */
-	public static int getDefaultFontSize() {
-		return defaultFontSize;
+	public static int getFontSize() {
+		Font font = UIManager.getFont("defaultFont");
+		return font != null ? font.getSize() : NORMAL_FONT_SIZE;
 	}
 	
 	public static void registerIconFont(String path) {
@@ -131,8 +136,12 @@ public class UiUtils {
 	public static void bindElevation(Component comp, final int alpha) {
 		comp.addPropertyChangeListener("UI", event -> {
 			Component c = (Component) event.getSource();
-			setElevation(c, UIManager.getColor("Panel.background"), alpha);
+			setElevation(c, alpha);
 		});
+		setElevation(comp, alpha);
+	}
+	
+	public static void setElevation(Component comp, int alpha) {
 		setElevation(comp, UIManager.getColor("Panel.background"), alpha);
 	}
 	
@@ -149,6 +158,38 @@ public class UiUtils {
 		Color overlay = isDark ? new Color(255, 255, 255, alpha) : new Color(0, 0, 0, alpha);
 		Color c = ColorTool.alphaBlending(overlay, background);
 		comp.setBackground(c);
+	}
+	
+	public static void bindFont(JComponent comp, Font font) {
+		bindFont(comp, font, false);
+	}
+	
+	public static void bindFont(JComponent comp, Font font, boolean colorDarker) {
+		Listener<FontSizeEvent> listener = e -> setFont(comp, font, colorDarker);
+		// remove font size listener when component is removed
+		comp.addPropertyChangeListener("ancestor", event -> {
+			if(event.getNewValue() == null) {
+				Main.getInstance().getCore().getEventHandler().unregister(FontSizeEvent.class, listener);
+			}
+		});
+		// register font size listener
+		Main.getInstance().getCore().getEventHandler().register(FontSizeEvent.class, listener);
+		setFont(comp, font, colorDarker);
+	}
+	
+	public static void setFont(JComponent comp, Font font, boolean colorDarker) {
+		int sizeDifference = font.getSize() - NORMAL_FONT_SIZE;
+		int newFontSize = getFontSize() + sizeDifference;
+		comp.setFont(font.deriveFont((float) newFontSize));
+		
+		if(colorDarker) {
+			comp.setForeground(UIManager.getColor("Label.disabledForeground"));
+		}
+	}
+	
+	public static void bindForeground(JComponent comp, Supplier<Color> colorSupplier) {
+		comp.addPropertyChangeListener("UI", e -> comp.setForeground(colorSupplier.get()));
+		comp.setForeground(colorSupplier.get());
 	}
 	
 	public static void configureButton(JButton btn) {

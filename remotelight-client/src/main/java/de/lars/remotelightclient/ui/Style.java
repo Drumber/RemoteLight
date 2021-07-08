@@ -24,9 +24,12 @@ package de.lars.remotelightclient.ui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
@@ -121,6 +124,10 @@ public class Style {
 	public static Color debug = new Color(173, 154, 38);
 	public static Color notification = info;
 	public static Color important = new Color(255, 200, 0);
+	
+	public static Supplier<Color> accent() {
+		return () -> UIManager.getColor("Component.focusedBorderColor");
+	}
 	
 	
 	/*
@@ -360,6 +367,24 @@ public class Style {
 	}
 	
 	/**
+	 * Get a rotated font icon with specified size and color
+	 * @param iconCode IconCode
+	 * @param fontSize custom font size
+	 * @param color icon color
+	 * @param rotation icon rotation in degree
+	 * @return new icon from IconCode with specified size, color and rotation
+	 */
+	public static Icon getFontIcon(IconCode iconCode, int fontSize, Color color, double rotation) {
+		BufferedImage image = (BufferedImage) IconFontSwing.buildImage(iconCode, fontSize, color);
+		BufferedImage out = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+		Graphics2D g2 = out.createGraphics();
+		g2.rotate(Math.toRadians(rotation), out.getWidth() / 2, out.getHeight() / 2);
+		g2.drawImage(image, 0, 0, null);
+		g2.dispose();
+		return new ImageIcon(out);
+	}
+	
+	/**
 	 * Get Help icon
 	 * @return new help icon
 	 */
@@ -388,12 +413,13 @@ public class Style {
 		SettingsManager sm = Main.getInstance().getSettingsManager();
 		SettingSelection settingFont = sm.getSetting(SettingSelection.class, "ui.font");
 		SettingInt settingSize = sm.getSetting(SettingInt.class, "ui.fontsize");
-		if(settingSize != null) {
-			UiUtils.setDefaultFontSize(settingSize.get());
-		}
 		if(settingFont != null) {
 			setUiFont(settingFont.getSelected());
 		}
+		if(settingSize != null) {
+			UiUtils.setFontSize(settingSize.get());
+		}
+		FlatLaf.updateUILater();
 	}
 	
 	/**
