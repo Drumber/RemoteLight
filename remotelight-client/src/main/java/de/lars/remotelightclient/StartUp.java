@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import org.tinylog.Logger;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme;
 
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
@@ -153,7 +153,7 @@ public class StartUp {
 	
 	public void registerSettings() {
 		// UI Theme
-		s.addSetting(new SettingString("ui.theme", "Theme Class Name", SettingCategory.Intern, null, FlatDarkLaf.class.getName()));
+		s.addSetting(new SettingString("ui.theme", "Theme Class Name", SettingCategory.Intern, null, FlatMaterialDarkerIJTheme.class.getName()));
 		
 		//General
 		s.addSetting(new SettingSelection("ui.language", "Language", SettingCategory.General, "UI Language", LangUtil.langCodeToName(LangUtil.LANGUAGES), "English", Model.ComboBox));
@@ -171,8 +171,8 @@ public class StartUp {
 		s.addSetting(new SettingBoolean("plugins.enable", "Enable plugins", SettingCategory.Others, "Option to enable or disable the plugin system. Requires a restart to take effect.", true));
 		s.addSetting(new SettingBoolean("restapi.enable", "Enable REST API", SettingCategory.Others, "Enable the web sever for the RemoteLight REST API", true));
 		s.addSetting(new SettingInt("restapi.port", "REST API Port", SettingCategory.Others, "Web server port for the REST API.", 8080, 0, Integer.MAX_VALUE, 1));
-		s.addSetting(new SettingBoolean("ui.touchscroll", "Touch Scroll support", SettingCategory.Others, "Enable scroll-on-drag feature.", true));
-		s.addSetting(new SettingBoolean("ui.touchscroll.invert", "Invert Touch Scroll", SettingCategory.Others, "Invert the scroll direction.", true));
+		s.addSetting(new SettingBoolean("ui.touchscroll", "Touch Scroll support", SettingCategory.Others, "Enable scroll-on-drag feature.", false));
+		s.addSetting(new SettingBoolean("ui.touchscroll.invert", "Invert Touch Scroll", SettingCategory.Others, "Invert the scroll direction.", false));
 		
 		//Intern
 		s.addSetting(new SettingObject("mainFrame.size", "Window size", new Dimension(850, 450)));

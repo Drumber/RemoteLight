@@ -47,6 +47,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.font.FontManager;
 import de.lars.remotelightclient.ui.font.FontResource;
+import de.lars.remotelightclient.utils.ColorTool;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.notification.NotificationType;
@@ -66,7 +67,7 @@ public class Style {
 	}
 	
 	public static Supplier<Color> panelDarkBackground() {
-		return () -> UiUtils.getElevationColor(panelBackground().get(), 10);
+		return () -> UiUtils.getElevationColor(panelBackground().get(), -20);
 	}
 	
 	public static Supplier<Color> panelAccentBackground() {
@@ -74,8 +75,10 @@ public class Style {
 	}
 	
 	public static Supplier<Color> buttonBackground() {
-		Color btnGradientBg = getUIColor("Button.startBackground");
-		return () -> btnGradientBg != null ? btnGradientBg : getUIColor("Button.background");
+		return () -> {
+			Color btnGradientBg = getUIColor("Button.startBackground");
+			return btnGradientBg != null ? btnGradientBg : getUIColor("Button.background");
+		};
 	}
 	
 	public static Supplier<Color> hoverBackground() {
@@ -83,7 +86,11 @@ public class Style {
 	}
 	
 	public static Supplier<Color> accent() {
-		return () -> getUIColor("Component.focusedBorderColor");
+		return () -> {
+			Color focusColor = getUIColor("Component.focusColor");
+			// if focusColor is equal to the panel color, return focusedBorderColor
+			return ColorTool.isEqual(focusColor, panelBackground().get()) ? getUIColor("Component.focusedBorderColor") : focusColor;
+		};
 	}
 	
 	public static Supplier<Color> textColor() {

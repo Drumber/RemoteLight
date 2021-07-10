@@ -115,7 +115,7 @@ public class NotificationPane extends JPanel {
 		// set colors
 		UiUtils.bindBackground(this, Style.panelAccentBackground());
 		UiUtils.bindForeground(taMessage, Style.textColorDarker());
-		taMessage.setBackground(getBackground());
+		UiUtils.bindBackground(taMessage, Style.panelAccentBackground());
 	}
 	
 	protected void placeComponents() {

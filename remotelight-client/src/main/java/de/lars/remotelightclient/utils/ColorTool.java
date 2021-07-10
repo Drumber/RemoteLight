@@ -27,5 +27,9 @@ public class ColorTool {
 		int cB = (int) Math.min(255, a.getBlue()  * alphaA + (1.0f - alphaA) * b.getBlue());
 		return new Color(cR, cG, cB);
 	}
+	
+	public static boolean isEqual(Color c1, Color c2) {
+		return c1.getRed() == c2.getRed() && c1.getGreen() == c2.getGreen() && c1.getBlue() == c2.getBlue();
+	}
 
 }

@@ -172,11 +172,12 @@ public class UiUtils {
 	 * Get the elevation color by blending the specified background color
 	 * with a semi-transparent overlay (white on dark themes, black otherwise).
 	 * @param background	the background color that should be blended with the overlay
-	 * @param alpha			the alpha value of the overlay (0..255)
+	 * @param alpha			the alpha value of the overlay (0..255), negative to invert overlay
 	 * @return	the resulting color
 	 */
 	public static Color getElevationColor(Color background, int alpha) {
-		boolean isDark = Style.isDarkLaF();
+		boolean isDark = Style.isDarkLaF() && alpha >= 0; // invert if alpha is negative
+		alpha = Math.abs(alpha);
 		// on dark themes use WHITE overlay, on light themes use BLACK overlay
 		Color overlay = isDark ? new Color(255, 255, 255, alpha) : new Color(0, 0, 0, alpha);
 		return ColorTool.alphaBlending(overlay, background);
