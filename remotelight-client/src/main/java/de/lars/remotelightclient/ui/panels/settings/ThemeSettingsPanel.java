@@ -249,6 +249,7 @@ public class ThemeSettingsPanel extends JPanel {
 		SettingBoolean sHideInTray = sm.getSetting(SettingBoolean.class, "ui.hideintray");
 		SettingBoolean sWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations");
 		SettingBoolean sUnifiedWindowDecorations = sm.getSetting(SettingBoolean.class, "ui.windowdecorations.unified");
+		SettingBoolean sUnifiedSideMenu = sm.getSetting(SettingBoolean.class, "ui.sidemenu.unified");
 		SettingSelection sFont = sm.getSetting(SettingSelection.class, "ui.font");
 		SettingInt sFontSize = sm.getSetting(SettingInt.class, "ui.fontsize");
 		SettingBoolean sGlowingEffectButton = sm.getSetting(SettingBoolean.class, "ui.glow.button");
@@ -263,6 +264,7 @@ public class ThemeSettingsPanel extends JPanel {
 		comboLanguage.addActionListener(e -> {
 			sLanguage.set(comboLanguage.getSelectedItem());
 			i18n.setLocale(sLanguage.get());
+			Main.getInstance().getMainFrame().getSideMenu().updateMenu();
 		});
 		appendUiSettingSection(root, comboLanguage, "Language");
 		root.add(Box.createVerticalStrut(10));
@@ -287,7 +289,7 @@ public class ThemeSettingsPanel extends JPanel {
 		});
 		panelWindowDecorations.add(boxWindowDecorations);
 		
-		JCheckBox boxUnifiedWindowDecorations = new JCheckBox("Unified background color", sUnifiedWindowDecorations.get());
+		JCheckBox boxUnifiedWindowDecorations = new JCheckBox("Unified window background", sUnifiedWindowDecorations.get());
 		boxUnifiedWindowDecorations.setAlignmentX(Component.LEFT_ALIGNMENT);
 		boxUnifiedWindowDecorations.addActionListener(e -> {
 			boolean value = boxUnifiedWindowDecorations.isSelected();
@@ -301,6 +303,16 @@ public class ThemeSettingsPanel extends JPanel {
 			appendUiSettingSection(root, panelWindowDecorations, "Window Decorations");
 			root.add(Box.createVerticalStrut(10));
 		}
+		
+		// Unified Side Menu Background
+		JCheckBox boxUnifiedSideMenu = new JCheckBox("Unified side menu background", sUnifiedSideMenu.get());
+		boxUnifiedSideMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
+		boxUnifiedSideMenu.addActionListener(e -> {
+			sUnifiedSideMenu.set(boxUnifiedSideMenu.isSelected());
+			Main.getInstance().getMainFrame().getSideMenu().updateMenu();
+		});
+		appendUiSettingSection(root, boxUnifiedSideMenu, "Side Menu");
+		root.add(Box.createVerticalStrut(10));
 		
 		// Font Family and Size
 		JPanel panelFont = new JPanel();

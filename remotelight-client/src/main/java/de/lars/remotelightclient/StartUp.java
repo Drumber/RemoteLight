@@ -162,6 +162,7 @@ public class StartUp {
 		s.addSetting(new SettingSelection("ui.font", "UI Font", SettingCategory.General, "Set a custom UI font", FontManager.getAllFontNames().toArray(new String[0]), "Muli", Model.ComboBox));
 		s.addSetting(new SettingInt("ui.fontsize", "UI Font size", SettingCategory.General, "Default UI font size", 11, 9, 20, 1));
 		s.addSetting(new SettingBoolean("ui.glow.button", "Glowing Effect Buttons", SettingCategory.General, "Enable glow effect for buttons.", true));
+		s.addSetting(new SettingBoolean("ui.sidemenu.unified", "Unified Side Menu Background", SettingCategory.General, null, false));
 		
 		//Others
 		s.addSetting(new SettingBoolean("ui.hideintray", "Hide in tray", SettingCategory.Others, "Hide in system tray when closing.", false));

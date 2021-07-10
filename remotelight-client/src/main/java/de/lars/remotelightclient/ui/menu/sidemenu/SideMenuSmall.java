@@ -22,70 +22,39 @@
 
 package de.lars.remotelightclient.ui.menu.sidemenu;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.ScrollPaneConstants;
 
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
-import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.ui.menu.MenuItem;
 import de.lars.remotelightclient.utils.ui.MenuIconFont.MenuIcon;
-import de.lars.remotelightclient.utils.ui.UiUtils;
 
 public class SideMenuSmall extends SideMenu {
 	private static final long serialVersionUID = 1604913473609403672L;
 	
-	private MainFrame mainFrame;
-	private JPanel root;
-
 	/**
 	 * Create the panel.
 	 */
 	public SideMenuSmall(MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
-		UiUtils.bindBackground(this, Style.panelAccentBackground());
-		setPreferredSize(new Dimension(40, 300));
-		setLayout(new BorderLayout());
-		
-		root = new JPanel();
-		root.setBackground(null);
-		root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
-		
-		TScrollPane scrollPane = new TScrollPane(root);
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(8);
-		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, root.getHeight()));
-		add(scrollPane, BorderLayout.CENTER);
-		
-		// add all menu items
-		addMenuItems();
+		super(mainFrame);
+		//setPreferredSize(new Dimension(40, 300));
 	}
 	
 	/**
 	 * Adds all menu items to the sidebar
 	 */
-	private void addMenuItems() {
+	@Override
+	protected void addMenuItems() {
 		// add extend/collapse button
-		JButton btnExtend = new JButton(""); //$NON-NLS-1$
-		btnExtend.setName("extend"); //$NON-NLS-1$
-		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU)); //$NON-NLS-1$
-		this.configureButton(btnExtend);
+		JButton btnExtend = new JButton("");
+		btnExtend.setName("extend");
+		btnExtend.setIcon(Style.getFontIcon(MenuIcon.MENU));
+		this.configureMenuButton(btnExtend);
 		root.add(btnExtend);
 		
 		for(MenuItem item : mainFrame.getMenuItems()) {
@@ -100,75 +69,23 @@ public class SideMenuSmall extends SideMenu {
 		}
 	}
 	
-	/**
-	 * Will remove and re-add all menu items.
-	 */
-	@Override
-	public void updateMenuItems() {
-		root.removeAll();
-		addMenuItems();
-	}
-	
 	private JButton getMenuButton(MenuItem item) {
 		Icon icon = item.getIconCode() == null ? item.getIcon() : Style.getFontIcon(item.getIconCode());
 		JButton btn = new JButton("");
 		btn.setName(item.getId());
 		btn.setIcon(icon);
-		this.configureButton(btn);
+		this.configureMenuButton(btn);
 		return btn;
+	}	
+	
+	@Override
+	protected void onMenuItemClicked(JButton btn, String name) {
+		super.onMenuItemClicked(btn, name);
+		
+		if(name.equals("extend")) {
+			mainFrame.replaceSideMenu(new SideMenuExtended(mainFrame));
+			Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(true);
+		}
 	}
-	
-	private void configureButton(JButton btn) {
-		btn.setBorderPainted(false);
-		btn.setFocusable(false);
-		btn.setBackground(null);
-		btn.setOpaque(false);
-		btn.setMaximumSize(new Dimension(40, 30));
-		btn.addMouseListener(buttonHoverListener);
-		btn.addActionListener(buttonActionListener);
-		btn.setRolloverEnabled(false);
-        if(mainFrame.getSelectedMenu().equals(btn.getName())) {
-        	btn.setBackground(Style.accent().get());
-        }
-	}
-	
-	private MouseAdapter buttonHoverListener = new MouseAdapter() {
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			JButton btn = (JButton) e.getSource();
-			if(!mainFrame.getSelectedMenu().equals(btn.getName())) {
-				btn.setBackground(Style.hoverBackground().get());
-			}
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			JButton btn = (JButton) e.getSource();
-			if(!mainFrame.getSelectedMenu().equals(btn.getName())) {
-				btn.setBackground(null);
-			}
-		}
-	};
-	
-	
-	private ActionListener buttonActionListener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton btn = (JButton) e.getSource();
-			
-			if(!btn.getName().equals("extend")) {
-				UiUtils.getComponentByName(root, new JButton(), mainFrame.getSelectedMenu()).setBackground(null); //reset background of previous selected button
-				btn.setBackground(Style.accent().get());
-				mainFrame.setSelectedMenu(btn.getName());
-			}
-			
-			if(btn.getName().equals("extend")) {
-				mainFrame.replaceSideMenu(new SideMenuExtended(mainFrame));
-				Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(true);
-			} else {
-				mainFrame.showMenuPanel(btn.getName());
-			}
-		}
-	};
-	
 
 }

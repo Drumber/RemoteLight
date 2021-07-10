@@ -37,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 
 import org.tinylog.Logger;
@@ -61,7 +62,7 @@ public class Style {
 	private static int fontHelpIconSize = 16;
 	
 	public static Supplier<Color> panelBackground() {
-		return () -> UIManager.getColor("Panel.background");
+		return () -> getUIColor("Panel.background");
 	}
 	
 	public static Supplier<Color> panelDarkBackground() {
@@ -69,28 +70,28 @@ public class Style {
 	}
 	
 	public static Supplier<Color> panelAccentBackground() {
-		return () -> panelBackground().get().brighter();
-	}
-	
-	public static Supplier<Color> buttonBackground() {
-		Color btnGradientBg = UIManager.getColor("Button.startBackground");
-		return () -> btnGradientBg != null ? btnGradientBg : UIManager.getColor("Button.background");
-	}
-	
-	public static Supplier<Color> hoverBackground() {
 		return () -> UiUtils.getElevationColor(panelBackground().get(), 20);
 	}
 	
+	public static Supplier<Color> buttonBackground() {
+		Color btnGradientBg = getUIColor("Button.startBackground");
+		return () -> btnGradientBg != null ? btnGradientBg : getUIColor("Button.background");
+	}
+	
+	public static Supplier<Color> hoverBackground() {
+		return () -> UiUtils.getElevationColor(buttonBackground().get(), 20);
+	}
+	
 	public static Supplier<Color> accent() {
-		return () -> UIManager.getColor("Component.focusedBorderColor");
+		return () -> getUIColor("Component.focusedBorderColor");
 	}
 	
 	public static Supplier<Color> textColor() {
-		return () -> UIManager.getColor("Label.foreground");
+		return () -> getUIColor("Label.foreground");
 	}
 	
 	public static Supplier<Color> textColorDarker() {
-		return () -> UIManager.getColor("Label.disabledForeground");
+		return () -> getUIColor("Label.disabledForeground");
 	}
 	
 	
@@ -98,12 +99,12 @@ public class Style {
 	
 	public static Supplier<Color> error() {
 		return () -> UIManager.getColor("Component.error.focusedBorderColor") != null ? 
-				UIManager.getColor("Component.error.focusedBorderColor") : new Color(242, 34, 34);
+				getUIColor("Component.error.focusedBorderColor") : new Color(242, 34, 34);
 	}
 
 	public static Supplier<Color> warn() {
 		return () -> UIManager.getColor("Component.warning.focusedBorderColor") != null ? 
-				UIManager.getColor("Component.warning.focusedBorderColor") : new Color(242, 183, 34);
+				getUIColor("Component.warning.focusedBorderColor") : new Color(242, 183, 34);
 	}
 	
 	public static Supplier<Color> info() {
@@ -124,6 +125,21 @@ public class Style {
 	
 	public static Supplier<Color> important() {
 		return () -> new Color(255, 200, 0);
+	}
+	
+	/**
+	 * This makes sure the color from the UIManager is from type
+	 * {@link java.awt.Color} and does not return a {@link javax.swing.plaf.ColorUIResource}
+	 * since this could cause some weird problems.
+	 * @param key	UIManager resource key
+	 * @return	{@link java.awt.Color}
+	 */
+	public static Color getUIColor(String key) {
+		Color color = UIManager.getColor(key);
+		if(color instanceof ColorUIResource) {
+			return new Color(color.getRGB());
+		}
+		return color;
 	}
 	
 	
