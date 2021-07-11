@@ -84,8 +84,10 @@ public class SideMenuExtended extends SideMenu {
 		super.onMenuItemClicked(btn, name);
 		
 		if(name.equals("extend")) {
-			mainFrame.replaceSideMenu(new SideMenuSmall(mainFrame));
+			if(animator != null) return;
 			Main.getInstance().getSettingsManager().getSettingObject("ui.sidemenu.extended").setValue(false);
+			final SideMenuSmall smallSideMenu = new SideMenuSmall(mainFrame);
+			animateExpand(smallSideMenu);
 		}
 	}
 

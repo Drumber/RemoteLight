@@ -37,18 +37,24 @@ import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import com.formdev.flatlaf.util.Animator;
+
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.MainFrame;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.TScrollPane;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.utils.maths.MathHelper;
 
 public abstract class SideMenu extends JPanel {
 	private static final long serialVersionUID = -1648378491673862404L;
 	
 	protected final MainFrame mainFrame;
 	protected JPanel root;
+	
+	protected static Animator animator;
+	public static int animationDuration = 150;
 	
 	public SideMenu(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -151,6 +157,27 @@ public abstract class SideMenu extends JPanel {
 			mainFrame.setSelectedMenu(btn.getName());
 			mainFrame.showMenuPanel(btn.getName());
 		}
+	}
+	
+	
+	public void animateExpand(SideMenu target) {
+		if(animator != null) return;
+		
+		final int startWidth = getPreferredSize().width;
+		final int endWidth = target.getPreferredSize().width;
+		
+		animator = new Animator(animationDuration, fraction -> {
+			int width = (int) MathHelper.map(fraction, 0.0, 1.0, startWidth, endWidth);
+			setPreferredSize(new Dimension(width, getPreferredSize().height));
+			revalidate();
+			repaint();
+		}, () -> {
+			animator = null;
+			mainFrame.replaceSideMenu(target);
+		});
+		
+		animator.setResolution(10);
+		animator.start();
 	}
 
 }

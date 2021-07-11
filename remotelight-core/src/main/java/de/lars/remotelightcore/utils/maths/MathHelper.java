@@ -117,6 +117,19 @@ public class MathHelper {
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
 	
+	/**
+	 * Map value of range <code>from1 - to2</code> to range </code>from2 - to2</code>
+	 * @param value Value between from1 and to2
+	 * @param from1 minimum start value
+	 * @param to1 maximum start value
+	 * @param from2 minimum new value
+	 * @param to2 maximum new value
+	 * @return float between from2 and to2
+	 */
+	public static double map(double value, double from1, double to1, double from2, double to2) {
+		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+	}
+	
 	public static float capMinMax(float value, float min, float max) {
 		if(value > max)
 			return max;
