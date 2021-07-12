@@ -48,10 +48,12 @@ public class RLServerSimulator {
 	private Gson gson;
 	private Color[] inputPixels;
 	private List<ConnectionStateChangeListener> listenersState;
+	private PixelReceiver pixelReceiver;
 	
-	public RLServerSimulator() {
+	public RLServerSimulator(PixelReceiver pixelReceiver) {
 		listenersState = new ArrayList<>();
 		gson = new Gson();
+		this.pixelReceiver = pixelReceiver;
 	}
 	
 	public void start() {
@@ -78,6 +80,9 @@ public class RLServerSimulator {
 							if(scanner.hasNextLine()) {
 								String input = scanner.nextLine();
 								inputPixels = gson.fromJson(input, Color[].class);
+								if(pixelReceiver != null) {
+									pixelReceiver.onPixelReceived(inputPixels);
+								}
 							}
 						}
 						
@@ -117,10 +122,6 @@ public class RLServerSimulator {
 		return inputPixels;
 	}
 	
-	public interface ConnectionStateChangeListener {
-		public void onConnectionStateChanged(String status);
-	}
-	
 	public synchronized void addStateChangeListener(ConnectionStateChangeListener l) {
 		listenersState.add(l);
 	}
@@ -129,6 +130,14 @@ public class RLServerSimulator {
 		for(ConnectionStateChangeListener l : listenersState) {
 			l.onConnectionStateChanged(text);
 		}
+	}
+	
+	public interface ConnectionStateChangeListener {
+		public void onConnectionStateChanged(String status);
+	}
+	
+	public interface PixelReceiver {
+		public void onPixelReceived(Color[] pixels);
 	}
 
 }

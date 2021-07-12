@@ -29,8 +29,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -41,25 +39,28 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import org.tinylog.Logger;
-
 import de.lars.remotelightclient.Main;
 import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.ui.components.frames.BasicFrame;
 import de.lars.remotelightclient.ui.simulator.RLServerSimulator.ConnectionStateChangeListener;
+import de.lars.remotelightclient.ui.simulator.RLServerSimulator.PixelReceiver;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightclient.utils.ui.WrapLayout;
 import de.lars.remotelightcore.lang.i18n;
 
-public class SimulatorFrame extends BasicFrame {
+public class SimulatorFrame extends BasicFrame implements PixelReceiver {
 	private static final long serialVersionUID = 2752076462014410311L;
 	
+	/*
+	 * TODO:
+	 * - option to set frame rate (FPS)
+	 * - option for spacing (small, medium, large spacing)
+	 */
+	
 	private RLServerSimulator emulator;
-	private boolean loopActive = false;
+	private SimulatorPanel pixelPanel;
 	private Dimension pixelPanelSize = new Dimension(20, 20);
-	private List<JPanel> pixelPanels;
 	private JPanel contentPane;
-	private JPanel panelPixel;
 	private JLabel lblStatus;
 
 	/**
@@ -67,9 +68,10 @@ public class SimulatorFrame extends BasicFrame {
 	 */
 	public SimulatorFrame() {
 		super("simulator", Main.getInstance().getSettingsManager());
-		pixelPanels = new ArrayList<>();
-		emulator = new RLServerSimulator();
+		emulator = new RLServerSimulator(this);
 		emulator.addStateChangeListener(stateListener);
+		
+		pixelPanel = new SimulatorPanel(1000 / 60, pixelPanelSize.width, 10);
 		
 		// add window close action
 		setCloseAction(() -> emulator.stop());
@@ -125,18 +127,13 @@ public class SimulatorFrame extends BasicFrame {
 		contentPane.add(bgrPixel, BorderLayout.CENTER);
 		bgrPixel.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		JScrollPane scrollPane = new JScrollPane(pixelPanel);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		bgrPixel.add(scrollPane, BorderLayout.CENTER);
-		
-		panelPixel = new JPanel();
-		WrapLayout wlayout = new WrapLayout(FlowLayout.LEFT);
-		panelPixel.setLayout(wlayout);
-		scrollPane.setViewportView(panelPixel);
 	}
 	
 	public void setFrameTitle(String text) {
@@ -148,15 +145,14 @@ public class SimulatorFrame extends BasicFrame {
 		public void actionPerformed(ActionEvent e) {
 			JButton btn = (JButton) e.getSource();
 			switch (btn.getName()) {
-			case "enable": //$NON-NLS-1$
-				pixelPanels.clear();
+			case "enable":
 				btn.setText(!emulator.isRunning() ? i18n.getString("EmulatorFrame.Disable") : i18n.getString("EmulatorFrame.Enable")); //$NON-NLS-1$ //$NON-NLS-2$
 				toggleEmulator(!emulator.isRunning());
 				break;
-			case "minus": //$NON-NLS-1$
+			case "minus":
 				changePanelSize(-2);
 				break;
-			case "plus": //$NON-NLS-1$
+			case "plus":
 				changePanelSize(2);
 				break;
 			}
@@ -176,47 +172,9 @@ public class SimulatorFrame extends BasicFrame {
 	public void toggleEmulator(boolean enable) {
 		if(enable) {
 			emulator.start();
-			startLoop();
 		} else {
 			emulator.stop();
-			stopLoop();
 		}
-	}
-	
-	private void startLoop() {
-		if(!loopActive) {
-			loopActive = true;
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					Logger.info("Started Simulator loop"); //$NON-NLS-1$
-					
-					while(loopActive) {
-						if(emulator.getPixels() != null) {
-							Color[] pixel = emulator.getPixels();
-							
-							if(pixelPanels.size() != pixel.length) {
-								addPixelPanels(pixel);
-								lblStatus.setText(i18n.getString("EmulatorFrame.PixelNumber") + pixel.length); //$NON-NLS-1$
-							} else {
-								setPanelColors(pixel);
-							}
-						}
-						try {
-							Thread.sleep(1000 / 30);	// running at 30 fps
-						} catch (InterruptedException e) {
-						}
-					}
-					Logger.info("Stopped Simulator loop"); //$NON-NLS-1$
-				}
-				
-			}, "Simulator loop").start(); //$NON-NLS-1$
-		}
-	}
-	
-	private void stopLoop() {
-		loopActive = false;
 	}
 	
 	private ConnectionStateChangeListener stateListener = new ConnectionStateChangeListener() {
@@ -226,28 +184,10 @@ public class SimulatorFrame extends BasicFrame {
 		}
 	};
 	
-	
-	public void addPixelPanels(Color[] pixels) {
-		panelPixel.removeAll();
-		pixelPanels.clear();
-		
-		for(Color c : pixels) {
-			JPanel panel = new JPanel();
-			panel.setBackground(c);
-			panel.setPreferredSize(pixelPanelSize);
-			
-			panelPixel.add(panel);
-			pixelPanels.add(panel);
-		}
-		panelPixel.updateUI();
-	}
-	
-	public void setPanelColors(Color[] pixels) {
-		if(pixels.length >= pixelPanels.size()) {
-			for(int i = 0; i < pixelPanels.size(); i++) {
-				pixelPanels.get(i).setBackground(pixels[i]);
-			}
-		}
+	@Override
+	public void onPixelReceived(Color[] pixels) {
+		lblStatus.setText(i18n.getString("EmulatorFrame.PixelNumber") + pixels.length);
+		pixelPanel.pushData(pixels);
 	}
 	
 	public void changePanelSize(int value) {
@@ -258,10 +198,7 @@ public class SimulatorFrame extends BasicFrame {
 			pixelPanelSize.setSize(200, 200);
 		}
 		
-		for(JPanel panel : pixelPanels) {
-			panel.setPreferredSize(pixelPanelSize);
-		}
-		panelPixel.updateUI();
+		pixelPanel.setLedWidth(pixelPanelSize.width);
 	}
 
 }
