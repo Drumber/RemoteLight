@@ -65,6 +65,7 @@ public class UiUtils {
 	
 	public static final int NORMAL_FONT_SIZE = 11;
 	
+	@Deprecated
 	private static boolean disableTheming = true;
 	
 	public static void setThemingEnabled(boolean themingEnabled) {
