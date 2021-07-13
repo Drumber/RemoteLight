@@ -73,6 +73,35 @@ public class StyleCompat {
 	}
 	
 	
+	public static Color error() {
+		return getColor("error", () -> Style.error().get());
+	}
+	
+	public static Color warn() {
+		return getColor("warn", () -> Style.warn().get());
+	}
+	
+	public static Color info() {
+		return getColor("info", () -> Style.info().get());
+	}
+	
+	public static Color success() {
+		return getColor("success", () -> Style.success().get());
+	}
+	
+	public static Color debug() {
+		return getColor("debug", () -> Style.debug().get());
+	}
+	
+	public static Color notification() {
+		return getColor("notification", () -> Style.notification().get());
+	}
+	
+	public static Color important() {
+		return getColor("important", () -> Style.important().get());
+	}
+	
+	
 	private interface AltColor {
 		public Color getAltColor();
 	}
