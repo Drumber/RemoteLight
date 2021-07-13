@@ -1,9 +1,11 @@
-package de.lars.remotelightclient.ui;
+package de.lars.remotelightplugincompat;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
 
 import org.tinylog.Logger;
+
+import de.lars.remotelightclient.ui.Style;
 
 /**
  * Compatibility class for {@link Style} before commit #ff537c41d3f651c59ca619337fff5fc8771c0c25.

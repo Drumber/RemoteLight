@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.lars</groupId>
+		<artifactId>remotelight</artifactId>
+		<version>0.2.5-beta</version>
+	</parent>
+	<artifactId>remotelight-plugincompat</artifactId>
+
+	<dependencies>
+		<!-- RemoteLightClient -->
+		<dependency>
+			<groupId>de.lars</groupId>
+			<artifactId>remotelight-client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+</project>

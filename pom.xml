@@ -17,6 +17,7 @@
 		<module>remotelight-client</module>
 		<module>remotelight-plugincore</module>
 		<module>remotelight-restapi</module>
+		<module>remotelight-plugincompat</module>
 	</modules>
 
 	<licenses>

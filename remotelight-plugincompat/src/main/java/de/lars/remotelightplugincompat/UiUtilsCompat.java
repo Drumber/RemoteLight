@@ -1,4 +1,4 @@
-package de.lars.remotelightclient.utils.ui;
+package de.lars.remotelightplugincompat;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -14,7 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 
-import de.lars.remotelightclient.ui.StyleCompat;
+import de.lars.remotelightclient.utils.ui.UiUtils;
 
 /**
  * Compatibility class for {@link UiUtils} before commit #ff537c41d3f651c59ca619337fff5fc8771c0c25.
