@@ -54,6 +54,8 @@ import de.lars.remotelightcore.settings.Setting;
 
 public class FileStorage {
 	
+	public static Map<Type, Object> optionalAdapters = new HashMap<>();
+	
 	/** storage file */
 	private File file;
 	/** Gson instance */
@@ -71,14 +73,16 @@ public class FileStorage {
 	
 	public FileStorage(File file) {
 		this.file = file;
-		this.gson = new GsonBuilder()
+		GsonBuilder builder = new GsonBuilder()
 				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingSerializer())
 				.registerTypeAdapter(TYPE_SETTINGS_LIST, new SettingDeserializer())
 				.registerTypeAdapter(TYPE_DEVICES_LIST, new DeviceSerializer())
 				.registerTypeAdapter(TYPE_DEVICES_LIST, new DeviceDeserializer())
 				.serializeNulls()
-				.setPrettyPrinting()
-				.create();
+				.setPrettyPrinting();
+		optionalAdapters.forEach((type, adapter) -> builder.registerTypeAdapter(type, adapter));
+		
+		this.gson = builder.create();
 		this.storageMap = new HashMap<>();
 	}
 	

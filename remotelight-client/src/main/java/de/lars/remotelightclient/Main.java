@@ -22,6 +22,7 @@
 
 package de.lars.remotelightclient;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
@@ -52,9 +53,11 @@ import de.lars.remotelightclient.ui.components.dialogs.NoFileAccessDialog;
 import de.lars.remotelightclient.ui.components.frames.SplashFrame;
 import de.lars.remotelightclient.ui.console.CustomOutputStream;
 import de.lars.remotelightclient.ui.font.DefaultFonts;
+import de.lars.remotelightclient.utils.ColorSerializer;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.cmd.StartParameterHandler;
+import de.lars.remotelightcore.io.FileStorage;
 import de.lars.remotelightcore.notification.Notification;
 import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
@@ -109,6 +112,9 @@ public class Main {
 			fileAcessExcpt.printStackTrace();
 			NoFileAccessDialog.showDialog(fileAcessExcpt.getMessage());
 		}
+		
+		// register Gson adapter for java.awt.Color
+		FileStorage.optionalAdapters.put(Color.class, new ColorSerializer());
 		
 		remoteLightCore = new RemoteLightCore(args, !uiMode);
 		// register shutdown hook

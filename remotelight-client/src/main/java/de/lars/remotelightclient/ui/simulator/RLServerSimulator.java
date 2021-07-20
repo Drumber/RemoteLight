@@ -35,7 +35,9 @@ import java.util.Scanner;
 import org.tinylog.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import de.lars.remotelightclient.utils.ColorSerializer;
 import de.lars.remotelightcore.lang.i18n;
 
 public class RLServerSimulator {
@@ -52,7 +54,9 @@ public class RLServerSimulator {
 	
 	public RLServerSimulator(PixelReceiver pixelReceiver) {
 		listenersState = new ArrayList<>();
-		gson = new Gson();
+		gson = new GsonBuilder()
+				.registerTypeAdapter(Color.class, new ColorSerializer())
+				.create();
 		this.pixelReceiver = pixelReceiver;
 	}
 	
