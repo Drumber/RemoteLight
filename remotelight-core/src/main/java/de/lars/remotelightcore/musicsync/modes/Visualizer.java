@@ -116,8 +116,8 @@ public class Visualizer extends MusicEffect {
 	
 	private Color getColor(int led) {
 		if(rainbow) {
-			int mltiplr = RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
-			return RainbowWheel.getRainbow()[led * mltiplr];
+			double mltiplr = (double) RainbowWheel.getRainbow().length / RemoteLightCore.getLedNum();
+			return RainbowWheel.getRainbow()[(int) Math.floor(led * mltiplr)];
 		} else {
 			return sColor.get();
 		}
