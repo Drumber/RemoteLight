@@ -143,6 +143,18 @@ public class ColorUtil {
 		float weightOld = 0.5f;
 		float weightNew = 0.5f;
 		
+		return mixColor(oldColor, weightOld, newColor, weightNew);
+	}
+	
+	/**
+	 * Mix two colors
+	 * @param oldColor Color 1
+	 * @param weightOld weight of the old color between 0 and 1
+	 * @param newColor Color 2
+	 * @param weightNew weight of the new color between 0 and 1
+	 * @return new color
+	 */
+	public static Color mixColor(Color oldColor, float weightOld, Color newColor, float weightNew) {
 		int r = (int) (weightOld * oldColor.getRed() + weightNew * newColor.getRed());
 		int g = (int) (weightOld * oldColor.getGreen() + weightNew * newColor.getGreen());
 		int b = (int) (weightOld * oldColor.getBlue() + weightNew * newColor.getBlue());
