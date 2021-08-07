@@ -35,6 +35,7 @@ import de.lars.remotelightclient.ui.Style;
 import de.lars.remotelightclient.utils.ui.UiUtils;
 import de.lars.remotelightcore.devices.arduino.RgbOrder;
 import de.lars.remotelightcore.devices.e131.E131;
+import de.lars.remotelightcore.devices.e131.E131Packet;
 import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.out.OutputManager;
 
@@ -50,6 +51,7 @@ public class E131SettingsPanel extends DeviceSettingsPanel {
 	private JCheckBox chckbxMulticast;
 	private JLabel lblEndUniverse;
 	private JSpinner spinnerStartUniverse;
+	private JSpinner spinnerUniverseSize;
 	private JSpinner spinnerShift;
 	private JSpinner spinnerClone;
 	private JCheckBox checkboxCloneMirrored;
@@ -119,6 +121,22 @@ public class E131SettingsPanel extends DeviceSettingsPanel {
 		
 		lblEndUniverse = new JLabel("0");
 		panelUniverse.add(lblEndUniverse);
+		
+		JPanel panelUniverseSize = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelUniverseSize.setPreferredSize(size);
+		panelUniverseSize.setMaximumSize(size);
+		panelUniverseSize.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelUniverseSize);
+		
+		JLabel lblUniverseSize = new JLabel("Universe size:");
+		panelUniverseSize.add(lblUniverseSize);
+		
+		spinnerUniverseSize = new JSpinner();
+		spinnerUniverseSize.setModel(new SpinnerNumberModel(e131.getUniverseSize(), E131.MIN_UNIVERSE_SIZE, E131Packet.DATA_LENGTH, 1));
+		UiUtils.configureSpinner(spinnerUniverseSize);
+		spinnerUniverseSize.addChangeListener(universeUpdateListener);
+		spinnerStartUniverse.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelUniverseSize.add(spinnerUniverseSize);
 		
 		JPanel panelPixels = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) panelPixels.getLayout();
@@ -212,7 +230,8 @@ public class E131SettingsPanel extends DeviceSettingsPanel {
 		}
 		
 		spinnerStartUniverse.setValue(e131.getStartUniverse());
-		lblEndUniverse.setText(e131.getEndUniverse(e131.getStartUniverse(), e131.getPixels()) +"");
+		spinnerUniverseSize.setValue(e131.getUniverseSize());
+		updateEndUniverseText();
 		
 		if(e131.getRgbOrder() == null) {
 			e131.setRgbOrder(RgbOrder.RGB);
@@ -234,10 +253,15 @@ public class E131SettingsPanel extends DeviceSettingsPanel {
 	private ChangeListener universeUpdateListener = new ChangeListener() {
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			lblEndUniverse.setText(e131.getEndUniverse((int) spinnerStartUniverse.getValue(), (int) spinnerPixels.getValue()) +"");
-			updateUI();
+			updateEndUniverseText();
 		}
 	};
+	
+	private void updateEndUniverseText() {
+		lblEndUniverse.setText(e131.getEndUniverse((int) spinnerStartUniverse.getValue(), (int) spinnerUniverseSize.getValue(), (int) spinnerPixels.getValue()) +"");
+		lblEndUniverse.revalidate();
+		lblEndUniverse.repaint();
+	}
 
 	@Override
 	public boolean save() {
@@ -250,6 +274,7 @@ public class E131SettingsPanel extends DeviceSettingsPanel {
 		e131.setUnicastAddress(fieldIpAddress.getText());
 		e131.setMulticast(chckbxMulticast.isSelected());
 		e131.setStartUniverse((int) spinnerStartUniverse.getValue());
+		e131.setUniverseSize((int) spinnerUniverseSize.getValue());
 		e131.getOutputPatch().setShift((int) spinnerShift.getValue());
 		e131.getOutputPatch().setClone((int) spinnerClone.getValue());
 		e131.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());

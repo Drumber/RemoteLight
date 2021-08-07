@@ -19,9 +19,12 @@ public class E131 extends Device {
 	
 	/* E1.31 Port is 5568 */
 	public final static int PORT = 5568;
+	/** Minimum universe size: 3 for a single pixel (RGB) */
+	public final static int MIN_UNIVERSE_SIZE = 3;
 	
 	private transient int sequenceNumber;
 	private int startUniverse;
+	private int universeSize = E131Packet.DATA_LENGTH;
 	
 	private String unicastIP;
 	private InetAddress address;
@@ -57,6 +60,14 @@ public class E131 extends Device {
 		return startUniverse;
 	}
 	
+	public int getUniverseSize() {
+		return universeSize;
+	}
+
+	public void setUniverseSize(int universeSize) {
+		this.universeSize = universeSize;
+	}
+
 	protected void initializeSocket() {
 		try {
 			address = getAddress();
@@ -82,6 +93,12 @@ public class E131 extends Device {
 	@Override
 	public void onLoad() {
 		e131Packet = new E131Packet();
+		if(universeSize == 0) {
+			universeSize = E131Packet.DATA_LENGTH;
+		}
+		if(universeSize < MIN_UNIVERSE_SIZE) {
+			universeSize = MIN_UNIVERSE_SIZE;
+		}
 	}
 
 	@Override
@@ -106,33 +123,40 @@ public class E131 extends Device {
 	@Override
 	public void send(Color[] pixels) {
 		final int dataLength = pixels.length * 3;
-		final int MAX_LENGTH = E131Packet.DATA_LENGTH; // maximal dmx data length
+		final int MAX_LENGTH = universeSize; // maximal dmx data length
 		
 		int arrayLength = dataLength > MAX_LENGTH ? MAX_LENGTH : dataLength;
 		byte[] dmxData = new byte[arrayLength];
 		int currUniverse = startUniverse;
+		int offset = 0;
 		
+		// loop over each pixel
 		for(int i = 0; i < pixels.length; i++) {
 			byte[] rgbData = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
 			
+			// loop over RGB data array
 			for(int d = 0; d < rgbData.length; d++) {
-				int additionalUniverses = currUniverse - startUniverse;
-				int index = (MAX_LENGTH * (currUniverse - startUniverse - additionalUniverses)) + (i * 3 - MAX_LENGTH * additionalUniverses);
-				
-				if(index + d >= MAX_LENGTH) {
+				// check if max length of universe is reached
+				if(offset >= MAX_LENGTH) {
 					// current universe is full; output universe and use next universe
 					sendDmxData(currUniverse, dmxData);
 					
 					// use next universe
 					currUniverse++;
-					index = 0 - d;
+					// reset offset
+					offset = 0;
 					
 					// create new buffer
-					int size = (dataLength - (currUniverse - startUniverse) * MAX_LENGTH) % MAX_LENGTH;
+					int usedUniverses = currUniverse - startUniverse;
+					int remainingDataLength = dataLength - usedUniverses * MAX_LENGTH;
+					int size = remainingDataLength > MAX_LENGTH ? MAX_LENGTH : remainingDataLength;
 					dmxData = new byte[size];
 				}
+				
 				// add to output data buffer
-				dmxData[index + d] = rgbData[d];
+				dmxData[offset] = rgbData[d];
+				// increment offset
+				offset++;
 			}
 		}
 		// output universe
@@ -164,8 +188,8 @@ public class E131 extends Device {
 			sequenceNumber = 0;
 	}
 	
-	public int getEndUniverse(int startUniverse, int pixels) {
-		return startUniverse + (3 * pixels / 512);
+	public int getEndUniverse(int startUniverse, int universeSize, int pixels) {
+		return startUniverse + (3 * pixels / universeSize);
 	}
 	
 }
