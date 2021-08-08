@@ -32,17 +32,16 @@ import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.utils.color.Color;
 
 public class Artnet extends Device {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 620972378928905059L;
+	
+	public static final int MAX_UNIVERSE_SIZE = 512;
+	
 	private transient ArtNetClient artnet;
 	private boolean broadcast;
 	private String address;
 	private int subnet;
 	private int startUniverse;
-	private boolean continuousUniverseOverflow;
+	private int universeSize = MAX_UNIVERSE_SIZE;
 	
 	public Artnet(String id) {
 		super(id, 0);
@@ -81,12 +80,12 @@ public class Artnet extends Device {
 		return startUniverse;
 	}
 
-	public boolean isContinuousUniverseOverflow() {
-		return continuousUniverseOverflow;
+	public int getUniverseSize() {
+		return universeSize;
 	}
 
-	public void setContinuousUniverseOverflow(boolean continuousUniverseOverflow) {
-		this.continuousUniverseOverflow = continuousUniverseOverflow;
+	public void setUniverseSize(int universeSize) {
+		this.universeSize = universeSize;
 	}
 
 	@Override
@@ -127,66 +126,58 @@ public class Artnet extends Device {
 		if(artnet == null) {
 			artnet = new ArtNetClient();
 		}
+		if(universeSize == 0) {
+			universeSize = MAX_UNIVERSE_SIZE;
+		}
+		if(universeSize < 3) {
+			universeSize = 3;
+		}
 	}
 
 	@Override
 	public void send(Color[] pixels) {
-		int dataLength = 512;
-		if(pixels.length * 3 <= 512) {
-			dataLength = pixels.length * 3;
-		}
-		byte[] dmxData = new byte[dataLength];
-		int universe = startUniverse;
-		int index = 0;
+		final int dataLength = pixels.length * 3;
+		final int MAX_LENGTH = universeSize; // maximal dmx data length
 		
+		int arrayLength = dataLength > MAX_LENGTH ? MAX_LENGTH : dataLength;
+		byte[] dmxData = new byte[arrayLength];
+		int currUniverse = startUniverse;
+		int offset = 0;
+		
+		// loop over each pixel
 		for(int i = 0; i < pixels.length; i++) {
-			byte[] rgbColor = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
+			byte[] rgbData = {(byte) pixels[i].getRed(), (byte) pixels[i].getGreen(), (byte) pixels[i].getBlue()};
 			
-			if(continuousUniverseOverflow) {
-				// continuous universe overflow: split RGB values across multiple universes
-				// e.g.: [uni 0] ... 510(B), 511(R), 512(G), [uni 1] 001(B), 002(R) ...
-				
-				for(int rgb = 0; rgb < rgbColor.length; rgb++) {
-					if(index + rgb >= dmxData.length) { // universe is full; output universe and use next one
-						sendDmxData(dmxData, universe);
-						universe++;
-						
-						dataLength = 512;
-						if((pixels.length - i) * 3 <= 512) {
-							dataLength = (pixels.length - i) * 3 - rgb;
-						}
-						dmxData = new byte[dataLength];
-						index = 0 - rgb;
-					}
+			// loop over RGB data array
+			for(int d = 0; d < rgbData.length; d++) {
+				// check if max length of universe is reached
+				if(offset >= MAX_LENGTH) {
+					// current universe is full; output universe and use next universe
+					sendDmxData(currUniverse, dmxData);
 					
-					dmxData[index + rgb] = rgbColor[rgb];
-				}
-			} else {
-				// do not split RGB values over multiple universes
-				
-				// universe is full, send universe and use next one
-				if(index + 3 >= dmxData.length) {
-					sendDmxData(dmxData, universe);
-					universe++;
+					// use next universe
+					currUniverse++;
+					// reset offset
+					offset = 0;
 					
-					dataLength = 512;
-					if((pixels.length - i) * 3 <= 512) {
-						dataLength = (pixels.length - i) * 3;
-					}
-					dmxData = new byte[dataLength];
-					index = 0;
+					// create new buffer
+					int usedUniverses = currUniverse - startUniverse;
+					int remainingDataLength = dataLength - usedUniverses * MAX_LENGTH;
+					int size = remainingDataLength > MAX_LENGTH ? MAX_LENGTH : remainingDataLength;
+					dmxData = new byte[size];
 				}
 				
-				dmxData[index + 0] = rgbColor[0];
-				dmxData[index + 1] = rgbColor[1];
-				dmxData[index + 2] = rgbColor[2];
+				// add to output data buffer
+				dmxData[offset] = rgbData[d];
+				// increment offset
+				offset++;
 			}
-			index += 3;
 		}
-		sendDmxData(dmxData, universe);
+		// output universe
+		sendDmxData(currUniverse, dmxData);
 	}
 	
-	private void sendDmxData(byte[] dmxData, int universe) {
+	private void sendDmxData(int universe, byte[] dmxData) {
 		if(broadcast) {
 			artnet.broadcastDmx(subnet, universe, dmxData);
 		} else {
@@ -194,8 +185,8 @@ public class Artnet extends Device {
 		}
 	}
 	
-	public int getEndUniverse(int startUniverse, int pixels) {
-		return startUniverse + (3 * pixels / 512);
+	public int getEndUniverse(int startUniverse, int universeSize, int pixels) {
+		return startUniverse + (3 * pixels / universeSize);
 	}
 
 }

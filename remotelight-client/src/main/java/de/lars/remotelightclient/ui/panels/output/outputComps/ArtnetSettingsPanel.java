@@ -39,11 +39,8 @@ import de.lars.remotelightcore.lang.i18n;
 import de.lars.remotelightcore.out.OutputManager;
 
 public class ArtnetSettingsPanel extends DeviceSettingsPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1248292009488744767L;
+	
 	private Artnet artnet;
 	private JTextField fieldId;
 	private JSpinner spinnerPixels;
@@ -54,7 +51,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private JLabel lblEndUniverse;
 	private JSpinner spinnerSubnet;
 	private JSpinner spinnerStartUniverse;
-	private JCheckBox checkboxContinuousUniverse;
+	private JSpinner spinnerUniverseSize;
 	private JSpinner spinnerShift;
 	private JSpinner spinnerClone;
 	private JCheckBox checkboxCloneMirrored;
@@ -141,9 +138,21 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		lblEndUniverse = new JLabel("0");
 		panelUniverse.add(lblEndUniverse);
 		
-		checkboxContinuousUniverse = new JCheckBox(i18n.getString("ArtnetSettingsPanel.checkboxContinuousUniverse.text"));
-		checkboxContinuousUniverse.setSelected(artnet.isContinuousUniverseOverflow());
-		add(checkboxContinuousUniverse);
+		JPanel panelUniverseSize = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelUniverseSize.setPreferredSize(size);
+		panelUniverseSize.setMaximumSize(size);
+		panelUniverseSize.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(panelUniverseSize);
+		
+		JLabel lblUniverseSize = new JLabel("Universe size:");
+		panelUniverseSize.add(lblUniverseSize);
+		
+		spinnerUniverseSize = new JSpinner();
+		spinnerUniverseSize.setModel(new SpinnerNumberModel(artnet.getUniverseSize(), 3, Artnet.MAX_UNIVERSE_SIZE, 1));
+		UiUtils.configureSpinner(spinnerUniverseSize);
+		spinnerUniverseSize.addChangeListener(universeUpdateListener);
+		spinnerStartUniverse.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelUniverseSize.add(spinnerUniverseSize);
 		
 		JPanel panelPixels = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) panelPixels.getLayout();
@@ -238,8 +247,8 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		
 		spinnerSubnet.setValue(artnet.getSubnet());
 		spinnerStartUniverse.setValue(artnet.getStartUniverse());
-		lblEndUniverse.setText(artnet.getEndUniverse(artnet.getStartUniverse(), artnet.getPixels()) +"");
-		checkboxContinuousUniverse.setSelected(artnet.isContinuousUniverseOverflow());
+		spinnerUniverseSize.setValue(artnet.getUniverseSize());
+		updateEndUniverseText();
 		
 		if(artnet.getRgbOrder() == null) {
 			artnet.setRgbOrder(RgbOrder.RGB);
@@ -261,10 +270,15 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 	private ChangeListener universeUpdateListener = new ChangeListener() {
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			lblEndUniverse.setText(artnet.getEndUniverse((int) spinnerStartUniverse.getValue(), (int) spinnerPixels.getValue()) +"");
-			updateUI();
+			updateEndUniverseText();
 		}
 	};
+	
+	private void updateEndUniverseText() {
+		lblEndUniverse.setText(artnet.getEndUniverse((int) spinnerStartUniverse.getValue(), (int) spinnerUniverseSize.getValue(), (int) spinnerPixels.getValue()) +"");
+		lblEndUniverse.revalidate();
+		lblEndUniverse.repaint();
+	}
 
 	@Override
 	public boolean save() {
@@ -278,7 +292,7 @@ public class ArtnetSettingsPanel extends DeviceSettingsPanel {
 		artnet.setBroadcast(chckbxBroadcast.isSelected());
 		artnet.setSubnet((int) spinnerSubnet.getValue());
 		artnet.setStartUniverse((int) spinnerStartUniverse.getValue());
-		artnet.setContinuousUniverseOverflow(checkboxContinuousUniverse.isSelected());
+		artnet.setUniverseSize((int) spinnerUniverseSize.getValue());
 		artnet.getOutputPatch().setShift((int) spinnerShift.getValue());
 		artnet.getOutputPatch().setClone((int) spinnerClone.getValue());
 		artnet.getOutputPatch().setCloneMirrored(checkboxCloneMirrored.isSelected());
