@@ -71,6 +71,7 @@ import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.out.Output;
 import de.lars.remotelightcore.out.OutputActionListener;
 import de.lars.remotelightcore.out.OutputManager;
+import de.lars.remotelightcore.utils.OutputUtil;
 import jiconfont.IconCode;
 
 public class OutputPanel extends MenuPanel {
@@ -195,11 +196,10 @@ public class OutputPanel extends MenuPanel {
 		panelTitle.add(lblEmulator);
 		
 		bgrMenu = new JPanel();
-		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 165));
-		bgrMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
-		add(bgrMenu);
+		bgrMenu.setPreferredSize(new Dimension(Integer.MAX_VALUE, 200));
+		bgrMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));
 		bgrMenu.setLayout(new BorderLayout(0, 0));
-
+		add(bgrMenu);
 	}
 	
 	private JPanel getDeviceSettingsBgr(boolean setup, JPanel deviceSettingsPanel) {
@@ -344,6 +344,13 @@ public class OutputPanel extends MenuPanel {
 			
 			bgrMenu.removeAll();
 			bgrMenu.add(bgr, BorderLayout.CENTER);
+			
+			String outputType = OutputUtil.getOutputTypeAsString(d);
+			String titleText = setup ? "Setup " + outputType : String.format("Configure %s (%s)", d.getId(), outputType);
+			JLabel lblTitle = new JLabel(titleText);
+			lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+			bgrMenu.add(lblTitle, BorderLayout.NORTH);
+			
 			bgrMenu.updateUI();
 		}
 	}
