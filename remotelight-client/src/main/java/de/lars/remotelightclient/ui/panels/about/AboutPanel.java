@@ -106,32 +106,35 @@ public class AboutPanel extends MenuPanel {
 		Component verticalStrut = Box.createVerticalStrut(8);
 		verticalBox.add(verticalStrut);
 		
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		verticalBox.add(horizontalBox_1);
+		Box boxLinks = Box.createHorizontalBox();
+		verticalBox.add(boxLinks);
 		
 		JLabel lblWebsite = new JLabel(i18n.getString("AboutPanel.Website")); //$NON-NLS-1$
 		UiUtils.bindForeground(lblWebsite, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblWebsite, RemoteLightCore.WEBSITE);
 		lblWebsite.setFont(Style.getFontRegualar(14));
-		horizontalBox_1.add(lblWebsite);
-		
-		Component horizontalStrut_2 = Box.createHorizontalStrut(10);
-		horizontalBox_1.add(horizontalStrut_2);
+		boxLinks.add(lblWebsite);
+		boxLinks.add(Box.createHorizontalStrut(10));
 		
 		JLabel lblWiki = new JLabel("Wiki"); //$NON-NLS-1$
 		UiUtils.bindForeground(lblWiki, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblWiki, RemoteLightCore.WIKI);
 		lblWiki.setFont(Style.getFontRegualar(14));
-		horizontalBox_1.add(lblWiki);
+		boxLinks.add(lblWiki);
+		boxLinks.add(Box.createHorizontalStrut(10));
 		
-		Component horizontalStrut_3 = Box.createHorizontalStrut(10);
-		horizontalBox_1.add(horizontalStrut_3);
+		JLabel lblDiscord = new JLabel("Discord");
+		UiUtils.bindForeground(lblDiscord, Style.accent());
+		UiUtils.addWebsiteHyperlink(lblDiscord, RemoteLightCore.DISCORD);
+		lblDiscord.setFont(Style.getFontRegualar(14));
+		boxLinks.add(lblDiscord);
+		boxLinks.add(Box.createHorizontalStrut(10));
 		
 		JLabel lblGithub = new JLabel("GitHub"); //$NON-NLS-1$
 		UiUtils.bindForeground(lblGithub, Style.accent());
 		UiUtils.addWebsiteHyperlink(lblGithub, RemoteLightCore.GITHUB);
 		lblGithub.setFont(Style.getFontRegualar(14));
-		horizontalBox_1.add(lblGithub);
+		boxLinks.add(lblGithub);
 		
 		JPanel bgrContent = new JPanel();
 		add(bgrContent);

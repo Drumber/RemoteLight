@@ -70,6 +70,7 @@ public class RemoteLightCore {
 	public final static String WEBSITE = "https://remotelight-software.blogspot.com";
 	public final static String GITHUB = "https://github.com/Drumber/RemoteLight";
 	public final static String WIKI = "https://github.com/Drumber/RemoteLight/wiki";
+	public final static String DISCORD = "https://discord.gg/JcsKm5U";
 	
 	private static RemoteLightCore instance;
 	private static boolean headless;
