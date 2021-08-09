@@ -144,6 +144,10 @@ public class SettingsManager {
 			if(update)
 				updateSetting(existing, setting);
 			return (T) existing;
+		} else if(existing != null) {
+			Logger.info("Setting class of '{}' changed from {} to {}. Old setting instance will be removed.",
+					existing.getId(), existing.getClass().getSimpleName(), setting.getClass().getSimpleName());
+			removeSetting(existing.getId());
 		}
 		Logger.info("Registered Setting '" + setting.getId() + "'.");
 		settings.add(setting);

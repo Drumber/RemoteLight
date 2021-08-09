@@ -23,7 +23,14 @@
 package de.lars.remotelightcore.utils;
 
 import de.lars.remotelightcore.settings.Setting;
-import de.lars.remotelightcore.settings.types.*;
+import de.lars.remotelightcore.settings.types.SettingBoolean;
+import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingDouble;
+import de.lars.remotelightcore.settings.types.SettingGradient;
+import de.lars.remotelightcore.settings.types.SettingInt;
+import de.lars.remotelightcore.settings.types.SettingObject;
+import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingString;
 
 public class SettingTypeUtil {
 	
@@ -44,6 +51,8 @@ public class SettingTypeUtil {
 			return SettingInt.class;
 		case "SettingObject":
 			return SettingObject.class;
+		case "SettingGradient":
+			return SettingGradient.class;
 		case "SettingSelection":
 			return SettingSelection.class;
 		case "SettingString":

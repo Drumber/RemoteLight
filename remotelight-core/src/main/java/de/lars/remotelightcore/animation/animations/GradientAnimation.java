@@ -1,13 +1,11 @@
 package de.lars.remotelightcore.animation.animations;
 
 import de.lars.remotelightcore.animation.Animation;
-import de.lars.remotelightcore.colors.palette.Palettes;
 import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
 import de.lars.remotelightcore.colors.palette.model.ColorGradient;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingDouble;
-import de.lars.remotelightcore.settings.types.SettingSelection;
-import de.lars.remotelightcore.settings.types.SettingSelection.Model;
+import de.lars.remotelightcore.settings.types.SettingGradient;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
 
@@ -15,13 +13,12 @@ public class GradientAnimation extends Animation {
 	
 	private Color[] strip;
 	AbstractPalette palette;
-	private SettingSelection sGradient;
+	private SettingGradient sGradient;
 	private SettingDouble sStepSize;
 
 	public GradientAnimation() {
 		super("Gradient");
-		String[] values = Palettes.getNames().toArray(new String[0]);
-		sGradient = this.addSetting(new SettingSelection("animations.gradient.gradients", "Gradient", SettingCategory.Intern, null, values, values[0], Model.ComboBox));
+		sGradient = this.addSetting(new SettingGradient("animations.gradient.gradients", "Gradient", null, null));
 		sStepSize = this.addSetting(new SettingDouble("animations.gradient.stepsize", "Resolution", SettingCategory.Intern, null, 0.05, 0.0009, 1.0, 0.005));
 	}
 	
@@ -33,8 +30,7 @@ public class GradientAnimation extends Animation {
 	
 	@Override
 	public Color[] onEffect() {
-		// TODO: could cause NullPointerException when selected palette gets removed while animation is running
-		palette = Palettes.getPalette(sGradient.getSelected()).getPalette();
+		palette = sGradient.getPalette();
 		
 		if(palette instanceof ColorGradient) {
 			((ColorGradient) palette).setStepSize(sStepSize.get().floatValue());
