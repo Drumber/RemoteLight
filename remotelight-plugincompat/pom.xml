@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.lars</groupId>
 		<artifactId>remotelight</artifactId>
-		<version>0.2.5-beta</version>
+		<version>0.2.5</version>
 	</parent>
 	<artifactId>remotelight-plugincompat</artifactId>
 
