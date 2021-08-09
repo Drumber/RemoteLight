@@ -1,4 +1,24 @@
 ## Changelog
+#### v0.2.5
+- UI improvements and changes
+  - added glow effect to animation and scene buttons, which provides a preview of the effect
+  - redesigned settings UI
+  - new theme selector
+  - improved UI style
+  - added side menu animation
+  - added French translation (thanks Pat'o beurre)
+  - added basic touch-scroll support (experimental)
+  - inverted speed and sensitivity slider (right ≙ faster/more sensitive)
+- added color palettes to Color menu
+- added output preview panel to Tools menu
+- added E1.31 output protocol
+- added settings interface for Lua scripts
+- added Gradient and Sawtooth animation
+- added new modes to Visualizer, Energy and Rainbow music effects
+- improved several animations
+- added REST API
+- various other bug fixes and improvements
+
 #### v0.2.4
 - minor UI fixes
 - improved ScreenColor
