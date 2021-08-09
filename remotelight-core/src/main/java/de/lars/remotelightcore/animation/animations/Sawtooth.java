@@ -1,11 +1,15 @@
 package de.lars.remotelightcore.animation.animations;
 
 import de.lars.remotelightcore.animation.Animation;
+import de.lars.remotelightcore.colors.palette.model.AbstractPalette;
+import de.lars.remotelightcore.colors.palette.model.ColorGradient;
 import de.lars.remotelightcore.settings.SettingsManager.SettingCategory;
 import de.lars.remotelightcore.settings.types.SettingBoolean;
 import de.lars.remotelightcore.settings.types.SettingColor;
+import de.lars.remotelightcore.settings.types.SettingGradient;
 import de.lars.remotelightcore.settings.types.SettingInt;
 import de.lars.remotelightcore.settings.types.SettingSelection;
+import de.lars.remotelightcore.settings.types.SettingSelection.Model;
 import de.lars.remotelightcore.utils.color.Color;
 import de.lars.remotelightcore.utils.color.ColorUtil;
 import de.lars.remotelightcore.utils.color.PixelColorUtils;
@@ -19,14 +23,19 @@ public class Sawtooth extends Animation {
 	private SettingSelection sDirection;
 	private final String[] DIRECTIONS = {"Left", "Right"};
 	private SettingBoolean sInvert;
+	private SettingSelection sColorMode;
+	private final String[] MODES = {"Static", "Gradient"};
 	private SettingColor sColor;
+	private SettingGradient sGradient;
 
 	public Sawtooth() {
 		super("Sawtooth");
 		sPeriod = this.addSetting(new SettingInt("animation.sawtooth.period", "Period", SettingCategory.Intern, null, 60, 1, 500, 5));
-		sDirection = this.addSetting(new SettingSelection("animation.sawtooth.direction", "Direction", SettingCategory.Intern, null, DIRECTIONS, DIRECTIONS[1], SettingSelection.Model.ComboBox));
+		sDirection = this.addSetting(new SettingSelection("animation.sawtooth.direction", "Direction", SettingCategory.Intern, null, DIRECTIONS, DIRECTIONS[1], Model.ComboBox));
 		sInvert = this.addSetting(new SettingBoolean("animation.sawtooth.invert", "Invert", SettingCategory.Intern, null, false));
+		sColorMode = this.addSetting(new SettingSelection("animation.sawtooth.colormode", "Color Mode", SettingCategory.Intern, null, MODES, MODES[0], Model.ComboBox));
 		sColor = this.addSetting(new SettingColor("animation.sawtooth.color", "Color", SettingCategory.Intern, null, Color.RED));
+		sGradient = this.addSetting(new SettingGradient("animatuon.sawtooth.gradient", "Gradient", null, null));
 	}
 	
 	@Override
@@ -58,7 +67,28 @@ public class Sawtooth extends Animation {
 	}
 	
 	private Color getColor(int index) {
-		return sColor.get();
+		String mode = sColorMode.get();
+		if(mode.equals("Static")) {
+			return sColor.get();
+		}
+		AbstractPalette palette = sGradient.getPalette();
+		if(palette instanceof ColorGradient) {
+			((ColorGradient) palette).setStepSize(1.0f / strip.length);
+			if(index == 0) {
+				((ColorGradient) palette).resetStepPosition();
+			}
+			return palette.getNext();
+		}
+		int gradientIndex = (int) MathHelper.map(index, 0, strip.length, 0, palette.size());
+		return palette.getColorAtIndex(gradientIndex);
+	}
+	
+	@Override
+	public void onSettingUpdate() {
+		String mode = sColorMode.get();
+		this.hideSetting(sColor, !mode.equals("Static"));
+		this.hideSetting(sGradient, !mode.equals("Gradient"));
+		super.onSettingUpdate();
 	}
 
 }

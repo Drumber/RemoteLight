@@ -23,6 +23,13 @@ public class SettingGradient extends SettingSelection {
 	}
 
 	public String[] getValues() {
+		return getValues(true);
+	}
+	
+	public String[] getValues(boolean sort) {
+		if(sort) {
+			return Palettes.getNames().stream().sorted().toArray(String[]::new);
+		}
 		return getGradientNames();
 	}
 
