@@ -204,6 +204,7 @@ public class AnimationManager extends EffectManager {
 		animations.add(new Particles());
 		animations.add(new SortAlgo());
 		animations.add(new GradientAnimation());
+		animations.add(new Sawtooth());
 	}
 
 }
