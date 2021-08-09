@@ -16,7 +16,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<flatlaf.version>1.3</flatlaf.version>
+		<flatlaf.version>1.5</flatlaf.version>
 		<mainclass>de.lars.remotelightclient.Main</mainclass>
 		<builtby>Drumber</builtby>
 		<!-- set to 'package' to enable or 'none' to disable packager -->
@@ -201,7 +201,7 @@
 						</goals>
 						<configuration>
 							<name>RemoteLight-Windows</name>
-							<jrePath>${project.basedir}/JREs/windows/jdk8u265-b01-jre</jrePath>
+							<jrePath>${project.basedir}/JREs/windows/jdk8u292-b10-jre</jrePath>
 							<platform>windows</platform>
 							<iconFile>${project.basedir}/icons/icon-ico.ico</iconFile>
 							<winConfig>
@@ -221,7 +221,7 @@
 						</goals>
 						<configuration>
 							<name>RemoteLight-Linux</name>
-							<jrePath>${project.basedir}/JREs/linux/jdk8u265-b01-jre</jrePath>
+							<jrePath>${project.basedir}/JREs/linux/jdk8u292-b10-jre</jrePath>
 							<platform>linux</platform>
 							<iconFile>${project.basedir}/icons/icon-png.png</iconFile>
 							<!-- <linuxConfig> <pngFile>${project.basedir}/icons/icon-png.png</pngFile> 
@@ -237,7 +237,7 @@
 						</goals>
 						<configuration>
 							<name>RemoteLight-MacOS</name>
-							<jrePath>${project.basedir}/JREs/mac/jdk8u265-b01-jre</jrePath>
+							<jrePath>${project.basedir}/JREs/mac/jdk8u302-b08-jre</jrePath>
 							<platform>mac</platform>
 							<iconFile>${project.basedir}/icons/icon-icns.icns</iconFile>
 							<!-- <macConfig> <icnsFile>${project.basedir}/icons/icon-icns.icns</icnsFile> 

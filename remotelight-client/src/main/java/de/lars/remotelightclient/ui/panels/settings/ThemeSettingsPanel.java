@@ -136,7 +136,7 @@ public class ThemeSettingsPanel extends JPanel {
 	
 	private void onThemeSelected(ListSelectionEvent event) {
 		LookAndFeelInfo info = listThemes.getSelectedValue();
-		if(event.getValueIsAdjusting()) return;
+		if(event.getValueIsAdjusting() || info == null) return;
 		sSelectedTheme.set(info.getClassName());
 		applyTheme(info);
 	}
