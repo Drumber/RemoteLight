@@ -168,6 +168,7 @@ public class MusicSyncOptionsPanel extends JPanel {
 		panelNativeSoundConfig.setBackground(null);
 		panelNativeSoundConfig.setLayout(new BoxLayout(panelNativeSoundConfig, BoxLayout.X_AXIS));
 		panelNativeSoundConfig.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+		panelNativeSoundConfig.setVisible(!RemoteLightCore.isMacOS());
 		bgrOptions.add(panelNativeSoundConfig);
 		
 		JButton btnTest = new JButton(i18n.getString("MusicSync.ConfigureNativeSound"));

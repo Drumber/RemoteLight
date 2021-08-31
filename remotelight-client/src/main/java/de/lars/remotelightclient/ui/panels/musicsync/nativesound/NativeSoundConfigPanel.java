@@ -59,6 +59,8 @@ import de.lars.remotelightclient.utils.ui.DisabledGlassPane;
 import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSound;
 import de.lars.remotelightcore.musicsync.sound.nativesound.NativeSoundFormat;
+import de.lars.remotelightcore.notification.Notification;
+import de.lars.remotelightcore.notification.NotificationType;
 import de.lars.remotelightcore.settings.SettingsManager;
 import de.lars.remotelightcore.settings.types.SettingObject;
 
@@ -351,6 +353,11 @@ public class NativeSoundConfigPanel extends JPanel {
 	
 	
 	public static NativeSoundConfigPanel showDialog() {
+		if(RemoteLightCore.isMacOS()) {
+			Main.getInstance().showNotification(new Notification(NotificationType.ERROR, "Unsupported", "Native-Sound-Input is not available on Mac OS."));
+			return null;
+		}
+		
 		Frame window = JOptionPane.getRootFrame();
 		JDialog dialog = new JDialog(window, "Choose a sound output or input", true);
 		

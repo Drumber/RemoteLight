@@ -28,10 +28,18 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.tinylog.Logger;
 
-import com.xtaudio.xt.*;
+import com.xtaudio.xt.XtAudio;
+import com.xtaudio.xt.XtBuffer;
+import com.xtaudio.xt.XtDevice;
+import com.xtaudio.xt.XtFormat;
+import com.xtaudio.xt.XtService;
+import com.xtaudio.xt.XtStream;
+import com.xtaudio.xt.XtStreamCallback;
 
+import de.lars.remotelightcore.RemoteLightCore;
 import de.lars.remotelightcore.utils.DirectoryUtil;
 
 public class NativeSound {
@@ -54,6 +62,10 @@ public class NativeSound {
 	}
 
 	public void init() {
+		if(RemoteLightCore.isMacOS()) {
+			Logger.warn("NativeSound is not supported on Mac OS.");
+			return;
+		}
 		if (!initialized) {
 			boolean isWin = System.getProperty("os.name").contains("Windows");
 
