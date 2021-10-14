@@ -65,7 +65,7 @@ public class PaletteLoader {
 				.create();
 	}
 	
-	public void load() {
+	public synchronized void load() {
 		List<PaletteData> palettes = null;
 		
 		if(dataFile.exists()) {
@@ -90,7 +90,7 @@ public class PaletteLoader {
 		}
 	}
 	
-	public void store() {
+	public synchronized void store() {
 		List<PaletteData> palettes = new ArrayList<PaletteData>(Palettes.getAll());
 		Logger.info("Storing " + palettes.size() + " color palettes.");
 		
